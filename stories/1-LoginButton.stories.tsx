@@ -28,10 +28,8 @@ export default {
 };
 
 async function loginTest() {
-  alert("you have logged in")
+  alert("you have logged in");
 }
-
-// authOptions={{popupUri: "./popup.html", callbackUri: "http://www.google.com"}}
 
 export function valueExample(): ReactElement {
   return (
@@ -42,7 +40,7 @@ export function valueExample(): ReactElement {
       }}
       onLogin={() => loginTest()}
     >
-      <h2>this is a test button hello hello hello</h2>
+      <h2>this is a test button</h2>
     </LoginButton>
   );
 }

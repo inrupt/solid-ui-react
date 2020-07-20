@@ -24,14 +24,13 @@ import auth from "solid-auth-client";
 
 interface Props {
   popupUrl?: string;
-  authOptions?: any;
+  authOptions?: Record<string, unknown>;
   onLogin(): void;
   children: React.ReactNode;
 }
 
-const LoginButton: React.FC<Props> = (props: Props) => {
-  // eslint-disable-next-line react/prop-types
-  const { popupUrl, children, authOptions, onLogin } = props;
+const LoginButton: React.FC<Props> = (propsLogin: Props) => {
+  const { popupUrl, children, authOptions, onLogin } = propsLogin;
   const options = authOptions || { popupUri: popupUrl };
   async function LoginHandler() {
     auth
@@ -39,7 +38,10 @@ const LoginButton: React.FC<Props> = (props: Props) => {
       .then(() => {
         onLogin();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        window.alert(err);
+        window.close();
+      });
   }
   return children ? (
     <div
