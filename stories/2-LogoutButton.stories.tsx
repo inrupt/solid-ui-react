@@ -35,7 +35,7 @@ export function valueExample(): ReactElement {
   return (
     // eslint-disable-next-line react/no-children-prop
     <LogoutButton onLogout={() => logoutTest()}>
-      <h2>this is a test button hello hello hello</h2>
+      <h2>Log Out</h2>
     </LogoutButton>
   );
 }

@@ -19,12 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Value from "./value";
 import LoginButton from "./loggedIn/LoginButton";
 import LogoutButton from "./loggedOut/LogoutButton";
 
 export default {
-  Value,
   LoginButton,
   LogoutButton,
 };

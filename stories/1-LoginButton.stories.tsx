@@ -40,7 +40,7 @@ export function valueExample(): ReactElement {
       }}
       onLogin={() => loginTest()}
     >
-      <h2>this is a test button</h2>
+      <h2>Log In</h2>
     </LoginButton>
   );
 }
