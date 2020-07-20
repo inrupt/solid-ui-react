@@ -3,7 +3,7 @@ import auth from "solid-auth-client";
 
 interface Props {
   onLogout(): void;
-  children?: React.ReactNode;
+  children?: React.ReactElement;
 }
 
 const LogoutButton: React.FC<Props> = (props) => {
