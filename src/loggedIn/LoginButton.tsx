@@ -29,15 +29,22 @@ interface Props {
   onLogin(): void;
 }
 
-const LoginButton: React.FC<Props> = (props) => {
-  const options = props.authOptions || { popupUri: props.popupUrl };
+const LoginButton: React.FC<Props> = (props: Props) => {
+  // eslint-disable-next-line react/prop-types
+  const { popupUrl, children, authOptions, onLogin } = props;
+  const options = authOptions || { popupUri: popupUrl };
   async function LoginHandler() {
-    auth.popupLogin(options).then(() => {
-      props.onLogin();
-    });
+    auth
+      .popupLogin(options)
+      .then(() => {
+        onLogin();
+      })
+      .catch((err) => console.log(err));
   }
-  return props.children ? (
-    <div onClick={LoginHandler}>{props.children}</div>
+  return children ? (
+    <div onClick={LoginHandler}>
+      {children}
+    </div>
   ) : (
     <button onClick={LoginHandler}>Log In</button>
   );

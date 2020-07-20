@@ -6,14 +6,18 @@ interface Props {
   children?: React.ReactElement;
 }
 
-const LogoutButton: React.FC<Props> = (props) => {
+const LogoutButton: React.FC<Props> = (props: Props) => {
+  const { children, onLogout } = props;
   async function LogoutHandler() {
-    auth.logout().then(() => {
-      props.onLogout();
-    });
+    auth
+      .logout()
+      .then(() => {
+      onLogout();
+      })
+      .catch((err) => console.log(err));
   }
-  return props.children ? (
-    <div onClick={LogoutHandler}>{props.children}</div>
+  return children ? (
+    <div onClick={LogoutHandler}>{children}</div>
   ) : (
     <button onClick={LogoutHandler}>Log Out</button>
   );
