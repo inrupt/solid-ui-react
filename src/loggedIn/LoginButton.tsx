@@ -23,10 +23,10 @@ import React from "react";
 import auth from "solid-auth-client";
 
 interface Props {
-  popupUrl: string;
-  children?: React.ReactElement;
+  popupUrl?: string;
   authOptions?: any;
   onLogin(): void;
+  children: React.ReactNode;
 }
 
 const LoginButton: React.FC<Props> = (props: Props) => {
@@ -42,11 +42,18 @@ const LoginButton: React.FC<Props> = (props: Props) => {
       .catch((err) => console.log(err));
   }
   return children ? (
-    <div onClick={LoginHandler}>
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={LoginHandler}
+      onKeyDown={LoginHandler}
+    >
       {children}
     </div>
   ) : (
-    <button onClick={LoginHandler}>Log In</button>
+    <button type="button" onClick={LoginHandler} onKeyDown={LoginHandler}>
+      Log In
+    </button>
   );
 };
 

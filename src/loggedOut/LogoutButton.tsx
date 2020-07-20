@@ -12,7 +12,7 @@ const LogoutButton: React.FC<Props> = (props: Props) => {
     auth
       .logout()
       .then(() => {
-      onLogout();
+        onLogout();
       })
       .catch((err) => console.log(err));
   }
