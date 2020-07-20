@@ -19,12 +19,28 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Value from "./value";
-import LoginButton from "./loggedIn/LoginButton";
-import LogoutButton from "./loggedOut/LogoutButton";
+import React from "react";
+import auth from "solid-auth-client";
 
-export default {
-  Value,
-  LoginButton,
-  LogoutButton,
+interface Props {
+  popupUrl: string;
+  children?: React.ReactNode;
+  authOptions?: any;
+  onLogin(): void;
+}
+
+const LoginButton: React.FC<Props> = (props) => {
+  const options = props.authOptions || { popupUri: props.popupUrl };
+  async function LoginHandler() {
+    auth.popupLogin(options).then(() => {
+      props.onLogin();
+    });
+  }
+  return props.children ? (
+    <div onClick={LoginHandler}>{props.children}</div>
+  ) : (
+    <button onClick={LoginHandler}>Log In</button>
+  );
 };
+
+export default LoginButton;

@@ -8,11 +8,12 @@
     "build": "webpack",
     "lint": "eslint src",
     "test": "jest",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -s ./public -p 6006",
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@solid/lit-pod": "0.0.2-chorerename-137272289-92.0"
+    "@solid/lit-pod": "0.0.2-chorerename-137272289-92.0",
+    "@types/solid-auth-client": "^2.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
@@ -47,6 +48,7 @@
     "react": "^16.13.1",
     "react-docgen-typescript-loader": "^3.7.2",
     "react-dom": "^16.13.1",
+    "solid-auth-client": "^2.4.1",
     "ts-loader": "^8.0.1",
     "typescript": "^3.9.7",
     "webpack": "^4.43.0",

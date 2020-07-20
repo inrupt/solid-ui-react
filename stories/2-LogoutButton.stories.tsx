@@ -19,12 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Value from "./value";
-import LoginButton from "./loggedIn/LoginButton";
-import LogoutButton from "./loggedOut/LogoutButton";
+import React, { ReactElement } from "react";
+import LogoutButton from "../src/loggedOut/LogoutButton";
 
 export default {
-  Value,
-  LoginButton,
-  LogoutButton,
+  title: "Logout Button",
+  component: LogoutButton,
 };
+
+async function logoutTest() {
+  alert("you have logged out");
+}
+
+export function valueExample(): ReactElement {
+  return (
+    // eslint-disable-next-line react/no-children-prop
+    <LogoutButton children={<h2>Log Out</h2>} onLogout={() => logoutTest()} />
+  );
+}
