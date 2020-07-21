@@ -21,7 +21,6 @@
 
 import React from "react";
 import auth from "solid-auth-client";
-import sessionProvider from "../sessionProvider";
 
 interface Props {
   popupUrl?: string;

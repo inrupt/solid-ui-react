@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LogoutButton /> component snapshot test matches snapshot 1`] = `
+<body>
+  <div>
+    <button
+      type="button"
+    >
+      Log Out
+    </button>
+  </div>
+</body>
+`;
