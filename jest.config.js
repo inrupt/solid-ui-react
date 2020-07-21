@@ -3,6 +3,7 @@ module.exports = {
   clearMocks: true,
 
   // The test environment that will be used for testing
+  preset: 'ts-jest',
   testEnvironment: 'jsdom',
 
   testPathIgnorePatterns: [
@@ -16,7 +17,6 @@ module.exports = {
     "/node_modules/",
   ],
 
-  /*
   coverageThreshold: {
     global: {
       branches: 90,
@@ -25,5 +25,4 @@ module.exports = {
       statements: 95,
     },
   },
-  */
 };
