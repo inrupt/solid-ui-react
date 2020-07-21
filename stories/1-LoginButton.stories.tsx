@@ -36,7 +36,6 @@ export function valueExample(): ReactElement {
     <LoginButton
       authOptions={{
         popupUri: "./popup.html",
-        callbackUri: "http://www.google.com",
       }}
       onLogin={() => loginTest()}
     >

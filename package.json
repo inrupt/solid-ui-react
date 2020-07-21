@@ -8,7 +8,7 @@
     "build": "webpack",
     "lint": "eslint src",
     "test": "jest",
-    "storybook": "start-storybook -s ./public -p 6006",
+    "storybook": "start-storybook -s ./public -p 3000 --https --ssl-cert ./certificates/localhost.crt --ssl-key ./certificates/localhost.key",
     "build-storybook": "build-storybook"
   },
   "dependencies": {
