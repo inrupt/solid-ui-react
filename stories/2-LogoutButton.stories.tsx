@@ -20,6 +20,7 @@
  */
 
 import React, { ReactElement } from "react";
+import { Button } from "@material-ui/core";
 import LogoutButton from "../src/logOut";
 
 export default {
@@ -31,14 +32,26 @@ async function logoutTest() {
   alert("you have logged out");
 }
 
+async function logoutFailed(error: Error) {
+  console.log("ERROR", error.message);
+}
+
 export function WithChildren(): ReactElement {
   return (
-    <LogoutButton onLogout={() => logoutTest()}>
-      <h2>Log Out</h2>
+    <LogoutButton
+      onLogout={() => logoutTest()}
+      onError={(error) => logoutFailed(error)}
+    >
+      <Button color="primary">Log Out</Button>
     </LogoutButton>
   );
 }
 
 export function WithoutChildren(): ReactElement {
-  return <LogoutButton onLogout={() => logoutTest()} />;
+  return (
+    <LogoutButton
+      onLogout={() => logoutTest()}
+      onError={(error) => logoutFailed(error)}
+    />
+  );
 }

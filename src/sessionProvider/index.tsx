@@ -19,41 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
-import { Button } from "@material-ui/core";
-import LoginButton from "../src/logIn";
+import auth from "solid-auth-client";
 
-export default {
-  title: "Login Button",
-  component: LoginButton,
-};
-
-async function loginTest() {
-  alert("you have logged in");
-}
-
-async function loginFailed(error: Error) {
-  console.log("ERROR", error.message);
-}
-
-export function WithChildren(): ReactElement {
-  return (
-    <LoginButton
-      popupUrl="./popup.html"
-      onLogin={() => loginTest()}
-      onError={(error) => loginFailed(error)}
-    >
-      <Button color="primary">Log In</Button>
-    </LoginButton>
-  );
-}
-
-export function WithoutChildren(): ReactElement {
-  return (
-    <LoginButton
-      popupUrl="./popup.html"
-      onLogin={() => loginTest()}
-      onError={(error) => loginFailed(error)}
-    />
-  );
+export default async function sessionProvider() {
+  await auth.trackSession((session) => {
+    const webId = session ? session.webId : null;
+    return webId;
+  });
+  return null;
 }

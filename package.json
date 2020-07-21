@@ -12,6 +12,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
     "@solid/lit-pod": "0.0.2-chorerename-137272289-92.0",
     "@types/solid-auth-client": "^2.4.0"
   },

@@ -24,21 +24,19 @@ import auth from "solid-auth-client";
 
 interface Props {
   onLogout(): void;
+  onError(error: Error): void;
   children?: React.ReactElement;
 }
 
 const LogoutButton: React.FC<Props> = (propsLogout: Props) => {
-  const { children, onLogout } = propsLogout;
+  const { children, onLogout, onError } = propsLogout;
   async function LogoutHandler() {
-    auth
-      .logout()
-      .then(() => {
-        onLogout();
-      })
-      .catch((err) => {
-        window.alert(err);
-        window.close();
-      });
+    try {
+      await auth.logout();
+      onLogout();
+    } catch (error) {
+      onError(error);
+    }
   }
   return children ? (
     <div

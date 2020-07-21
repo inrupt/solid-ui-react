@@ -21,27 +21,26 @@
 
 import React from "react";
 import auth from "solid-auth-client";
+import sessionProvider from "../sessionProvider";
 
 interface Props {
   popupUrl?: string;
   authOptions?: Record<string, unknown>;
   children?: React.ReactNode;
   onLogin(): void;
+  onError(error: Error): void;
 }
 
 const LoginButton: React.FC<Props> = (propsLogin: Props) => {
-  const { popupUrl, children, authOptions, onLogin } = propsLogin;
+  const { popupUrl, children, authOptions, onLogin, onError } = propsLogin;
   const options = authOptions || { popupUri: popupUrl };
   async function LoginHandler() {
-    auth
-      .popupLogin(options)
-      .then(() => {
-        onLogin();
-      })
-      .catch((err) => {
-        window.alert(err);
-        window.close();
-      });
+    try {
+      await auth.popupLogin(options);
+      onLogin();
+    } catch (error) {
+      onError(error);
+    }
   }
   return children ? (
     <div
