@@ -17,7 +17,6 @@ module.exports = {
     "/node_modules/",
   ],
 
-  /*
   coverageThreshold: {
     global: {
       branches: 90,
@@ -26,5 +25,4 @@ module.exports = {
       statements: 95,
     },
   },
-  */
 };
