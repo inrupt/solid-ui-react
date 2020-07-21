@@ -25,8 +25,8 @@ import auth from "solid-auth-client";
 interface Props {
   popupUrl?: string;
   authOptions?: Record<string, unknown>;
+  children?: React.ReactNode;
   onLogin(): void;
-  children: React.ReactNode;
 }
 
 const LoginButton: React.FC<Props> = (propsLogin: Props) => {

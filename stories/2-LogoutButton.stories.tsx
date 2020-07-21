@@ -20,7 +20,7 @@
  */
 
 import React, { ReactElement } from "react";
-import LogoutButton from "../src/loggedOut/LogoutButton";
+import LogoutButton from "../src/logOut";
 
 export default {
   title: "Logout Button",
@@ -31,11 +31,14 @@ async function logoutTest() {
   alert("you have logged out");
 }
 
-export function valueExample(): ReactElement {
+export function WithChildren(): ReactElement {
   return (
-    // eslint-disable-next-line react/no-children-prop
     <LogoutButton onLogout={() => logoutTest()}>
       <h2>Log Out</h2>
     </LogoutButton>
   );
+}
+
+export function WithoutChildren(): ReactElement {
+  return <LogoutButton onLogout={() => logoutTest()} />;
 }

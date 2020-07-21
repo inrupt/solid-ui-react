@@ -19,8 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import LoginButton from "./loggedIn/LoginButton";
-import LogoutButton from "./loggedOut/LogoutButton";
+import LoginButton from "./logIn";
+import LogoutButton from "./logOut";
 
 export default {
   LoginButton,

@@ -20,7 +20,7 @@
  */
 
 import React, { ReactElement } from "react";
-import LoginButton from "../src/loggedIn/LoginButton";
+import LoginButton from "../src/logIn";
 
 export default {
   title: "Login Button",
@@ -31,15 +31,14 @@ async function loginTest() {
   alert("you have logged in");
 }
 
-export function valueExample(): ReactElement {
+export function WithChildren(): ReactElement {
   return (
-    <LoginButton
-      authOptions={{
-        popupUri: "./popup.html",
-      }}
-      onLogin={() => loginTest()}
-    >
+    <LoginButton popupUrl="./popup.html" onLogin={() => loginTest()}>
       <h2>Log In</h2>
     </LoginButton>
   );
+}
+
+export function WithoutChildren(): ReactElement {
+  return <LoginButton popupUrl="./popup.html" onLogin={() => loginTest()} />;
 }
