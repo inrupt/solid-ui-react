@@ -1,0 +1,73 @@
+{
+  "name": "@solid/ui-react",
+  "version": "0.2.0",
+  "description": "Set of UI libraries using @solid/core",
+  "main": "dist/index.js",
+  "module": "src/index.ts",
+  "scripts": {
+    "build": "webpack",
+    "lint": "eslint src",
+    "test": "jest",
+    "storybook": "start-storybook -s ./public -p 3000 --https --ssl-cert ./certificates/localhost.crt --ssl-key ./certificates/localhost.key",
+    "build-storybook": "build-storybook"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@solid/lit-pod": "0.0.2-chorerename-137272289-92.0",
+    "@types/solid-auth-client": "^2.4.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.5",
+    "@inrupt/eslint-config-base": "0.0.4",
+    "@inrupt/eslint-config-react": "0.0.4",
+    "@storybook/addon-actions": "^5.3.19",
+    "@storybook/addon-docs": "^5.3.19",
+    "@storybook/addon-links": "^5.3.19",
+    "@storybook/addons": "^5.3.19",
+    "@storybook/preset-typescript": "^3.0.0",
+    "@storybook/react": "^5.3.19",
+    "@testing-library/react": "^10.4.7",
+    "@types/jest": "^26.0.5",
+    "@types/react": "^16.9.43",
+    "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@typescript-eslint/parser": "^3.6.1",
+    "babel-loader": "^8.1.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "eslint": "^7.5.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^23.18.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-license-header": "^0.2.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.3",
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "fork-ts-checker-webpack-plugin": "^5.0.7",
+    "prettier": "^2.0.5",
+    "react": "^16.13.1",
+    "react-docgen-typescript-loader": "^3.7.2",
+    "react-dom": "^16.13.1",
+    "solid-auth-client": "^2.4.1",
+    "ts-loader": "^8.0.1",
+    "typescript": "^3.9.7",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inrupt/solid-ui-react.git"
+  },
+  "keywords": [
+    "Solid",
+    "ui",
+    "react"
+  ],
+  "author": "Inrupt <engineering@inrupt.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/inrupt/solid-ui-react/issues"
+  },
+  "homepage": "https://github.com/inrupt/solid-ui-react#readme"
+}
