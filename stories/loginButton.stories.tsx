@@ -19,18 +19,46 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Link from "./components/link";
-import LoginButton from "./components/logIn";
-import LogoutButton from "./components/logOut";
-import Text from "./components/text";
-import { SessionProvider } from "./context/sessionContext";
-import useSession from "./hooks/useSession";
+import React, { ReactElement } from "react";
+import { Button } from "@material-ui/core";
+import { SessionProvider } from "../src/context/sessionContext";
+import LoginButton from "../src/components/logIn";
 
 export default {
-  Link,
-  LoginButton,
-  LogoutButton,
-  Text,
-  SessionProvider,
-  useSession,
+  title: "Login Button",
+  component: LoginButton,
 };
+
+async function loginTest() {
+  alert("you have logged in");
+}
+
+async function loginFailed(error: Error) {
+  console.log("ERROR", error.message);
+}
+
+export function WithChildren(): ReactElement {
+  return (
+    <SessionProvider>
+      <LoginButton
+        popupUrl="./popup.html"
+        onLogin={() => loginTest()}
+        onError={(error) => loginFailed(error)}
+      >
+        <Button color="primary">Log In</Button>
+      </LoginButton>
+    </SessionProvider>
+  );
+}
+
+export function WithoutChildren(): ReactElement {
+  return (
+    <SessionProvider>
+      <LoginButton
+        popupUrl="./popup.html"
+        onLogin={() => loginTest()}
+        onError={(error) => loginFailed(error)}
+      />
+    </SessionProvider>
+  );
+}

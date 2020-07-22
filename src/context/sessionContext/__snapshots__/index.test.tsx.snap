@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing SessionContext matches snapshot matches snapshot 1`] = `
+<body>
+  <div>
+    <div>
+      <div
+        data-testid="sessionRequestInProgress"
+      >
+        sessionRequestInProgress
+      </div>
+      <div
+        data-testid="sesssion"
+      />
+    </div>
+  </div>
+</body>
+`;

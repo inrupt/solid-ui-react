@@ -23,38 +23,35 @@ import React from "react";
 import auth from "solid-auth-client";
 
 interface Props {
-  popupUrl?: string;
-  authOptions?: Record<string, unknown>;
-  children?: React.ReactNode;
-  onLogin(): void;
-  onError(error: Error): void;
+  onLogout?(): void;
+  onError?(error: Error): void;
+  children?: React.ReactElement;
 }
 
-const LoginButton: React.FC<Props> = (propsLogin: Props) => {
-  const { popupUrl, children, authOptions, onLogin, onError } = propsLogin;
-  const options = authOptions || { popupUri: popupUrl };
-  async function LoginHandler() {
+const LogoutButton: React.FC<Props> = (propsLogout: Props) => {
+  const { children, onLogout, onError } = propsLogout;
+  async function LogoutHandler() {
     try {
-      await auth.popupLogin(options);
-      onLogin();
+      await auth.logout();
+      if (onLogout) onLogout();
     } catch (error) {
-      onError(error);
+      if (onError) onError(error);
     }
   }
   return children ? (
     <div
       role="button"
       tabIndex={0}
-      onClick={LoginHandler}
-      onKeyDown={LoginHandler}
+      onClick={LogoutHandler}
+      onKeyDown={LogoutHandler}
     >
       {children}
     </div>
   ) : (
-    <button type="button" onClick={LoginHandler} onKeyDown={LoginHandler}>
-      Log In
+    <button type="button" onClick={LogoutHandler} onKeyDown={LogoutHandler}>
+      Log Out
     </button>
   );
 };
 
-export default LoginButton;
+export default LogoutButton;

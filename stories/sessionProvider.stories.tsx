@@ -21,39 +21,40 @@
 
 import React, { ReactElement } from "react";
 import { Button } from "@material-ui/core";
-import LoginButton from "../src/logIn";
+import useSession from "../src/hooks/useSession";
+import { SessionProvider } from "../src/context/sessionContext";
+import LoginButton from "../src/components/logIn";
+import LogoutButton from "../src/components/logOut";
 
 export default {
-  title: "Login Button",
-  component: LoginButton,
+  title: "Session Provider",
 };
 
-async function loginTest() {
-  alert("you have logged in");
-}
-
-async function loginFailed(error: Error) {
-  console.log("ERROR", error.message);
-}
-
-export function WithChildren(): ReactElement {
+export function ProviderWithHook(): ReactElement {
   return (
-    <LoginButton
-      popupUrl="./popup.html"
-      onLogin={() => loginTest()}
-      onError={(error) => loginFailed(error)}
-    >
-      <Button color="primary">Log In</Button>
-    </LoginButton>
+    <SessionProvider>
+      <LoginButton popupUrl="./popup.html">
+        <Button color="primary">Log In</Button>
+      </LoginButton>
+      <LogoutButton>
+        <Button color="primary">Log Out</Button>
+      </LogoutButton>
+      <Dashboard />
+    </SessionProvider>
   );
 }
 
-export function WithoutChildren(): ReactElement {
+function Dashboard() {
+  const { session, sessionRequestInProgress } = useSession();
+  const sessionRequestText = sessionRequestInProgress
+    ? "Session request is in progress"
+    : "No session request is in progress";
   return (
-    <LoginButton
-      popupUrl="./popup.html"
-      onLogin={() => loginTest()}
-      onError={(error) => loginFailed(error)}
-    />
+    <div>
+      <h1>Current Session:</h1>
+      <h2>{session?.webId || "logged out"}</h2>
+      <h1>Session Request:</h1>
+      <h2>{sessionRequestText}</h2>
+    </div>
   );
 }

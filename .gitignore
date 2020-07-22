@@ -59,3 +59,9 @@ dist/
 
 # storybook build
 docs/
+
+# TernJS port file
+.tern-port
+
+# VSCode settings
+.vscode
