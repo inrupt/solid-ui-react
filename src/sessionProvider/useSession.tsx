@@ -19,12 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import auth from "solid-auth-client";
+import { useContext } from "react";
+import SessionProviderContext from "./sessionProviderContext";
 
-export default async function sessionProvider() {
-  await auth.trackSession((session) => {
-    const webId = session ? session.webId : null;
-    return webId;
-  });
-  return null;
+export default function useSession() {
+  let { sessionRequestInProgress } = useContext(SessionProviderContext);
+  const { session } = useContext(SessionProviderContext);
+  sessionRequestInProgress = !session;
+  return { session, sessionRequestInProgress };
 }

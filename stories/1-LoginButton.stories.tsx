@@ -19,8 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState, useEffect } from "react";
 import { Button } from "@material-ui/core";
+import auth from "solid-auth-client";
+import SessionProviderContext, {
+  ISession,
+} from "../src/sessionProvider/sessionProviderContext";
 import LoginButton from "../src/logIn";
 
 export default {
@@ -28,27 +32,54 @@ export default {
   component: LoginButton,
 };
 
-async function loginTest() {
-  alert("you have logged in");
-}
-
-async function loginFailed(error: Error) {
-  console.log("ERROR", error.message);
-}
-
 export function WithChildren(): ReactElement {
+  const [session, setSession] = useState<ISession | undefined>();
+  const [sessionRequestInProgress, setSessionRequestInProgress] = useState(
+    true
+  );
+
+  useEffect(() => {
+    setSessionRequestInProgress(true);
+    async function fetchSession(): Promise<void> {
+      const sessionStorage = await auth.currentSession();
+      setSession(sessionStorage);
+      setSessionRequestInProgress(false);
+    }
+    fetchSession().catch((e) => {
+      throw e;
+    });
+  }, [setSession, setSessionRequestInProgress]);
+
+  async function loginTest() {
+    console.log("Logged in");
+  }
+  async function loginFailed(error: Error) {
+    console.log("ERROR", error.message);
+  }
+
   return (
-    <LoginButton
-      popupUrl="./popup.html"
-      onLogin={() => loginTest()}
-      onError={(error) => loginFailed(error)}
+    <SessionProviderContext.Provider
+      value={{ session, sessionRequestInProgress }}
     >
-      <Button color="primary">Log In</Button>
-    </LoginButton>
+      <LoginButton
+        popupUrl="./popup.html"
+        onLogin={() => loginTest()}
+        onError={(error) => loginFailed(error)}
+      >
+        <Button color="primary">Log In</Button>
+      </LoginButton>
+    </SessionProviderContext.Provider>
   );
 }
 
 export function WithoutChildren(): ReactElement {
+  async function loginTest() {
+    console.log("Logged In");
+  }
+  async function loginFailed(error: Error) {
+    console.log("ERROR", error.message);
+  }
+
   return (
     <LoginButton
       popupUrl="./popup.html"

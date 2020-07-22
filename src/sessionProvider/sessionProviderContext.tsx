@@ -19,47 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState, useEffect } from "react";
-import auth from "solid-auth-client";
-import useSession from "../sessionProvider/useSession";
+import { createContext } from "react";
 
-interface Props {
-  popupUrl?: string;
-  authOptions?: Record<string, unknown>;
-  children?: React.ReactNode;
-  onLogin(): void;
-  onError(error: Error): void;
+export interface ISession {
+  webId: string;
 }
 
-const LoginButton: React.FC<Props> = (propsLogin: Props) => {
-  const { popupUrl, children, authOptions, onLogin, onError } = propsLogin;
-  const options = authOptions || { popupUri: popupUrl };
-  const { session, sessionRequestInProgress } = useSession();
-  console.log(sessionRequestInProgress);
-  console.log(session);
+export interface SessionProviderContext {
+  session: ISession | undefined;
+  sessionRequestInProgress: boolean;
+}
 
-  async function LoginHandler() {
-    try {
-      await auth.popupLogin(options);
-      onLogin();
-    } catch (error) {
-      onError(error);
-    }
-  }
-  return children ? (
-    <div
-      role="button"
-      tabIndex={0}
-      onClick={LoginHandler}
-      onKeyDown={LoginHandler}
-    >
-      {children}
-    </div>
-  ) : (
-    <button type="button" onClick={LoginHandler} onKeyDown={LoginHandler}>
-      Log In
-    </button>
-  );
-};
-
-export default LoginButton;
+export default createContext<SessionProviderContext>({
+  session: undefined,
+  sessionRequestInProgress: true,
+});
