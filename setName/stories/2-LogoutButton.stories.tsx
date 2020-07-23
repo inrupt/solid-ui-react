@@ -19,42 +19,39 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import auth from "solid-auth-client";
+import React, { ReactElement } from "react";
+import { Button } from "@material-ui/core";
+import LogoutButton from "../src/logOut";
 
-interface Props {
-  popupUrl?: string;
-  authOptions?: Record<string, unknown>;
-  children?: React.ReactNode;
-  onLogin(): void;
-  onError(error: Error): void;
-}
-
-const LoginButton: React.FC<Props> = (propsLogin: Props) => {
-  const { popupUrl, children, authOptions, onLogin, onError } = propsLogin;
-  const options = authOptions || { popupUri: popupUrl };
-  async function LoginHandler() {
-    try {
-      await auth.popupLogin(options);
-      onLogin();
-    } catch (error) {
-      onError(error);
-    }
-  }
-  return children ? (
-    <div
-      role="button"
-      tabIndex={0}
-      onClick={LoginHandler}
-      onKeyDown={LoginHandler}
-    >
-      {children}
-    </div>
-  ) : (
-    <button type="button" onClick={LoginHandler}>
-      Log In
-    </button>
-  );
+export default {
+  title: "Logout Button",
+  component: LogoutButton,
 };
 
-export default LoginButton;
+async function logoutTest() {
+  alert("you have logged out");
+}
+
+async function logoutFailed(error: Error) {
+  console.log("ERROR", error.message);
+}
+
+export function WithChildren(): ReactElement {
+  return (
+    <LogoutButton
+      onLogout={() => logoutTest()}
+      onError={(error) => logoutFailed(error)}
+    >
+      <Button color="primary">Log Out</Button>
+    </LogoutButton>
+  );
+}
+
+export function WithoutChildren(): ReactElement {
+  return (
+    <LogoutButton
+      onLogout={() => logoutTest()}
+      onError={(error) => logoutFailed(error)}
+    />
+  );
+}

@@ -19,42 +19,52 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import auth from "solid-auth-client";
+import {
+  fetchLitDataset,
+  getThingOne,
+  getStringUnlocalizedOne,
+  setStringNoLocale,
+  saveLitDatasetAt,
+  Thing,
+} from "@solid/lit-pod";
 
-interface Props {
-  popupUrl?: string;
-  authOptions?: Record<string, unknown>;
-  children?: React.ReactNode;
-  onLogin(): void;
-  onError(error: Error): void;
+export interface profileObject {
+  containerIri: string;
+  name: string | null;
+  profile: Thing;
+  profileResource: any;
 }
 
-const LoginButton: React.FC<Props> = (propsLogin: Props) => {
-  const { popupUrl, children, authOptions, onLogin, onError } = propsLogin;
-  const options = authOptions || { popupUri: popupUrl };
-  async function LoginHandler() {
-    try {
-      await auth.popupLogin(options);
-      onLogin();
-    } catch (error) {
-      onError(error);
-    }
-  }
-  return children ? (
-    <div
-      role="button"
-      tabIndex={0}
-      onClick={LoginHandler}
-      onKeyDown={LoginHandler}
-    >
-      {children}
-    </div>
-  ) : (
-    <button type="button" onClick={LoginHandler}>
-      Log In
-    </button>
+export async function fetchProfileName(
+  containerIri: string
+): Promise<profileObject> {
+  const profileResource = await fetchLitDataset(containerIri);
+  const resourceIri = `${containerIri}#me`;
+  const profile = getThingOne(profileResource, resourceIri);
+  const name: string | null = getStringUnlocalizedOne(
+    profile,
+    `http://xmlns.com/foaf/0.1/name`
   );
-};
+  return {
+    containerIri,
+    name,
+    profile,
+    profileResource,
+  };
+}
 
-export default LoginButton;
+export function setProfileName(thing: Thing): Thing {
+  return setStringNoLocale(thing, `http://xmlns.com/foaf/0.1/name`, "New Name");
+}
+
+export async function saveProfileName(
+  updatedProfileResource: Thing,
+  containerIri: string
+): Promise<string | Error> {
+  try {
+    await saveLitDatasetAt(containerIri, updatedProfileResource);
+    return "saved";
+  } catch (error) {
+    return error.message;
+  }
+}

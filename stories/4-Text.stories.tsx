@@ -19,42 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import auth from "solid-auth-client";
+import React, { ReactElement } from "react";
+import Text from "../src/Text";
 
-interface Props {
-  popupUrl?: string;
-  authOptions?: Record<string, unknown>;
-  children?: React.ReactNode;
-  onLogin(): void;
-  onError(error: Error): void;
-}
-
-const LoginButton: React.FC<Props> = (propsLogin: Props) => {
-  const { popupUrl, children, authOptions, onLogin, onError } = propsLogin;
-  const options = authOptions || { popupUri: popupUrl };
-  async function LoginHandler() {
-    try {
-      await auth.popupLogin(options);
-      onLogin();
-    } catch (error) {
-      onError(error);
-    }
-  }
-  return children ? (
-    <div
-      role="button"
-      tabIndex={0}
-      onClick={LoginHandler}
-      onKeyDown={LoginHandler}
-    >
-      {children}
-    </div>
-  ) : (
-    <button type="button" onClick={LoginHandler}>
-      Log In
-    </button>
-  );
+export default {
+  title: "Text component",
+  component: Text,
 };
 
-export default LoginButton;
+export function TextEditFalse(): ReactElement {
+  return <Text locale="en" />;
+}
+
+export function TextEditTrue(): ReactElement {
+    return <Text locale="en" edit />;
+  }

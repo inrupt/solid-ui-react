@@ -19,42 +19,57 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import auth from "solid-auth-client";
+import React, { ReactElement } from "react";
+import * as LitPodFns from "@solid/lit-pod";
 
-interface Props {
-  popupUrl?: string;
-  authOptions?: Record<string, unknown>;
-  children?: React.ReactNode;
-  onLogin(): void;
-  onError(error: Error): void;
+enum DATA_TYPES {
+  Boolean = "Boolean",
+  Datetime = "Datetime",
+  Decimal = "Decimal",
+  Integer = "Integer",
+  String = "String",
 }
 
-const LoginButton: React.FC<Props> = (propsLogin: Props) => {
-  const { popupUrl, children, authOptions, onLogin, onError } = propsLogin;
-  const options = authOptions || { popupUri: popupUrl };
-  async function LoginHandler() {
-    try {
-      await auth.popupLogin(options);
-      onLogin();
-    } catch (error) {
-      onError(error);
+// TODO: finish implementing. Make typescript happy. Implement edit mode.
+
+const DATA_TYPE_TO_FN = {
+  [DATA_TYPES.Boolean]: LitPodFns.getBooleanOne,
+}
+
+interface IValue {
+  thing: LitPodFns.Thing;
+  dataType: DATA_TYPES;
+  locale?: string;
+  edit: boolean;
+  inputOptions?: Object;
+  autosave: boolean;
+  onSave: Function;
+  predicate: string;
+}
+
+export default function Value(props: IValue): ReactElement {
+  const {
+    thing,
+    dataType,
+    locale,
+    edit,
+    inputOptions,
+    autosave,
+    predicate,
+    onSave,
+  } = props;
+
+  let dataFnName = `get${dataType}One`;
+
+  if (dataType === DATA_TYPES.String ) {
+    dataFnName = "getStringNoLocaleOne";
+
+    if (locale) {
+      dataFnName = "getStringWithLocaleOne";
     }
   }
-  return children ? (
-    <div
-      role="button"
-      tabIndex={0}
-      onClick={LoginHandler}
-      onKeyDown={LoginHandler}
-    >
-      {children}
-    </div>
-  ) : (
-    <button type="button" onClick={LoginHandler}>
-      Log In
-    </button>
-  );
-};
 
-export default LoginButton;
+  const value = LitPodFns[dataFnName](thing, predicate, locale);
+
+  return <span>{ value }</span>;
+}

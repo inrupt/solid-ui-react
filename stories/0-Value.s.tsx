@@ -19,42 +19,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import auth from "solid-auth-client";
+import React, { ReactElement } from "react";
 
-interface Props {
-  popupUrl?: string;
-  authOptions?: Record<string, unknown>;
-  children?: React.ReactNode;
-  onLogin(): void;
-  onError(error: Error): void;
-}
+import Value from "../src/value";
 
-const LoginButton: React.FC<Props> = (propsLogin: Props) => {
-  const { popupUrl, children, authOptions, onLogin, onError } = propsLogin;
-  const options = authOptions || { popupUri: popupUrl };
-  async function LoginHandler() {
-    try {
-      await auth.popupLogin(options);
-      onLogin();
-    } catch (error) {
-      onError(error);
-    }
-  }
-  return children ? (
-    <div
-      role="button"
-      tabIndex={0}
-      onClick={LoginHandler}
-      onKeyDown={LoginHandler}
-    >
-      {children}
-    </div>
-  ) : (
-    <button type="button" onClick={LoginHandler}>
-      Log In
-    </button>
-  );
+export default {
+  title: "Value",
+  component: Value,
 };
 
-export default LoginButton;
+export function valueExample(): ReactElement {
+  return <Value />;
+}
