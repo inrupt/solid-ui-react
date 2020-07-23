@@ -50,7 +50,7 @@ const LoginButton: React.FC<Props> = (propsLogin: Props) => {
     }
   }
 
-  return (
+  return children ? (
     <div
       role="button"
       tabIndex={0}
@@ -59,6 +59,10 @@ const LoginButton: React.FC<Props> = (propsLogin: Props) => {
     >
       {children}
     </div>
+  ) : (
+    <button type="button" onClick={LoginHandler} onKeyDown={LoginHandler}>
+      Log In
+    </button>
   );
 };
 
