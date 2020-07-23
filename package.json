@@ -1,6 +1,6 @@
 {
   "name": "@solid/ui-react",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "Set of UI libraries using @solid/core",
   "main": "dist/index.js",
   "module": "src/index.ts",

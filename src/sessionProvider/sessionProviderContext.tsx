@@ -19,18 +19,64 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { createContext } from "react";
+import React, {
+  createContext,
+  ReactElement,
+  useState,
+  SetStateAction,
+  Dispatch,
+  useEffect,
+} from "react";
+import auth from "solid-auth-client";
 
 export interface ISession {
   webId: string;
 }
 
-export interface SessionProviderContext {
-  session: ISession | undefined;
-  sessionRequestInProgress: boolean;
+interface ISessionContext {
+  session?: ISession | undefined;
+  setSession?: Dispatch<SetStateAction<ISession>> | any;
+  sessionRequestInProgress?: boolean;
+  setSessionRequestInProgress?: Dispatch<SetStateAction<boolean>> | any;
 }
 
-export default createContext<SessionProviderContext>({
-  session: undefined,
-  sessionRequestInProgress: true,
-});
+const SessionContext = createContext<ISessionContext>({});
+export default SessionContext;
+
+interface ISessionProvider {
+  children: ReactElement | ReactElement[] | undefined | null;
+}
+
+export function SessionProvider({ children }: ISessionProvider): ReactElement {
+  const [session, setSession] = useState<ISession | undefined>();
+  const [sessionRequestInProgress, setSessionRequestInProgress] = useState(
+    false
+  );
+
+  useEffect(() => {
+    auth
+      .trackSession((trackedSession) => {
+        setSession(trackedSession);
+      })
+      .catch((error) => {
+        throw error;
+      });
+
+    return function cleanup() {
+      auth.stopTrackSession(() => {});
+    };
+  }, [setSession]);
+
+  return (
+    <SessionContext.Provider
+      value={{
+        session,
+        setSession,
+        sessionRequestInProgress,
+        setSessionRequestInProgress,
+      }}
+    >
+      {children}
+    </SessionContext.Provider>
+  );
+}

@@ -19,9 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import auth from "solid-auth-client";
-import useSession from "../sessionProvider/useSession";
+import SessionContext from "../sessionProvider/sessionProviderContext";
 
 interface Props {
   popupUrl?: string;
@@ -34,19 +34,20 @@ interface Props {
 const LoginButton: React.FC<Props> = (propsLogin: Props) => {
   const { popupUrl, children, authOptions, onLogin, onError } = propsLogin;
   const options = authOptions || { popupUri: popupUrl };
-  const { session, sessionRequestInProgress } = useSession();
-  console.log(sessionRequestInProgress);
-  console.log(session);
+  const { setSessionRequestInProgress } = useContext(SessionContext);
 
   async function LoginHandler() {
+    setSessionRequestInProgress(true);
     try {
       await auth.popupLogin(options);
+      setSessionRequestInProgress(false);
       onLogin();
     } catch (error) {
       onError(error);
     }
   }
-  return children ? (
+
+  return (
     <div
       role="button"
       tabIndex={0}
@@ -55,10 +56,6 @@ const LoginButton: React.FC<Props> = (propsLogin: Props) => {
     >
       {children}
     </div>
-  ) : (
-    <button type="button" onClick={LoginHandler} onKeyDown={LoginHandler}>
-      Log In
-    </button>
   );
 };
 
