@@ -55,11 +55,9 @@ export function SessionProvider({ children }: ISessionProvider): ReactElement {
   );
 
   useEffect(() => {
-    auth
-      .trackSession((trackedSession) => setSession(trackedSession))
-      .catch((error) => {
-        throw error;
-      });
+    auth.trackSession(setSession).catch((error) => {
+      throw error;
+    });
 
     return function cleanup() {
       auth.stopTrackSession(() => {});
