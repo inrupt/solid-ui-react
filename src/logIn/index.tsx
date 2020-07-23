@@ -21,6 +21,7 @@
 
 import React, { useContext } from "react";
 import auth from "solid-auth-client";
+import useSession from "../sessionProvider/useSession";
 import SessionContext from "../sessionProvider/sessionProviderContext";
 
 interface Props {
@@ -35,6 +36,8 @@ const LoginButton: React.FC<Props> = (propsLogin: Props) => {
   const { popupUrl, children, authOptions, onLogin, onError } = propsLogin;
   const options = authOptions || { popupUri: popupUrl };
   const { setSessionRequestInProgress } = useContext(SessionContext);
+
+  const { session, sessionRequestInProgress } = useSession();
 
   async function LoginHandler() {
     setSessionRequestInProgress(true);

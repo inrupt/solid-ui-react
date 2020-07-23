@@ -24,5 +24,7 @@ import SessionContext from "./sessionProviderContext";
 
 export default function useSession() {
   const { session, sessionRequestInProgress } = useContext(SessionContext);
+  console.log(session);
+  console.log(sessionRequestInProgress);
   return { session, sessionRequestInProgress };
 }

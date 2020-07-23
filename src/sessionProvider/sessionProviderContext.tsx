@@ -26,6 +26,7 @@ import React, {
   SetStateAction,
   Dispatch,
   useEffect,
+  ReactNode,
 } from "react";
 import auth from "solid-auth-client";
 
@@ -44,7 +45,7 @@ const SessionContext = createContext<ISessionContext>({});
 export default SessionContext;
 
 interface ISessionProvider {
-  children: ReactElement | ReactElement[] | undefined | null;
+  children: ReactNode;
 }
 
 export function SessionProvider({ children }: ISessionProvider): ReactElement {
@@ -55,9 +56,7 @@ export function SessionProvider({ children }: ISessionProvider): ReactElement {
 
   useEffect(() => {
     auth
-      .trackSession((trackedSession) => {
-        setSession(trackedSession);
-      })
+      .trackSession((trackedSession) => setSession(trackedSession))
       .catch((error) => {
         throw error;
       });
