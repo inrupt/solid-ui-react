@@ -48,40 +48,23 @@ export default function Text(props: IText): ReactElement {
   const [text, setText] = useState<string | null>("");
 
   useEffect(() => {
-    setText(
-      LitPodFns.getStringUnlocalizedOne(thing, "http://xmlns.com/foaf/0.1/name")
-    );
-  }, [thing]);
-
-  // const saveResource = async () => {
-  //   try {
-  //     await litPodFns.saveLitDatasetAt(predicate, thing);
-  //     if (onSave) {
-  //       onSave();
-  //     }
-  //     return "saved";
-  //   } catch (error) {
-  //     return error.message;
-  //   }
-  // };
+    setText(LitPodFns.getStringUnlocalizedOne(thing, predicate));
+  }, [thing, predicate]);
 
   /* Save text value in the pod */
   const saveHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     const {
-      datasetInfo: { fetchedFrom },
+      resourceInfo: { fetchedFrom },
     } = dataSet;
     const updatedResource = LitPodFns.setStringUnlocalized(
       thing,
       predicate,
       newValue
     );
-    const updatedProfileResource = LitPodFns.setThing(
-      fetchedFrom,
-      updatedResource
-    );
+    const updatedProfileResource = LitPodFns.setThing(dataSet, updatedResource);
     try {
-      await LitPodFns.saveLitDatasetAt(predicate, updatedProfileResource);
+      await LitPodFns.saveLitDatasetAt(fetchedFrom, updatedProfileResource);
       if (onSave) {
         onSave();
       }
@@ -97,10 +80,9 @@ export default function Text(props: IText): ReactElement {
       {edit && (
         <input
           type="text"
-          // onChange={(e) => setText(e.target.value)}
           onChange={(e) => setText(e.target.value)}
           onBlur={(e) => saveHandler(e)}
-          value={text}
+          value={text || ""}
         />
       )}
     </>
