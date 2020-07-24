@@ -19,7 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState, useEffect } from "react";
+import { Thing } from "@solid/lit-pod";
+import { fetchProfileName } from "../src/helpers/fetch-lit-pod";
 import Text from "../src/Text";
 
 export default {
@@ -32,5 +34,44 @@ export function TextEditFalse(): ReactElement {
 }
 
 export function TextEditTrue(): ReactElement {
-    return <Text locale="en" edit />;
+  const [profileResource, setProfileResource] = useState<string | null>();
+  const [profile, setProfile] = useState<Thing | null>();
+  const [containerIri, setContainerIri] = useState<string | null>();
+
+  async function fetchData() {
+    try {
+      await fetchProfileName(
+        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
+      )
+        .then((result) => {
+          setProfileResource(result.profileResource);
+          setProfile(result.profile);
+          setContainerIri(result.containerIri);
+        })
+        .finally((result) => {
+          return console.log(result);
+        });
+    } catch (error) {
+      return error.message;
+    }
+    return "done";
   }
+
+  useEffect(() => {
+    // eslint-disable-next-line no-void
+    void fetchData();
+  }, []);
+
+  if (profile) {
+    return (
+      <Text
+        locale="en"
+        dataSet={profileResource}
+        thing={profile}
+        predicate={containerIri}
+        edit
+      />
+    );
+  }
+  return <p>Thing missing</p>;
+}

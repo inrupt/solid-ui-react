@@ -19,37 +19,54 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState, useEffect } from "react";
 import * as LitPodFns from "@solid/lit-pod";
 
 interface IText {
-  // dataSet: LitPodFns.LitDataset;
-  // thing: LitPodFns.Thing;
+  dataSet: LitPodFns.LitDataset;
+  thing: LitPodFns.Thing;
   locale?: string;
   edit?: boolean;
   inputOptions?: Record<string, unknown>;
   autosave?: boolean;
   // onSave(): void;
-  // predicate: string;
+  predicate: string;
 }
 
 export default function Text(props: IText): ReactElement {
   const {
-    // dataSet,
-    // thing,
+    dataSet,
+    thing,
     locale,
     edit,
     inputOptions,
     autosave,
-    // predicate,
+    predicate,
     // onSave,
   } = props;
+
+  const [text, setText] = useState<string | null>();
+
+  useEffect(() => {
+    setText(
+      LitPodFns.getStringUnlocalizedOne(thing, "http://xmlns.com/foaf/0.1/name")
+    );
+  }, [thing]);
+
+  // const litDataSet = localStorage.getItem("litDataSet");
+  // const thing = localStorage.getItem("thing");
+  // const predicate = localStorage.getItem("containerIri");
+
+  console.debug("dataSet", dataSet);
 
   // const text = locale
   //   ? LitPodFns.getStringWithLocaleOne(thing, predicate, locale)
   //   : LitPodFns.getStringNoLocaleOne(thing, predicate, locale);
 
-  const text = "hello world";
+  const logDataSet = () => {
+    console.log("dataSet", dataSet);
+    console.log("thing", thing);
+  }
 
   /* Save text value in the pod */
   const saveHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,9 +79,18 @@ export default function Text(props: IText): ReactElement {
 
   return (
     <>
+      <p>{predicate}</p>
       {!edit && <span>{text}</span>}
       {edit && (
-        <input type="text" onBlur={(e) => saveHandler(e)} value={text} />
+        <>
+          <input
+            type="text"
+            onChange={(e) => setText(e.target.value)}
+            onBlur={(e) => saveHandler(e)}
+            value={text}
+          />
+          <button type="button" onClick={() => logDataSet()}>Hello</button>
+        </>
       )}
     </>
   );

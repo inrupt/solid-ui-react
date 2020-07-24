@@ -30,6 +30,14 @@ const SetName: React.FC = () => {
       if (pUrl) {
         await fetchProfileName(pUrl)
           .then((result) => {
+            // eslint-disable-next-line no-console
+            console.log("result", result);
+            localStorage.setItem(
+              "litDataSet",
+              JSON.stringify(result.profileResource)
+            );
+            localStorage.setItem("thing", JSON.stringify(result.profile));
+            localStorage.setItem("containerIri", result.containerIri);
             setPName(result.name);
             const updatedProfile = setProfileName(result.profile);
             const updatedProfileResource = setThing(
@@ -37,6 +45,7 @@ const SetName: React.FC = () => {
               updatedProfile
             );
 
+            // eslint-disable-next-line no-void
             void saveProfileName(updatedProfileResource, result.containerIri);
           })
           .finally((result) => {
