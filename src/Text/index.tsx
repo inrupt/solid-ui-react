@@ -29,7 +29,7 @@ interface IText {
   edit?: boolean;
   inputOptions?: Record<string, unknown>;
   autosave?: boolean;
-  // onSave(): void;
+  onSave?(): void;
   predicate: string;
 }
 
@@ -42,10 +42,10 @@ export default function Text(props: IText): ReactElement {
     inputOptions,
     autosave,
     predicate,
-    // onSave,
+    onSave,
   } = props;
 
-  const [text, setText] = useState<string | null>();
+  const [text, setText] = useState<string | null>("");
 
   useEffect(() => {
     setText(
@@ -53,44 +53,55 @@ export default function Text(props: IText): ReactElement {
     );
   }, [thing]);
 
-  // const litDataSet = localStorage.getItem("litDataSet");
-  // const thing = localStorage.getItem("thing");
-  // const predicate = localStorage.getItem("containerIri");
-
-  console.debug("dataSet", dataSet);
-
-  // const text = locale
-  //   ? LitPodFns.getStringWithLocaleOne(thing, predicate, locale)
-  //   : LitPodFns.getStringNoLocaleOne(thing, predicate, locale);
-
-  const logDataSet = () => {
-    console.log("dataSet", dataSet);
-    console.log("thing", thing);
-  }
+  // const saveResource = async () => {
+  //   try {
+  //     await litPodFns.saveLitDatasetAt(predicate, thing);
+  //     if (onSave) {
+  //       onSave();
+  //     }
+  //     return "saved";
+  //   } catch (error) {
+  //     return error.message;
+  //   }
+  // };
 
   /* Save text value in the pod */
-  const saveHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const saveHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    // eslint-disable-next-line no-console
-    console.debug("newValue", newValue);
-    /* TODO: call lit-pod set and update functions */
-    // onSave();
+    const {
+      datasetInfo: { fetchedFrom },
+    } = dataSet;
+    const updatedResource = LitPodFns.setStringUnlocalized(
+      thing,
+      predicate,
+      newValue
+    );
+    const updatedProfileResource = LitPodFns.setThing(
+      fetchedFrom,
+      updatedResource
+    );
+    try {
+      await LitPodFns.saveLitDatasetAt(predicate, updatedProfileResource);
+      if (onSave) {
+        onSave();
+      }
+      return "saved";
+    } catch (error) {
+      return error.message;
+    }
   };
 
   return (
     <>
-      <p>{predicate}</p>
       {!edit && <span>{text}</span>}
       {edit && (
-        <>
-          <input
-            type="text"
-            onChange={(e) => setText(e.target.value)}
-            onBlur={(e) => saveHandler(e)}
-            value={text}
-          />
-          <button type="button" onClick={() => logDataSet()}>Hello</button>
-        </>
+        <input
+          type="text"
+          // onChange={(e) => setText(e.target.value)}
+          onChange={(e) => setText(e.target.value)}
+          onBlur={(e) => saveHandler(e)}
+          value={text}
+        />
       )}
     </>
   );
@@ -101,4 +112,5 @@ Text.defaultProps = {
   inputOptions: {},
   autosave: false,
   edit: false,
+  // onSave(): () => {}
 };

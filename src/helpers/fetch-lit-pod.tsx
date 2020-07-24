@@ -19,52 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import {
-  fetchLitDataset,
-  getThingOne,
-  getStringUnlocalizedOne,
-  setStringNoLocale,
-  saveLitDatasetAt,
-  Thing,
-} from "@solid/lit-pod";
+import * as litPodFns from "@solid/lit-pod";
 
 export interface profileObject {
-  containerIri: string;
-  name: string | null;
-  profile: Thing;
-  profileResource: any;
+  dataSet: litPodFns.LitDataset;
+  thing: litPodFns.Thing;
 }
 
-export async function fetchProfileName(
-  containerIri: string
+export async function fetchStringResource(
+  datasetIri: string,
+  thingIri: string
 ): Promise<profileObject> {
-  const profileResource = await fetchLitDataset(containerIri);
-  const resourceIri = `${containerIri}#me`;
-  const profile = getThingOne(profileResource, resourceIri);
-  const name: string | null = getStringUnlocalizedOne(
-    profile,
-    `http://xmlns.com/foaf/0.1/name`
-  );
+  const dataSet = await litPodFns.fetchLitDataset(datasetIri);
+  const thing = litPodFns.getThingOne(dataSet, thingIri);
   return {
-    containerIri,
-    name,
-    profile,
-    profileResource,
+    dataSet,
+    thing,
   };
-}
-
-export function setProfileName(thing: Thing): Thing {
-  return setStringNoLocale(thing, `http://xmlns.com/foaf/0.1/name`, "New Name");
-}
-
-export async function saveProfileName(
-  updatedProfileResource: Thing,
-  containerIri: string
-): Promise<string | Error> {
-  try {
-    await saveLitDatasetAt(containerIri, updatedProfileResource);
-    return "saved";
-  } catch (error) {
-    return error.message;
-  }
 }

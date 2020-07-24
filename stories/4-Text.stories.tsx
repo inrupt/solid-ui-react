@@ -20,8 +20,8 @@
  */
 
 import React, { ReactElement, useState, useEffect } from "react";
-import { Thing } from "@solid/lit-pod";
-import { fetchProfileName } from "../src/helpers/fetch-lit-pod";
+import * as litPodFns from "@solid/lit-pod";
+import { fetchStringResource } from "../src/helpers/fetch-lit-pod";
 import Text from "../src/Text";
 
 export default {
@@ -30,27 +30,18 @@ export default {
 };
 
 export function TextEditFalse(): ReactElement {
-  return <Text locale="en" />;
-}
-
-export function TextEditTrue(): ReactElement {
-  const [profileResource, setProfileResource] = useState<string | null>();
-  const [profile, setProfile] = useState<Thing | null>();
-  const [containerIri, setContainerIri] = useState<string | null>();
+  const [dataSet, setDataSet] = useState<litPodFns.LitDataset | null>();
+  const [thing, setThing] = useState<litPodFns.Thing | null>();
 
   async function fetchData() {
     try {
-      await fetchProfileName(
-        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
-      )
-        .then((result) => {
-          setProfileResource(result.profileResource);
-          setProfile(result.profile);
-          setContainerIri(result.containerIri);
-        })
-        .finally((result) => {
-          return console.log(result);
-        });
+      await fetchStringResource(
+        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card",
+        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card#me"
+      ).then((result) => {
+        setDataSet(result.dataSet);
+        setThing(result.thing);
+      });
     } catch (error) {
       return error.message;
     }
@@ -62,13 +53,50 @@ export function TextEditTrue(): ReactElement {
     void fetchData();
   }, []);
 
-  if (profile) {
+  if (dataSet && thing) {
     return (
       <Text
         locale="en"
-        dataSet={profileResource}
-        thing={profile}
-        predicate={containerIri}
+        dataSet={dataSet}
+        thing={thing}
+        predicate="http://xmlns.com/foaf/0.1/name"
+      />
+    );
+  }
+  return <p>Thing missing</p>;
+}
+
+export function TextEditTrue(): ReactElement {
+  const [dataSet, setDataSet] = useState<litPodFns.LitDataset | null>();
+  const [thing, setThing] = useState<litPodFns.Thing | null>();
+
+  async function fetchData() {
+    try {
+      await fetchStringResource(
+        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card",
+        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card#me"
+      ).then((result) => {
+        setDataSet(result.dataSet);
+        setThing(result.thing);
+      });
+    } catch (error) {
+      return error.message;
+    }
+    return "done";
+  }
+
+  useEffect(() => {
+    // eslint-disable-next-line no-void
+    void fetchData();
+  }, []);
+
+  if (dataSet && thing) {
+    return (
+      <Text
+        locale="en"
+        dataSet={dataSet}
+        thing={thing}
+        predicate="http://xmlns.com/foaf/0.1/name"
         edit
       />
     );
