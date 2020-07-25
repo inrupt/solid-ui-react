@@ -22,27 +22,31 @@
 import React, { ReactElement, useState, useEffect } from "react";
 import * as LitPodFns from "@solid/lit-pod";
 
+/* TODO: implement locale and autosave checks plus write tests */
+
 interface IText {
+  autosave?: boolean;
+  className?: string;
   dataSet: LitPodFns.LitDataset;
-  thing: LitPodFns.Thing;
-  locale?: string;
   edit?: boolean;
   inputOptions?: Record<string, unknown>;
-  autosave?: boolean;
-  onSave?(): void;
+  locale?: string;
+  onSave?: () => void;
   predicate: string;
+  thing: LitPodFns.Thing;
 }
 
 export default function Text(props: IText): ReactElement {
   const {
+    autosave,
+    className,
     dataSet,
-    thing,
-    locale,
     edit,
     inputOptions,
-    autosave,
-    predicate,
+    locale,
     onSave,
+    predicate,
+    thing,
   } = props;
 
   const [text, setText] = useState<string | null>("");
@@ -54,15 +58,19 @@ export default function Text(props: IText): ReactElement {
   /* Save text value in the pod */
   const saveHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
+
     const {
       resourceInfo: { fetchedFrom },
     } = dataSet;
+
     const updatedResource = LitPodFns.setStringUnlocalized(
       thing,
       predicate,
       newValue
     );
+
     const updatedProfileResource = LitPodFns.setThing(dataSet, updatedResource);
+
     try {
       await LitPodFns.saveLitDatasetAt(fetchedFrom, updatedProfileResource);
       if (onSave) {
@@ -76,10 +84,13 @@ export default function Text(props: IText): ReactElement {
 
   return (
     <>
-      {!edit && <span>{text}</span>}
+      {!edit && <span className={className}>{text}</span>}
       {edit && (
         <input
           type="text"
+          className={className}
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...inputOptions}
           onChange={(e) => setText(e.target.value)}
           onBlur={(e) => saveHandler(e)}
           value={text || ""}
@@ -90,9 +101,10 @@ export default function Text(props: IText): ReactElement {
 }
 
 Text.defaultProps = {
-  locale: null,
-  inputOptions: {},
   autosave: false,
+  className: null,
   edit: false,
-  // onSave(): () => {}
+  inputOptions: {},
+  locale: null,
+  onSave: () => {},
 };

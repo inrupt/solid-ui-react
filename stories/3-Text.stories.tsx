@@ -29,6 +29,9 @@ export default {
   component: Text,
 };
 
+/* TODO: Decide how we authenticate and pass resource URL
+        dynamically for storybook demo purposes */
+
 export function TextEditFalse(): ReactElement {
   const [dataSet, setDataSet] = useState<litPodFns.LitDataset | null>();
   const [thing, setThing] = useState<litPodFns.Thing | null>();
@@ -93,6 +96,90 @@ export function TextEditTrue(): ReactElement {
   if (dataSet && thing) {
     return (
       <Text
+        locale="en"
+        dataSet={dataSet}
+        thing={thing}
+        predicate="http://xmlns.com/foaf/0.1/name"
+        edit
+      />
+    );
+  }
+  return <p>Thing missing</p>;
+}
+
+export function TextEditTrueWithInputOptions(): ReactElement {
+  const [dataSet, setDataSet] = useState<litPodFns.LitDataset | null>();
+  const [thing, setThing] = useState<litPodFns.Thing | null>();
+
+  async function fetchData() {
+    try {
+      await fetchStringResource(
+        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card",
+        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card#me"
+      ).then((result) => {
+        setDataSet(result.dataSet);
+        setThing(result.thing);
+      });
+    } catch (error) {
+      return error.message;
+    }
+    return "done";
+  }
+
+  useEffect(() => {
+    // eslint-disable-next-line no-void
+    void fetchData();
+  }, []);
+
+  const inputOptions = {
+    id: "input-test",
+    name: "input-text",
+    placeholder: "some name value",
+  };
+
+  if (dataSet && thing) {
+    return (
+      <Text
+        inputOptions={inputOptions}
+        locale="en"
+        dataSet={dataSet}
+        thing={thing}
+        predicate="http://xmlns.com/foaf/0.1/name"
+        edit
+      />
+    );
+  }
+  return <p>Thing missing</p>;
+}
+
+export function TextEditTrueWithClass(): ReactElement {
+  const [dataSet, setDataSet] = useState<litPodFns.LitDataset | null>();
+  const [thing, setThing] = useState<litPodFns.Thing | null>();
+
+  async function fetchData() {
+    try {
+      await fetchStringResource(
+        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card",
+        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card#me"
+      ).then((result) => {
+        setDataSet(result.dataSet);
+        setThing(result.thing);
+      });
+    } catch (error) {
+      return error.message;
+    }
+    return "done";
+  }
+
+  useEffect(() => {
+    // eslint-disable-next-line no-void
+    void fetchData();
+  }, []);
+
+  if (dataSet && thing) {
+    return (
+      <Text
+        className="input-class"
         locale="en"
         dataSet={dataSet}
         thing={thing}
