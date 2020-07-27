@@ -24,12 +24,12 @@ import { render } from "@testing-library/react";
 import * as LitPodFns from "@solid/lit-pod";
 import Link from ".";
 
-const mockUrl = "test.url";
-const mockPredicate = `http://xmlns.com/foaf/0.1/nick`;
-const mockThing = LitPodFns.addStringUnlocalized(
+const mockUrl = "http://test.url";
+const mockPredicate = `https://www.w3.org/ns/auth/acl#origin`;
+const mockThing = LitPodFns.addUrl(
   LitPodFns.createThing(),
   mockPredicate,
-  "timbl"
+  mockUrl
 );
 
 jest.spyOn(LitPodFns, "getUrlOne").mockImplementation(() => mockUrl);
