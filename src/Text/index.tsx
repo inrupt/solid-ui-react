@@ -51,37 +51,42 @@ export default function Text(props: IText): ReactElement {
 
   const [text, setText] = useState<string | null>("");
 
-  let dataGetFnName = `getStringUnlocalizedOne`;
-  let dataSetFnName = `setStringUnlocalized`;
-
-  if (locale) {
-    dataGetFnName = "getStringInLocaleOne";
-    dataSetFnName = "setStringInLocale";
-  }
-
   useEffect(() => {
-    setText(LitPodFns[dataGetFnName](thing, predicate, locale));
-  }, [thing, predicate, dataGetFnName, locale]);
+    if (locale) {
+      setText(LitPodFns.getStringInLocaleOne(thing, predicate, locale));
+    } else {
+      setText(LitPodFns.getStringUnlocalizedOne(thing, predicate));
+    }
+  }, [thing, predicate, locale]);
 
   /* Save text value in the pod */
   const saveHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
 
-    const {
-      resourceInfo: { fetchedFrom },
-    } = dataSet;
-
-    const updatedResource = LitPodFns[dataSetFnName](
-      thing,
-      predicate,
-      newValue,
-      locale
-    );
+    let updatedResource: LitPodFns.Thing;
+    if (locale) {
+      updatedResource = LitPodFns.setStringInLocale(
+        thing,
+        predicate,
+        newValue,
+        locale
+      );
+    } else {
+      updatedResource = LitPodFns.setStringUnlocalized(
+        thing,
+        predicate,
+        newValue
+      );
+    }
 
     const updatedProfileResource = LitPodFns.setThing(dataSet, updatedResource);
 
     try {
-      await LitPodFns.saveLitDatasetAt(fetchedFrom, updatedProfileResource);
+      await LitPodFns.saveLitDatasetAt(
+        // TODO: make TS happy once docs are back
+        LitPodFns.getFetchedFrom(dataSet),
+        updatedProfileResource
+      );
       if (onSave) {
         onSave();
       }

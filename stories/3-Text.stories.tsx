@@ -59,7 +59,7 @@ export function TextEditFalse(): ReactElement {
   if (dataSet && thing) {
     return (
       <Text
-        locale="en"
+        fetchedFrom="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
         dataSet={dataSet}
         thing={thing}
         predicate="http://xmlns.com/foaf/0.1/name"
@@ -96,6 +96,7 @@ export function TextEditTrue(): ReactElement {
   if (dataSet && thing) {
     return (
       <Text
+        fetchedFrom="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
         locale="en"
         dataSet={dataSet}
         thing={thing}
@@ -140,6 +141,7 @@ export function TextEditTrueWithInputOptions(): ReactElement {
   if (dataSet && thing) {
     return (
       <Text
+        fetchedFrom="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
         inputOptions={inputOptions}
         locale="en"
         dataSet={dataSet}
@@ -179,6 +181,7 @@ export function TextEditTrueWithClass(): ReactElement {
   if (dataSet && thing) {
     return (
       <Text
+        fetchedFrom="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
         className="input-class"
         // locale="en"
         dataSet={dataSet}
