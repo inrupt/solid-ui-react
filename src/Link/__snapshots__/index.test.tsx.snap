@@ -3,9 +3,9 @@
 exports[`Link component Link snapshot 1`] = `
 <DocumentFragment>
   <a
-    href="test.url"
+    href="http://test.url"
   >
-    http://xmlns.com/foaf/0.1/nick
+    https://www.w3.org/ns/auth/acl#origin
   </a>
 </DocumentFragment>
 `;
