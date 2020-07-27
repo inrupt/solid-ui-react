@@ -24,14 +24,15 @@ import { render } from "@testing-library/react";
 import * as LitPodFns from "@solid/lit-pod";
 import Link from ".";
 
-jest.mock("@solid/lit-pod", () => {
-  return {
-    getUrlOne: jest.fn(() => "test.url"),
-  };
-});
-// TODO: add proper Thing mock
-const mockThing = JSON.parse("{}");
-const mockPredicate = "http://www.w3.org/2006/vcard/ns#fn";
+const mockUrl = "test.url";
+const mockPredicate = `http://xmlns.com/foaf/0.1/nick`;
+const mockThing = LitPodFns.addStringUnlocalized(
+  LitPodFns.createThing(),
+  mockPredicate,
+  "timbl"
+);
+
+jest.spyOn(LitPodFns, "getUrlOne").mockImplementation(() => mockUrl);
 
 describe("Link component", () => {
   it("Link snapshot", () => {
@@ -45,7 +46,7 @@ describe("Link component", () => {
       <Link thing={mockThing} property={mockPredicate} />
     );
     expect(LitPodFns.getUrlOne).toHaveBeenCalled();
-    expect(getByText(mockPredicate).getAttribute("href")).toBe("test.url");
+    expect(getByText(mockPredicate).getAttribute("href")).toBe(mockUrl);
   });
   it("When getUrlOne returns null, should set href to empty string", () => {
     (LitPodFns.getUrlOne as jest.Mock).mockReturnValue(null);
