@@ -21,15 +21,64 @@
 
 import React from "react";
 import { render } from "@testing-library/react";
-import { getUrlOne } from "@solid/lit-pod";
+import * as LitPodFns from "@solid/lit-pod";
 import Link from ".";
 
-jest.mock("@solid/lit-pods");
-// getUrlOne = jest.fn()
+jest.mock("@solid/lit-pod", () => {
+  return {
+    getUrlOne: jest.fn(() => "test.url"),
+  };
+});
+// TODO: add proper Thing mock
+const mockThing = JSON.parse("{}");
+const mockPredicate = "http://www.w3.org/2006/vcard/ns#fn";
 
 describe("Link component", () => {
   it("Link snapshot", () => {
-    const link = render(<Link thing={{}} property={{}} />);
-    expect(getUrlOne).toHaveBeenCalled();
+    const { asFragment } = render(
+      <Link thing={mockThing} property={mockPredicate} />
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+  it("Should call getUrlOne and use result as href value", () => {
+    const { getByText } = render(
+      <Link thing={mockThing} property={mockPredicate} />
+    );
+    expect(LitPodFns.getUrlOne).toHaveBeenCalled();
+    expect(getByText(mockPredicate).getAttribute("href")).toBe("test.url");
+  });
+  it("When getUrlOne returns null, should set href to empty string", () => {
+    (LitPodFns.getUrlOne as jest.Mock).mockReturnValue(null);
+    const { getByText } = render(
+      <Link thing={mockThing} property={mockPredicate} />
+    );
+    expect(LitPodFns.getUrlOne).toHaveBeenCalled();
+    expect(getByText(mockPredicate).getAttribute("href")).toBe("");
+  });
+  it("When passed no children, should render given property as link text", () => {
+    const { getByText } = render(
+      <Link thing={mockThing} property={mockPredicate} />
+    );
+    expect(getByText(mockPredicate)).toBeTruthy();
+  });
+  it("When passed children, should render as link text", () => {
+    const { getByText } = render(
+      <Link thing={mockThing} property={mockPredicate}>
+        <span>Test child</span>
+      </Link>
+    );
+    expect(getByText("Test child")).toBeTruthy();
+  });
+  it("Passes down additional props to <a>", () => {
+    const { getByText } = render(
+      <Link
+        thing={mockThing}
+        property={mockPredicate}
+        className="test-class"
+        linkOptions={{ target: "_blank" }}
+      />
+    );
+    expect(getByText(mockPredicate).getAttribute("target")).toBe("_blank");
+    expect(getByText(mockPredicate).getAttribute("class")).toBe("test-class");
   });
 });
