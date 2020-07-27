@@ -26,17 +26,28 @@ interface Props {
   children?: React.ReactNode;
   property: string;
   thing: Thing;
+  className?: string;
+  linkOptions?: Record<string, unknown>;
 }
 
 export default function Link({
   children,
   property,
   thing,
+  className,
+  linkOptions,
 }: Props): ReactElement {
   const href = getUrlOne(thing, property);
-  return <a href={href || ""}>{children || property}</a>;
+  return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <a href={href || ""} className={className} {...linkOptions}>
+      {children || property}
+    </a>
+  );
 }
 
 Link.defaultProps = {
   children: null,
+  className: null,
+  linkOptions: null,
 };
