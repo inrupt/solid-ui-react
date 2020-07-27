@@ -51,9 +51,17 @@ export default function Text(props: IText): ReactElement {
 
   const [text, setText] = useState<string | null>("");
 
+  let dataGetFnName = `getStringUnlocalizedOne`;
+  let dataSetFnName = `setStringUnlocalized`;
+
+  if (locale) {
+    dataGetFnName = "getStringInLocaleOne";
+    dataSetFnName = "setStringInLocale";
+  }
+
   useEffect(() => {
-    setText(LitPodFns.getStringUnlocalizedOne(thing, predicate));
-  }, [thing, predicate]);
+    setText(LitPodFns[dataGetFnName](thing, predicate, locale));
+  }, [thing, predicate, dataGetFnName, locale]);
 
   /* Save text value in the pod */
   const saveHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,10 +71,11 @@ export default function Text(props: IText): ReactElement {
       resourceInfo: { fetchedFrom },
     } = dataSet;
 
-    const updatedResource = LitPodFns.setStringUnlocalized(
+    const updatedResource = LitPodFns[dataSetFnName](
       thing,
       predicate,
-      newValue
+      newValue,
+      locale
     );
 
     const updatedProfileResource = LitPodFns.setThing(dataSet, updatedResource);

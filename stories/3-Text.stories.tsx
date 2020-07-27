@@ -99,7 +99,7 @@ export function TextEditTrue(): ReactElement {
         locale="en"
         dataSet={dataSet}
         thing={thing}
-        predicate="http://xmlns.com/foaf/0.1/name"
+        predicate="http://xmlns.com/foaf/0.1/nick"
         edit
       />
     );
@@ -180,7 +180,7 @@ export function TextEditTrueWithClass(): ReactElement {
     return (
       <Text
         className="input-class"
-        locale="en"
+        // locale="en"
         dataSet={dataSet}
         thing={thing}
         predicate="http://xmlns.com/foaf/0.1/name"
