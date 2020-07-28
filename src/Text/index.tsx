@@ -22,12 +22,12 @@
 import React, { ReactElement, useState, useEffect } from "react";
 import * as LitPodFns from "@solid/lit-pod";
 
-/* TODO: implement locale and autosave checks plus write tests */
+/* TODO: implement autosave check and write tests */
 
 interface IText {
   autosave?: boolean;
   className?: string;
-  dataSet: LitPodFns.LitDataset;
+  dataSet: LitPodFns.LitDataset & LitPodFns.WithResourceInfo;
   edit?: boolean;
   inputOptions?: Record<string, unknown>;
   locale?: string;
