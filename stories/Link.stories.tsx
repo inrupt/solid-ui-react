@@ -20,7 +20,7 @@
  */
 
 import React, { ReactElement } from "react";
-import * as LitPodFns from "@solid/lit-pod";
+import * as SolidFns from "@inrupt/solid-client";
 import Link from "../src/Link";
 
 export default {
@@ -31,8 +31,8 @@ export default {
 export function WithChildren(): ReactElement {
   const exampleUrl = "http://test.url";
   const examplePredicate = `https://www.w3.org/ns/auth/acl#origin`;
-  const exampleThing = LitPodFns.addUrl(
-    LitPodFns.createThing(),
+  const exampleThing = SolidFns.addUrl(
+    SolidFns.createThing(),
     examplePredicate,
     exampleUrl
   );
@@ -46,8 +46,8 @@ export function WithChildren(): ReactElement {
 export function WithoutChildren(): ReactElement {
   const exampleUrl = "http://test.url";
   const examplePredicate = `https://www.w3.org/ns/auth/acl#origin`;
-  const exampleThing = LitPodFns.addUrl(
-    LitPodFns.createThing(),
+  const exampleThing = SolidFns.addUrl(
+    SolidFns.createThing(),
     examplePredicate,
     exampleUrl
   );

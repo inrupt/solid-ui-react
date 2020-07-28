@@ -21,18 +21,18 @@
 
 import React from "react";
 import { render } from "@testing-library/react";
-import * as LitPodFns from "@solid/lit-pod";
+import * as SolidFns from "@inrupt/solid-client";
 import Link from ".";
 
 const mockUrl = "http://test.url";
 const mockPredicate = `https://www.w3.org/ns/auth/acl#origin`;
-const mockThing = LitPodFns.addUrl(
-  LitPodFns.createThing(),
+const mockThing = SolidFns.addUrl(
+  SolidFns.createThing(),
   mockPredicate,
   mockUrl
 );
 
-jest.spyOn(LitPodFns, "getUrlOne").mockImplementation(() => mockUrl);
+jest.spyOn(SolidFns, "getUrlOne").mockImplementation(() => mockUrl);
 
 describe("Link component", () => {
   it("Link snapshot", () => {
@@ -45,15 +45,15 @@ describe("Link component", () => {
     const { getByText } = render(
       <Link thing={mockThing} property={mockPredicate} />
     );
-    expect(LitPodFns.getUrlOne).toHaveBeenCalled();
+    expect(SolidFns.getUrlOne).toHaveBeenCalled();
     expect(getByText(mockPredicate).getAttribute("href")).toBe(mockUrl);
   });
   it("When getUrlOne returns null, should set href to empty string", () => {
-    (LitPodFns.getUrlOne as jest.Mock).mockReturnValue(null);
+    (SolidFns.getUrlOne as jest.Mock).mockReturnValue(null);
     const { getByText } = render(
       <Link thing={mockThing} property={mockPredicate} />
     );
-    expect(LitPodFns.getUrlOne).toHaveBeenCalled();
+    expect(SolidFns.getUrlOne).toHaveBeenCalled();
     expect(getByText(mockPredicate).getAttribute("href")).toBe("");
   });
   it("When passed no children, should render given property as link text", () => {

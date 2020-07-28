@@ -20,7 +20,7 @@
  */
 
 import React, { ReactElement } from "react";
-import { Thing, getUrlOne } from "@solid/lit-pod";
+import { Thing, getUrlOne } from "@inrupt/solid-client";
 
 interface Props {
   children?: React.ReactNode;
