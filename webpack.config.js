@@ -24,6 +24,9 @@ module.exports = {
     new CleanWebpackPlugin(),
   ],
   externals: [
+    "@inrupt/solid-client",
+    "@material-ui/core",
     "react",
+    "solid-auth-client",
   ],
 };

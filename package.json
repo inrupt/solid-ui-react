@@ -1,25 +1,28 @@
 {
-  "name": "@solid/ui-react",
+  "name": "@inrupt/solid-ui-react",
   "version": "0.2.0",
   "description": "Set of UI libraries using @solid/core",
   "main": "dist/index.js",
-  "module": "src/index.ts",
   "scripts": {
     "build": "webpack",
+    "ci": "npm run lint && npm run test && npm run build",
     "lint": "eslint src",
     "test": "jest",
     "storybook": "start-storybook -s ./public -p 3000 --https --ssl-cert ./certificates/localhost.crt --ssl-key ./certificates/localhost.key",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook -c .storybook -o docs"
   },
-  "dependencies": {
-    "@inrupt/solid-client": "0.0.2-master-185438310-580.0",
+  "peerDependencies": {
+    "@inrupt/solid-client": "*",
     "@material-ui/core": "^4.11.0",
-    "@types/solid-auth-client": "^2.4.0"
+    "react": "^16.13.1",
+    "solid-auth-client": "^2.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
     "@inrupt/eslint-config-base": "0.0.4",
     "@inrupt/eslint-config-react": "0.0.4",
+    "@inrupt/solid-client": "0.0.2-master-185438310-580.0",
+    "@material-ui/core": "^4.11.0",
     "@storybook/addon-actions": "^5.3.19",
     "@storybook/addon-docs": "^5.3.19",
     "@storybook/addon-links": "^5.3.19",
@@ -29,6 +32,7 @@
     "@testing-library/react": "^10.4.7",
     "@types/jest": "^26.0.5",
     "@types/react": "^16.9.43",
+    "@types/solid-auth-client": "^2.4.0",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
     "babel-loader": "^8.1.0",

@@ -1,0 +1,39 @@
+name: CI
+
+on: [push]
+
+env:
+  CI: true
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # Available OS's: https://help.github.com/en/actions/reference/virtual-environments-for-github-hosted-runners
+        os: [ubuntu-20.04, windows-2019, macos-10.15]
+        node-version: [14.x, 12.x, 10.x]
+    steps:
+    - uses: actions/checkout@v2.1.0
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1.4.1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Cache node modules
+      uses: actions/cache@v1.1.2
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node${{ runner.node-version }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+    - run: npm ci
+    - run: npm run ci
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: code-coverage-report
+        path: coverage
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: dist
+        path: dist
