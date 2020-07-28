@@ -79,14 +79,13 @@ export default function Text(props: IText): ReactElement {
       );
     }
     try {
-      if (onSave) {
-        onSave();
-      }
       await saveLitDatasetAt(
         getFetchedFrom(dataSet),
         setThing(dataSet, updatedResource)
       );
-      return "saved";
+      if (onSave) {
+        onSave();
+      }
     } catch (error) {
       return error.message;
     }

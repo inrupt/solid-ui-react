@@ -131,6 +131,7 @@ describe("<Text /> component functional testing", () => {
 
   it("Should call onSave if it was passed", async () => {
     const onSave = jest.fn();
+    jest.spyOn(SolidFns, "saveLitDatasetAt").mockImplementation();
     const { getByDisplayValue } = render(
       <Text
         dataSet={mockDataSet}
@@ -145,5 +146,24 @@ describe("<Text /> component functional testing", () => {
     fireEvent.change(input, { target: { value: "updated nick" } });
     input.blur();
     await waitFor(() => expect(onSave).toHaveBeenCalled());
+  });
+
+  it("Should not call onSave if saving fails", async () => {
+    const onSave = jest.fn();
+    jest.spyOn(SolidFns, "saveLitDatasetAt").mockImplementation();
+    const { getByDisplayValue } = render(
+      <Text
+        dataSet={mockDataSet}
+        thing={mockThing}
+        predicate={mockPredicate}
+        onSave={onSave}
+        edit
+      />
+    );
+    const input = getByDisplayValue(mockNick);
+    input.focus();
+    fireEvent.change(input, { target: { value: "updated nick" } });
+    input.blur();
+    await waitFor(() => expect(onSave).not.toHaveBeenCalled());
   });
 });
