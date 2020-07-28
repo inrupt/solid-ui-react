@@ -40,7 +40,7 @@ export default function Link({
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
     <a href={href} {...linkOptions}>
-      {children ?? property}
+      {children ?? href}
     </a>
   );
 }

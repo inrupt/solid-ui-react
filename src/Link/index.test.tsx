@@ -46,7 +46,7 @@ describe("Link component", () => {
       <Link thing={mockThing} property={mockPredicate} />
     );
     expect(SolidFns.getUrlOne).toHaveBeenCalled();
-    expect(getByText(mockPredicate).getAttribute("href")).toBe(mockUrl);
+    expect(getByText(mockUrl).getAttribute("href")).toBe(mockUrl);
   });
   it("When getUrlOne returns null, should throw an error", () => {
     (SolidFns.getUrlOne as jest.Mock).mockReturnValueOnce(null);
@@ -55,11 +55,11 @@ describe("Link component", () => {
     ).toThrowErrorMatchingSnapshot();
     expect(SolidFns.getUrlOne).toHaveBeenCalled();
   });
-  it("When passed no children, should render given property as link text", () => {
+  it("When passed no children, should render href as link text", () => {
     const { getByText } = render(
       <Link thing={mockThing} property={mockPredicate} />
     );
-    expect(getByText(mockPredicate)).toBeTruthy();
+    expect(getByText(mockUrl)).toBeTruthy();
   });
   it("When passed children, should render as link text", () => {
     const { getByText } = render(
@@ -78,7 +78,7 @@ describe("Link component", () => {
         target="_blank"
       />
     );
-    expect(getByText(mockPredicate).getAttribute("target")).toBe("_blank");
-    expect(getByText(mockPredicate).getAttribute("class")).toBe("test-class");
+    expect(getByText(mockUrl).getAttribute("target")).toBe("_blank");
+    expect(getByText(mockUrl).getAttribute("class")).toBe("test-class");
   });
 });
