@@ -27,7 +27,7 @@ interface Props {
   property: Url | UrlString;
   thing: Thing;
   className?: string;
-  linkOptions?: Record<string, unknown>;
+  linkOptions?: React.AnchorHTMLAttributes<HTMLAnchorElement>;
 }
 
 export default function Link({
