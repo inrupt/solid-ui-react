@@ -20,20 +20,20 @@
  */
 
 import * as React from "react";
-import { render } from "@testing-library/react";
-import * as litPodFns from "@solid/lit-pod";
+import { render, fireEvent, waitFor } from "@testing-library/react";
+import * as SolidFns from "@inrupt/solid-client";
 import Text from "./index";
 
 const mockPredicate = `http://xmlns.com/foaf/0.1/nick`;
 const mockNick = "test nick value";
 
-const mockThing = litPodFns.addStringNoLocale(
-  litPodFns.createThing(),
+const mockThing = SolidFns.addStringNoLocale(
+  SolidFns.createThing(),
   mockPredicate,
   mockNick
 );
 
-const mockDataSet = litPodFns.setThing(litPodFns.createLitDataset(), mockThing);
+const mockDataSet = SolidFns.setThing(SolidFns.createLitDataset(), mockThing);
 
 describe("<Text /> component snapshot test", () => {
   it("matches snapshot", () => {
@@ -63,5 +63,87 @@ describe("<Text /> component snapshot test", () => {
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
+  });
+});
+
+describe("<Text /> component functional testing", () => {
+  it("Should call getStringUnlocalizedOne function if no locale is passed", async () => {
+    jest
+      .spyOn(SolidFns, "getStringUnlocalizedOne")
+      .mockImplementation(() => mockNick);
+    const { getByText } = render(
+      <Text dataSet={mockDataSet} thing={mockThing} predicate={mockPredicate} />
+    );
+    expect(SolidFns.getStringUnlocalizedOne).toHaveBeenCalled();
+    expect(getByText(mockNick)).toBeTruthy();
+  });
+
+  it("Should call getStringInLocaleOne function if locale is passed", async () => {
+    jest
+      .spyOn(SolidFns, "getStringInLocaleOne")
+      .mockImplementation(() => mockNick);
+    const { getByText } = render(
+      <Text
+        dataSet={mockDataSet}
+        thing={mockThing}
+        predicate={mockPredicate}
+        locale="en"
+      />
+    );
+    expect(SolidFns.getStringInLocaleOne).toHaveBeenCalled();
+    expect(getByText(mockNick)).toBeTruthy();
+  });
+
+  it("Should call setStringUnlocalized onBlur if no locale is set", async () => {
+    jest
+      .spyOn(SolidFns, "setStringUnlocalized")
+      .mockImplementation(() => mockThing);
+    const { getByDisplayValue } = render(
+      <Text
+        dataSet={mockDataSet}
+        thing={mockThing}
+        predicate={mockPredicate}
+        edit
+      />
+    );
+    getByDisplayValue(mockNick).focus();
+    getByDisplayValue(mockNick).blur();
+    expect(SolidFns.setStringUnlocalized).toHaveBeenCalled();
+  });
+
+  it("Should call setStringInLocale onBlur if locale is set", async () => {
+    jest
+      .spyOn(SolidFns, "setStringInLocale")
+      .mockImplementation(() => mockThing);
+    const { getByDisplayValue } = render(
+      <Text
+        dataSet={mockDataSet}
+        thing={mockThing}
+        predicate={mockPredicate}
+        locale="en"
+        edit
+      />
+    );
+    getByDisplayValue(mockNick).focus();
+    getByDisplayValue(mockNick).blur();
+    expect(SolidFns.setStringInLocale).toHaveBeenCalled();
+  });
+
+  it("Should call onSave if it was passed", async () => {
+    const onSave = jest.fn();
+    const { getByDisplayValue } = render(
+      <Text
+        dataSet={mockDataSet}
+        thing={mockThing}
+        predicate={mockPredicate}
+        onSave={onSave}
+        edit
+      />
+    );
+    const input = getByDisplayValue(mockNick);
+    input.focus();
+    fireEvent.change(input, { target: { value: "updated nick" } });
+    input.blur();
+    await waitFor(() => expect(onSave).toHaveBeenCalled());
   });
 });

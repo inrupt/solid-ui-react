@@ -29,167 +29,109 @@ export default {
   component: Text,
 };
 
-/* TODO: Decide how we authenticate and pass resource URL
-        dynamically for storybook demo purposes */
-
 export function TextEditFalse(): ReactElement {
-  const [dataSet, setDataSet] = useState<litPodFns.LitDataset | null>();
-  const [thing, setThing] = useState<litPodFns.Thing | null>();
+  const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
+  const exampleNick = "example value";
 
-  async function fetchData() {
-    try {
-      await fetchStringResource(
-        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card",
-        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card#me"
-      ).then((result) => {
-        setDataSet(result.dataSet);
-        setThing(result.thing);
-      });
-    } catch (error) {
-      return error.message;
-    }
-    return "done";
-  }
+  const exampleThing = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    examplePredicate,
+    exampleNick
+  );
 
-  useEffect(() => {
-    // eslint-disable-next-line no-void
-    void fetchData();
-  }, []);
+  const exampleDataSet = SolidFns.setThing(
+    SolidFns.createLitDataset(),
+    exampleThing
+  );
 
-  if (dataSet && thing) {
-    return (
-      <Text
-        fetchedFrom="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
-        dataSet={dataSet}
-        thing={thing}
-        predicate="http://xmlns.com/foaf/0.1/name"
-      />
-    );
-  }
-  return <p>Thing missing</p>;
+  return (
+    <Text
+      dataSet={exampleDataSet}
+      thing={exampleThing}
+      predicate={examplePredicate}
+    />
+  );
 }
 
 export function TextEditTrue(): ReactElement {
-  const [dataSet, setDataSet] = useState<litPodFns.LitDataset | null>();
-  const [thing, setThing] = useState<litPodFns.Thing | null>();
+  const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
+  const exampleNick = "example value";
 
-  async function fetchData() {
-    try {
-      await fetchStringResource(
-        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card",
-        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card#me"
-      ).then((result) => {
-        setDataSet(result.dataSet);
-        setThing(result.thing);
-      });
-    } catch (error) {
-      return error.message;
-    }
-    return "done";
-  }
+  const exampleThing = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    examplePredicate,
+    exampleNick
+  );
 
-  useEffect(() => {
-    // eslint-disable-next-line no-void
-    void fetchData();
-  }, []);
+  const exampleDataSet = SolidFns.setThing(
+    SolidFns.createLitDataset(),
+    exampleThing
+  );
 
-  if (dataSet && thing) {
-    return (
-      <Text
-        fetchedFrom="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
-        locale="en"
-        dataSet={dataSet}
-        thing={thing}
-        predicate="http://xmlns.com/foaf/0.1/nick"
-        edit
-      />
-    );
-  }
-  return <p>Thing missing</p>;
+  return (
+    <Text
+      dataSet={exampleDataSet}
+      thing={exampleThing}
+      predicate={examplePredicate}
+      edit
+    />
+  );
 }
 
 export function TextEditTrueWithInputOptions(): ReactElement {
-  const [dataSet, setDataSet] = useState<litPodFns.LitDataset | null>();
-  const [thing, setThing] = useState<litPodFns.Thing | null>();
+  const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
+  const exampleNick = "example value";
 
-  async function fetchData() {
-    try {
-      await fetchStringResource(
-        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card",
-        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card#me"
-      ).then((result) => {
-        setDataSet(result.dataSet);
-        setThing(result.thing);
-      });
-    } catch (error) {
-      return error.message;
-    }
-    return "done";
-  }
+  const exampleThing = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    examplePredicate,
+    exampleNick
+  );
 
-  useEffect(() => {
-    // eslint-disable-next-line no-void
-    void fetchData();
-  }, []);
-
+  const exampleDataSet = SolidFns.setThing(
+    SolidFns.createLitDataset(),
+    exampleThing
+  );
   const inputOptions = {
     id: "input-test",
     name: "input-text",
     placeholder: "some name value",
   };
 
-  if (dataSet && thing) {
-    return (
-      <Text
-        fetchedFrom="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
-        inputOptions={inputOptions}
-        locale="en"
-        dataSet={dataSet}
-        thing={thing}
-        predicate="http://xmlns.com/foaf/0.1/name"
-        edit
-      />
-    );
-  }
-  return <p>Thing missing</p>;
+  return (
+    <Text
+      inputOptions={inputOptions}
+      dataSet={exampleDataSet}
+      thing={exampleThing}
+      predicate={examplePredicate}
+      edit
+    />
+  );
 }
 
 export function TextEditTrueWithClass(): ReactElement {
-  const [dataSet, setDataSet] = useState<litPodFns.LitDataset | null>();
-  const [thing, setThing] = useState<litPodFns.Thing | null>();
+  const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
+  const exampleNick = "example value";
 
-  async function fetchData() {
-    try {
-      await fetchStringResource(
-        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card",
-        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card#me"
-      ).then((result) => {
-        setDataSet(result.dataSet);
-        setThing(result.thing);
-      });
-    } catch (error) {
-      return error.message;
-    }
-    return "done";
-  }
+  const exampleThing = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    examplePredicate,
+    exampleNick
+  );
 
-  useEffect(() => {
-    // eslint-disable-next-line no-void
-    void fetchData();
-  }, []);
+  const exampleDataSet = SolidFns.setThing(
+    SolidFns.createLitDataset(),
+    exampleThing
+  );
 
-  if (dataSet && thing) {
-    return (
-      <Text
-        fetchedFrom="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
-        className="input-class"
-        // locale="en"
-        dataSet={dataSet}
-        thing={thing}
-        predicate="http://xmlns.com/foaf/0.1/name"
-        edit
-      />
-    );
-  }
-  return <p>Thing missing</p>;
+  return (
+    <Text
+      className="input-class"
+      dataSet={exampleDataSet}
+      thing={exampleThing}
+      predicate={examplePredicate}
+      onSave={() => alert("hello")}
+      edit
+    />
+  );
 }

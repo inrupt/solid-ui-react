@@ -38,15 +38,15 @@ interface IText {
 
 export default function Text(props: IText): ReactElement {
   const {
-    autosave,
-    className,
-    dataSet,
-    edit,
-    inputOptions,
-    locale,
-    onSave,
-    predicate,
     thing,
+    dataSet,
+    predicate,
+    locale,
+    className,
+    onSave,
+    edit,
+    autosave,
+    ...inputOptions
   } = props;
 
   const [text, setText] = useState<string | null>("");
@@ -78,18 +78,14 @@ export default function Text(props: IText): ReactElement {
         newValue
       );
     }
-
-    const updatedProfileResource = LitPodFns.setThing(dataSet, updatedResource);
-
     try {
-      await LitPodFns.saveLitDatasetAt(
-        // TODO: make TS happy once docs are back
-        LitPodFns.getFetchedFrom(dataSet),
-        updatedProfileResource
-      );
       if (onSave) {
         onSave();
       }
+      await saveLitDatasetAt(
+        getFetchedFrom(dataSet),
+        setThing(dataSet, updatedResource)
+      );
       return "saved";
     } catch (error) {
       return error.message;
@@ -120,5 +116,5 @@ Text.defaultProps = {
   edit: false,
   inputOptions: {},
   locale: null,
-  onSave: () => {},
+  onSave: null,
 };
