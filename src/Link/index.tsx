@@ -20,11 +20,11 @@
  */
 
 import React, { ReactElement } from "react";
-import { Thing, getUrlOne } from "@inrupt/solid-client";
+import { Thing, UrlString, getUrlOne } from "@inrupt/solid-client";
 
 interface Props {
   children?: React.ReactNode;
-  property: string;
+  property: UrlString;
   thing: Thing;
   className?: string;
   linkOptions?: Record<string, unknown>;
