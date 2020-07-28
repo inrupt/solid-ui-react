@@ -76,9 +76,11 @@ describe("Link component", () => {
         property={mockPredicate}
         className="test-class"
         target="_blank"
+        rel="noreferrer"
       />
     );
     expect(getByText(mockUrl).getAttribute("target")).toBe("_blank");
     expect(getByText(mockUrl).getAttribute("class")).toBe("test-class");
+    expect(getByText(mockUrl).getAttribute("rel")).toBe("noreferrer");
   });
 });

@@ -4,6 +4,7 @@ exports[`Link component Link snapshot 1`] = `
 <DocumentFragment>
   <a
     href="http://test.url"
+    rel="nofollow"
   >
     http://test.url
   </a>
