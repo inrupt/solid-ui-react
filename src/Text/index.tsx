@@ -32,8 +32,8 @@ type Props = {
   autosave?: boolean;
   edit?: boolean;
   locale?: string;
-  onSave?: () => void | null;
-  onError?: (error: Error) => void | null;
+  onSave?(): void | null;
+  onError?(): (error: Error) => void | null;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 export default function Text({
@@ -115,6 +115,4 @@ Text.defaultProps = {
   autosave: false,
   className: null,
   edit: false,
-  onSave: null,
-  onError: null,
 };
