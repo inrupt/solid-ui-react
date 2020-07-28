@@ -31,19 +31,16 @@ export default function Link({
   children,
   property,
   thing,
-  ...linkProps
+  rel = "nofollow",
+  ...linkOptions
 }: Props): ReactElement {
   const href = getUrlOne(thing, property);
   if (!href) {
     throw new Error("URL not found for given property");
   }
-  const linkOptions = {
-    rel: "nofollow",
-    ...linkProps,
-  };
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <a href={href} {...linkOptions}>
+    <a href={href} rel={rel} {...linkOptions}>
       {children ?? href}
     </a>
   );
