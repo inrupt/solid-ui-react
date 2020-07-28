@@ -9,3 +9,5 @@ exports[`Link component Link snapshot 1`] = `
   </a>
 </DocumentFragment>
 `;
+
+exports[`Link component When getUrlOne returns null, should throw an error 1`] = `"URL not found for given property"`;

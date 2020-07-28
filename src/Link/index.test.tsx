@@ -48,13 +48,12 @@ describe("Link component", () => {
     expect(SolidFns.getUrlOne).toHaveBeenCalled();
     expect(getByText(mockPredicate).getAttribute("href")).toBe(mockUrl);
   });
-  it("When getUrlOne returns null, should set href to empty string", () => {
-    (SolidFns.getUrlOne as jest.Mock).mockReturnValue(null);
-    const { getByText } = render(
-      <Link thing={mockThing} property={mockPredicate} />
-    );
+  it("When getUrlOne returns null, should throw an error", () => {
+    (SolidFns.getUrlOne as jest.Mock).mockReturnValueOnce(null);
+    expect(() =>
+      render(<Link thing={mockThing} property={mockPredicate} />)
+    ).toThrowErrorMatchingSnapshot();
     expect(SolidFns.getUrlOne).toHaveBeenCalled();
-    expect(getByText(mockPredicate).getAttribute("href")).toBe("");
   });
   it("When passed no children, should render given property as link text", () => {
     const { getByText } = render(

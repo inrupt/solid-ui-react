@@ -34,9 +34,12 @@ export default function Link({
   ...linkOptions
 }: Props): ReactElement {
   const href = getUrlOne(thing, property);
+  if (!href) {
+    throw new Error("URL not found for given property");
+  }
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <a href={href ?? ""} {...linkOptions}>
+    <a href={href} {...linkOptions}>
       {children ?? property}
     </a>
   );
