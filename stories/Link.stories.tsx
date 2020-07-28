@@ -28,17 +28,6 @@ export default {
   component: Link,
 };
 
-export function WithoutChildren(): ReactElement {
-  const exampleUrl = "http://test.url";
-  const examplePredicate = `https://www.w3.org/ns/auth/acl#origin`;
-  const exampleThing = LitPodFns.addUrl(
-    LitPodFns.createThing(),
-    examplePredicate,
-    exampleUrl
-  );
-  return <Link thing={exampleThing} property={examplePredicate} />;
-}
-
 export function WithChildren(): ReactElement {
   const exampleUrl = "http://test.url";
   const examplePredicate = `https://www.w3.org/ns/auth/acl#origin`;
@@ -52,4 +41,15 @@ export function WithChildren(): ReactElement {
       <span>Example child</span>
     </Link>
   );
+}
+
+export function WithoutChildren(): ReactElement {
+  const exampleUrl = "http://test.url";
+  const examplePredicate = `https://www.w3.org/ns/auth/acl#origin`;
+  const exampleThing = LitPodFns.addUrl(
+    LitPodFns.createThing(),
+    examplePredicate,
+    exampleUrl
+  );
+  return <Link thing={exampleThing} property={examplePredicate} />;
 }
