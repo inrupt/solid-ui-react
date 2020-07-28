@@ -24,31 +24,30 @@ import * as LitPodFns from "@solid/lit-pod";
 
 /* TODO: implement autosave check and write tests */
 
-interface IText {
-  autosave?: boolean;
+type Props = {
   className?: string;
-  dataSet: LitPodFns.LitDataset & LitPodFns.WithResourceInfo;
+  dataSet: LitDataset & WithResourceInfo;
+  predicate: UrlString;
+  thing: Thing;
+  autosave?: boolean;
   edit?: boolean;
-  inputOptions?: Record<string, unknown>;
   locale?: string;
-  onSave?: () => void;
-  predicate: string;
-  thing: LitPodFns.Thing;
-}
+  onSave?: () => void | null;
+  onError?: (error: Error) => void | null;
+} & React.InputHTMLAttributes<HTMLInputElement>;
 
-export default function Text(props: IText): ReactElement {
-  const {
-    thing,
-    dataSet,
-    predicate,
-    locale,
-    className,
-    onSave,
-    edit,
-    autosave,
-    ...inputOptions
-  } = props;
-
+export default function Text({
+  thing,
+  dataSet,
+  predicate,
+  locale,
+  className,
+  onSave,
+  onError,
+  edit,
+  autosave,
+  ...inputOptions
+}: Props): ReactElement {
   const [text, setText] = useState<string | null>("");
 
   useEffect(() => {
@@ -83,11 +82,14 @@ export default function Text(props: IText): ReactElement {
         getFetchedFrom(dataSet),
         setThing(dataSet, updatedResource)
       );
+      // TODO: line 89 is not tested for some reason
       if (onSave) {
         onSave();
       }
     } catch (error) {
-      return error.message;
+      if (onError) {
+        onError(error);
+      }
     }
   };
 
@@ -113,7 +115,6 @@ Text.defaultProps = {
   autosave: false,
   className: null,
   edit: false,
-  inputOptions: {},
-  locale: null,
   onSave: null,
+  onError: null,
 };

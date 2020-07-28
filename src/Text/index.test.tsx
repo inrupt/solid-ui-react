@@ -34,6 +34,13 @@ const mockThing = SolidFns.addStringNoLocale(
 );
 
 const mockDataSet = SolidFns.setThing(SolidFns.createLitDataset(), mockThing);
+const mockDataSetWithResourceInfo = SolidFns.setThing(
+  SolidFns.createLitDataset() as any,
+  mockThing
+);
+mockDataSetWithResourceInfo.internal_resourceInfo = {};
+mockDataSetWithResourceInfo.internal_resourceInfo.fetchedFrom =
+  "https://some-interesting-value.com";
 
 describe("<Text /> component snapshot test", () => {
   it("matches snapshot", () => {
@@ -54,7 +61,8 @@ describe("<Text /> component snapshot test", () => {
     const documentBody = render(
       <Text
         edit
-        inputOptions={inputOptions}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...inputOptions}
         className="test-class"
         dataSet={mockDataSet}
         thing={mockThing}
@@ -129,41 +137,45 @@ describe("<Text /> component functional testing", () => {
     expect(SolidFns.setStringInLocale).toHaveBeenCalled();
   });
 
-  it("Should call onSave if it was passed", async () => {
+  it("Should call onError if saving fails", async () => {
+    const onError = jest.fn();
     const onSave = jest.fn();
-    jest.spyOn(SolidFns, "saveLitDatasetAt").mockImplementation();
     const { getByDisplayValue } = render(
       <Text
         dataSet={mockDataSet}
         thing={mockThing}
         predicate={mockPredicate}
+        onError={onError}
         onSave={onSave}
         edit
       />
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick" } });
+    fireEvent.change(input, { target: { value: "updated nick three" } });
     input.blur();
-    await waitFor(() => expect(onSave).toHaveBeenCalled());
+    await waitFor(() => expect(onError).toHaveBeenCalled());
   });
 
-  it("Should not call onSave if saving fails", async () => {
+  it("Should call onSave if it was passed", async () => {
     const onSave = jest.fn();
-    jest.spyOn(SolidFns, "saveLitDatasetAt").mockImplementation();
+    const onError = jest.fn();
+    const savedDataSet = SolidFns.createLitDataset() as any;
+    jest.spyOn(SolidFns, "saveLitDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
       <Text
-        dataSet={mockDataSet}
+        dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         predicate={mockPredicate}
         onSave={onSave}
+        onError={onError}
         edit
       />
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick" } });
+    fireEvent.change(input, { target: { value: "updated nick ten" } });
     input.blur();
-    await waitFor(() => expect(onSave).not.toHaveBeenCalled());
+    await waitFor(() => expect(onSave).toHaveBeenCalled());
   });
 });
