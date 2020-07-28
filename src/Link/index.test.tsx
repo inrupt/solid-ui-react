@@ -25,7 +25,7 @@ import * as SolidFns from "@inrupt/solid-client";
 import Link from ".";
 
 const mockUrl = "http://test.url";
-const mockPredicate = `https://www.w3.org/ns/auth/acl#origin`;
+const mockPredicate = `http://www.w3.org/ns/auth/acl#origin`;
 const mockThing = SolidFns.addUrl(
   SolidFns.createThing(),
   mockPredicate,
