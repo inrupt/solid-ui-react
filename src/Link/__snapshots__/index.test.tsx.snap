@@ -5,7 +5,7 @@ exports[`Link component Link snapshot 1`] = `
   <a
     href="http://test.url"
   >
-    http://www.w3.org/ns/auth/acl#origin
+    http://xmlns.com/foaf/0.1/homepage
   </a>
 </DocumentFragment>
 `;

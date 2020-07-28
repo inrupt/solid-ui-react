@@ -30,7 +30,7 @@ export default {
 
 export function WithChildren(): ReactElement {
   const exampleUrl = "http://test.url";
-  const examplePredicate = `https://www.w3.org/ns/auth/acl#origin`;
+  const examplePredicate = `http://xmlns.com/foaf/0.1/homepage`;
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
     examplePredicate,
@@ -45,7 +45,7 @@ export function WithChildren(): ReactElement {
 
 export function WithoutChildren(): ReactElement {
   const exampleUrl = "http://test.url";
-  const examplePredicate = `https://www.w3.org/ns/auth/acl#origin`;
+  const examplePredicate = `http://xmlns.com/foaf/0.1/homepage`;
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
     examplePredicate,
