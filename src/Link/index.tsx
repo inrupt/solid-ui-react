@@ -22,32 +22,22 @@
 import React, { ReactElement } from "react";
 import { Thing, Url, UrlString, getUrlOne } from "@inrupt/solid-client";
 
-interface Props {
-  children?: React.ReactNode;
-  property: Url | UrlString;
+type Props = {
   thing: Thing;
-  className?: string;
-  linkOptions?: React.AnchorHTMLAttributes<HTMLAnchorElement>;
-}
+  property: Url | UrlString;
+} & React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
 export default function Link({
   children,
   property,
   thing,
-  className,
-  linkOptions,
+  ...linkOptions
 }: Props): ReactElement {
   const href = getUrlOne(thing, property);
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <a href={href || ""} className={className} {...linkOptions}>
-      {children || property}
+    <a href={href ?? ""} {...linkOptions}>
+      {children ?? property}
     </a>
   );
 }
-
-Link.defaultProps = {
-  children: null,
-  className: null,
-  linkOptions: null,
-};

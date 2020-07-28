@@ -76,7 +76,7 @@ describe("Link component", () => {
         thing={mockThing}
         property={mockPredicate}
         className="test-class"
-        linkOptions={{ target: "_blank" }}
+        target="_blank"
       />
     );
     expect(getByText(mockPredicate).getAttribute("target")).toBe("_blank");
