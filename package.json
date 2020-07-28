@@ -1,25 +1,30 @@
 {
-  "name": "@solid/ui-react",
+  "name": "@inrupt/solid-ui-react",
   "version": "0.2.0",
   "description": "Set of UI libraries using @solid/core",
   "main": "dist/index.js",
-  "module": "src/index.ts",
   "scripts": {
+    "audit": "npm audit --audit-level=moderate",
+    "audit-licenses": "license-checker --production --failOn \"AGPL-1.0-only; AGPL-1.0-or-later; AGPL-3.0-only; AGPL-3.0-or-later; Beerware; CC-BY-NC-1.0; CC-BY-NC-2.0; CC-BY-NC-2.5; CC-BY-NC-3.0; CC-BY-NC-4.0; CC-BY-NC-ND-1.0; CC-BY-NC-ND-2.0; CC-BY-NC-ND-2.5; CC-BY-NC-ND-3.0; CC-BY-NC-ND-4.0; CC-BY-NC-SA-1.0; CC-BY-NC-SA-2.0; CC-BY-NC-SA-2.5; CC-BY-NC-SA-3.0; CC-BY-NC-SA-4.0; CPAL-1.0; EUPL-1.0; EUPL-1.1; EUPL-1.1;  GPL-1.0-only; GPL-1.0-or-later; GPL-2.0-only;  GPL-2.0-or-later; GPL-3.0; GPL-3.0-only; GPL-3.0-or-later; SISSL;  SISSL-1.2; WTFPL\"",
     "build": "webpack",
+    "ci": "npm run lint && npm run test && npm run audit && npm run audit-licenses && npm run build",
     "lint": "eslint src",
     "test": "jest",
     "storybook": "start-storybook -s ./public -p 3000 --https --ssl-cert ./certificates/localhost.crt --ssl-key ./certificates/localhost.key",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook -c .storybook -o docs"
   },
-  "dependencies": {
-    "@inrupt/solid-client": "0.0.2-master-185438310-580.0",
+  "peerDependencies": {
+    "@inrupt/solid-client": "*",
     "@material-ui/core": "^4.11.0",
-    "@types/solid-auth-client": "^2.4.0"
+    "react": "^16.13.1",
+    "solid-auth-client": "^2.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
     "@inrupt/eslint-config-base": "0.0.4",
     "@inrupt/eslint-config-react": "0.0.4",
+    "@inrupt/solid-client": "0.0.2-master-185438310-580.0",
+    "@material-ui/core": "^4.11.0",
     "@storybook/addon-actions": "^5.3.19",
     "@storybook/addon-docs": "^5.3.19",
     "@storybook/addon-links": "^5.3.19",
@@ -29,6 +34,7 @@
     "@testing-library/react": "^10.4.7",
     "@types/jest": "^26.0.5",
     "@types/react": "^16.9.43",
+    "@types/solid-auth-client": "^2.4.0",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
     "babel-loader": "^8.1.0",
@@ -46,6 +52,7 @@
     "eslint-plugin-react-hooks": "^4.0.8",
     "fork-ts-checker-webpack-plugin": "^5.0.7",
     "jest": "^26.1.0",
+    "license-checker": "^25.0.1",
     "prettier": "^2.0.5",
     "react": "^16.13.1",
     "react-docgen-typescript-loader": "^3.7.2",
