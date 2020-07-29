@@ -15,9 +15,7 @@ exports[`<Text /> component snapshot test matches snapshot with edit true and in
   <div>
     <input
       class="test-class"
-      id="input-test"
-      name="input-text"
-      placeholder="some name value"
+      name="test-name"
       type="text"
       value="test nick value"
     />

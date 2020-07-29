@@ -56,7 +56,7 @@ describe("<Text /> component snapshot test", () => {
       <Text
         edit
         // eslint-disable-next-line react/jsx-props-no-spreading
-        {...inputOptions}
+        name="test-name"
         className="test-class"
         dataSet={mockDataSet}
         thing={mockThing}
