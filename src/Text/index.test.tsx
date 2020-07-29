@@ -57,7 +57,6 @@ describe("<Text /> component snapshot test", () => {
     const documentBody = render(
       <Text
         edit
-        // eslint-disable-next-line react/jsx-props-no-spreading
         name="test-name"
         className="test-class"
         dataSet={mockDataSet}
