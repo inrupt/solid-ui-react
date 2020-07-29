@@ -43,10 +43,12 @@ export default function Text({
   onError,
   edit,
   autosave,
-  ...inputOptions
+  onChange,
+  ...inputProps
 }: Props): ReactElement {
   const [text, setText] = useState<string | null>("");
-
+  const inputOptions = { ...inputProps };
+  delete inputOptions.type;
   useEffect(() => {
     if (locale) {
       setText(LitPodFns.getStringInLocaleOne(thing, predicate, locale));
@@ -96,7 +98,10 @@ export default function Text({
         <input
           type="text"
           className={className}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => {
+            setText(e.target.value);
+            if (onChange) onChange(e);
+          }}
           onBlur={(e) => autosave && saveHandler(e)}
           value={text || ""}
           // eslint-disable-next-line react/jsx-props-no-spreading

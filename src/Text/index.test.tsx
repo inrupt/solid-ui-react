@@ -173,9 +173,10 @@ describe("<Text /> component functional testing", () => {
     await waitFor(() => expect(onError).toHaveBeenCalled());
   });
 
-  it("Should call onSave if it was passed", async () => {
+  it("Should call onSave and onChange if they were passed", async () => {
     const onSave = jest.fn();
     const onError = jest.fn();
+    const onChange = jest.fn();
     const savedDataSet = SolidFns.createLitDataset() as any;
     jest.spyOn(SolidFns, "saveLitDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
@@ -185,6 +186,7 @@ describe("<Text /> component functional testing", () => {
         predicate={mockPredicate}
         onSave={onSave}
         onError={onError}
+        onChange={onChange}
         edit
         autosave
       />
@@ -193,10 +195,11 @@ describe("<Text /> component functional testing", () => {
     input.focus();
     fireEvent.change(input, { target: { value: "updated nick ten" } });
     input.blur();
+    await waitFor(() => expect(onChange).toHaveBeenCalled());
     await waitFor(() => expect(onSave).toHaveBeenCalled());
   });
 
-  it("Should not call onSave if it wasn't passed", async () => {
+  it("Should not call onSave and if it wasn't passed", async () => {
     const onSave = jest.fn();
     const savedDataSet = SolidFns.createLitDataset() as any;
     jest.spyOn(SolidFns, "saveLitDatasetAt").mockResolvedValue(savedDataSet);
