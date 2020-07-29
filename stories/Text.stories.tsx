@@ -47,7 +47,32 @@ export function TextEditFalse(): ReactElement {
     <Text
       dataSet={exampleDataSet}
       thing={exampleThing}
-      predicate={examplePredicate}
+      property={examplePredicate}
+    />
+  );
+}
+
+export function TextEditFalseWithProps(): ReactElement {
+  const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
+  const exampleNick = "example value";
+
+  const exampleThing = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    examplePredicate,
+    exampleNick
+  );
+
+  const exampleDataSet = SolidFns.setThing(
+    SolidFns.createLitDataset(),
+    exampleThing
+  );
+
+  return (
+    <Text
+      dataSet={exampleDataSet}
+      thing={exampleThing}
+      property={examplePredicate}
+      className="class-test"
     />
   );
 }
@@ -71,7 +96,7 @@ export function TextEditTrue(): ReactElement {
     <Text
       dataSet={exampleDataSet}
       thing={exampleThing}
-      predicate={examplePredicate}
+      property={examplePredicate}
       edit
     />
   );
@@ -92,39 +117,18 @@ export function TextEditTrueWithInputOptions(): ReactElement {
     exampleThing
   );
 
-  return (
-    <Text
-      name="tst-name"
-      dataSet={exampleDataSet}
-      thing={exampleThing}
-      predicate={examplePredicate}
-      edit
-    />
-  );
-}
-
-export function TextEditTrueWithClass(): ReactElement {
-  const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
-  const exampleNick = "example value";
-
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
-    examplePredicate,
-    exampleNick
-  );
-
-  const exampleDataSet = SolidFns.setThing(
-    SolidFns.createLitDataset(),
-    exampleThing
-  );
+  const inputOptions = {
+    type: "url",
+    name: "test-name",
+    className: "test-class",
+  };
 
   return (
     <Text
-      className="input-class"
       dataSet={exampleDataSet}
       thing={exampleThing}
-      predicate={examplePredicate}
-      onSave={() => alert("hello")}
+      property={examplePredicate}
+      inputProps={inputOptions}
       edit
     />
   );

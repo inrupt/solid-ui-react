@@ -24,38 +24,37 @@ import * as LitPodFns from "@solid/lit-pod";
 
 type Props = {
   dataSet: LitDataset & WithResourceInfo;
-  predicate: UrlString | string;
+  property: UrlString | string;
   thing: Thing;
   autosave?: boolean;
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   edit?: boolean;
   locale?: string;
   onSave?(): void | null;
-  onError?(): (error: Error) => void | null;
-} & React.InputHTMLAttributes<HTMLInputElement>;
+  onError?(error: Error): void | null;
+} & React.HTMLAttributes<HTMLSpanElement>;
 
 export default function Text({
   thing,
   dataSet,
-  predicate,
+  property,
   locale,
-  className,
   onSave,
   onError,
   edit,
   autosave,
-  onChange,
-  ...inputProps
+  inputProps,
+  ...other
 }: Props): ReactElement {
   const [text, setText] = useState<string | null>("");
-  const inputOptions = { ...inputProps };
-  delete inputOptions.type;
+
   useEffect(() => {
     if (locale) {
-      setText(LitPodFns.getStringInLocaleOne(thing, predicate, locale));
+      setText(getStringInLocaleOne(thing, property, locale));
     } else {
-      setText(LitPodFns.getStringUnlocalizedOne(thing, predicate));
+      setText(getStringUnlocalizedOne(thing, property));
     }
-  }, [thing, predicate, locale]);
+  }, [thing, property, locale]);
 
   /* Save text value in the pod */
   const saveHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,18 +62,9 @@ export default function Text({
 
     let updatedResource: LitPodFns.Thing;
     if (locale) {
-      updatedResource = LitPodFns.setStringInLocale(
-        thing,
-        predicate,
-        newValue,
-        locale
-      );
+      updatedResource = setStringInLocale(thing, property, newValue, locale);
     } else {
-      updatedResource = LitPodFns.setStringUnlocalized(
-        thing,
-        predicate,
-        newValue
-      );
+      updatedResource = setStringUnlocalized(thing, property, newValue);
     }
     try {
       await saveLitDatasetAt(
@@ -93,19 +83,18 @@ export default function Text({
 
   return (
     <>
-      {!edit && <span className={className}>{text}</span>}
+      {
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        !edit && <span {...other}>{text}</span>
+      }
       {edit && (
         <input
-          type="text"
-          className={className}
-          onChange={(e) => {
-            setText(e.target.value);
-            if (onChange) onChange(e);
-          }}
+          type={inputProps && inputProps.type ? inputProps.type : "text"}
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...inputProps}
+          onChange={(e) => setText(e.target.value)}
           onBlur={(e) => autosave && saveHandler(e)}
           value={text || ""}
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          {...inputOptions}
         />
       )}
     </>

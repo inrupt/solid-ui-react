@@ -14,9 +14,8 @@ exports[`<Text /> component snapshot test matches snapshot with edit true and in
 <body>
   <div>
     <input
-      class="test-class"
       name="test-name"
-      type="text"
+      type="url"
       value="test nick value"
     />
   </div>

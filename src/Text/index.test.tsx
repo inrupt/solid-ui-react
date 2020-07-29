@@ -47,21 +47,25 @@ mockDataSetWithResourceInfo.internal_resourceInfo.fetchedFrom =
 describe("<Text /> component snapshot test", () => {
   it("matches snapshot", () => {
     const documentBody = render(
-      <Text dataSet={mockDataSet} thing={mockThing} predicate={mockPredicate} />
+      <Text dataSet={mockDataSet} thing={mockThing} property={mockPredicate} />
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
   });
 
   it("matches snapshot with edit true and inputOptions", () => {
+    const inputOptions = {
+      name: "test-name",
+      type: "url",
+    };
+
     const documentBody = render(
       <Text
         edit
-        name="test-name"
-        className="test-class"
+        inputProps={inputOptions}
         dataSet={mockDataSet}
         thing={mockThing}
-        predicate={mockPredicate}
+        property={mockPredicate}
       />
     );
     const { baseElement } = documentBody;
@@ -75,7 +79,7 @@ describe("<Text /> component functional testing", () => {
       .spyOn(SolidFns, "getStringUnlocalizedOne")
       .mockImplementation(() => mockNick);
     const { getByText } = render(
-      <Text dataSet={mockDataSet} thing={mockThing} predicate={mockPredicate} />
+      <Text dataSet={mockDataSet} thing={mockThing} property={mockPredicate} />
     );
     expect(SolidFns.getStringUnlocalizedOne).toHaveBeenCalled();
     expect(getByText(mockNick)).toBeTruthy();
@@ -89,7 +93,7 @@ describe("<Text /> component functional testing", () => {
       <Text
         dataSet={mockDataSet}
         thing={mockThing}
-        predicate={mockPredicate}
+        property={mockPredicate}
         locale="en"
         autosave
       />
@@ -106,7 +110,7 @@ describe("<Text /> component functional testing", () => {
       <Text
         dataSet={mockDataSet}
         thing={mockThing}
-        predicate={mockPredicate}
+        property={mockPredicate}
         edit
         autosave
       />
@@ -124,7 +128,7 @@ describe("<Text /> component functional testing", () => {
       <Text
         dataSet={mockDataSet}
         thing={mockThing}
-        predicate={mockPredicate}
+        property={mockPredicate}
         locale="en"
         edit
         autosave
@@ -142,7 +146,7 @@ describe("<Text /> component functional testing", () => {
       <Text
         dataSet={mockDataSet}
         thing={mockThing}
-        predicate={mockPredicate}
+        property={mockPredicate}
         locale="en"
         edit
       />
@@ -159,7 +163,7 @@ describe("<Text /> component functional testing", () => {
       <Text
         dataSet={mockDataSet}
         thing={mockThing}
-        predicate={mockPredicate}
+        property={mockPredicate}
         onError={onError}
         onSave={onSave}
         edit
@@ -173,20 +177,18 @@ describe("<Text /> component functional testing", () => {
     await waitFor(() => expect(onError).toHaveBeenCalled());
   });
 
-  it("Should call onSave and onChange if they were passed", async () => {
+  it("Should call onSave if it is passed", async () => {
     const onSave = jest.fn();
     const onError = jest.fn();
-    const onChange = jest.fn();
     const savedDataSet = SolidFns.createLitDataset() as any;
     jest.spyOn(SolidFns, "saveLitDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
       <Text
         dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
-        predicate={mockPredicate}
+        property={mockPredicate}
         onSave={onSave}
         onError={onError}
-        onChange={onChange}
         edit
         autosave
       />
@@ -195,7 +197,6 @@ describe("<Text /> component functional testing", () => {
     input.focus();
     fireEvent.change(input, { target: { value: "updated nick ten" } });
     input.blur();
-    await waitFor(() => expect(onChange).toHaveBeenCalled());
     await waitFor(() => expect(onSave).toHaveBeenCalled());
   });
 
@@ -207,7 +208,7 @@ describe("<Text /> component functional testing", () => {
       <Text
         dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
-        predicate={mockPredicate}
+        property={mockPredicate}
         edit
         autosave
       />
