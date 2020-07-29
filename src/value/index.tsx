@@ -20,7 +20,7 @@
  */
 
 import React, { ReactElement } from "react";
-import * as LitPodFns from "@solid/lit-pod";
+import * as LitPodFns from "@inrupt/solid-client";
 
 enum DATA_TYPES {
   Boolean = "Boolean",

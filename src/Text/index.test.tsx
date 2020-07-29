@@ -52,12 +52,6 @@ describe("<Text /> component snapshot test", () => {
   });
 
   it("matches snapshot with edit true and inputOptions", () => {
-    const inputOptions = {
-      id: "input-test",
-      name: "input-text",
-      placeholder: "some name value",
-    };
-
     const documentBody = render(
       <Text
         edit

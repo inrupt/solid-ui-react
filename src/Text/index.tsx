@@ -100,11 +100,11 @@ export default function Text({
         <input
           type="text"
           className={className}
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          {...inputOptions}
           onChange={(e) => setText(e.target.value)}
           onBlur={(e) => saveHandler(e)}
           value={text || ""}
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...inputOptions}
         />
       )}
     </>

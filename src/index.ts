@@ -22,9 +22,13 @@
 import Link from "./link";
 import LoginButton from "./logIn";
 import LogoutButton from "./logOut";
+import Link from "./Link";
+import Text from "./Text";
 
 export default {
   Link,
   LoginButton,
   LogoutButton,
+  Link,
+  Text,
 };
