@@ -25,7 +25,7 @@ import * as LitPodFns from "@solid/lit-pod";
 type Props = {
   className?: string;
   dataSet: LitDataset & WithResourceInfo;
-  predicate: UrlString;
+  predicate: UrlString | string;
   thing: Thing;
   autosave?: boolean;
   edit?: boolean;
