@@ -51,7 +51,7 @@ const LoginButton: React.FC<Props> = (propsLogin: Props) => {
       {children}
     </div>
   ) : (
-    <button type="button" onClick={LoginHandler}>
+    <button type="button" onClick={LoginHandler} onKeyDown={LoginHandler}>
       Log In
     </button>
   );
