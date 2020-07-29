@@ -22,8 +22,6 @@
 import React, { ReactElement, useState, useEffect } from "react";
 import * as LitPodFns from "@solid/lit-pod";
 
-/* TODO: implement autosave check and write tests */
-
 type Props = {
   className?: string;
   dataSet: LitDataset & WithResourceInfo;
@@ -100,7 +98,7 @@ export default function Text({
           type="text"
           className={className}
           onChange={(e) => setText(e.target.value)}
-          onBlur={(e) => saveHandler(e)}
+          onBlur={(e) => autosave && saveHandler(e)}
           value={text || ""}
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...inputOptions}

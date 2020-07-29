@@ -91,6 +91,7 @@ describe("<Text /> component functional testing", () => {
         thing={mockThing}
         predicate={mockPredicate}
         locale="en"
+        autosave
       />
     );
     expect(SolidFns.getStringInLocaleOne).toHaveBeenCalled();
@@ -107,6 +108,7 @@ describe("<Text /> component functional testing", () => {
         thing={mockThing}
         predicate={mockPredicate}
         edit
+        autosave
       />
     );
     getByDisplayValue(mockNick).focus();
@@ -125,11 +127,29 @@ describe("<Text /> component functional testing", () => {
         predicate={mockPredicate}
         locale="en"
         edit
+        autosave
       />
     );
     getByDisplayValue(mockNick).focus();
     getByDisplayValue(mockNick).blur();
     expect(SolidFns.setStringInLocale).toHaveBeenCalled();
+  });
+
+  it("Should not call saveLitDatasetAt onBlur if autosave is false", async () => {
+    const savedDataSet = SolidFns.createLitDataset() as any;
+    jest.spyOn(SolidFns, "saveLitDatasetAt").mockResolvedValue(savedDataSet);
+    const { getByDisplayValue } = render(
+      <Text
+        dataSet={mockDataSet}
+        thing={mockThing}
+        predicate={mockPredicate}
+        locale="en"
+        edit
+      />
+    );
+    getByDisplayValue(mockNick).focus();
+    getByDisplayValue(mockNick).blur();
+    expect(SolidFns.saveLitDatasetAt).toHaveBeenCalledTimes(0);
   });
 
   it("Should call onError if saving fails", async () => {
@@ -143,6 +163,7 @@ describe("<Text /> component functional testing", () => {
         onError={onError}
         onSave={onSave}
         edit
+        autosave
       />
     );
     const input = getByDisplayValue(mockNick);
@@ -165,6 +186,7 @@ describe("<Text /> component functional testing", () => {
         onSave={onSave}
         onError={onError}
         edit
+        autosave
       />
     );
     const input = getByDisplayValue(mockNick);
@@ -184,6 +206,7 @@ describe("<Text /> component functional testing", () => {
         thing={mockThing}
         predicate={mockPredicate}
         edit
+        autosave
       />
     );
     const input = getByDisplayValue(mockNick);
