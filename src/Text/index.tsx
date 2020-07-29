@@ -82,7 +82,6 @@ export default function Text({
         getFetchedFrom(dataSet),
         setThing(dataSet, updatedResource)
       );
-      // TODO: line 89 is not tested for some reason
       if (onSave) {
         onSave();
       }
