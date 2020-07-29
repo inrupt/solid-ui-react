@@ -51,7 +51,5 @@ export function WithoutChildren(): ReactElement {
     examplePredicate,
     exampleUrl
   );
-  return (
-    <Link thing={exampleThing} property={examplePredicate} target="_blank" />
-  );
+  return <Link thing={exampleThing} property={examplePredicate} />;
 }
