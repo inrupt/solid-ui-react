@@ -23,7 +23,6 @@ import React, { ReactElement, useState, useEffect } from "react";
 import * as LitPodFns from "@solid/lit-pod";
 
 type Props = {
-  className?: string;
   dataSet: LitDataset & WithResourceInfo;
   predicate: UrlString | string;
   thing: Thing;
@@ -110,6 +109,5 @@ export default function Text({
 
 Text.defaultProps = {
   autosave: false,
-  className: null,
   edit: false,
 };
