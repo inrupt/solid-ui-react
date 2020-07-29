@@ -38,6 +38,8 @@ const mockDataSetWithResourceInfo = SolidFns.setThing(
   SolidFns.createLitDataset() as any,
   mockThing
 );
+
+// TODO: refactor this once ticket SDK-1157 has been done
 mockDataSetWithResourceInfo.internal_resourceInfo = {};
 mockDataSetWithResourceInfo.internal_resourceInfo.fetchedFrom =
   "https://some-interesting-value.com";
@@ -172,9 +174,9 @@ describe("<Text /> component functional testing", () => {
     input.blur();
     await waitFor(() => expect(onSave).toHaveBeenCalled());
   });
+
   it("Should not call onSave if it wasn't passed", async () => {
     const onSave = jest.fn();
-    const onError = jest.fn();
     const savedDataSet = SolidFns.createLitDataset() as any;
     jest.spyOn(SolidFns, "saveLitDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
@@ -189,6 +191,6 @@ describe("<Text /> component functional testing", () => {
     input.focus();
     fireEvent.change(input, { target: { value: "updated nick ten" } });
     input.blur();
-    await waitFor(() => expect(onSave).not.toHaveBeenCalled());
+    await waitFor(() => expect(onSave).toHaveBeenCalledTimes(0));
   });
 });
