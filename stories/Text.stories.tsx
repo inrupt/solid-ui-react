@@ -21,7 +21,7 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
-import Text from "../src/Text";
+import Text from "../src/text";
 
 export default {
   title: "Text component",
