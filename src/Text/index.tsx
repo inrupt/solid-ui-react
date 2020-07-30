@@ -20,7 +20,19 @@
  */
 
 import React, { ReactElement, useState, useEffect } from "react";
-import * as LitPodFns from "@solid/lit-pod";
+import {
+  Thing,
+  LitDataset,
+  WithResourceInfo,
+  UrlString,
+  getStringInLocaleOne,
+  getStringUnlocalizedOne,
+  setStringInLocale,
+  setStringUnlocalized,
+  setThing,
+  saveLitDatasetAt,
+  getFetchedFrom,
+} from "@inrupt/solid-client";
 
 type Props = {
   dataSet: LitDataset & WithResourceInfo;
@@ -60,7 +72,7 @@ export default function Text({
   const saveHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
 
-    let updatedResource: LitPodFns.Thing;
+    let updatedResource: Thing;
     if (locale) {
       updatedResource = setStringInLocale(thing, property, newValue, locale);
     } else {
