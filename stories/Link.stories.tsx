@@ -21,7 +21,7 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
-import Link from "../src/Link";
+import Link from "../src/link";
 
 export default {
   title: "Link",
