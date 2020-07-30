@@ -19,10 +19,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import Link from "./link";
 import LoginButton from "./logIn";
 import LogoutButton from "./logOut";
 
 export default {
+  Link,
   LoginButton,
   LogoutButton,
 };
