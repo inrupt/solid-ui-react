@@ -115,8 +115,10 @@ describe("<Text /> component functional testing", () => {
         autosave
       />
     );
-    getByDisplayValue(mockNick).focus();
-    getByDisplayValue(mockNick).blur();
+    const input = getByDisplayValue(mockNick);
+    input.focus();
+    fireEvent.change(input, { target: { value: "updated nick change" } });
+    input.blur();
     expect(SolidFns.setStringUnlocalized).toHaveBeenCalled();
   });
 
@@ -134,9 +136,31 @@ describe("<Text /> component functional testing", () => {
         autosave
       />
     );
-    getByDisplayValue(mockNick).focus();
-    getByDisplayValue(mockNick).blur();
+    const input = getByDisplayValue(mockNick);
+    input.focus();
+    fireEvent.change(input, { target: { value: "updated nick change" } });
+    input.blur();
     expect(SolidFns.setStringInLocale).toHaveBeenCalled();
+  });
+
+  it("Should not call setString onBlur if the value of the input hasn't changed", async () => {
+    jest
+      .spyOn(SolidFns, "setStringInLocale")
+      .mockImplementation(() => mockThing);
+    const { getByDisplayValue } = render(
+      <Text
+        dataSet={mockDataSet}
+        thing={mockThing}
+        property={mockPredicate}
+        locale="en"
+        edit
+        autosave
+      />
+    );
+    const input = getByDisplayValue(mockNick);
+    input.focus();
+    input.blur();
+    expect(SolidFns.setStringInLocale).toHaveBeenCalledTimes(0);
   });
 
   it("Should not call saveLitDatasetAt onBlur if autosave is false", async () => {
@@ -200,7 +224,7 @@ describe("<Text /> component functional testing", () => {
     await waitFor(() => expect(onSave).toHaveBeenCalled());
   });
 
-  it("Should not call onSave and if it wasn't passed", async () => {
+  it("Should not call onSave if it wasn't passed", async () => {
     const onSave = jest.fn();
     const savedDataSet = SolidFns.createLitDataset() as any;
     jest.spyOn(SolidFns, "saveLitDatasetAt").mockResolvedValue(savedDataSet);

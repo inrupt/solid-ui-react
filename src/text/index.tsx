@@ -59,6 +59,7 @@ export default function Text({
   ...other
 }: Props): ReactElement {
   const [text, setText] = useState<string | null>("");
+  const [initialValue, setInitialValue] = useState<string | null>("");
 
   useEffect(() => {
     if (locale) {
@@ -70,25 +71,26 @@ export default function Text({
 
   /* Save text value in the pod */
   const saveHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-
-    let updatedResource: Thing;
-    if (locale) {
-      updatedResource = setStringInLocale(thing, property, newValue, locale);
-    } else {
-      updatedResource = setStringUnlocalized(thing, property, newValue);
-    }
-    try {
-      await saveLitDatasetAt(
-        getFetchedFrom(dataSet),
-        setThing(dataSet, updatedResource)
-      );
-      if (onSave) {
-        onSave();
+    if(initialValue !== e.target.value) {
+      const newValue = e.target.value;
+      let updatedResource: Thing;
+      if (locale) {
+        updatedResource = setStringInLocale(thing, property, newValue, locale);
+      } else {
+        updatedResource = setStringUnlocalized(thing, property, newValue);
       }
-    } catch (error) {
-      if (onError) {
-        onError(error);
+      try {
+        await saveLitDatasetAt(
+          getFetchedFrom(dataSet),
+          setThing(dataSet, updatedResource)
+        );
+        if (onSave) {
+          onSave();
+        }
+      } catch (error) {
+        if (onError) {
+          onError(error);
+        }
       }
     }
   };
@@ -104,6 +106,7 @@ export default function Text({
           type={inputProps && inputProps.type ? inputProps.type : "text"}
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...inputProps}
+          onFocus={(e) => setInitialValue(e.target.value)}
           onChange={(e) => setText(e.target.value)}
           onBlur={(e) => autosave && saveHandler(e)}
           value={text || ""}

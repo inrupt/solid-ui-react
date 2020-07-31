@@ -98,6 +98,7 @@ export function TextEditTrue(): ReactElement {
       thing={exampleThing}
       property={examplePredicate}
       edit
+      autosave
     />
   );
 }
