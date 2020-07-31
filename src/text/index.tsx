@@ -71,7 +71,7 @@ export default function Text({
 
   /* Save text value in the pod */
   const saveHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if(initialValue !== e.target.value) {
+    if (initialValue !== e.target.value) {
       const newValue = e.target.value;
       let updatedResource: Thing;
       if (locale) {
