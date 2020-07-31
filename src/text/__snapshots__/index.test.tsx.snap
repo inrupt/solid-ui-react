@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Text /> component snapshot test matches snapshot 1`] = `
+<body>
+  <div>
+    <span>
+      test nick value
+    </span>
+  </div>
+</body>
+`;
+
+exports[`<Text /> component snapshot test matches snapshot with edit true and inputOptions 1`] = `
+<body>
+  <div>
+    <input
+      name="test-name"
+      type="url"
+      value="test nick value"
+    />
+  </div>
+</body>
+`;
