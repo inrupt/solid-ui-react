@@ -82,7 +82,7 @@ describe("<Text /> component functional testing", () => {
       <Text dataSet={mockDataSet} thing={mockThing} property={mockPredicate} />
     );
     expect(SolidFns.getStringUnlocalizedOne).toHaveBeenCalled();
-    expect(getByText(mockNick)).toBeTruthy();
+    expect(getByText(mockNick)).toBeDefined();
   });
 
   it("Should call getStringInLocaleOne function if locale is passed", async () => {
@@ -99,7 +99,7 @@ describe("<Text /> component functional testing", () => {
       />
     );
     expect(SolidFns.getStringInLocaleOne).toHaveBeenCalled();
-    expect(getByText(mockNick)).toBeTruthy();
+    expect(getByText(mockNick)).toBeDefined();
   });
 
   it("Should call setStringUnlocalized onBlur if no locale is set", async () => {
