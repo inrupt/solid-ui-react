@@ -75,12 +75,37 @@ describe("Link component", () => {
         thing={mockThing}
         property={mockPredicate}
         className="test-class"
-        target="_blank"
-        rel="noreferrer"
+        target="_self"
+        rel="abcd"
       />
     );
-    expect(getByText(mockUrl).getAttribute("target")).toBe("_blank");
+    expect(getByText(mockUrl).getAttribute("target")).toBe("_self");
     expect(getByText(mockUrl).getAttribute("class")).toBe("test-class");
-    expect(getByText(mockUrl).getAttribute("rel")).toBe("noreferrer");
+    expect(getByText(mockUrl).getAttribute("rel")).toBe("abcd");
+  });
+
+  it("Defaults rel to 'noopener noreferrer' if target=_blank", () => {
+    const { getByText } = render(
+      <Link
+        thing={mockThing}
+        property={mockPredicate}
+        className="test-class"
+        target="_blank"
+      />
+    );
+    expect(getByText(mockUrl).getAttribute("rel")).toBe("noopener noreferrer");
+  });
+
+  it("Overrides rel if passed in", () => {
+    const { getByText } = render(
+      <Link
+        thing={mockThing}
+        property={mockPredicate}
+        className="test-class"
+        target="_blank"
+        rel="test"
+      />
+    );
+    expect(getByText(mockUrl).getAttribute("rel")).toBe("test");
   });
 });
