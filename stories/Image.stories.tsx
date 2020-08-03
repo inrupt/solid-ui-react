@@ -21,7 +21,7 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
-import Image from "../src/Image";
+import Image from "../src/image";
 
 export default {
   title: "Image",
