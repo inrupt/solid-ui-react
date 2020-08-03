@@ -28,20 +28,24 @@ import {
 } from "@testing-library/react";
 import auth from "solid-auth-client";
 import LoginButton from "./index";
+import { SessionContext } from "../../context/sessionContext";
 
 jest.mock("solid-auth-client");
 let documentBody: RenderResult;
 const onLogin = jest.fn();
 const onError = jest.fn();
+const setSessionRequestInProgress = jest.fn();
 
 describe("<LoginButton /> component snapshot test", () => {
   beforeEach(() => {
     documentBody = render(
-      <LoginButton
-        popupUrl="./popup.html"
-        onLogin={onLogin}
-        onError={onError}
-      />
+      <SessionContext.Provider value={{ setSessionRequestInProgress }}>
+        <LoginButton
+          popupUrl="./popup.html"
+          onLogin={onLogin}
+          onError={onError}
+        />
+      </SessionContext.Provider>
     );
   });
   it("matches snapshot", () => {
@@ -53,9 +57,15 @@ describe("<LoginButton /> component snapshot test", () => {
 describe("<LoginButton /> component visual testing", () => {
   it("Renders child element", () => {
     const { getByText } = render(
-      <LoginButton popupUrl="./popup.html" onLogin={onLogin} onError={onError}>
-        <div>Custom child element</div>
-      </LoginButton>
+      <SessionContext.Provider value={{ setSessionRequestInProgress }}>
+        <LoginButton
+          popupUrl="./popup.html"
+          onLogin={onLogin}
+          onError={onError}
+        >
+          <div>Custom child element</div>
+        </LoginButton>
+      </SessionContext.Provider>
     );
 
     expect(getByText("Custom child element")).toBeTruthy();
@@ -67,17 +77,37 @@ describe("<LoginButton /> component functional testing", () => {
     (auth.popupLogin as jest.Mock).mockImplementationOnce(() =>
       Promise.resolve()
     );
+
     const { getByText } = render(
-      <LoginButton
-        popupUrl="./popup.html"
-        onLogin={onLogin}
-        onError={onError}
-      />
+      <SessionContext.Provider value={{ setSessionRequestInProgress }}>
+        <LoginButton
+          popupUrl="./popup.html"
+          onLogin={onLogin}
+          onError={onError}
+        />
+      </SessionContext.Provider>
     );
 
     fireEvent.click(getByText("Log In"));
+    expect(setSessionRequestInProgress).toHaveBeenCalledTimes(1);
     expect(auth.popupLogin).toHaveBeenCalled();
+
     await waitFor(() => expect(onLogin).toHaveBeenCalledTimes(1));
+  });
+
+  it("fires the onClick function and doesn't call OnLogin if it wasn't provided", async () => {
+    (auth.popupLogin as jest.Mock).mockImplementationOnce(() =>
+      Promise.resolve()
+    );
+
+    const { getByText } = render(
+      <SessionContext.Provider value={{ setSessionRequestInProgress }}>
+        <LoginButton popupUrl="./popup.html" onError={onError} />
+      </SessionContext.Provider>
+    );
+
+    fireEvent.click(getByText("Log In"));
+    await waitFor(() => expect(onLogin).toHaveBeenCalledTimes(0));
   });
 
   it("fires the onClick function and calls OnError", async () => {
@@ -85,15 +115,29 @@ describe("<LoginButton /> component functional testing", () => {
       Promise.reject()
     );
     const { getByText } = render(
-      <LoginButton
-        popupUrl="./popup.html"
-        onLogin={onLogin}
-        onError={onError}
-      />
+      <SessionContext.Provider value={{ setSessionRequestInProgress }}>
+        <LoginButton
+          popupUrl="./popup.html"
+          onLogin={onLogin}
+          onError={onError}
+        />
+      </SessionContext.Provider>
     );
-
     fireEvent.click(getByText("Log In"));
     expect(auth.popupLogin).toHaveBeenCalled();
     await waitFor(() => expect(onError).toHaveBeenCalledTimes(1));
+  });
+
+  it("fires the onClick function and doesn't call OnError if it wasn't provided", async () => {
+    (auth.popupLogin as jest.Mock).mockImplementationOnce(() =>
+      Promise.reject()
+    );
+    const { getByText } = render(
+      <SessionContext.Provider value={{ setSessionRequestInProgress }}>
+        <LoginButton popupUrl="./popup.html" onLogin={onLogin} />
+      </SessionContext.Provider>
+    );
+    fireEvent.click(getByText("Log In"));
+    await waitFor(() => expect(onError).toHaveBeenCalledTimes(0));
   });
 });

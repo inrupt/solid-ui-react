@@ -21,7 +21,8 @@
 
 import React, { ReactElement } from "react";
 import { Button } from "@material-ui/core";
-import LogoutButton from "../src/logOut";
+import { SessionProvider } from "../src/context/sessionContext";
+import LogoutButton from "../src/components/logOut";
 
 export default {
   title: "Logout Button",
@@ -38,20 +39,24 @@ async function logoutFailed(error: Error) {
 
 export function WithChildren(): ReactElement {
   return (
-    <LogoutButton
-      onLogout={() => logoutTest()}
-      onError={(error) => logoutFailed(error)}
-    >
-      <Button color="primary">Log Out</Button>
-    </LogoutButton>
+    <SessionProvider>
+      <LogoutButton
+        onLogout={() => logoutTest()}
+        onError={(error) => logoutFailed(error)}
+      >
+        <Button color="primary">Log Out</Button>
+      </LogoutButton>
+    </SessionProvider>
   );
 }
 
 export function WithoutChildren(): ReactElement {
   return (
-    <LogoutButton
-      onLogout={() => logoutTest()}
-      onError={(error) => logoutFailed(error)}
-    />
+    <SessionProvider>
+      <LogoutButton
+        onLogout={() => logoutTest()}
+        onError={(error) => logoutFailed(error)}
+      />
+    </SessionProvider>
   );
 }

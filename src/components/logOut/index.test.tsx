@@ -70,6 +70,24 @@ describe("<LoginButton /> component functional testing", () => {
     await waitFor(() => expect(onLogout).toHaveBeenCalledTimes(1));
   });
 
+  it("fires on click and doesn't pass on logout", async () => {
+    (auth.logout as jest.Mock).mockImplementationOnce(() => Promise.resolve());
+    const { getByText } = render(<LogoutButton onError={onError} />);
+
+    fireEvent.click(getByText("Log Out"));
+    expect(auth.logout).toHaveBeenCalled();
+    await waitFor(() => expect(onLogout).toHaveBeenCalledTimes(0));
+  });
+
+  it("fires the onClick function and not pass OnError", async () => {
+    (auth.logout as jest.Mock).mockImplementationOnce(() => Promise.reject());
+    const { getByText } = render(<LogoutButton onLogout={onLogout} />);
+
+    fireEvent.click(getByText("Log Out"));
+    expect(auth.logout).toHaveBeenCalled();
+    await waitFor(() => expect(onError).toHaveBeenCalledTimes(0));
+  });
+
   it("fires the onClick function and calls OnError", async () => {
     (auth.logout as jest.Mock).mockImplementationOnce(() => Promise.reject());
     const { getByText } = render(

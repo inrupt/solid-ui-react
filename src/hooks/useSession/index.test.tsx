@@ -19,18 +19,29 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Link from "./components/link";
-import LoginButton from "./components/logIn";
-import LogoutButton from "./components/logOut";
-import Text from "./components/text";
-import { SessionProvider } from "./context/sessionContext";
-import useSession from "./hooks/useSession";
+import * as React from "react";
+import { renderHook } from "@testing-library/react-hooks";
+import { SessionContext } from "../../context/sessionContext";
+import useSession from "./index";
 
-export default {
-  Link,
-  LoginButton,
-  LogoutButton,
-  Text,
-  SessionProvider,
-  useSession,
-};
+describe("useSession() hook functional testing", () => {
+  it("The hook should return values set in the SessionContext", async () => {
+    interface IProps {
+      children: React.ReactNode;
+    }
+
+    const wrapper = ({ children }: IProps) => (
+      <SessionContext.Provider
+        value={{
+          sessionRequestInProgress: true,
+          session: { webId: "https://solid.community/" },
+        }}
+      >
+        {children}
+      </SessionContext.Provider>
+    );
+    const { result } = renderHook(() => useSession(), { wrapper });
+    expect(result.current.session?.webId).toEqual("https://solid.community/");
+    expect(result.current.sessionRequestInProgress).toEqual(true);
+  });
+});

@@ -19,39 +19,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import auth from "solid-auth-client";
+import React, { ReactElement } from "react";
+import { Thing, Url, UrlString, getUrlOne } from "@inrupt/solid-client";
 
-interface Props {
-  onLogout(): void;
-  onError(error: Error): void;
-  children?: React.ReactElement;
-}
+type Props = {
+  thing: Thing;
+  property: Url | UrlString;
+} & React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
-const LogoutButton: React.FC<Props> = (propsLogout: Props) => {
-  const { children, onLogout, onError } = propsLogout;
-  async function LogoutHandler() {
-    try {
-      await auth.logout();
-      onLogout();
-    } catch (error) {
-      onError(error);
-    }
+export default function Link({
+  children,
+  property,
+  thing,
+  rel = "nofollow",
+  ...linkOptions
+}: Props): ReactElement {
+  const href = getUrlOne(thing, property);
+
+  if (!href) {
+    throw new Error("URL not found for given property");
   }
-  return children ? (
-    <div
-      role="button"
-      tabIndex={0}
-      onClick={LogoutHandler}
-      onKeyDown={LogoutHandler}
-    >
-      {children}
-    </div>
-  ) : (
-    <button type="button" onClick={LogoutHandler} onKeyDown={LogoutHandler}>
-      Log Out
-    </button>
-  );
-};
 
-export default LogoutButton;
+  return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    <a href={href} rel={rel} {...linkOptions}>
+      {children ?? href}
+    </a>
+  );
+}

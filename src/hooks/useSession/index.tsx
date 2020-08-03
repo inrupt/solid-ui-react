@@ -19,29 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
-import { Thing, Url, UrlString, getUrlOne } from "@inrupt/solid-client";
+import { useContext } from "react";
+import { SessionContext } from "../../context/sessionContext";
 
-type Props = {
-  thing: Thing;
-  property: Url | UrlString;
-} & React.AnchorHTMLAttributes<HTMLAnchorElement>;
-
-export default function Link({
-  children,
-  property,
-  thing,
-  rel = "nofollow",
-  ...linkOptions
-}: Props): ReactElement {
-  const href = getUrlOne(thing, property);
-  if (!href) {
-    throw new Error("URL not found for given property");
-  }
-  return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    <a href={href} rel={rel} {...linkOptions}>
-      {children ?? href}
-    </a>
-  );
+export default function useSession() {
+  const { session, sessionRequestInProgress } = useContext(SessionContext);
+  return { session, sessionRequestInProgress };
 }

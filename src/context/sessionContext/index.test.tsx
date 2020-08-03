@@ -19,18 +19,42 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Link from "./components/link";
-import LoginButton from "./components/logIn";
-import LogoutButton from "./components/logOut";
-import Text from "./components/text";
-import { SessionProvider } from "./context/sessionContext";
-import useSession from "./hooks/useSession";
+import * as React from "react";
+import { RenderResult, render } from "@testing-library/react";
+import auth from "solid-auth-client";
+import { SessionContext, SessionProvider } from ".";
 
-export default {
-  Link,
-  LoginButton,
-  LogoutButton,
-  Text,
-  SessionProvider,
-  useSession,
-};
+jest.mock("solid-auth-client");
+
+let documentBody: RenderResult;
+
+function ChildComponent(): React.ReactElement {
+  const { session, sessionRequestInProgress } = React.useContext(
+    SessionContext
+  );
+
+  return (
+    <div>
+      {sessionRequestInProgress && (
+        <div data-testid="sessionRequestInProgress">
+          sessionRequestInProgress
+        </div>
+      )}
+      <div data-testid="sesssion">{session}</div>
+    </div>
+  );
+}
+
+describe("Testing SessionContext matches snapshot", () => {
+  it("matches snapshot", () => {
+    (auth.trackSession as jest.Mock).mockResolvedValue(null);
+
+    documentBody = render(
+      <SessionProvider sessionRequestInProgress>
+        <ChildComponent />
+      </SessionProvider>
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+});
