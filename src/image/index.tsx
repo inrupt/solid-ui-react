@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState, useCallback } from "react";
 import {
   Thing,
   Url,
@@ -52,24 +52,22 @@ export default function Link({
   inputProps,
   ...imgOptions
 }: Props): ReactElement {
-  // const src = getUrlOne(thing, property);
-  const src = "https://ldp.demo-ess.inrupt.com/andydavison/private/test.jpg";
-  // const src = "https://andydavison.inrupt.net/private/test.jpg";
+  const src = getUrlOne(thing, property);
   if (!src) {
     throw new Error("URL not found for given property");
   }
   const [imgBase64, setImgBase64] = useState("");
 
-  const fetchImage = async () => {
+  const fetchImage = useCallback(async () => {
     const imageBlob = await fetchFile(src);
     const imageObjectUrl = URL.createObjectURL(imageBlob);
     setImgBase64(imageObjectUrl);
-  };
+  }, [src]);
 
   useEffect(() => {
     // eslint-disable-next-line no-void
     void fetchImage();
-  }, [src]);
+  }, [fetchImage]);
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
@@ -85,6 +83,7 @@ export default function Link({
           return;
         }
         input.setCustomValidity("");
+
         await overwriteFile(src, file);
         if (onSave) {
           onSave();
