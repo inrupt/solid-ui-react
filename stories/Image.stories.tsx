@@ -36,5 +36,13 @@ export function WithoutChildren(): ReactElement {
     exampleProperty,
     exampleUrl
   );
-  return <Image thing={exampleThing} property={exampleProperty} edit />;
+  return (
+    <Image
+      thing={exampleThing}
+      property={exampleProperty}
+      edit
+      autosave
+      maxSize={100}
+    />
+  );
 }

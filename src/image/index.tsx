@@ -33,8 +33,9 @@ type Props = {
   thing: Thing;
   property: Url | UrlString;
   edit?: boolean;
-  autoSave?: boolean;
+  autosave?: boolean;
   maxSize?: number;
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   onSave?: () => void;
   onError?: (error: Error) => void;
 } & React.ImgHTMLAttributes<HTMLImageElement>;
@@ -43,11 +44,12 @@ export default function Link({
   property,
   thing,
   edit,
-  // autoSave,
-  // onSave,
-  // onError,
-  // maxSize,
+  autosave,
+  onSave,
+  onError,
+  maxSize,
   alt,
+  inputProps,
   ...imgOptions
 }: Props): ReactElement {
   // const src = getUrlOne(thing, property);
@@ -69,13 +71,29 @@ export default function Link({
     void fetchImage();
   }, [src]);
 
-  const handleChange = async (fileList: FileList | null) => {
+  const handleChange = async (input: EventTarget & HTMLInputElement) => {
+    const fileList = input.files;
     // TODO do something for 0 files selected?
-    if (fileList && fileList.length > 0) {
-      const file = fileList[0];
-      console.log("file", file);
-      const response = await overwriteFile(src, file);
-      console.log("response", response);
+    if (autosave && fileList && fileList.length > 0) {
+      try {
+        const file = fileList[0];
+        if (maxSize && file.size > maxSize * 1024) {
+          input.setCustomValidity(
+            `The selected file must not be larger than ${maxSize}kB`
+          );
+          input.reportValidity();
+          return;
+        }
+        input.setCustomValidity("");
+        await overwriteFile(src, file);
+        if (onSave) {
+          onSave();
+        }
+      } catch (error) {
+        if (onError) {
+          onError(error);
+        }
+      }
       // eslint-disable-next-line no-void
       void fetchImage();
     }
@@ -86,9 +104,11 @@ export default function Link({
       <img src={imgBase64 ?? undefined} alt={alt ?? ""} {...imgOptions} />
       {edit && (
         <input
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          {...inputProps}
           type="file"
           accept="image/*"
-          onChange={(e) => handleChange(e.target.files)}
+          onChange={(e) => handleChange(e.target)}
         />
       )}
     </>
