@@ -30,11 +30,11 @@ export default {
 
 export function WithoutChildren(): ReactElement {
   const exampleUrl = "https://picsum.photos/200/300";
-  const examplePredicate = `http://xmlns.com/foaf/0.1/homepage`;
+  const exampleProperty = `http://xmlns.com/foaf/0.1/homepage`;
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
-    examplePredicate,
+    exampleProperty,
     exampleUrl
   );
-  return <Image thing={exampleThing} property={examplePredicate} />;
+  return <Image thing={exampleThing} property={exampleProperty} edit />;
 }
