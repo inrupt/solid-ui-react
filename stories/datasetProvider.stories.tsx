@@ -20,73 +20,80 @@
  */
 
 import React, { ReactElement, useContext, useState, useEffect } from "react";
+import { withKnobs, text } from "@storybook/addon-knobs";
 import * as SolidFns from "@inrupt/solid-client";
-import {
-  DatasetProvider,
-  DatasetContext,
-} from "../src/context/datasetContext";
+import { DatasetProvider, DatasetContext } from "../src/context/datasetContext";
 
 export default {
   title: "Dataset Provider",
+  decorators: [withKnobs],
 };
 
+const localPredicate = `http://xmlns.com/foaf/0.1/nick`;
+const localNick = "example value";
+
+const localThing = SolidFns.addStringNoLocale(
+  SolidFns.createThing(),
+  localPredicate,
+  localNick
+);
+
+const localDataSet = SolidFns.setThing(SolidFns.createLitDataset(), localThing);
+
 export function ProviderWithDatasetUrl(): ReactElement {
+  const datasetUrl = text(
+    "datasetUrl",
+    "https://ldp.demo-ess.inrupt.com/norbertand/profile/card#me"
+  );
   return (
-    <DatasetProvider datasetUrl="https://ldp.demo-ess.inrupt.com/norbertand/profile/card#me">
+    <DatasetProvider datasetUrl={datasetUrl}>
       <ExampleComponentWithDatasetUrl />
     </DatasetProvider>
   );
 }
 
 export function ProviderWithDataset(): ReactElement {
-  const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
-  const exampleNick = "example value";
-
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
-    examplePredicate,
-    exampleNick
-  );
-
-  const exampleDataSet = SolidFns.setThing(
-    SolidFns.createLitDataset(),
-    exampleThing
-  );
-
   return (
-    <DatasetProvider dataset={exampleDataSet}>
+    <DatasetProvider dataset={localDataSet}>
       <ExampleComponentWithDataset />
     </DatasetProvider>
   );
 }
 
 function ExampleComponentWithDatasetUrl(): ReactElement {
+  const datasetUrl = text(
+    "datasetUrl",
+    "https://ldp.demo-ess.inrupt.com/norbertand/profile/card#me"
+  );
+
+  const examplePredicate = text("property", "http://xmlns.com/foaf/0.1/name");
+
   const [exampleThing, setExampleThing] = useState<SolidFns.Thing>();
   const [property, setProperty] = useState<string>("fetching in progress");
 
   const datasetContext = useContext(DatasetContext);
   const { dataset } = datasetContext;
 
-  const examplePredicate = `http://xmlns.com/foaf/0.1/name`;
-
   useEffect(() => {
     if (dataset) {
-      const thing = SolidFns.getThingOne(
-        dataset,
-        "https://ldp.demo-ess.inrupt.com/norbertand/profile/card#me"
-      );
+      const thing = SolidFns.getThingOne(dataset, datasetUrl);
       setExampleThing(thing);
     }
+  }, [dataset, datasetUrl]);
+
+  useEffect(() => {
     if (exampleThing) {
       const fetchedProperty = SolidFns.getStringUnlocalizedOne(
         exampleThing,
         examplePredicate
       );
+      console.log("here", exampleThing);
+      console.log("fetchedProperty", fetchedProperty);
       if (fetchedProperty) {
         setProperty(fetchedProperty);
       }
     }
-  }, [dataset, examplePredicate, exampleThing]);
+  }, [examplePredicate, exampleThing]);
 
   return (
     <div>
@@ -96,8 +103,33 @@ function ExampleComponentWithDatasetUrl(): ReactElement {
 }
 
 function ExampleComponentWithDataset(): ReactElement {
+  const [exampleThing, setExampleThing] = useState<SolidFns.Thing>();
+  const [property, setProperty] = useState<string>("fetching in progress");
+
   const datasetContext = useContext(DatasetContext);
   const { dataset } = datasetContext;
+
+  useEffect(() => {
+    if (dataset) {
+      const thing = SolidFns.getThingOne(
+        dataset,
+        SolidFns.asIri(localThing, localPredicate)
+      );
+      setExampleThing(thing);
+    }
+  }, [dataset]);
+
+  useEffect(() => {
+    if (localThing && exampleThing) {
+      const fetchedProperty = SolidFns.getStringUnlocalizedOne(
+        localThing,
+        localPredicate
+      );
+      if (fetchedProperty) {
+        setProperty(fetchedProperty);
+      }
+    }
+  }, [dataset, exampleThing]);
 
   return (
     <div>
