@@ -29,17 +29,6 @@ export default {
   decorators: [withKnobs],
 };
 
-const localPredicate = `http://xmlns.com/foaf/0.1/nick`;
-const localNick = "example value";
-
-const localThing = SolidFns.addStringNoLocale(
-  SolidFns.createThing(),
-  localPredicate,
-  localNick
-);
-
-const localDataSet = SolidFns.setThing(SolidFns.createLitDataset(), localThing);
-
 export function ProviderWithDatasetUrl(): ReactElement {
   const datasetUrl = text(
     "datasetUrl",
@@ -53,8 +42,18 @@ export function ProviderWithDatasetUrl(): ReactElement {
 }
 
 export function ProviderWithDataset(): ReactElement {
+  const property = "http://xmlns.com/foaf/0.1/nick";
+  const nick = "example value";
+
+  const exampleThing = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    property,
+    nick
+  );
+  const dataSet = SolidFns.setThing(SolidFns.createLitDataset(), exampleThing);
+
   return (
-    <DatasetProvider dataset={localDataSet}>
+    <DatasetProvider dataset={dataSet}>
       <ExampleComponentWithDataset />
     </DatasetProvider>
   );
@@ -87,8 +86,6 @@ function ExampleComponentWithDatasetUrl(): ReactElement {
         exampleThing,
         examplePredicate
       );
-      console.log("here", exampleThing);
-      console.log("fetchedProperty", fetchedProperty);
       if (fetchedProperty) {
         setProperty(fetchedProperty);
       }
@@ -111,25 +108,22 @@ function ExampleComponentWithDataset(): ReactElement {
 
   useEffect(() => {
     if (dataset) {
-      const thing = SolidFns.getThingOne(
-        dataset,
-        SolidFns.asIri(localThing, localPredicate)
-      );
-      setExampleThing(thing);
+      const things = SolidFns.getThingAll(dataset);
+      setExampleThing(things[0]);
     }
   }, [dataset]);
 
   useEffect(() => {
-    if (localThing && exampleThing) {
+    if (exampleThing) {
       const fetchedProperty = SolidFns.getStringUnlocalizedOne(
-        localThing,
-        localPredicate
+        exampleThing,
+        "http://xmlns.com/foaf/0.1/nick"
       );
       if (fetchedProperty) {
         setProperty(fetchedProperty);
       }
     }
-  }, [dataset, exampleThing]);
+  }, [exampleThing]);
 
   return (
     <div>
