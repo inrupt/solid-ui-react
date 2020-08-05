@@ -20,14 +20,14 @@
  */
 
 import * as React from "react";
-import { RenderResult, render } from "@testing-library/react";
+import { RenderResult, render, waitFor } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
-import { ThingContext, ThingProvider } from "./index";
-import { DatasetProvider } from "../datasetContext/index";
+import { DatasetProvider, DatasetContext } from "./index";
 
 let documentBody: RenderResult;
 
-const mockPredicate = `http://xmlns.com/foaf/0.1/nick`;
+const mockUrl = "https://some-interesting-value.com";
+const mockPredicate = "http://xmlns.com/foaf/0.1/nick";
 const mockNick = "test nick value";
 
 const mockThing = SolidFns.addStringNoLocale(
@@ -36,6 +36,7 @@ const mockThing = SolidFns.addStringNoLocale(
   mockNick
 );
 
+// const mockDataSet = SolidFns.setThing(SolidFns.createLitDataset(), mockThing);
 const mockDataSetWithResourceInfo = SolidFns.setThing(
   SolidFns.createLitDataset() as any,
   mockThing
@@ -46,24 +47,33 @@ mockDataSetWithResourceInfo.internal_resourceInfo = {};
 mockDataSetWithResourceInfo.internal_resourceInfo.fetchedFrom =
   "https://some-interesting-value.com";
 
-function ExampleComponentWithThing(): React.ReactElement {
+function ExampleComponentWithDataset(): React.ReactElement {
+  const [exampleThing, setExampleThing] = React.useState<SolidFns.Thing>();
   const [property, setProperty] = React.useState<string>(
     "fetching in progress"
   );
-  const thingContext = React.useContext(ThingContext);
-  const { thing } = thingContext;
+
+  const datasetContext = React.useContext(DatasetContext);
+  const { dataset } = datasetContext;
 
   React.useEffect(() => {
-    if (thing) {
+    if (dataset) {
+      const things = SolidFns.getThingAll(dataset);
+      setExampleThing(things[0]);
+    }
+  }, [dataset]);
+
+  React.useEffect(() => {
+    if (exampleThing) {
       const fetchedProperty = SolidFns.getStringUnlocalizedOne(
-        thing,
-        "http://xmlns.com/foaf/0.1/name"
+        exampleThing,
+        mockPredicate
       );
       if (fetchedProperty) {
         setProperty(fetchedProperty);
       }
     }
-  }, [thing]);
+  }, [exampleThing]);
 
   return (
     <div>
@@ -72,26 +82,33 @@ function ExampleComponentWithThing(): React.ReactElement {
   );
 }
 
-function ExampleComponentWithThingUrl(): React.ReactElement {
-  const examplePredicate = "http://xmlns.com/foaf/0.1/nick";
+function ExampleComponentWithDatasetUrl(): React.ReactElement {
+  const [exampleThing, setExampleThing] = React.useState<SolidFns.Thing>();
   const [property, setProperty] = React.useState<string>(
     "fetching in progress"
   );
 
-  const thingContext = React.useContext(ThingContext);
-  const { thing } = thingContext;
+  const datasetContext = React.useContext(DatasetContext);
+  const { dataset } = datasetContext;
 
   React.useEffect(() => {
-    if (thing) {
+    if (dataset) {
+      const thing = SolidFns.getThingOne(dataset, mockUrl);
+      setExampleThing(thing);
+    }
+  }, [dataset]);
+
+  React.useEffect(() => {
+    if (exampleThing) {
       const fetchedProperty = SolidFns.getStringUnlocalizedOne(
-        thing,
-        examplePredicate
+        exampleThing,
+        mockPredicate
       );
       if (fetchedProperty) {
         setProperty(fetchedProperty);
       }
     }
-  }, [examplePredicate, thing]);
+  }, [exampleThing]);
 
   return (
     <div>
@@ -102,34 +119,28 @@ function ExampleComponentWithThingUrl(): React.ReactElement {
 
 describe("Testing ThingContext matches snapshot", () => {
   it("matches snapshot with thing provided", () => {
-    const property = "http://xmlns.com/foaf/0.1/name";
-    const name = "example value";
-
-    const exampleThing = SolidFns.addStringNoLocale(
-      SolidFns.createThing(),
-      property,
-      name
-    );
-
-    documentBody = render(
-      <ThingProvider thing={exampleThing}>
-        <ExampleComponentWithThing />
-      </ThingProvider>
-    );
-    const { baseElement } = documentBody;
-    expect(baseElement).toMatchSnapshot();
-  });
-  it("matches snapshot with thingUrl provided", () => {
-    jest.spyOn(SolidFns, "getThingOne").mockImplementation(() => mockThing);
-
     documentBody = render(
       <DatasetProvider dataset={mockDataSetWithResourceInfo}>
-        <ThingProvider thingUrl="https://some-interesting-value.com">
-          <ExampleComponentWithThingUrl />
-        </ThingProvider>
+        <ExampleComponentWithDataset />
       </DatasetProvider>
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
+  });
+});
+
+describe("Functional testing", () => {
+  it("Should call fetchLitDataset", async () => {
+    const setLitDataset = jest.fn();
+    jest
+      .spyOn(SolidFns, "fetchLitDataset")
+      .mockResolvedValue(mockDataSetWithResourceInfo);
+
+    render(
+      <DatasetProvider datasetUrl={mockUrl}>
+        <ExampleComponentWithDatasetUrl />
+      </DatasetProvider>
+    );
+    expect(SolidFns.fetchLitDataset).toHaveBeenCalled();
   });
 });

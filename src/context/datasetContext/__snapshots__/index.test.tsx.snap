@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing ThingContext matches snapshot matches snapshot with thing provided 1`] = `
+<body>
+  <div>
+    <div>
+      <h2>
+        test nick value
+      </h2>
+    </div>
+  </div>
+</body>
+`;
