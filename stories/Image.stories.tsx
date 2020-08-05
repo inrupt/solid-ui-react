@@ -30,7 +30,7 @@ export default {
 
 export function EditFalse(): ReactElement {
   const exampleUrl = "https://picsum.photos/200/300";
-  const exampleProperty = `http://xmlns.com/foaf/0.1/homepage`;
+  const exampleProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
     exampleProperty,
@@ -41,7 +41,7 @@ export function EditFalse(): ReactElement {
 
 export function EditTrue(): ReactElement {
   const exampleUrl = "https://picsum.photos/200/300";
-  const exampleProperty = `http://xmlns.com/foaf/0.1/homepage`;
+  const exampleProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
     exampleProperty,
