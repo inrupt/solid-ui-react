@@ -42,13 +42,13 @@ export function ProviderWithDatasetUrl(): ReactElement {
 }
 
 export function ProviderWithDataset(): ReactElement {
-  const property = "http://xmlns.com/foaf/0.1/nick";
-  const nick = "example value";
+  const property = "http://xmlns.com/foaf/0.1/name";
+  const name = "example value";
 
   const exampleThing = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     property,
-    nick
+    name
   );
   const dataSet = SolidFns.setThing(SolidFns.createLitDataset(), exampleThing);
 
@@ -117,7 +117,7 @@ function ExampleComponentWithDataset(): ReactElement {
     if (exampleThing) {
       const fetchedProperty = SolidFns.getStringUnlocalizedOne(
         exampleThing,
-        "http://xmlns.com/foaf/0.1/nick"
+        "http://xmlns.com/foaf/0.1/name"
       );
       if (fetchedProperty) {
         setProperty(fetchedProperty);
