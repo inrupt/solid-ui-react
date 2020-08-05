@@ -71,7 +71,6 @@ export default function Image({
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
-    // TODO do something for 0 files selected?
     if (autosave && fileList && fileList.length > 0) {
       try {
         const file = fileList[0];
