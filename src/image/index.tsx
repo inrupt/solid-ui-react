@@ -40,7 +40,7 @@ type Props = {
   onError?: (error: Error) => void;
 } & React.ImgHTMLAttributes<HTMLImageElement>;
 
-export default function Link({
+export default function Image({
   property,
   thing,
   edit,
@@ -75,7 +75,7 @@ export default function Link({
     if (autosave && fileList && fileList.length > 0) {
       try {
         const file = fileList[0];
-        if (maxSize && file.size > maxSize * 1024) {
+        if (maxSize !== undefined && file.size > maxSize * 1024) {
           input.setCustomValidity(
             `The selected file must not be larger than ${maxSize}kB`
           );
@@ -83,8 +83,9 @@ export default function Link({
           return;
         }
         input.setCustomValidity("");
-
         await overwriteFile(src, file);
+        // eslint-disable-next-line no-void
+        void fetchImage();
         if (onSave) {
           onSave();
         }
@@ -93,14 +94,12 @@ export default function Link({
           onError(error);
         }
       }
-      // eslint-disable-next-line no-void
-      void fetchImage();
     }
   };
   return (
     <>
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <img src={imgBase64 ?? undefined} alt={alt ?? ""} {...imgOptions} />
+      <img src={imgBase64} alt={alt ?? ""} {...imgOptions} />
       {edit && (
         <input
           // eslint-disable-next-line react/jsx-props-no-spreading
