@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import Image from "./components/image";
 import Link from "./components/link";
 import LoginButton from "./components/logIn";
 import LogoutButton from "./components/logOut";
@@ -27,6 +28,7 @@ import { SessionProvider } from "./context/sessionContext";
 import useSession from "./hooks/useSession";
 
 export default {
+  Image,
   Link,
   LoginButton,
   LogoutButton,
