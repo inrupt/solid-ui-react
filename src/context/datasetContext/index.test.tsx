@@ -131,7 +131,6 @@ describe("Testing ThingContext matches snapshot", () => {
 
 describe("Functional testing", () => {
   it("Should call fetchLitDataset", async () => {
-    const setLitDataset = jest.fn();
     jest
       .spyOn(SolidFns, "fetchLitDataset")
       .mockResolvedValue(mockDataSetWithResourceInfo);
