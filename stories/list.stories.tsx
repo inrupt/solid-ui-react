@@ -19,38 +19,55 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useState, useEffect } from "react";
-import {
-  Thing,
-  LitDataset,
-  WithResourceInfo,
-  UrlString,
-  getStringInLocaleOne,
-  getStringUnlocalizedOne,
-  getThingAll,
-  getStringNoLocaleAll,
-} from "@inrupt/solid-client";
+import React, { ReactElement } from "react";
+import * as SolidFns from "@inrupt/solid-client";
+import List from "../src/components/list";
 
-type Props = {
-  dataSet: LitDataset & WithResourceInfo;
-  property: UrlString | string;
-  thing: Thing;
-  type: string;
-  locale?: string;
+export default {
+  title: "List component",
+  component: List,
 };
 
-export default function List({
-  thing,
-  dataSet,
-  property,
-  type,
-  locale,
-}: Props): ReactElement {
-  const listValues = getStringNoLocaleAll(thing, property);
-  const listItems = listValues.map((item) => <li>{item}</li>);
+export function WithoutChildren(): ReactElement {
+  const examplePredicate = "http://xmlns.com/foaf/0.1/nick";
+  const thing = SolidFns.createThing();
+
+  const updatedThingValue = SolidFns.addStringNoLocale(
+    thing,
+    examplePredicate,
+    "laura"
+  );
+
+  const updatedThingValue2 = SolidFns.addStringNoLocale(
+    updatedThingValue,
+    examplePredicate,
+    "john"
+  );
+
+  const updatedThingValue3 = SolidFns.addStringNoLocale(
+    updatedThingValue2,
+    examplePredicate,
+    "kate"
+  );
+
+  const finalThing = SolidFns.addStringNoLocale(
+    updatedThingValue3,
+    examplePredicate,
+    "paul"
+  );
+
+  const exampleDataSet = SolidFns.setThing(
+    SolidFns.createLitDataset(),
+    finalThing
+  );
+
   return (
-    <>
-      <ul>{listItems}</ul>
-    </>
+    <List
+      dataSet={exampleDataSet}
+      thing={finalThing}
+      property={examplePredicate}
+      type="string"
+      locale="en"
+    />
   );
 }
