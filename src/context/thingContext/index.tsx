@@ -47,12 +47,10 @@ interface IThingProvider {
   children: React.ReactNode;
   thing?: Thing;
   thingUrl?: UrlString | string;
-  dataset?: LitDataset | (LitDataset & WithResourceInfo);
-  datasetUrl?: UrlString | string;
 }
 
 type RequireProperty<T, Prop extends keyof T> = T & { [key in Prop]-?: T[key] };
-type RequireDatasetOrDatasetUrl =
+type RequireThingOrThingUrl =
   | RequireProperty<IThingProvider, "thing">
   | RequireProperty<IThingProvider, "thingUrl">;
 
@@ -60,7 +58,7 @@ export const ThingProvider = ({
   children,
   thing,
   thingUrl,
-}: RequireDatasetOrDatasetUrl): ReactElement => {
+}: RequireThingOrThingUrl): ReactElement => {
   const datasetContext = useContext(DatasetContext);
   const { dataset } = datasetContext;
   const [litThing, setLitThing] = useState<Thing>();
@@ -71,22 +69,12 @@ export const ThingProvider = ({
     }
   }, [dataset, thingUrl]);
 
-  if (thing) {
-    return (
-      <ThingContext.Provider
-        value={{
-          thing,
-        }}
-      >
-        {children}
-      </ThingContext.Provider>
-    );
-  }
+  const thingValue = thing || litThing;
 
   return (
     <ThingContext.Provider
       value={{
-        thing: litThing,
+        thing: thingValue,
       }}
     >
       {children}

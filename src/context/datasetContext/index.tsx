@@ -66,22 +66,12 @@ export const DatasetProvider = ({
     }
   }, [dataset, datasetUrl]);
 
-  if (dataset) {
-    return (
-      <DatasetContext.Provider
-        value={{
-          dataset,
-        }}
-      >
-        {children}
-      </DatasetContext.Provider>
-    );
-  }
+  const datasetValue = dataset || litDataset;
 
   return (
     <DatasetContext.Provider
       value={{
-        dataset: litDataset,
+        dataset: datasetValue,
       }}
     >
       {children}
