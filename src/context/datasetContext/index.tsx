@@ -37,6 +37,7 @@ export const DatasetContext = createContext<IDatasetContext>({
 
 interface IDatasetProvider {
   children: React.ReactNode;
+  onError?(error: Error): void | null;
   dataset?: LitDataset | (LitDataset & WithResourceInfo);
   datasetUrl?: UrlString | string;
 }
@@ -48,15 +49,21 @@ type RequireDatasetOrDatasetUrl =
 
 export const DatasetProvider = ({
   children,
+  onError,
   dataset,
   datasetUrl,
 }: RequireDatasetOrDatasetUrl): ReactElement => {
   const [litDataset, setLitDataset] = useState<LitDataset & WithResourceInfo>();
 
   const fetchDataset = async (url: string) => {
-    await fetchLitDataset(url).then((result) => {
-      setLitDataset(result);
-    });
+    try {
+      const resource = await fetchLitDataset(url);
+      setLitDataset(resource);
+    } catch (error) {
+      if (onError) {
+        onError(error);
+      }
+    }
   };
 
   useEffect(() => {

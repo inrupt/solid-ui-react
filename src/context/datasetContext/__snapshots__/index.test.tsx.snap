@@ -1,6 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Testing ThingContext matches snapshot matches snapshot with thing provided 1`] = `
+exports[`Testing DatasetContext matches snapshot when fetching fails 1`] = `
+<body>
+  <div>
+    <div>
+      <h2>
+        fetching in progress
+      </h2>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Testing DatasetContext matches snapshot with Dataset provided 1`] = `
 <body>
   <div>
     <div>

@@ -33,6 +33,7 @@ import { ThingProvider } from "../thingContext/index";
 
 type Props = {
   children: React.ReactNode;
+  onError?(error: Error): void | null;
 };
 
 type ThingOrThingUrl = {
@@ -62,9 +63,13 @@ function CombinedDataProvider(
 ): ReactElement;
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function CombinedDataProvider(props: any): ReactElement {
-  const { children, dataset, datasetUrl, thing, thingUrl } = props;
+  const { children, dataset, datasetUrl, thing, thingUrl, onError } = props;
   return (
-    <DatasetProvider dataset={dataset} datasetUrl={datasetUrl}>
+    <DatasetProvider
+      onError={onError}
+      dataset={dataset}
+      datasetUrl={datasetUrl}
+    >
       <ThingProvider thing={thing} thingUrl={thingUrl}>
         {children}
       </ThingProvider>

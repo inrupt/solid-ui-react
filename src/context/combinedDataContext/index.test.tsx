@@ -20,7 +20,7 @@
  */
 
 import * as React from "react";
-import { RenderResult, render, waitFor } from "@testing-library/react";
+import { RenderResult, render } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
 import { ThingContext } from "../thingContext/index";
 import CombinedProvider from "./index";
