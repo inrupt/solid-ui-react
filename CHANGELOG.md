@@ -17,3 +17,12 @@
 ### Added
 
 - Image component
+
+## 0.7.0 ( August 7, 2020 )
+
+### Added
+
+- Dataset Provider Context
+- Thing Provider Context
+- Combined Dataset and Thing Provider wrapper
+

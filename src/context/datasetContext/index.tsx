@@ -19,7 +19,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { createContext, ReactElement, useState, useEffect } from "react";
+import React, {
+  createContext,
+  ReactElement,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import {
   fetchLitDataset,
   LitDataset,
@@ -55,23 +61,26 @@ export const DatasetProvider = ({
 }: RequireDatasetOrDatasetUrl): ReactElement => {
   const [litDataset, setLitDataset] = useState<LitDataset & WithResourceInfo>();
 
-  const fetchDataset = async (url: string) => {
-    try {
-      const resource = await fetchLitDataset(url);
-      setLitDataset(resource);
-    } catch (error) {
-      if (onError) {
-        onError(error);
+  const fetchDataset = useCallback(
+    async (url: string) => {
+      try {
+        const resource = await fetchLitDataset(url);
+        setLitDataset(resource);
+      } catch (error) {
+        if (onError) {
+          onError(error);
+        }
       }
-    }
-  };
+    },
+    [onError]
+  );
 
   useEffect(() => {
     if (!dataset && datasetUrl) {
       // eslint-disable-next-line no-void
       void fetchDataset(datasetUrl);
     }
-  }, [dataset, datasetUrl]);
+  }, [dataset, datasetUrl, fetchDataset]);
 
   const datasetValue = dataset || litDataset;
 

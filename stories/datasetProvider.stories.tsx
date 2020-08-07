@@ -32,7 +32,7 @@ export default {
 export function ProviderWithDatasetUrl(): ReactElement {
   const datasetUrl = text(
     "datasetUrl",
-    "https://ldp.demo-ess.inrupt.com/norbertand/profile/card#me"
+    "https://docs-example.inrupt.net/profile/card#me"
   );
   return (
     <DatasetProvider datasetUrl={datasetUrl}>
@@ -62,7 +62,7 @@ export function ProviderWithDataset(): ReactElement {
 function ExampleComponentWithDatasetUrl(): ReactElement {
   const datasetUrl = text(
     "datasetUrl",
-    "https://ldp.demo-ess.inrupt.com/norbertand/profile/card#me"
+    "https://docs-example.inrupt.net/profile/card#me"
   );
 
   const examplePredicate = text("property", "http://xmlns.com/foaf/0.1/name");

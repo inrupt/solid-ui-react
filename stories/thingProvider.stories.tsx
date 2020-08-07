@@ -37,7 +37,7 @@ export function ThingProviderWithThingUrlAndDataset(): ReactElement {
 
   const datasetUrl = text(
     "datasetUrl",
-    "https://ldp.demo-ess.inrupt.com/norbertand/profile/card#me"
+    "https://docs-example.inrupt.net/profile/card#me"
   );
 
   const setDataset = async (url: string) => {
