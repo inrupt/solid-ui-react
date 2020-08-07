@@ -53,7 +53,7 @@ export const DatasetProvider = ({
 }: RequireDatasetOrDatasetUrl): ReactElement => {
   const [litDataset, setLitDataset] = useState<LitDataset & WithResourceInfo>();
 
-  const setDataset = async (url: string) => {
+  const fetchDataset = async (url: string) => {
     await fetchLitDataset(url).then((result) => {
       setLitDataset(result);
     });
@@ -62,7 +62,7 @@ export const DatasetProvider = ({
   useEffect(() => {
     if (!dataset && datasetUrl) {
       // eslint-disable-next-line no-void
-      void setDataset(datasetUrl);
+      void fetchDataset(datasetUrl);
     }
   }, [dataset, datasetUrl]);
 
