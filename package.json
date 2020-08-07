@@ -1,6 +1,6 @@
 {
   "name": "@inrupt/solid-ui-react",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Set of UI libraries using @solid/core",
   "main": "dist/index.js",
   "scripts": {
@@ -80,5 +80,8 @@
   "bugs": {
     "url": "https://github.com/inrupt/solid-ui-react/issues"
   },
-  "homepage": "https://github.com/inrupt/solid-ui-react#readme"
+  "homepage": "https://github.com/inrupt/solid-ui-react#readme",
+  "dependencies": {
+    "@storybook/addon-knobs": "^5.3.19"
+  }
 }

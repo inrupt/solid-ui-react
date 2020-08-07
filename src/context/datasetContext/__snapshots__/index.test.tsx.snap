@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing DatasetContext matches snapshot when fetching fails 1`] = `
+<body>
+  <div>
+    <div>
+      <h2>
+        fetching in progress
+      </h2>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Testing DatasetContext matches snapshot with Dataset provided 1`] = `
+<body>
+  <div>
+    <div>
+      <h2>
+        test nick value
+      </h2>
+    </div>
+  </div>
+</body>
+`;

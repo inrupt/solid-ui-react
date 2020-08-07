@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CombinedProvider matches snapshot with dataset and thing provided 1`] = `
+<body>
+  <div>
+    <div>
+      <h2>
+        test nick value
+      </h2>
+    </div>
+  </div>
+</body>
+`;
