@@ -22,48 +22,15 @@
 import React, { ReactElement, useContext, useState, useEffect } from "react";
 import { withKnobs, text } from "@storybook/addon-knobs";
 import * as SolidFns from "@inrupt/solid-client";
-import { DatasetProvider } from "../src/context/datasetContext";
-import { ThingProvider, ThingContext } from "../src/context/thingContext";
+import { ThingContext } from "../src/context/thingContext";
+import CombinedDataProvider from "../src/context/combinedDataContext";
 
 export default {
-  title: "Thing Provider",
+  title: "Combined Provider (name TBC)",
   decorators: [withKnobs],
 };
 
-export function ThingProviderWithThingUrlAndDataset(): ReactElement {
-  const [litDataset, setLitDataset] = useState<
-    SolidFns.LitDataset & SolidFns.WithResourceInfo
-  >();
-
-  const datasetUrl = text(
-    "datasetUrl",
-    "https://ldp.demo-ess.inrupt.com/norbertand/profile/card#me"
-  );
-
-  const setDataset = async (url: string) => {
-    await SolidFns.fetchLitDataset(url).then((result) => {
-      setLitDataset(result);
-    });
-  };
-
-  useEffect(() => {
-    // eslint-disable-next-line no-void
-    void setDataset(datasetUrl);
-  }, [datasetUrl]);
-
-  if (litDataset) {
-    return (
-      <DatasetProvider dataset={litDataset}>
-        <ThingProvider thingUrl={datasetUrl}>
-          <ExampleComponentWithThingUrl />
-        </ThingProvider>
-      </DatasetProvider>
-    );
-  }
-  return <span>no dataset</span>;
-}
-
-export function ThingProviderWithThing(): ReactElement {
+export function CombinedDataProviderExample(): ReactElement {
   const property = "http://xmlns.com/foaf/0.1/name";
   const name = "example value";
 
@@ -72,16 +39,17 @@ export function ThingProviderWithThing(): ReactElement {
     property,
     name
   );
+  const dataSet = SolidFns.setThing(SolidFns.createLitDataset(), exampleThing);
 
   return (
-    <ThingProvider thing={exampleThing}>
-      <ExampleComponentWithThing />
-    </ThingProvider>
+    <CombinedDataProvider dataset={dataSet} thing={exampleThing}>
+      <ExampleComponent />
+    </CombinedDataProvider>
   );
 }
 
-function ExampleComponentWithThingUrl(): ReactElement {
-  const examplePredicate = text("property", "http://xmlns.com/foaf/0.1/name");
+function ExampleComponent(): ReactElement {
+  const examplePredicate = "http://xmlns.com/foaf/0.1/name";
   const [property, setProperty] = useState<string>("fetching in progress");
 
   const thingContext = useContext(ThingContext);
@@ -98,30 +66,6 @@ function ExampleComponentWithThingUrl(): ReactElement {
       }
     }
   }, [examplePredicate, thing]);
-
-  return (
-    <div>
-      <h2>{property}</h2>
-    </div>
-  );
-}
-
-function ExampleComponentWithThing(): ReactElement {
-  const [property, setProperty] = useState<string>("fetching in progress");
-  const thingContext = useContext(ThingContext);
-  const { thing } = thingContext;
-
-  useEffect(() => {
-    if (thing) {
-      const fetchedProperty = SolidFns.getStringUnlocalizedOne(
-        thing,
-        "http://xmlns.com/foaf/0.1/name"
-      );
-      if (fetchedProperty) {
-        setProperty(fetchedProperty);
-      }
-    }
-  }, [thing]);
 
   return (
     <div>
