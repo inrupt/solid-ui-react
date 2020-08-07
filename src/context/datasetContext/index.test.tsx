@@ -84,9 +84,7 @@ function ExampleComponentWithDataset(): React.ReactElement {
 
 function ExampleComponentWithDatasetUrl(): React.ReactElement {
   const [exampleThing, setExampleThing] = React.useState<SolidFns.Thing>();
-  const [property, setProperty] = React.useState<string>(
-    "fetching in progress"
-  );
+  const [property, setProperty] = React.useState<string>();
 
   const datasetContext = React.useContext(DatasetContext);
   const { dataset } = datasetContext;
@@ -112,15 +110,27 @@ function ExampleComponentWithDatasetUrl(): React.ReactElement {
 
   return (
     <div>
-      <h2>{property}</h2>
+      {property && <h2>{property}</h2>}
+      {!property && <h2>Failed to fetch property</h2>}
     </div>
   );
 }
 
-describe("Testing ThingContext matches snapshot", () => {
-  it("matches snapshot with thing provided", () => {
+describe("Testing DatasetContext", () => {
+  it("matches snapshot with Dataset provided", () => {
     documentBody = render(
       <DatasetProvider dataset={mockDataSetWithResourceInfo}>
+        <ExampleComponentWithDataset />
+      </DatasetProvider>
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+  it("matches snapshot when fetching fails", async () => {
+    jest.spyOn(SolidFns, "fetchLitDataset").mockRejectedValue(null);
+
+    documentBody = render(
+      <DatasetProvider datasetUrl="https://some-broken-resource.com">
         <ExampleComponentWithDataset />
       </DatasetProvider>
     );
@@ -141,5 +151,18 @@ describe("Functional testing", () => {
       </DatasetProvider>
     );
     expect(SolidFns.fetchLitDataset).toHaveBeenCalled();
+  });
+  it("When fetchLitDataset fails, should call onError if passed", async () => {
+    const onError = jest.fn();
+    (SolidFns.fetchLitDataset as jest.Mock).mockRejectedValue(null);
+    render(
+      <DatasetProvider
+        onError={onError}
+        datasetUrl="https://some-broken-value.com"
+      >
+        <ExampleComponentWithDatasetUrl />
+      </DatasetProvider>
+    );
+    await waitFor(() => expect(onError).toHaveBeenCalled());
   });
 });
