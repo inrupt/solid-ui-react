@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Image component Image functional tests When getUrlOne returns null, should throw an error 1`] = `"URL not found for given property"`;
+
+exports[`Image component Image snapshots matches snapshot with additional props for img and input 1`] = `
+<DocumentFragment>
+  <img
+    alt="test img"
+    class="img-class"
+    src="mock base64"
+  />
+  <input
+    accept="image/*"
+    class="input-class"
+    type="file"
+  />
+</DocumentFragment>
+`;
+
+exports[`Image component Image snapshots matches snapshot with standard props 1`] = `
+<DocumentFragment>
+  <img
+    alt=""
+    src="mock base64"
+  />
+</DocumentFragment>
+`;

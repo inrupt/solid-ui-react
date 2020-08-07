@@ -11,3 +11,9 @@
 
 - Session Provider Context
 - useSession hook
+
+## 0.6.0 ( August 5, 2020 )
+
+### Added
+
+- Image component

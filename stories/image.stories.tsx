@@ -19,20 +19,41 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Image from "./components/image";
-import Link from "./components/link";
-import LoginButton from "./components/logIn";
-import LogoutButton from "./components/logOut";
-import Text from "./components/text";
-import { SessionProvider } from "./context/sessionContext";
-import useSession from "./hooks/useSession";
+import React, { ReactElement } from "react";
+import * as SolidFns from "@inrupt/solid-client";
+import Image from "../src/components/image";
 
 export default {
-  Image,
-  Link,
-  LoginButton,
-  LogoutButton,
-  Text,
-  SessionProvider,
-  useSession,
+  title: "Image",
+  component: Image,
 };
+
+export function EditFalse(): ReactElement {
+  const exampleUrl = "https://picsum.photos/200/300";
+  const exampleProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
+  const exampleThing = SolidFns.addUrl(
+    SolidFns.createThing(),
+    exampleProperty,
+    exampleUrl
+  );
+  return <Image thing={exampleThing} property={exampleProperty} />;
+}
+
+export function EditTrue(): ReactElement {
+  const exampleUrl = "https://picsum.photos/200/300";
+  const exampleProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
+  const exampleThing = SolidFns.addUrl(
+    SolidFns.createThing(),
+    exampleProperty,
+    exampleUrl
+  );
+  return (
+    <Image
+      thing={exampleThing}
+      property={exampleProperty}
+      edit
+      autosave
+      maxSize={100}
+    />
+  );
+}
