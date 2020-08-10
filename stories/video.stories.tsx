@@ -19,22 +19,43 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Image from "./components/image";
-import Link from "./components/link";
-import LoginButton from "./components/logIn";
-import LogoutButton from "./components/logOut";
-import Text from "./components/text";
-import Video from "./components/video";
-import { SessionProvider } from "./context/sessionContext";
-import useSession from "./hooks/useSession";
+import React, { ReactElement } from "react";
+import * as SolidFns from "@inrupt/solid-client";
+import Video from "../src/components/video";
 
 export default {
-  Image,
-  Link,
-  LoginButton,
-  LogoutButton,
-  Text,
-  Video,
-  SessionProvider,
-  useSession,
+  title: "Video",
+  component: Video,
 };
+
+export function EditFalse(): ReactElement {
+  const exampleUrl =
+    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
+  const exampleProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
+  const exampleThing = SolidFns.addUrl(
+    SolidFns.createThing(),
+    exampleProperty,
+    exampleUrl
+  );
+  return <Video thing={exampleThing} property={exampleProperty} />;
+}
+
+export function EditTrue(): ReactElement {
+  const exampleUrl =
+    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
+  const exampleProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
+  const exampleThing = SolidFns.addUrl(
+    SolidFns.createThing(),
+    exampleProperty,
+    exampleUrl
+  );
+  return (
+    <Video
+      thing={exampleThing}
+      property={exampleProperty}
+      edit
+      autosave
+      maxSize={100}
+    />
+  );
+}
