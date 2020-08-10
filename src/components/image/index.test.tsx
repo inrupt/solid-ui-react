@@ -34,7 +34,7 @@ const mockThing = SolidFns.addUrl(
 );
 const mockFileBlob = new Blob([""], { type: "image/png" }) as Blob &
   SolidFns.WithResourceInfo;
-const mockObjectUrl = "mock base64";
+const mockObjectUrl = "mock object url";
 const mockFile = new File(["test file"], "test.png", { type: "image/png" });
 window.URL.createObjectURL = jest.fn(() => mockObjectUrl);
 
@@ -122,7 +122,7 @@ describe("Image component", () => {
     });
 
     it("Should call overwriteFile on change if autosave is true", async () => {
-      const mockUpdatedObjectUrl = "updated mock base64";
+      const mockUpdatedObjectUrl = "updated mock object url";
       const { getByAltText } = render(
         <Image
           thing={mockThing}
@@ -150,7 +150,6 @@ describe("Image component", () => {
         )
       );
       expect(SolidFns.unstable_overwriteFile).toHaveBeenCalled();
-      expect(SolidFns.unstable_fetchFile).toHaveBeenCalledTimes(2);
     });
 
     it("Should not call overwriteFile on change if file size > maxSize", async () => {
@@ -177,7 +176,7 @@ describe("Image component", () => {
     });
 
     it("Should call onSave after successful overwrite, if it is passed", async () => {
-      const mockUpdatedObjectUrl = "updated mock base64";
+      const mockUpdatedObjectUrl = "updated mock object url";
       const mockOnSave = jest.fn();
       const { getByAltText } = render(
         <Image

@@ -19,15 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useEffect, useState, useCallback } from "react";
-import {
-  Thing,
-  Url,
-  UrlString,
-  getUrl,
-  unstable_overwriteFile as overwriteFile,
-  unstable_fetchFile as fetchFile,
-} from "@inrupt/solid-client";
+import React, { ReactElement, useState, useEffect } from "react";
+import { Thing, Url, UrlString, getUrl } from "@inrupt/solid-client";
+import { overwriteFile, retrieveFile } from "../../helpers";
 
 type Props = {
   thing: Thing;
@@ -56,49 +50,33 @@ export default function Image({
   if (!src) {
     throw new Error("URL not found for given property");
   }
-  const [imgBase64, setImgBase64] = useState("");
-
-  const fetchImage = useCallback(async () => {
-    const imageBlob = await fetchFile(src);
-    const imageObjectUrl = URL.createObjectURL(imageBlob);
-    setImgBase64(imageObjectUrl);
-  }, [src]);
+  const [imgObjectUrl, setImgObjectUrl] = useState("");
 
   useEffect(() => {
     // eslint-disable-next-line no-void
-    void fetchImage();
-  }, [fetchImage]);
+    void retrieveFile(src, setImgObjectUrl);
+  }, [src]);
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
     if (autosave && fileList && fileList.length > 0) {
-      try {
-        const file = fileList[0];
-        if (maxSize !== undefined && file.size > maxSize * 1024) {
-          input.setCustomValidity(
-            `The selected file must not be larger than ${maxSize}kB`
-          );
-          input.reportValidity();
-          return;
-        }
-        input.setCustomValidity("");
-        await overwriteFile(src, file);
-        // eslint-disable-next-line no-void
-        void fetchImage();
-        if (onSave) {
-          onSave();
-        }
-      } catch (error) {
-        if (onError) {
-          onError(error);
-        }
+      const newObjectUrl = await overwriteFile(
+        src,
+        fileList[0],
+        input,
+        maxSize,
+        onSave,
+        onError
+      );
+      if (newObjectUrl) {
+        setImgObjectUrl(newObjectUrl);
       }
     }
   };
   return (
     <>
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <img src={imgBase64} alt={alt ?? ""} {...imgOptions} />
+      <img src={imgObjectUrl} alt={alt ?? ""} {...imgOptions} />
       {edit && (
         <input
           // eslint-disable-next-line react/jsx-props-no-spreading

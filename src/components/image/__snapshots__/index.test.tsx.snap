@@ -7,7 +7,7 @@ exports[`Image component Image snapshots matches snapshot with additional props 
   <img
     alt="test img"
     class="img-class"
-    src="mock base64"
+    src="mock object url"
   />
   <input
     accept="image/*"
@@ -21,7 +21,7 @@ exports[`Image component Image snapshots matches snapshot with standard props 1`
 <DocumentFragment>
   <img
     alt=""
-    src="mock base64"
+    src="mock object url"
   />
 </DocumentFragment>
 `;
