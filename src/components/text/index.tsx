@@ -23,20 +23,23 @@ import React, { ReactElement, useState, useEffect } from "react";
 import {
   Thing,
   SolidDataset,
+  Url,
   UrlString,
   getStringInLocaleOne,
   getStringUnlocalizedOne,
   setStringInLocale,
   setStringUnlocalized,
   setThing,
-  saveLitDatasetAt,
+  saveSolidDatasetAt,
   getFetchedFrom,
+  hasResourceInfo,
 } from "@inrupt/solid-client";
 
 type Props = {
   dataSet: SolidDataset;
-  property: UrlString | string;
+  property: Url | UrlString;
   thing: Thing;
+  saveDatasetTo?: Url | UrlString;
   autosave?: boolean;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   edit?: boolean;
@@ -67,7 +70,6 @@ export default function Text({
       setText(getStringUnlocalizedOne(thing, property));
     }
   }, [thing, property, locale]);
-
   /* Save text value in the pod */
   const saveHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (initialValue !== e.target.value) {
@@ -78,20 +80,25 @@ export default function Text({
       } else {
         updatedResource = setStringUnlocalized(thing, property, newValue);
       }
-      // TODO: refactor the text component using hasResourceInfo to handle new and existing datasets
-      // try {
-      //   await saveLitDatasetAt(
-      //     getFetchedFrom(dataSet),
-      //     setThing(dataSet, updatedResource)
-      //   );
-      //   if (onSave) {
-      //     onSave();
-      //   }
-      // } catch (error) {
-      //   if (onError) {
-      //     onError(error);
-      //   }
-      // }
+      try {
+        if (hasResourceInfo(dataSet)) {
+          await saveSolidDatasetAt(
+            getFetchedFrom(dataSet),
+            setThing(dataSet, updatedResource)
+          );
+          if (onSave) {
+            onSave();
+          }
+          return;
+        }
+        throw new Error(
+          "Resource Info not found for given Dataset, please provide SaveDatasetTo prop"
+        );
+      } catch (Error) {
+        if (onError) {
+          onError(Error);
+        }
+      }
     }
   };
 
