@@ -43,7 +43,7 @@ const mockDataSetWithResourceInfo = SolidFns.setThing(
 mockDataSetWithResourceInfo.internal_resourceInfo = {};
 mockDataSetWithResourceInfo.internal_resourceInfo.fetchedFrom =
   "https://some-interesting-value.com";
-const saveDatasetTo = "https://some-interesting-value.com"
+const saveDatasetTo = "https://some-interesting-value.com";
 
 describe("<Text /> component snapshot test", () => {
   it("matches snapshot", () => {

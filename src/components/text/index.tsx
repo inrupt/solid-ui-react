@@ -94,9 +94,9 @@ export default function Text({
         throw new Error(
           "Resource Info not found for given Dataset, please provide SaveDatasetTo prop"
         );
-      } catch (Error) {
+      } catch (error) {
         if (onError) {
-          onError(Error);
+          onError(error);
         }
       }
     }
