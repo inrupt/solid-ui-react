@@ -26,3 +26,9 @@
 - Thing Provider Context
 - Combined Dataset and Thing Provider wrapper
 
+## 0.8.0 ( August 10, 2020 )
+
+### Changed
+
+- @inrupt/solid-client version to 0.1.0
+
