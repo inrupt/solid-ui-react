@@ -38,11 +38,9 @@ const mockObjectUrl = "mock base64";
 const mockFile = new File(["test file"], "test.png", { type: "image/png" });
 window.URL.createObjectURL = jest.fn(() => mockObjectUrl);
 
-jest.spyOn(SolidFns, "getUrlOne").mockImplementation(() => mockUrl);
+jest.spyOn(SolidFns, "getUrl").mockImplementation(() => mockUrl);
 jest.spyOn(SolidFns, "unstable_fetchFile").mockResolvedValue(mockFileBlob);
-jest.spyOn(SolidFns, "unstable_overwriteFile").mockResolvedValue(({
-  body: "mock overwrite response",
-} as unknown) as Response);
+jest.spyOn(SolidFns, "unstable_overwriteFile").mockResolvedValue(mockFileBlob);
 
 describe("Image component", () => {
   beforeEach(() => {
@@ -77,26 +75,26 @@ describe("Image component", () => {
     });
   });
   describe("Image functional tests", () => {
-    it("Should call getUrlOne using given thing and property", async () => {
+    it("Should call getUrl using given thing and property", async () => {
       const { getByAltText } = render(
         <Image thing={mockThing} property={mockProperty} alt={mockAlt} />
       );
       await waitFor(() =>
         expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
       );
-      expect(SolidFns.getUrlOne).toHaveBeenCalledWith(mockThing, mockProperty);
+      expect(SolidFns.getUrl).toHaveBeenCalledWith(mockThing, mockProperty);
     });
 
-    it("When getUrlOne returns null, should throw an error", () => {
+    it("When getUrl returns null, should throw an error", () => {
       jest.spyOn(console, "error").mockImplementationOnce(() => {});
 
-      (SolidFns.getUrlOne as jest.Mock).mockReturnValueOnce(null);
+      (SolidFns.getUrl as jest.Mock).mockReturnValueOnce(null);
       expect(() =>
         render(
           <Image thing={mockThing} property={mockProperty} alt={mockAlt} />
         )
       ).toThrowErrorMatchingSnapshot();
-      expect(SolidFns.getUrlOne).toHaveBeenCalled();
+      expect(SolidFns.getUrl).toHaveBeenCalled();
 
       // eslint-disable-next-line no-console
       (console.error as jest.Mock).mockRestore();

@@ -120,7 +120,7 @@ describe("Testing ThingContext matches snapshot", () => {
     expect(baseElement).toMatchSnapshot();
   });
   it("matches snapshot with thingUrl provided", () => {
-    jest.spyOn(SolidFns, "getThingOne").mockImplementation(() => mockThing);
+    jest.spyOn(SolidFns, "getThing").mockImplementation(() => mockThing);
 
     documentBody = render(
       <DatasetProvider dataset={mockDataSetWithResourceInfo}>

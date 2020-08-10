@@ -22,8 +22,7 @@
 import React, { ReactElement, useState, useEffect } from "react";
 import {
   Thing,
-  LitDataset,
-  WithResourceInfo,
+  SolidDataset,
   UrlString,
   getStringInLocaleOne,
   getStringUnlocalizedOne,
@@ -35,7 +34,7 @@ import {
 } from "@inrupt/solid-client";
 
 type Props = {
-  dataSet: LitDataset & WithResourceInfo;
+  dataSet: SolidDataset;
   property: UrlString | string;
   thing: Thing;
   autosave?: boolean;

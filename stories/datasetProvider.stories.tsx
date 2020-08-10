@@ -75,7 +75,7 @@ function ExampleComponentWithDatasetUrl(): ReactElement {
 
   useEffect(() => {
     if (dataset) {
-      const thing = SolidFns.getThingOne(dataset, datasetUrl);
+      const thing = SolidFns.getThing(dataset, datasetUrl);
       setExampleThing(thing);
     }
   }, [dataset, datasetUrl]);

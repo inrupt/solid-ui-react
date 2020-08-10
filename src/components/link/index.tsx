@@ -20,7 +20,7 @@
  */
 
 import React, { ReactElement } from "react";
-import { Thing, Url, UrlString, getUrlOne } from "@inrupt/solid-client";
+import { Thing, Url, UrlString, getUrl } from "@inrupt/solid-client";
 
 type Props = {
   thing: Thing;
@@ -35,7 +35,7 @@ export default function Link({
   target,
   ...linkOptions
 }: Props): ReactElement {
-  const href = getUrlOne(thing, property);
+  const href = getUrl(thing, property);
 
   const adjustedRel =
     rel || (target === "_blank" ? "noopener noreferrer" : "nofollow");

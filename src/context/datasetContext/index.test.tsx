@@ -91,7 +91,7 @@ function ExampleComponentWithDatasetUrl(): React.ReactElement {
 
   React.useEffect(() => {
     if (dataset) {
-      const thing = SolidFns.getThingOne(dataset, mockUrl);
+      const thing = SolidFns.getThing(dataset, mockUrl);
       setExampleThing(thing);
     }
   }, [dataset]);
