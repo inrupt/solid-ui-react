@@ -102,7 +102,7 @@ export function TextEditTrue(): ReactElement {
       dataSet={exampleDataSet}
       thing={exampleThing}
       property={examplePredicate}
-      // saveDatasetTo="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
+      saveDatasetTo="https://docs-example.inrupt.net/profile/card#me"
       onError={onError}
       edit
       autosave
