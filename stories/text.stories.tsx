@@ -92,11 +92,18 @@ export function TextEditTrue(): ReactElement {
     exampleThing
   );
 
+  const onError = (error: any) => {
+    // eslint-disable-next-line no-alert
+    alert(`"some awesome error message" ${error}`);
+  };
+
   return (
     <Text
       dataSet={exampleDataSet}
       thing={exampleThing}
       property={examplePredicate}
+      // saveDatasetTo="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
+      onError={onError}
       edit
       autosave
     />

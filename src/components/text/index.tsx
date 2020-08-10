@@ -52,6 +52,7 @@ export default function Text({
   thing,
   dataSet,
   property,
+  saveDatasetTo,
   locale,
   onSave,
   onError,
@@ -80,20 +81,26 @@ export default function Text({
       } else {
         updatedResource = setStringUnlocalized(thing, property, newValue);
       }
+
+      const datasetSaveLocation = hasResourceInfo(dataSet)
+        ? getFetchedFrom(dataSet)
+        : saveDatasetTo;
+
       try {
-        if (hasResourceInfo(dataSet)) {
+        if (datasetSaveLocation) {
           await saveSolidDatasetAt(
-            getFetchedFrom(dataSet),
+            datasetSaveLocation,
             setThing(dataSet, updatedResource)
           );
+          // eslint-disable-next-line no-console
+          console.log("just do it what this?");
           if (onSave) {
+            // eslint-disable-next-line no-console
+            console.log("just do it");
             onSave();
           }
           return;
         }
-        throw new Error(
-          "Resource Info not found for given Dataset, please provide SaveDatasetTo prop"
-        );
       } catch (error) {
         if (onError) {
           onError(error);
@@ -101,6 +108,10 @@ export default function Text({
       }
     }
   };
+
+  if (!hasResourceInfo(dataSet) && !saveDatasetTo && autosave) {
+    throw new Error("Please provide saveDatasetTo location for new data");
+  }
 
   return (
     <>
