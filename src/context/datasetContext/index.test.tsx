@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 import { RenderResult, render, waitFor } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
@@ -91,7 +92,7 @@ function ExampleComponentWithDatasetUrl(): React.ReactElement {
 
   React.useEffect(() => {
     if (dataset) {
-      const thing = SolidFns.getThingOne(dataset, mockUrl);
+      const thing = SolidFns.getThing(dataset, mockUrl);
       setExampleThing(thing);
     }
   }, [dataset]);

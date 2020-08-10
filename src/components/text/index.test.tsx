@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
@@ -47,7 +48,11 @@ mockDataSetWithResourceInfo.internal_resourceInfo.fetchedFrom =
 describe("<Text /> component snapshot test", () => {
   it("matches snapshot", () => {
     const documentBody = render(
-      <Text dataSet={mockDataSet} thing={mockThing} property={mockPredicate} />
+      <Text
+        dataSet={mockDataSetWithResourceInfo}
+        thing={mockThing}
+        property={mockPredicate}
+      />
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -63,7 +68,7 @@ describe("<Text /> component snapshot test", () => {
       <Text
         edit
         inputProps={inputOptions}
-        dataSet={mockDataSet}
+        dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
       />
@@ -79,7 +84,11 @@ describe("<Text /> component functional testing", () => {
       .spyOn(SolidFns, "getStringUnlocalizedOne")
       .mockImplementation(() => mockNick);
     const { getByText } = render(
-      <Text dataSet={mockDataSet} thing={mockThing} property={mockPredicate} />
+      <Text
+        dataSet={mockDataSetWithResourceInfo}
+        thing={mockThing}
+        property={mockPredicate}
+      />
     );
     expect(SolidFns.getStringUnlocalizedOne).toHaveBeenCalled();
     expect(getByText(mockNick)).toBeDefined();
@@ -91,7 +100,7 @@ describe("<Text /> component functional testing", () => {
       .mockImplementation(() => mockNick);
     const { getByText } = render(
       <Text
-        dataSet={mockDataSet}
+        dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
         locale="en"
@@ -108,7 +117,7 @@ describe("<Text /> component functional testing", () => {
       .mockImplementation(() => mockThing);
     const { getByDisplayValue } = render(
       <Text
-        dataSet={mockDataSet}
+        dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
         edit
@@ -117,7 +126,7 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick change" } });
+    fireEvent.change(input, { target: { value: "updated nick value" } });
     input.blur();
     expect(SolidFns.setStringUnlocalized).toHaveBeenCalled();
   });
@@ -128,7 +137,7 @@ describe("<Text /> component functional testing", () => {
       .mockImplementation(() => mockThing);
     const { getByDisplayValue } = render(
       <Text
-        dataSet={mockDataSet}
+        dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
         locale="en"
@@ -138,7 +147,7 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick change" } });
+    fireEvent.change(input, { target: { value: "updated nick value" } });
     input.blur();
     expect(SolidFns.setStringInLocale).toHaveBeenCalled();
   });
@@ -149,7 +158,7 @@ describe("<Text /> component functional testing", () => {
       .mockImplementation(() => mockThing);
     const { getByDisplayValue } = render(
       <Text
-        dataSet={mockDataSet}
+        dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
         locale="en"
@@ -163,12 +172,12 @@ describe("<Text /> component functional testing", () => {
     expect(SolidFns.setStringInLocale).toHaveBeenCalledTimes(0);
   });
 
-  it("Should not call saveLitDatasetAt onBlur if autosave is false", async () => {
+  it("Should not call saveSolidDatasetAt onBlur if autosave is false", async () => {
     const savedDataSet = SolidFns.createLitDataset() as any;
-    jest.spyOn(SolidFns, "saveLitDatasetAt").mockResolvedValue(savedDataSet);
+    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
       <Text
-        dataSet={mockDataSet}
+        dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
         locale="en"
@@ -177,7 +186,7 @@ describe("<Text /> component functional testing", () => {
     );
     getByDisplayValue(mockNick).focus();
     getByDisplayValue(mockNick).blur();
-    expect(SolidFns.saveLitDatasetAt).toHaveBeenCalledTimes(0);
+    expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalledTimes(0);
   });
 
   it("Should call onError if saving fails", async () => {
@@ -196,7 +205,7 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick three" } });
+    fireEvent.change(input, { target: { value: "updated nick value" } });
     input.blur();
     await waitFor(() => expect(onError).toHaveBeenCalled());
   });
@@ -205,7 +214,7 @@ describe("<Text /> component functional testing", () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     const savedDataSet = SolidFns.createLitDataset() as any;
-    jest.spyOn(SolidFns, "saveLitDatasetAt").mockResolvedValue(savedDataSet);
+    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
       <Text
         dataSet={mockDataSetWithResourceInfo}
@@ -219,7 +228,7 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick ten" } });
+    fireEvent.change(input, { target: { value: "updated nick value" } });
     input.blur();
     await waitFor(() => expect(onSave).toHaveBeenCalled());
   });
@@ -227,7 +236,7 @@ describe("<Text /> component functional testing", () => {
   it("Should not call onSave if it wasn't passed", async () => {
     const onSave = jest.fn();
     const savedDataSet = SolidFns.createLitDataset() as any;
-    jest.spyOn(SolidFns, "saveLitDatasetAt").mockResolvedValue(savedDataSet);
+    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
       <Text
         dataSet={mockDataSetWithResourceInfo}
@@ -239,7 +248,7 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick ten" } });
+    fireEvent.change(input, { target: { value: "updated nick value" } });
     input.blur();
     await waitFor(() => expect(onSave).toHaveBeenCalledTimes(0));
   });

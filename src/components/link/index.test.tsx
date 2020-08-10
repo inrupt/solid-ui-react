@@ -32,7 +32,7 @@ const mockThing = SolidFns.addUrl(
   mockUrl
 );
 
-jest.spyOn(SolidFns, "getUrlOne").mockImplementation(() => mockUrl);
+jest.spyOn(SolidFns, "getUrl").mockImplementation(() => mockUrl);
 
 describe("Link component", () => {
   it("Link snapshot", () => {
@@ -41,19 +41,19 @@ describe("Link component", () => {
     );
     expect(asFragment()).toMatchSnapshot();
   });
-  it("Should call getUrlOne and use result as href value", () => {
+  it("Should call getUrl and use result as href value", () => {
     const { getByText } = render(
       <Link thing={mockThing} property={mockPredicate} />
     );
-    expect(SolidFns.getUrlOne).toHaveBeenCalled();
+    expect(SolidFns.getUrl).toHaveBeenCalled();
     expect(getByText(mockUrl).getAttribute("href")).toBe(mockUrl);
   });
-  it("When getUrlOne returns null, should throw an error", () => {
-    (SolidFns.getUrlOne as jest.Mock).mockReturnValueOnce(null);
+  it("When getUrl returns null, should throw an error", () => {
+    (SolidFns.getUrl as jest.Mock).mockReturnValueOnce(null);
     expect(() =>
       render(<Link thing={mockThing} property={mockPredicate} />)
     ).toThrowErrorMatchingSnapshot();
-    expect(SolidFns.getUrlOne).toHaveBeenCalled();
+    expect(SolidFns.getUrl).toHaveBeenCalled();
   });
   it("When passed no children, should render href as link text", () => {
     const { getByText } = render(

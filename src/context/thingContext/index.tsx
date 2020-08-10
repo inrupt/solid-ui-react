@@ -31,7 +31,7 @@ import {
   LitDataset,
   WithResourceInfo,
   UrlString,
-  getThingOne,
+  getThing,
 } from "@inrupt/solid-client";
 import { DatasetContext } from "../datasetContext";
 
@@ -65,7 +65,7 @@ export const ThingProvider = ({
 
   useEffect(() => {
     if (dataset && thingUrl) {
-      setLitThing(getThingOne(dataset, thingUrl));
+      setLitThing(getThing(dataset, thingUrl));
     }
   }, [dataset, thingUrl]);
 

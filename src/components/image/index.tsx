@@ -24,7 +24,7 @@ import {
   Thing,
   Url,
   UrlString,
-  getUrlOne,
+  getUrl,
   unstable_overwriteFile as overwriteFile,
   unstable_fetchFile as fetchFile,
 } from "@inrupt/solid-client";
@@ -52,7 +52,7 @@ export default function Image({
   inputProps,
   ...imgOptions
 }: Props): ReactElement {
-  const src = getUrlOne(thing, property);
+  const src = getUrl(thing, property);
   if (!src) {
     throw new Error("URL not found for given property");
   }
