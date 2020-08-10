@@ -78,19 +78,20 @@ export default function Text({
       } else {
         updatedResource = setStringUnlocalized(thing, property, newValue);
       }
-      try {
-        await saveLitDatasetAt(
-          getFetchedFrom(dataSet),
-          setThing(dataSet, updatedResource)
-        );
-        if (onSave) {
-          onSave();
-        }
-      } catch (error) {
-        if (onError) {
-          onError(error);
-        }
-      }
+      // TODO: refactor the text component using hasResourceInfo to handle new and existing datasets
+      // try {
+      //   await saveLitDatasetAt(
+      //     getFetchedFrom(dataSet),
+      //     setThing(dataSet, updatedResource)
+      //   );
+      //   if (onSave) {
+      //     onSave();
+      //   }
+      // } catch (error) {
+      //   if (onError) {
+      //     onError(error);
+      //   }
+      // }
     }
   };
 
