@@ -264,7 +264,6 @@ describe("<Text /> component functional testing", () => {
 
   it("Should not call onSave if it wasn't passed", async () => {
     const onSave = jest.fn();
-    const savedDataSet = SolidFns.createLitDataset() as any;
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
       <Text
