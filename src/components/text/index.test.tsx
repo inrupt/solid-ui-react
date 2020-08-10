@@ -163,84 +163,88 @@ describe("<Text /> component functional testing", () => {
     expect(SolidFns.setStringInLocale).toHaveBeenCalledTimes(0);
   });
 
-  // it("Should not call saveLitDatasetAt onBlur if autosave is false", async () => {
-  //   const savedDataSet = SolidFns.createLitDataset() as any;
-  //   jest.spyOn(SolidFns, "saveLitDatasetAt").mockResolvedValue(savedDataSet);
-  //   const { getByDisplayValue } = render(
-  //     <Text
-  //       dataSet={mockDataSet}
-  //       thing={mockThing}
-  //       property={mockPredicate}
-  //       locale="en"
-  //       edit
-  //     />
-  //   );
-  //   getByDisplayValue(mockNick).focus();
-  //   getByDisplayValue(mockNick).blur();
-  //   expect(SolidFns.saveLitDatasetAt).toHaveBeenCalledTimes(0);
-  // });
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip("Should not call saveLitDatasetAt onBlur if autosave is false", async () => {
+    const savedDataSet = SolidFns.createLitDataset() as any;
+    jest.spyOn(SolidFns, "saveLitDatasetAt").mockResolvedValue(savedDataSet);
+    const { getByDisplayValue } = render(
+      <Text
+        dataSet={mockDataSet}
+        thing={mockThing}
+        property={mockPredicate}
+        locale="en"
+        edit
+      />
+    );
+    getByDisplayValue(mockNick).focus();
+    getByDisplayValue(mockNick).blur();
+    expect(SolidFns.saveLitDatasetAt).toHaveBeenCalledTimes(0);
+  });
 
-  // it("Should call onError if saving fails", async () => {
-  //   const onError = jest.fn();
-  //   const onSave = jest.fn();
-  //   const { getByDisplayValue } = render(
-  //     <Text
-  //       dataSet={mockDataSet}
-  //       thing={mockThing}
-  //       property={mockPredicate}
-  //       onError={onError}
-  //       onSave={onSave}
-  //       edit
-  //       autosave
-  //     />
-  //   );
-  //   const input = getByDisplayValue(mockNick);
-  //   input.focus();
-  //   fireEvent.change(input, { target: { value: "updated nick three" } });
-  //   input.blur();
-  //   await waitFor(() => expect(onError).toHaveBeenCalled());
-  // });
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip("Should call onError if saving fails", async () => {
+    const onError = jest.fn();
+    const onSave = jest.fn();
+    const { getByDisplayValue } = render(
+      <Text
+        dataSet={mockDataSet}
+        thing={mockThing}
+        property={mockPredicate}
+        onError={onError}
+        onSave={onSave}
+        edit
+        autosave
+      />
+    );
+    const input = getByDisplayValue(mockNick);
+    input.focus();
+    fireEvent.change(input, { target: { value: "updated nick three" } });
+    input.blur();
+    await waitFor(() => expect(onError).toHaveBeenCalled());
+  });
 
-  // it("Should call onSave if it is passed", async () => {
-  //   const onSave = jest.fn();
-  //   const onError = jest.fn();
-  //   const savedDataSet = SolidFns.createLitDataset() as any;
-  //   jest.spyOn(SolidFns, "saveLitDatasetAt").mockResolvedValue(savedDataSet);
-  //   const { getByDisplayValue } = render(
-  //     <Text
-  //       dataSet={mockDataSetWithResourceInfo}
-  //       thing={mockThing}
-  //       property={mockPredicate}
-  //       onSave={onSave}
-  //       onError={onError}
-  //       edit
-  //       autosave
-  //     />
-  //   );
-  //   const input = getByDisplayValue(mockNick);
-  //   input.focus();
-  //   fireEvent.change(input, { target: { value: "updated nick ten" } });
-  //   input.blur();
-  //   await waitFor(() => expect(onSave).toHaveBeenCalled());
-  // });
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip("Should call onSave if it is passed", async () => {
+    const onSave = jest.fn();
+    const onError = jest.fn();
+    const savedDataSet = SolidFns.createLitDataset() as any;
+    jest.spyOn(SolidFns, "saveLitDatasetAt").mockResolvedValue(savedDataSet);
+    const { getByDisplayValue } = render(
+      <Text
+        dataSet={mockDataSetWithResourceInfo}
+        thing={mockThing}
+        property={mockPredicate}
+        onSave={onSave}
+        onError={onError}
+        edit
+        autosave
+      />
+    );
+    const input = getByDisplayValue(mockNick);
+    input.focus();
+    fireEvent.change(input, { target: { value: "updated nick ten" } });
+    input.blur();
+    await waitFor(() => expect(onSave).toHaveBeenCalled());
+  });
 
-  // it("Should not call onSave if it wasn't passed", async () => {
-  //   const onSave = jest.fn();
-  //   const savedDataSet = SolidFns.createLitDataset() as any;
-  //   jest.spyOn(SolidFns, "saveLitDatasetAt").mockResolvedValue(savedDataSet);
-  //   const { getByDisplayValue } = render(
-  //     <Text
-  //       dataSet={mockDataSetWithResourceInfo}
-  //       thing={mockThing}
-  //       property={mockPredicate}
-  //       edit
-  //       autosave
-  //     />
-  //   );
-  //   const input = getByDisplayValue(mockNick);
-  //   input.focus();
-  //   fireEvent.change(input, { target: { value: "updated nick ten" } });
-  //   input.blur();
-  //   await waitFor(() => expect(onSave).toHaveBeenCalledTimes(0));
-  // });
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip("Should not call onSave if it wasn't passed", async () => {
+    const onSave = jest.fn();
+    const savedDataSet = SolidFns.createLitDataset() as any;
+    jest.spyOn(SolidFns, "saveLitDatasetAt").mockResolvedValue(savedDataSet);
+    const { getByDisplayValue } = render(
+      <Text
+        dataSet={mockDataSetWithResourceInfo}
+        thing={mockThing}
+        property={mockPredicate}
+        edit
+        autosave
+      />
+    );
+    const input = getByDisplayValue(mockNick);
+    input.focus();
+    fireEvent.change(input, { target: { value: "updated nick ten" } });
+    input.blur();
+    await waitFor(() => expect(onSave).toHaveBeenCalledTimes(0));
+  });
 });
