@@ -19,16 +19,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useState, useEffect } from "react";
+import React, { ReactElement } from "react";
 import {
   Thing,
   LitDataset,
   WithResourceInfo,
   UrlString,
-  getStringInLocaleOne,
-  getStringUnlocalizedOne,
-  getThingAll,
-  getStringNoLocaleAll,
+  getStringInLocaleAll,
+  getStringUnlocalizedAll,
 } from "@inrupt/solid-client";
 
 type Props = {
@@ -37,6 +35,8 @@ type Props = {
   thing: Thing;
   type: string;
   locale?: string;
+  element?: any;
+  child?: any;
 };
 
 export default function List({
@@ -45,12 +45,26 @@ export default function List({
   property,
   type,
   locale,
+  element,
+  child,
 }: Props): ReactElement {
-  const listValues = getStringNoLocaleAll(thing, property);
-  const listItems = listValues.map((item) => <li>{item}</li>);
-  return (
-    <>
-      <ul>{listItems}</ul>
-    </>
-  );
+  const listValues = locale
+    ? getStringInLocaleAll(thing, property, locale)
+    : getStringUnlocalizedAll(thing, property);
+
+  let NewParent = null;
+  let NewChild = null;
+  if (element && child) {
+    const jsxChildren = [];
+    for (let i = 0; i < listValues.length; i++) {
+      jsxChildren.push(child(listValues[i]));
+    }
+    NewParent = element();
+    NewChild = jsxChildren;
+  } else {
+    NewParent = React.createElement("ul");
+    NewChild = listValues.map((item) => <li key={item}>{item}</li>);
+  }
+
+  return <>{React.cloneElement(NewParent, undefined, NewChild)}</>;
 }

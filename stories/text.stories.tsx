@@ -73,7 +73,6 @@ export function TextEditFalseWithProps(): ReactElement {
       thing={exampleThing}
       property={examplePredicate}
       className="class-test"
-      locale="en_gb"
     />
   );
 }

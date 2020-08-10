@@ -28,32 +28,36 @@ export default {
   component: List,
 };
 
-export function WithoutChildren(): ReactElement {
+export function WithChildren(): ReactElement {
   const examplePredicate = "http://xmlns.com/foaf/0.1/nick";
   const thing = SolidFns.createThing();
 
-  const updatedThingValue = SolidFns.addStringNoLocale(
+  const updatedThingValue = SolidFns.addStringWithLocale(
     thing,
     examplePredicate,
-    "laura"
+    "laura",
+    "gb_en"
   );
 
-  const updatedThingValue2 = SolidFns.addStringNoLocale(
+  const updatedThingValue2 = SolidFns.addStringWithLocale(
     updatedThingValue,
     examplePredicate,
-    "john"
+    "john",
+    "gb_en"
   );
 
-  const updatedThingValue3 = SolidFns.addStringNoLocale(
+  const updatedThingValue3 = SolidFns.addStringWithLocale(
     updatedThingValue2,
     examplePredicate,
-    "kate"
+    "kate",
+    "gb_en"
   );
 
-  const finalThing = SolidFns.addStringNoLocale(
+  const finalThing = SolidFns.addStringWithLocale(
     updatedThingValue3,
     examplePredicate,
-    "paul"
+    "paul",
+    "gb_en"
   );
 
   const exampleDataSet = SolidFns.setThing(
@@ -67,7 +71,67 @@ export function WithoutChildren(): ReactElement {
       thing={finalThing}
       property={examplePredicate}
       type="string"
-      locale="en"
+      locale="gb_en"
+      element={(
+        props: JSX.IntrinsicAttributes &
+          React.ClassAttributes<HTMLDListElement> &
+          React.HTMLAttributes<HTMLDListElement>
+        // eslint-disable-next-line react/jsx-props-no-spreading
+      ) => <dl {...props} />}
+      child={(value: React.ReactNode) => (
+        <>
+          <dt>name</dt>
+          <dd>{value}</dd>
+        </>
+      )}
+    />
+  );
+}
+
+export function WithoutChildren(): ReactElement {
+  const examplePredicate = "http://xmlns.com/foaf/0.1/nick";
+  const thing = SolidFns.createThing();
+
+  const updatedThingValue = SolidFns.addStringWithLocale(
+    thing,
+    examplePredicate,
+    "laura",
+    "gb_en"
+  );
+
+  const updatedThingValue2 = SolidFns.addStringWithLocale(
+    updatedThingValue,
+    examplePredicate,
+    "john",
+    "gb_en"
+  );
+
+  const updatedThingValue3 = SolidFns.addStringWithLocale(
+    updatedThingValue2,
+    examplePredicate,
+    "kate",
+    "gb_en"
+  );
+
+  const finalThing = SolidFns.addStringWithLocale(
+    updatedThingValue3,
+    examplePredicate,
+    "paul",
+    "gb_en"
+  );
+
+  const exampleDataSet = SolidFns.setThing(
+    SolidFns.createLitDataset(),
+    finalThing
+  );
+
+  return (
+    <List
+      dataSet={exampleDataSet}
+      thing={finalThing}
+      property={examplePredicate}
+      type="string"
+      locale="gb_en"
     />
   );
 }
