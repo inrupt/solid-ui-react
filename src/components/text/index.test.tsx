@@ -95,7 +95,6 @@ describe("<Text /> component snapshot test", () => {
         />
       )
     ).toThrowErrorMatchingSnapshot();
-    expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
   });
 });
 
