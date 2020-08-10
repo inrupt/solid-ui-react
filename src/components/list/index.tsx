@@ -52,19 +52,11 @@ export default function List({
     ? getStringInLocaleAll(thing, property, locale)
     : getStringUnlocalizedAll(thing, property);
 
-  let NewParent = null;
-  let NewChild = null;
-  if (element && child) {
-    const jsxChildren = [];
-    for (let i = 0; i < listValues.length; i++) {
-      jsxChildren.push(child(listValues[i]));
-    }
-    NewParent = element();
-    NewChild = jsxChildren;
-  } else {
-    NewParent = React.createElement("ul");
-    NewChild = listValues.map((item) => <li key={item}>{item}</li>);
-  }
+  const NewParent = element && child ? element() : React.createElement("ul");
+  const NewChild =
+    element && child
+      ? listValues.map((value) => child(value))
+      : listValues.map((item) => <li key={item}>{item}</li>);
 
   return <>{React.cloneElement(NewParent, undefined, NewChild)}</>;
 }
