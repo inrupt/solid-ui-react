@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
@@ -43,7 +44,6 @@ const mockDataSetWithResourceInfo = SolidFns.setThing(
 mockDataSetWithResourceInfo.internal_resourceInfo = {};
 mockDataSetWithResourceInfo.internal_resourceInfo.fetchedFrom =
   "https://some-interesting-value.com";
-const saveDatasetTo = "https://some-interesting-value.com";
 
 describe("<Text /> component snapshot test", () => {
   it("matches snapshot", () => {

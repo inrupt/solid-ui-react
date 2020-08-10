@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 import { RenderResult, render } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
