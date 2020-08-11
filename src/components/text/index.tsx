@@ -82,20 +82,23 @@ export default function Text({
         updatedResource = setStringUnlocalized(thing, property, newValue);
       }
 
-      const datasetSaveLocation = hasResourceInfo(dataSet)
-        ? getFetchedFrom(dataSet)
-        : saveDatasetTo;
-
       try {
-        if (datasetSaveLocation) {
+        if (saveDatasetTo) {
           await saveSolidDatasetAt(
-            datasetSaveLocation,
+            saveDatasetTo,
             setThing(dataSet, updatedResource)
           );
           if (onSave) {
             onSave();
           }
-          return;
+        } else if (hasResourceInfo(dataSet)) {
+          await saveSolidDatasetAt(
+            getFetchedFrom(dataSet),
+            setThing(dataSet, updatedResource)
+          );
+          if (onSave) {
+            onSave();
+          }
         }
       } catch (error) {
         if (onError) {
