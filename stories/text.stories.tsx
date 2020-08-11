@@ -21,6 +21,7 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
+import { action } from "@storybook/addon-actions";
 import Text from "../src/components/text";
 
 export default {
@@ -92,18 +93,13 @@ export function TextEditTrue(): ReactElement {
     exampleThing
   );
 
-  const onError = (error: any) => {
-    // eslint-disable-next-line no-alert
-    alert(`"some awesome error message" ${error}`);
-  };
-
   return (
     <Text
       dataSet={exampleDataSet}
       thing={exampleThing}
       property={examplePredicate}
       saveDatasetTo="https://docs-example.inrupt.net/profile/card#me"
-      onError={onError}
+      onError={action("OnError")}
       edit
       autosave
     />
