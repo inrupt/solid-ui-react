@@ -19,22 +19,45 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Image from "./components/image";
-import Link from "./components/link";
-import LoginButton from "./components/logIn";
-import LogoutButton from "./components/logOut";
-import Text from "./components/text";
-import Video from "./components/video";
-import { SessionProvider } from "./context/sessionContext";
-import useSession from "./hooks/useSession";
+import {
+  unstable_overwriteFile as unstableOverwriteFile,
+  unstable_fetchFile as unstableFetchFile,
+} from "@inrupt/solid-client";
 
-export default {
-  Image,
-  Link,
-  LoginButton,
-  LogoutButton,
-  Text,
-  Video,
-  SessionProvider,
-  useSession,
+export const overwriteFile = async (
+  src: string,
+  file: File,
+  input: EventTarget & HTMLInputElement,
+  maxSize?: number,
+  onSave?: () => void,
+  onError?: (error: Error) => void
+): Promise<string | null> => {
+  try {
+    if (maxSize !== undefined && file.size > maxSize * 1024) {
+      input.setCustomValidity(
+        `The selected file must not be larger than ${maxSize}kB`
+      );
+      input.reportValidity();
+      return null;
+    }
+    input.setCustomValidity("");
+    await unstableOverwriteFile(src, file);
+    if (onSave) {
+      onSave();
+    }
+    const objectUrl = URL.createObjectURL(file);
+    return objectUrl;
+  } catch (error) {
+    if (onError) {
+      onError(error);
+    }
+    return null;
+  }
 };
+
+export const retrieveFile = async (src: string): Promise<string> => {
+  const imageBlob = await unstableFetchFile(src);
+  return URL.createObjectURL(imageBlob);
+};
+
+export default { overwriteFile, retrieveFile };

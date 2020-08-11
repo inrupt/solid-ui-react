@@ -23,65 +23,65 @@ import React from "react";
 import { render, waitFor, fireEvent } from "@testing-library/react";
 import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
-import Image from ".";
+import Video from ".";
 
-const mockAlt = "test img";
-const mockUrl = "http://test.url/image.png";
+const mockTitle = "test video";
+const mockUrl = "http://test.url/video.mp4";
 const mockProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
 const mockThing = SolidFns.addUrl(
   SolidFns.createThing(),
   mockProperty,
   mockUrl
 );
-const mockFileBlob = new Blob([""], { type: "image/png" }) as Blob &
+const mockFileBlob = new Blob([""], { type: "video/mp4" }) as Blob &
   SolidFns.WithResourceInfo;
 const mockObjectUrl = "mock object url";
-const mockFile = new File(["test file"], "test.png", { type: "image/png" });
+const mockFile = new File(["test file"], "test.mp4", { type: "video/mp4" });
 window.URL.createObjectURL = jest.fn(() => mockObjectUrl);
 
 jest.spyOn(SolidFns, "getUrl").mockImplementation(() => mockUrl);
 jest.spyOn(SolidFns, "unstable_fetchFile").mockResolvedValue(mockFileBlob);
 jest.spyOn(SolidFns, "unstable_overwriteFile").mockResolvedValue(mockFileBlob);
 
-describe("Image component", () => {
+describe("Video component", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  describe("Image snapshots", () => {
+  describe("Video snapshots", () => {
     it("matches snapshot with standard props", async () => {
-      const { asFragment, getByAltText } = render(
-        <Image thing={mockThing} property={mockProperty} />
+      const { asFragment, getByTitle } = render(
+        <Video thing={mockThing} property={mockProperty} title={mockTitle} />
       );
       await waitFor(() =>
-        expect(getByAltText("").getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle("").getAttribute("src")).toBe(mockObjectUrl)
       );
       expect(asFragment()).toMatchSnapshot();
     });
 
-    it("matches snapshot with additional props for img and input", async () => {
-      const { asFragment, getByAltText } = render(
-        <Image
+    it("matches snapshot with additional props for video and input", async () => {
+      const { asFragment, getByTitle } = render(
+        <Video
           thing={mockThing}
           property={mockProperty}
-          alt={mockAlt}
+          title={mockTitle}
           edit
-          className="img-class"
+          className="video-class"
           inputProps={{ className: "input-class" }}
         />
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
       );
       expect(asFragment()).toMatchSnapshot();
     });
   });
-  describe("Image functional tests", () => {
+  describe("Video functional tests", () => {
     it("Should call getUrl using given thing and property", async () => {
-      const { getByAltText } = render(
-        <Image thing={mockThing} property={mockProperty} alt={mockAlt} />
+      const { getByTitle } = render(
+        <Video thing={mockThing} property={mockProperty} title={mockTitle} />
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
       );
       expect(SolidFns.getUrl).toHaveBeenCalledWith(mockThing, mockProperty);
     });
@@ -92,7 +92,7 @@ describe("Image component", () => {
       (SolidFns.getUrl as jest.Mock).mockReturnValueOnce(null);
       expect(() =>
         render(
-          <Image thing={mockThing} property={mockProperty} alt={mockAlt} />
+          <Video thing={mockThing} property={mockProperty} title={mockTitle} />
         )
       ).toThrowErrorMatchingSnapshot();
       expect(SolidFns.getUrl).toHaveBeenCalled();
@@ -109,7 +109,7 @@ describe("Image component", () => {
 
       const { getByText } = render(
         <ErrorBoundary fallbackRender={({ error }) => <div>{error}</div>}>
-          <Image thing={mockThing} property={mockProperty} alt={mockAlt} />
+          <Video thing={mockThing} property={mockProperty} />
         </ErrorBoundary>
       );
 
@@ -123,10 +123,10 @@ describe("Image component", () => {
       const mockOnError = jest.fn();
       (SolidFns.unstable_fetchFile as jest.Mock).mockRejectedValueOnce(null);
       render(
-        <Image
+        <Video
           thing={mockThing}
           property={mockProperty}
-          alt={mockAlt}
+          title={mockTitle}
           edit
           autosave
           onError={mockOnError}
@@ -137,17 +137,17 @@ describe("Image component", () => {
     });
 
     it("Should not call overwriteFile on change if autosave is false", async () => {
-      const { getByAltText } = render(
-        <Image
+      const { getByAltText, getByTitle } = render(
+        <Video
           thing={mockThing}
           property={mockProperty}
-          alt={mockAlt}
+          title={mockTitle}
           edit
           inputProps={{ alt: "test-input" }}
         />
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
       );
       fireEvent.change(getByAltText("test-input"), {
         target: {
@@ -159,18 +159,18 @@ describe("Image component", () => {
 
     it("Should call overwriteFile on change if autosave is true", async () => {
       const mockUpdatedObjectUrl = "updated mock object url";
-      const { getByAltText } = render(
-        <Image
+      const { getByAltText, getByTitle } = render(
+        <Video
           thing={mockThing}
           property={mockProperty}
-          alt={mockAlt}
+          title={mockTitle}
           edit
           autosave
           inputProps={{ alt: "test-input" }}
         />
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
       );
       fireEvent.change(getByAltText("test-input"), {
         target: {
@@ -181,7 +181,7 @@ describe("Image component", () => {
         mockUpdatedObjectUrl
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(
           mockUpdatedObjectUrl
         )
       );
@@ -189,11 +189,11 @@ describe("Image component", () => {
     });
 
     it("Should not call overwriteFile on change if file size > maxSize", async () => {
-      const { getByAltText } = render(
-        <Image
+      const { getByAltText, getByTitle } = render(
+        <Video
           thing={mockThing}
           property={mockProperty}
-          alt={mockAlt}
+          title={mockTitle}
           edit
           autosave
           maxSize={0}
@@ -201,7 +201,7 @@ describe("Image component", () => {
         />
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
       );
       fireEvent.change(getByAltText("test-input"), {
         target: {
@@ -214,11 +214,11 @@ describe("Image component", () => {
     it("Should call onSave after successful overwrite, if it is passed", async () => {
       const mockUpdatedObjectUrl = "updated mock object url";
       const mockOnSave = jest.fn();
-      const { getByAltText } = render(
-        <Image
+      const { getByAltText, getByTitle } = render(
+        <Video
           thing={mockThing}
           property={mockProperty}
-          alt={mockAlt}
+          title={mockTitle}
           edit
           autosave
           onSave={mockOnSave}
@@ -226,7 +226,7 @@ describe("Image component", () => {
         />
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
       );
       fireEvent.change(getByAltText("test-input"), {
         target: {
@@ -237,29 +237,29 @@ describe("Image component", () => {
         mockUpdatedObjectUrl
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(
           mockUpdatedObjectUrl
         )
       );
       expect(mockOnSave).toHaveBeenCalled();
     });
 
-    it("Should not fetch updated image if overwriteFile fails", async () => {
+    it("Should not fetch updated video if overwriteFile fails", async () => {
       (SolidFns.unstable_overwriteFile as jest.Mock).mockRejectedValueOnce(
         null
       );
-      const { getByAltText } = render(
-        <Image
+      const { getByAltText, getByTitle } = render(
+        <Video
           thing={mockThing}
           property={mockProperty}
-          alt={mockAlt}
+          title={mockTitle}
           edit
           autosave
           inputProps={{ alt: "test-input" }}
         />
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
       );
       fireEvent.change(getByAltText("test-input"), {
         target: {
@@ -279,11 +279,11 @@ describe("Image component", () => {
       (SolidFns.unstable_overwriteFile as jest.Mock).mockRejectedValueOnce(
         null
       );
-      const { getByAltText } = render(
-        <Image
+      const { getByAltText, getByTitle } = render(
+        <Video
           thing={mockThing}
           property={mockProperty}
-          alt={mockAlt}
+          title={mockTitle}
           edit
           autosave
           onError={mockOnError}
@@ -291,7 +291,7 @@ describe("Image component", () => {
         />
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
       );
       fireEvent.change(getByAltText("test-input"), {
         target: {

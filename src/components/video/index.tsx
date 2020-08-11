@@ -19,9 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useState, useEffect } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { Thing, Url, UrlString, getUrl } from "@inrupt/solid-client";
-import { overwriteFile, retrieveFile } from "../../helpers";
+import { retrieveFile, overwriteFile } from "../../helpers";
 
 type Props = {
   thing: Thing;
@@ -32,7 +32,7 @@ type Props = {
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   onSave?: () => void;
   onError?: (error: Error) => void;
-} & React.ImgHTMLAttributes<HTMLImageElement>;
+} & React.VideoHTMLAttributes<HTMLVideoElement>;
 
 export default function Image({
   property,
@@ -42,24 +42,23 @@ export default function Image({
   onSave,
   onError,
   maxSize,
-  alt,
   inputProps,
-  ...imgOptions
+  ...videoOptions
 }: Props): ReactElement {
   const src = getUrl(thing, property);
   if (!src) {
     throw new Error("URL not found for given property");
   }
-  const [imgObjectUrl, setImgObjectUrl] = useState("");
+  const [videoObjectUrl, setVideoObjectUrl] = useState("");
 
   useEffect(() => {
     retrieveFile(src)
-      .then(setImgObjectUrl)
+      .then(setVideoObjectUrl)
       .catch((error) => {
         if (onError) {
           onError(error);
         } else {
-          setImgObjectUrl(() => {
+          setVideoObjectUrl(() => {
             throw error;
           });
         }
@@ -78,20 +77,21 @@ export default function Image({
         onError
       );
       if (newObjectUrl) {
-        setImgObjectUrl(newObjectUrl);
+        setVideoObjectUrl(newObjectUrl);
       }
     }
   };
+
   return (
     <>
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <img src={imgObjectUrl} alt={alt ?? ""} {...imgOptions} />
+      {/* eslint-disable-next-line jsx-a11y/media-has-caption, react/jsx-props-no-spreading */}
+      <video src={videoObjectUrl || src} {...videoOptions} controls />
       {edit && (
         <input
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...inputProps}
           type="file"
-          accept="image/*"
+          accept="video/*"
           onChange={(e) => handleChange(e.target)}
         />
       )}
