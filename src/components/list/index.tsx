@@ -29,6 +29,7 @@ import {
   getStringUnlocalizedAll,
   Url,
 } from "@inrupt/solid-client";
+import Text from "../text";
 
 type Props = {
   dataSet: LitDataset & WithResourceInfo;
@@ -36,8 +37,8 @@ type Props = {
   thing: Thing;
   type: string;
   locale?: string;
-  element?: React.Component;
-  child?: React.Component;
+  element?: React.FC;
+  child?: React.FC;
 };
 
 export default function List({
@@ -56,8 +57,14 @@ export default function List({
   const Element = element || "ul";
   const Child = child;
   const children = child
-    ? listValues.map((value, index) => <Child value={value} index={index} />)
-    : listValues.map((item) => <li key={item}>{item}</li>);
+    ? listValues.map((value, index) => (
+      <Child key={value} value={value} index={index} />
+      ))
+    : listValues.map((item) => (
+      <li key={item}>
+          <Text dataSet={dataSet} thing={item} property={property} />
+        </li>
+      ));
 
   return <Element>{children}</Element>;
 }
