@@ -27,16 +27,17 @@ import {
   UrlString,
   getStringInLocaleAll,
   getStringUnlocalizedAll,
+  Url,
 } from "@inrupt/solid-client";
 
 type Props = {
   dataSet: LitDataset & WithResourceInfo;
-  property: UrlString | string;
+  property: Url | UrlString;
   thing: Thing;
   type: string;
   locale?: string;
-  element?: any;
-  child?: any;
+  element?: React.Component;
+  child?: React.Component;
 };
 
 export default function List({
@@ -52,11 +53,11 @@ export default function List({
     ? getStringInLocaleAll(thing, property, locale)
     : getStringUnlocalizedAll(thing, property);
 
-  const NewParent = element && child ? element() : React.createElement("ul");
-  const NewChild =
-    element && child
-      ? listValues.map((value) => child(value))
-      : listValues.map((item) => <li key={item}>{item}</li>);
+  const Element = element || "ul";
+  const Child = child;
+  const children = child
+    ? listValues.map((value, index) => <Child value={value} index={index} />)
+    : listValues.map((item) => <li key={item}>{item}</li>);
 
-  return <>{React.cloneElement(NewParent, undefined, NewChild)}</>;
+  return <Element>{children}</Element>;
 }
