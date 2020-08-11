@@ -21,6 +21,7 @@
 
 import React from "react";
 import { render, waitFor, fireEvent } from "@testing-library/react";
+import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
 import Video from ".";
 
@@ -98,6 +99,41 @@ describe("Video component", () => {
 
       // eslint-disable-next-line no-console
       (console.error as jest.Mock).mockRestore();
+    });
+
+    it("Should throw error if initial fetch fails, if onError is not passed", async () => {
+      jest.spyOn(console, "error").mockImplementationOnce(() => {});
+      (SolidFns.unstable_fetchFile as jest.Mock).mockRejectedValueOnce(
+        "Error in fetch"
+      );
+
+      const { getByText } = render(
+        <ErrorBoundary fallbackRender={({ error }) => <div>{error}</div>}>
+          <Video thing={mockThing} property={mockProperty} />
+        </ErrorBoundary>
+      );
+
+      await waitFor(() => expect(getByText("Error in fetch")).toBeDefined());
+
+      // eslint-disable-next-line no-console
+      (console.error as jest.Mock).mockRestore();
+    });
+
+    it("Should call onError if initial fetch fails, if it is passed", async () => {
+      const mockOnError = jest.fn();
+      (SolidFns.unstable_fetchFile as jest.Mock).mockRejectedValueOnce(null);
+      render(
+        <Video
+          thing={mockThing}
+          property={mockProperty}
+          title={mockTitle}
+          edit
+          autosave
+          onError={mockOnError}
+          inputProps={{ alt: "test-input" }}
+        />
+      );
+      await waitFor(() => expect(mockOnError).toHaveBeenCalled());
     });
 
     it("Should not call overwriteFile on change if autosave is false", async () => {

@@ -55,13 +55,10 @@ export const overwriteFile = async (
   }
 };
 
-export const retrieveFile = async (
-  src: string,
-  setObjectUrl: (objectUrl: string) => void
-): Promise<void> => {
+export const retrieveFile = async (src: string): Promise<string> => {
   const imageBlob = await unstableFetchFile(src);
   const objectUrl = URL.createObjectURL(imageBlob);
-  setObjectUrl(objectUrl);
+  return objectUrl;
 };
 
 export default { overwriteFile, retrieveFile };

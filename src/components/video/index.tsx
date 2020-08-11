@@ -49,12 +49,21 @@ export default function Image({
   if (!src) {
     throw new Error("URL not found for given property");
   }
-  const [imgObjectUrl, setImgObjectUrl] = useState("");
+  const [videoObjectUrl, setVideoObjectUrl] = useState("");
 
   useEffect(() => {
-    // eslint-disable-next-line no-void
-    void retrieveFile(src, setImgObjectUrl);
-  }, [src]);
+    retrieveFile(src)
+      .then(setVideoObjectUrl)
+      .catch((error) => {
+        if (onError) {
+          onError(error);
+        } else {
+          setVideoObjectUrl(() => {
+            throw error;
+          });
+        }
+      });
+  }, [src, onError]);
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
@@ -68,7 +77,7 @@ export default function Image({
         onError
       );
       if (newObjectUrl) {
-        setImgObjectUrl(newObjectUrl);
+        setVideoObjectUrl(newObjectUrl);
       }
     }
   };
@@ -76,7 +85,7 @@ export default function Image({
   return (
     <>
       {/* eslint-disable-next-line jsx-a11y/media-has-caption, react/jsx-props-no-spreading */}
-      <video src={imgObjectUrl || src} {...videoOptions} controls />
+      <video src={videoObjectUrl || src} {...videoOptions} controls />
       {edit && (
         <input
           // eslint-disable-next-line react/jsx-props-no-spreading

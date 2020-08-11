@@ -53,9 +53,18 @@ export default function Image({
   const [imgObjectUrl, setImgObjectUrl] = useState("");
 
   useEffect(() => {
-    // eslint-disable-next-line no-void
-    void retrieveFile(src, setImgObjectUrl);
-  }, [src]);
+    retrieveFile(src)
+      .then(setImgObjectUrl)
+      .catch((error) => {
+        if (onError) {
+          onError(error);
+        } else {
+          setImgObjectUrl(() => {
+            throw error;
+          });
+        }
+      });
+  }, [src, onError]);
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
