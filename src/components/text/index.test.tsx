@@ -237,10 +237,7 @@ describe("<Text /> component functional testing", () => {
 
   // eslint-disable-next-line jest/no-disabled-tests
   it.skip("Should call onSave if it is passed", async () => {
-    const onSave = jest.fn(() => {
-      // eslint-disable-next-line no-console
-      console.log("hellloooooo");
-    });
+    const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(

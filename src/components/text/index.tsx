@@ -92,11 +92,7 @@ export default function Text({
             datasetSaveLocation,
             setThing(dataSet, updatedResource)
           );
-          // eslint-disable-next-line no-console
-          console.log("just do it what this?");
           if (onSave) {
-            // eslint-disable-next-line no-console
-            console.log("just do it");
             onSave();
           }
           return;
