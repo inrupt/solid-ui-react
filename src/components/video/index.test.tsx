@@ -35,7 +35,7 @@ const mockThing = SolidFns.addUrl(
 const mockFileBlob = new Blob([""], { type: "video/mp4" }) as Blob &
   SolidFns.WithResourceInfo;
 const mockObjectUrl = "mock object url";
-const mockFile = new File(["test file"], "test.png", { type: "video/mp4" });
+const mockFile = new File(["test file"], "test.mp4", { type: "video/mp4" });
 window.URL.createObjectURL = jest.fn(() => mockObjectUrl);
 
 jest.spyOn(SolidFns, "getUrl").mockImplementation(() => mockUrl);
