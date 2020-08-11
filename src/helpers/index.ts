@@ -57,8 +57,7 @@ export const overwriteFile = async (
 
 export const retrieveFile = async (src: string): Promise<string> => {
   const imageBlob = await unstableFetchFile(src);
-  const objectUrl = URL.createObjectURL(imageBlob);
-  return objectUrl;
+  return URL.createObjectURL(imageBlob);
 };
 
 export default { overwriteFile, retrieveFile };
