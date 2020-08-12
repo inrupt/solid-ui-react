@@ -86,7 +86,10 @@ export function WithThingUrl(): ReactElement {
 }
 
 function ExampleComponentWithThingUrl(): ReactElement {
-  const examplePredicate = text("Property", "http://xmlns.com/foaf/0.1/name");
+  const examplePredicate = text(
+    "Property",
+    "http://www.w3.org/2006/vcard/ns#note"
+  );
   const [property, setProperty] = useState<string>("fetching in progress");
 
   const thingContext = useContext(ThingContext);
