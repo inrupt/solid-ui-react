@@ -27,7 +27,8 @@ import LoginButton from "../src/components/logIn";
 import LogoutButton from "../src/components/logOut";
 
 export default {
-  title: "Session Provider",
+  title: "Authentication/Session Provider",
+  id: "Authentication/Session Provider",
 };
 
 export function ProviderWithHook(): ReactElement {

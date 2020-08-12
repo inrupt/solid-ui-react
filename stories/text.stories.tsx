@@ -28,7 +28,7 @@ import { DatasetProvider } from "../src/context/datasetContext";
 import { ThingProvider } from "../src/context/thingContext";
 
 export default {
-  title: "Text component",
+  title: "Components/Text component",
   component: Text,
   decorators: [withKnobs],
 };
@@ -68,7 +68,7 @@ export function BasicExample(): ReactElement {
   );
 }
 
-export function WithUnsavedData(): ReactElement {
+export function WithLocalData(): ReactElement {
   const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
   const exampleNick = "example value";
 

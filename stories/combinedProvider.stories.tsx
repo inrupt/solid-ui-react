@@ -26,11 +26,11 @@ import { ThingContext } from "../src/context/thingContext";
 import CombinedDataProvider from "../src/context/combinedDataContext";
 
 export default {
-  title: "Combined Provider (name TBC)",
+  title: "Providers/Combined Provider (name TBC)",
   decorators: [withKnobs],
 };
 
-export function WithExistingData(): ReactElement {
+export function WithLocalData(): ReactElement {
   const property = "http://xmlns.com/foaf/0.1/name";
   const name = "example value";
 

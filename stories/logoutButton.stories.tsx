@@ -25,7 +25,7 @@ import { SessionProvider } from "../src/context/sessionContext";
 import LogoutButton from "../src/components/logOut";
 
 export default {
-  title: "Logout Button",
+  title: "Authentication/Logout Button",
   component: LogoutButton,
 };
 

@@ -25,11 +25,11 @@ import * as SolidFns from "@inrupt/solid-client";
 import { DatasetProvider, DatasetContext } from "../src/context/datasetContext";
 
 export default {
-  title: "Dataset Provider",
+  title: "Providers/Dataset Provider",
   decorators: [withKnobs],
 };
 
-export function WithExistingDataset(): ReactElement {
+export function WithLocalDataset(): ReactElement {
   const property = "http://xmlns.com/foaf/0.1/name";
   const name = "example value";
 

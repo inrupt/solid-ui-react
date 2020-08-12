@@ -24,7 +24,7 @@ import * as SolidFns from "@inrupt/solid-client";
 import Image from "../src/components/image";
 
 export default {
-  title: "Image",
+  title: "Components/Image",
   component: Image,
 };
 

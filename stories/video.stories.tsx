@@ -24,7 +24,7 @@ import * as SolidFns from "@inrupt/solid-client";
 import Video from "../src/components/video";
 
 export default {
-  title: "Video",
+  title: "Components/Video",
   component: Video,
 };
 

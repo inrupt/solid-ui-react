@@ -26,17 +26,39 @@ import { DatasetProvider } from "../src/context/datasetContext";
 import { ThingProvider, ThingContext } from "../src/context/thingContext";
 
 export default {
-  title: "Thing Provider",
+  title: "Providers/Thing Provider",
   decorators: [withKnobs],
 };
 
-export function ThingProviderWithThingUrlAndDataset(): ReactElement {
+export function WithLocalThing(): ReactElement {
+  const property = "http://xmlns.com/foaf/0.1/name";
+  const name = "example value";
+
+  const exampleThing = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    property,
+    name
+  );
+
+  return (
+    <ThingProvider thing={exampleThing}>
+      <ExampleComponentWithThing />
+    </ThingProvider>
+  );
+}
+
+export function WithThingUrl(): ReactElement {
   const [litDataset, setLitDataset] = useState<
     SolidFns.LitDataset & SolidFns.WithResourceInfo
   >();
 
   const datasetUrl = text(
-    "datasetUrl",
+    "Dataset Url",
+    "https://docs-example.inrupt.net/profile/card#me"
+  );
+
+  const thingUrl = text(
+    "Thing Url",
     "https://docs-example.inrupt.net/profile/card#me"
   );
 
@@ -54,7 +76,7 @@ export function ThingProviderWithThingUrlAndDataset(): ReactElement {
   if (litDataset) {
     return (
       <DatasetProvider dataset={litDataset}>
-        <ThingProvider thingUrl={datasetUrl}>
+        <ThingProvider thingUrl={thingUrl}>
           <ExampleComponentWithThingUrl />
         </ThingProvider>
       </DatasetProvider>
@@ -63,25 +85,8 @@ export function ThingProviderWithThingUrlAndDataset(): ReactElement {
   return <span>no dataset</span>;
 }
 
-export function ThingProviderWithThing(): ReactElement {
-  const property = "http://xmlns.com/foaf/0.1/name";
-  const name = "example value";
-
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
-    property,
-    name
-  );
-
-  return (
-    <ThingProvider thing={exampleThing}>
-      <ExampleComponentWithThing />
-    </ThingProvider>
-  );
-}
-
 function ExampleComponentWithThingUrl(): ReactElement {
-  const examplePredicate = text("property", "http://xmlns.com/foaf/0.1/name");
+  const examplePredicate = text("Property", "http://xmlns.com/foaf/0.1/name");
   const [property, setProperty] = useState<string>("fetching in progress");
 
   const thingContext = useContext(ThingContext);
