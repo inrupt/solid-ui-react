@@ -53,7 +53,7 @@ export function WithDataUrls(): ReactElement {
     <CombinedDataProvider
       datasetUrl={text(
         "Dataset Url",
-        "https://docs-example.inrupt.net/profile/card#me"
+        "https://docs-example.inrupt.net/profile/card"
       )}
       thingUrl={text(
         "Thing Url",

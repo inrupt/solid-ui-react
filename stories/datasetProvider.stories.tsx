@@ -47,10 +47,10 @@ export function WithLocalDataset(): ReactElement {
   );
 }
 
-export function WithDataUrl(): ReactElement {
+export function WithDatasetUrl(): ReactElement {
   const datasetUrl = text(
     "Dataset Url",
-    "https://docs-example.inrupt.net/profile/card#me"
+    "https://docs-example.inrupt.net/profile/card"
   );
   return (
     <DatasetProvider datasetUrl={datasetUrl}>
