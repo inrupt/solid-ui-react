@@ -26,10 +26,12 @@
     "@inrupt/solid-client": "^0.1.1-master-202544392-832.0",
     "@material-ui/core": "^4.11.0",
     "@storybook/addon-actions": "^5.3.19",
+    "@storybook/addon-docs": "^5.3.19",
     "@storybook/addon-links": "^5.3.19",
-    "@storybook/addon-storysource": "^5.3.19",
+    "@storybook/addon-knobs": "^6.0.1",
     "@storybook/addons": "^5.3.19",
     "@storybook/preset-typescript": "^3.0.0",
+    "@storybook/addon-storysource": "^5.3.19",
     "@storybook/react": "^5.3.19",
     "@testing-library/react": "^10.4.7",
     "@testing-library/react-hooks": "^3.4.1",
@@ -81,8 +83,5 @@
   "bugs": {
     "url": "https://github.com/inrupt/solid-ui-react/issues"
   },
-  "homepage": "https://github.com/inrupt/solid-ui-react#readme",
-  "dependencies": {
-    "@storybook/addon-knobs": "^5.3.19"
-  }
+  "homepage": "https://github.com/inrupt/solid-ui-react#readme"
 }

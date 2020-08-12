@@ -1,13 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Text /> component snapshot test Should throw an error 1`] = `"Please provide saveDatasetTo location for new data"`;
-
 exports[`<Text /> component snapshot test matches snapshot 1`] = `
 <body>
   <div>
     <span>
       test nick value
     </span>
+  </div>
+</body>
+`;
+
+exports[`<Text /> component snapshot test matches snapshot with data from context 1`] = `
+<body>
+  <div>
+    <input
+      type="text"
+      value="test nick value"
+    />
   </div>
 </body>
 `;

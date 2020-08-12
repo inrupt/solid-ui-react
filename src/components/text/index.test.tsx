@@ -22,8 +22,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
+import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
 import Text from "./index";
+import { DatasetProvider } from "../../context/datasetContext";
+import { ThingProvider } from "../../context/thingContext";
 
 const mockPredicate = `http://xmlns.com/foaf/0.1/nick`;
 const mockNick = "test nick value";
@@ -68,6 +71,18 @@ describe("<Text /> component snapshot test", () => {
     expect(baseElement).toMatchSnapshot();
   });
 
+  it("matches snapshot with data from context", () => {
+    const documentBody = render(
+      <DatasetProvider dataset={mockDataSetWithResourceInfo}>
+        <ThingProvider thing={mockThing}>
+          <Text property={mockPredicate} edit autosave />
+        </ThingProvider>
+      </DatasetProvider>
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
   it("matches snapshot with edit true and inputOptions", () => {
     const documentBody = render(
       <Text
@@ -80,23 +95,6 @@ describe("<Text /> component snapshot test", () => {
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
-  });
-
-  it("Should throw an error", () => {
-    // eslint-disable-next-line no-console
-    console.error = jest.fn();
-    (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValue(null);
-    expect(() =>
-      render(
-        <Text
-          edit
-          dataSet={mockDataSet}
-          thing={mockThing}
-          property={mockPredicate}
-          autosave
-        />
-      )
-    ).toThrowErrorMatchingSnapshot();
   });
 });
 
@@ -137,6 +135,7 @@ describe("<Text /> component functional testing", () => {
     jest
       .spyOn(SolidFns, "setStringUnlocalized")
       .mockImplementation(() => mockThing);
+    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
       <Text
         dataSet={mockDataSetWithResourceInfo}
@@ -157,6 +156,7 @@ describe("<Text /> component functional testing", () => {
     jest
       .spyOn(SolidFns, "setStringInLocale")
       .mockImplementation(() => mockThing);
+    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
       <Text
         dataSet={mockDataSetWithResourceInfo}
@@ -255,45 +255,6 @@ describe("<Text /> component functional testing", () => {
     await waitFor(() => expect(onSave).toHaveBeenCalled());
   });
 
-  it("Should not call onSave if it wasn't passed", async () => {
-    const onSave = jest.fn();
-    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
-    const { getByDisplayValue } = render(
-      <Text
-        dataSet={mockDataSetWithResourceInfo}
-        thing={mockThing}
-        property={mockPredicate}
-        edit
-        autosave
-      />
-    );
-    const input = getByDisplayValue(mockNick);
-    input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(onSave).toHaveBeenCalledTimes(0));
-  });
-
-  it("Should not call onSave for fetched dataset with custom location if it wasn't passed", async () => {
-    const onSave = jest.fn();
-    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
-    const { getByDisplayValue } = render(
-      <Text
-        dataSet={mockDataSetWithResourceInfo}
-        thing={mockThing}
-        property={mockPredicate}
-        saveDatasetTo="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
-        edit
-        autosave
-      />
-    );
-    const input = getByDisplayValue(mockNick);
-    input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(onSave).not.toHaveBeenCalled());
-  });
-
   it("Should call onError if saving fails", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
     const onError = jest.fn();
@@ -334,5 +295,57 @@ describe("<Text /> component functional testing", () => {
     fireEvent.change(input, { target: { value: "updated nick value" } });
     input.blur();
     await waitFor(() => expect(onError).toHaveBeenCalled());
+  });
+
+  it("Should throw error if saving data fails and on OnError is passed", async () => {
+    jest.spyOn(console, "error").mockImplementationOnce(() => {});
+    (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(
+      "Saving data failed"
+    );
+    const { getByText, getByDisplayValue } = render(
+      <ErrorBoundary fallbackRender={({ error }) => <div>{error}</div>}>
+        <Text
+          dataSet={mockDataSetWithResourceInfo}
+          thing={mockThing}
+          property={mockPredicate}
+          edit
+          autosave
+        />
+      </ErrorBoundary>
+    );
+
+    const input = getByDisplayValue(mockNick);
+    input.focus();
+    fireEvent.change(input, { target: { value: "updated nick value" } });
+    input.blur();
+    await waitFor(() => expect(getByText("Saving data failed")).toBeDefined());
+    // eslint-disable-next-line no-console
+    (console.error as jest.Mock).mockRestore();
+  });
+
+  it("Should throw error if SaveDatasetTo is missing for new data", async () => {
+    // eslint-disable-next-line no-console
+    console.error = jest.fn();
+    const { getByText, getByDisplayValue } = render(
+      <ErrorBoundary
+        fallbackRender={({ error }) => <div>{JSON.stringify(error)}</div>}
+      >
+        <Text
+          dataSet={mockDataSet}
+          thing={mockThing}
+          property={mockPredicate}
+          edit
+          autosave
+        />
+      </ErrorBoundary>
+    );
+
+    const input = getByDisplayValue(mockNick);
+    input.focus();
+    fireEvent.change(input, { target: { value: "updated nick value" } });
+    input.blur();
+    await waitFor(() => expect(getByText("{}")).toBeDefined());
+    // eslint-disable-next-line no-console
+    (console.error as jest.Mock).mockRestore();
   });
 });
