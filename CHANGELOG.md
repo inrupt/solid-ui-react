@@ -43,3 +43,13 @@
 ### Changed
 
 - Added context support for the <Text /> component
+
+## 0.8.2 ( August 12, 2020 )
+
+### Changed
+
+- Added sub-folders for storybook Authentication Providers Components
+
+- Added storybook knobs to image video and link components
+
+- Added storybook knobs to Dataset Thing and Combined providers
