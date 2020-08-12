@@ -33,6 +33,11 @@ import {
   saveSolidDatasetAt,
   getFetchedFrom,
   hasResourceInfo,
+  getBoolean,
+  getDatetime,
+  getDecimal,
+  getInteger,
+  getUrl,
 } from "@inrupt/solid-client";
 import { DatasetContext } from "../../context/datasetContext";
 import { ThingContext } from "../../context/thingContext";
@@ -41,6 +46,7 @@ type Props = {
   dataSet?: SolidDataset;
   property: Url | UrlString;
   thing?: Thing;
+  dataType: "boolean" | "datetime" | "decimal" | "integer" | "string" | "url";
   saveDatasetTo?: Url | UrlString;
   autosave?: boolean;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
@@ -54,6 +60,7 @@ export default function Value({
   thing: propThing,
   dataSet: propDataset,
   property,
+  dataType,
   saveDatasetTo,
   locale,
   onSave,
@@ -63,7 +70,9 @@ export default function Value({
   inputProps,
   ...other
 }: Props): ReactElement {
-  const [value, setValue] = useState<string | null>("");
+  const [value, setValue] = useState<string | boolean | Date | number | null>(
+    null
+  );
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setErrorState] = useState<string | null>();
   const [initialValue, setInitialValue] = useState<string | null>("");
@@ -84,13 +93,34 @@ export default function Value({
 
   useEffect(() => {
     if (thing) {
-      if (locale) {
-        setValue(getStringInLocaleOne(thing, property, locale));
-      } else {
-        setValue(getStringUnlocalizedOne(thing, property));
+      switch (dataType) {
+        case "boolean":
+          setValue(getBoolean(thing, property));
+          break;
+        case "datetime":
+          setValue(getDatetime(thing, property));
+          break;
+        case "decimal":
+          setValue(getDecimal(thing, property));
+          break;
+        case "integer":
+          setValue(getInteger(thing, property));
+          break;
+        case "string":
+          if (locale) {
+            setValue(getStringInLocaleOne(thing, property, locale));
+          } else {
+            setValue(getStringUnlocalizedOne(thing, property));
+          }
+          break;
+        case "url":
+          setValue(getUrl(thing, property));
+          break;
+        default:
+          throw new Error("Unexpected dataType");
       }
     }
-  }, [thing, property, locale]);
+  }, [thing, property, locale, dataType]);
 
   /* Save Value value in the pod */
   const saveHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
