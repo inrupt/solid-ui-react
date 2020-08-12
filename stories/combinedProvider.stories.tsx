@@ -30,7 +30,7 @@ export default {
   decorators: [withKnobs],
 };
 
-export function CombinedDataProviderExample(): ReactElement {
+export function WithExistingData(): ReactElement {
   const property = "http://xmlns.com/foaf/0.1/name";
   const name = "example value";
 
@@ -48,8 +48,54 @@ export function CombinedDataProviderExample(): ReactElement {
   );
 }
 
+export function WithDataUrls(): ReactElement {
+  return (
+    <CombinedDataProvider
+      datasetUrl={text(
+        "Dataset Url",
+        "https://docs-example.inrupt.net/profile/card#me"
+      )}
+      thingUrl={text(
+        "Thing Url",
+        "https://docs-example.inrupt.net/profile/card#me"
+      )}
+    >
+      <ExampleComponentFetchedData />
+    </CombinedDataProvider>
+  );
+}
+
 function ExampleComponent(): ReactElement {
   const examplePredicate = "http://xmlns.com/foaf/0.1/name";
+  const [property, setProperty] = useState<string>("fetching in progress");
+
+  const thingContext = useContext(ThingContext);
+  const { thing } = thingContext;
+
+  useEffect(() => {
+    if (thing) {
+      const fetchedProperty = SolidFns.getStringUnlocalizedOne(
+        thing,
+        examplePredicate
+      );
+      if (fetchedProperty) {
+        setProperty(fetchedProperty);
+      }
+    }
+  }, [examplePredicate, thing]);
+
+  return (
+    <div>
+      <h2>{property}</h2>
+    </div>
+  );
+}
+
+function ExampleComponentFetchedData(): ReactElement {
+  const examplePredicate = text(
+    "Property",
+    "http://www.w3.org/2006/vcard/ns#organization-name"
+  );
   const [property, setProperty] = useState<string>("fetching in progress");
 
   const thingContext = useContext(ThingContext);
