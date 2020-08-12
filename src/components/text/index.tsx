@@ -109,11 +109,17 @@ export default function Text({
             saveDatasetTo,
             setThing(dataset, updatedResource)
           );
+          if (onSave) {
+            onSave();
+          }
         } else if (hasResourceInfo(dataset)) {
           await saveSolidDatasetAt(
             getFetchedFrom(dataset),
             setThing(dataset, updatedResource)
           );
+          if (onSave) {
+            onSave();
+          }
         } else {
           setErrorState(() => {
             throw new Error(
@@ -129,9 +135,6 @@ export default function Text({
             throw error;
           });
         }
-      }
-      if (onSave) {
-        onSave();
       }
     }
   };
