@@ -21,11 +21,13 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
+import { withKnobs, boolean, number } from "@storybook/addon-knobs";
 import Video from "../src/components/video";
 
 export default {
   title: "Components/Video",
   component: Video,
+  decorators: [withKnobs],
 };
 
 export function EditFalse(): ReactElement {
@@ -53,9 +55,9 @@ export function EditTrue(): ReactElement {
     <Video
       thing={exampleThing}
       property={exampleProperty}
-      edit
-      autosave
-      maxSize={100}
+      edit={boolean("Edit", true)}
+      autosave={boolean("Autosave", true)}
+      maxSize={number("Max Size", 100)}
     />
   );
 }
