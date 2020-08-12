@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useState, useEffect } from "react";
+import React, { ReactElement, useState, useEffect, useContext } from "react";
 import {
   Thing,
   SolidDataset,
@@ -34,11 +34,13 @@ import {
   getFetchedFrom,
   hasResourceInfo,
 } from "@inrupt/solid-client";
+import { DatasetContext } from "../../context/datasetContext";
+import { ThingContext } from "../../context/thingContext";
 
 type Props = {
-  dataSet: SolidDataset;
+  dataSet?: SolidDataset;
   property: Url | UrlString;
-  thing: Thing;
+  thing?: Thing;
   saveDatasetTo?: Url | UrlString;
   autosave?: boolean;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
@@ -49,9 +51,10 @@ type Props = {
 } & React.HTMLAttributes<HTMLSpanElement>;
 
 export default function Text({
-  thing,
-  dataSet,
+  thing: propThing,
+  dataSet: propDataset,
   property,
+  saveDatasetTo,
   locale,
   onSave,
   onError,
@@ -61,18 +64,37 @@ export default function Text({
   ...other
 }: Props): ReactElement {
   const [text, setText] = useState<string | null>("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setErrorState] = useState<string | null>();
   const [initialValue, setInitialValue] = useState<string | null>("");
 
+  const [dataset, SetDataset] = useState<SolidDataset>();
+  const [thing, SetThing] = useState<Thing>();
+
+  const datasetContext = useContext(DatasetContext);
+  const { dataset: contextDataset } = datasetContext;
+
+  const thingContext = useContext(ThingContext);
+  const { thing: contextThing } = thingContext;
+
   useEffect(() => {
-    if (locale) {
-      setText(getStringInLocaleOne(thing, property, locale));
-    } else {
-      setText(getStringUnlocalizedOne(thing, property));
+    SetDataset(propDataset || contextDataset);
+    SetThing(propThing || contextThing);
+  }, [contextDataset, contextThing, propDataset, propThing]);
+
+  useEffect(() => {
+    if (thing) {
+      if (locale) {
+        setText(getStringInLocaleOne(thing, property, locale));
+      } else {
+        setText(getStringUnlocalizedOne(thing, property));
+      }
     }
   }, [thing, property, locale]);
+
   /* Save text value in the pod */
   const saveHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (initialValue !== e.target.value) {
+    if (initialValue !== e.target.value && thing && dataset) {
       const newValue = e.target.value;
       let updatedResource: Thing;
       if (locale) {
@@ -80,35 +102,52 @@ export default function Text({
       } else {
         updatedResource = setStringUnlocalized(thing, property, newValue);
       }
+
       try {
-        if (hasResourceInfo(dataSet)) {
+        if (saveDatasetTo) {
           await saveSolidDatasetAt(
-            getFetchedFrom(dataSet),
-            setThing(dataSet, updatedResource)
+            saveDatasetTo,
+            setThing(dataset, updatedResource)
           );
-          if (onSave) {
-            onSave();
-          }
-          return;
+        } else if (hasResourceInfo(dataset)) {
+          await saveSolidDatasetAt(
+            getFetchedFrom(dataset),
+            setThing(dataset, updatedResource)
+          );
+        } else {
+          setErrorState(() => {
+            throw new Error(
+              "Please provide saveDatasetTo location for new data"
+            );
+          });
         }
-        throw new Error(
-          "Resource Info not found for given Dataset, please provide SaveDatasetTo prop"
-        );
+        if (onSave) {
+          onSave();
+        }
       } catch (error) {
         if (onError) {
           onError(error);
+        } else {
+          setErrorState(() => {
+            throw error;
+          });
         }
       }
     }
   };
 
+  if (!dataset && !thing) {
+    // TODO: provide option for user to pass in loader
+    return <h3>fetching data in progress</h3>;
+  }
+
   return (
     <>
       {
         // eslint-disable-next-line react/jsx-props-no-spreading
-        !edit && <span {...other}>{text}</span>
+        !edit && dataset && thing && <span {...other}>{text}</span>
       }
-      {edit && (
+      {edit && dataset && thing && (
         <input
           type={inputProps && inputProps.type ? inputProps.type : "text"}
           // eslint-disable-next-line react/jsx-props-no-spreading

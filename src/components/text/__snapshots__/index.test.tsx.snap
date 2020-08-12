@@ -10,6 +10,17 @@ exports[`<Text /> component snapshot test matches snapshot 1`] = `
 </body>
 `;
 
+exports[`<Text /> component snapshot test matches snapshot with data from context 1`] = `
+<body>
+  <div>
+    <input
+      type="text"
+      value="test nick value"
+    />
+  </div>
+</body>
+`;
+
 exports[`<Text /> component snapshot test matches snapshot with edit true and inputOptions 1`] = `
 <body>
   <div>

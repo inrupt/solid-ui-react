@@ -21,15 +21,26 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
+import { withKnobs, text, boolean, object } from "@storybook/addon-knobs";
+import { action } from "@storybook/addon-actions";
 import Text from "../src/components/text";
+import { DatasetProvider } from "../src/context/datasetContext";
+import { ThingProvider } from "../src/context/thingContext";
 
 export default {
   title: "Text component",
   component: Text,
+  decorators: [withKnobs],
 };
 
-export function TextEditFalse(): ReactElement {
-  const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
+const inputOptions = {
+  type: "text",
+  name: "test-name",
+  className: "test-class",
+};
+
+export function BasicExample(): ReactElement {
+  const examplePredicate = `http://xmlns.com/foaf/0.1/name`;
   const exampleNick = "example value";
 
   const exampleThing = SolidFns.addStringNoLocale(
@@ -48,11 +59,16 @@ export function TextEditFalse(): ReactElement {
       dataSet={exampleDataSet}
       thing={exampleThing}
       property={examplePredicate}
+      autosave={boolean("Autosave", false)}
+      edit={boolean("Edit", false)}
+      inputProps={object("Input options", inputOptions)}
+      onError={action("OnError")}
+      onSave={action("onSave")}
     />
   );
 }
 
-export function TextEditFalseWithProps(): ReactElement {
+export function WithUnsavedData(): ReactElement {
   const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
   const exampleNick = "example value";
 
@@ -72,65 +88,42 @@ export function TextEditFalseWithProps(): ReactElement {
       dataSet={exampleDataSet}
       thing={exampleThing}
       property={examplePredicate}
-      className="class-test"
+      edit={boolean("Edit", false)}
+      autosave={boolean("Autosave", false)}
+      saveDatasetTo={text(
+        "Save Dataset to URL",
+        "https://docs-example.inrupt.net/profile/car"
+      )}
+      inputProps={object("Input options", inputOptions)}
+      onError={action("OnError")}
+      onSave={action("onSave")}
     />
   );
 }
 
-export function TextEditTrue(): ReactElement {
-  const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
-  const exampleNick = "example value";
-
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
-    examplePredicate,
-    exampleNick
-  );
-
-  const exampleDataSet = SolidFns.setThing(
-    SolidFns.createLitDataset(),
-    exampleThing
-  );
-
+export function WithFetchedData(): ReactElement {
   return (
-    <Text
-      dataSet={exampleDataSet}
-      thing={exampleThing}
-      property={examplePredicate}
-      edit
-      autosave
-    />
-  );
-}
-
-export function TextEditTrueWithInputOptions(): ReactElement {
-  const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
-  const exampleNick = "example value";
-
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
-    examplePredicate,
-    exampleNick
-  );
-
-  const exampleDataSet = SolidFns.setThing(
-    SolidFns.createLitDataset(),
-    exampleThing
-  );
-
-  const inputOptions = {
-    type: "url",
-    name: "test-name",
-    className: "test-class",
-  };
-
-  return (
-    <Text
-      dataSet={exampleDataSet}
-      thing={exampleThing}
-      property={examplePredicate}
-      inputProps={inputOptions}
-      edit
-    />
+    <DatasetProvider
+      datasetUrl={text(
+        "Dataset Url",
+        "https://docs-example.inrupt.net/profile/card#me"
+      )}
+    >
+      <ThingProvider
+        thingUrl={text(
+          "Thing Url",
+          "https://docs-example.inrupt.net/profile/card#me"
+        )}
+      >
+        <Text
+          property={text("property", "http://xmlns.com/foaf/0.1/name")}
+          edit={boolean("Edit", true)}
+          autosave={boolean("Autosave", true)}
+          saveDatasetTo="https://docs-example.inrupt.net/profile/card#me"
+          onError={action("OnError")}
+          onSave={action("onSave")}
+        />
+      </ThingProvider>
+    </DatasetProvider>
   );
 }
