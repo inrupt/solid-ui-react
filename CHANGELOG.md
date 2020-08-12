@@ -34,6 +34,12 @@
 
 ## 0.8.0 ( August 10, 2020 )
 
-### Changed
+### Added
 
 - Added Video component
+
+## 0.8.1 ( August 12, 2020 )
+
+### Changed
+
+- Added context support for the <Text /> component

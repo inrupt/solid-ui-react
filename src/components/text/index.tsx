@@ -109,23 +109,20 @@ export default function Text({
             saveDatasetTo,
             setThing(dataset, updatedResource)
           );
-          if (onSave) {
-            onSave();
-          }
         } else if (hasResourceInfo(dataset)) {
           await saveSolidDatasetAt(
             getFetchedFrom(dataset),
             setThing(dataset, updatedResource)
           );
-          if (onSave) {
-            onSave();
-          }
         } else {
           setErrorState(() => {
             throw new Error(
               "Please provide saveDatasetTo location for new data"
             );
           });
+        }
+        if (onSave) {
+          onSave();
         }
       } catch (error) {
         if (onError) {
