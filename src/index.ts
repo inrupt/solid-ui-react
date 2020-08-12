@@ -24,6 +24,7 @@ import Link from "./components/link";
 import LoginButton from "./components/logIn";
 import LogoutButton from "./components/logOut";
 import Text from "./components/text";
+import Value from "./components/value";
 import Video from "./components/video";
 import { SessionProvider } from "./context/sessionContext";
 import useSession from "./hooks/useSession";
@@ -34,6 +35,7 @@ export default {
   LoginButton,
   LogoutButton,
   Text,
+  Value,
   Video,
   SessionProvider,
   useSession,
