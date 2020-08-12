@@ -63,6 +63,7 @@ export function BasicExample(): ReactElement {
       edit={boolean("Edit", false)}
       inputProps={object("Input options", inputOptions)}
       onError={action("OnError")}
+      onSave={action("onSave")}
     />
   );
 }
@@ -95,6 +96,7 @@ export function WithUnsavedData(): ReactElement {
       )}
       inputProps={object("Input options", inputOptions)}
       onError={action("OnError")}
+      onSave={action("onSave")}
     />
   );
 }
@@ -119,6 +121,7 @@ export function WithFetchedData(): ReactElement {
           autosave={boolean("Autosave", true)}
           saveDatasetTo="https://docs-example.inrupt.net/profile/card#me"
           onError={action("OnError")}
+          onSave={action("onSave")}
         />
       </ThingProvider>
     </DatasetProvider>
