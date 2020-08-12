@@ -25,23 +25,11 @@ import * as SolidFns from "@inrupt/solid-client";
 import { DatasetProvider, DatasetContext } from "../src/context/datasetContext";
 
 export default {
-  title: "Dataset Provider",
+  title: "Providers/Dataset Provider",
   decorators: [withKnobs],
 };
 
-export function ProviderWithDatasetUrl(): ReactElement {
-  const datasetUrl = text(
-    "datasetUrl",
-    "https://docs-example.inrupt.net/profile/card#me"
-  );
-  return (
-    <DatasetProvider datasetUrl={datasetUrl}>
-      <ExampleComponentWithDatasetUrl />
-    </DatasetProvider>
-  );
-}
-
-export function ProviderWithDataset(): ReactElement {
+export function WithLocalDataset(): ReactElement {
   const property = "http://xmlns.com/foaf/0.1/name";
   const name = "example value";
 
@@ -59,13 +47,28 @@ export function ProviderWithDataset(): ReactElement {
   );
 }
 
+export function WithDatasetUrl(): ReactElement {
+  const datasetUrl = text(
+    "Dataset Url",
+    "https://docs-example.inrupt.net/profile/card"
+  );
+  return (
+    <DatasetProvider datasetUrl={datasetUrl}>
+      <ExampleComponentWithDatasetUrl />
+    </DatasetProvider>
+  );
+}
+
 function ExampleComponentWithDatasetUrl(): ReactElement {
   const datasetUrl = text(
-    "datasetUrl",
+    "Thing Url",
     "https://docs-example.inrupt.net/profile/card#me"
   );
 
-  const examplePredicate = text("property", "http://xmlns.com/foaf/0.1/name");
+  const examplePredicate = text(
+    "property",
+    "http://www.w3.org/2006/vcard/ns#role"
+  );
 
   const [exampleThing, setExampleThing] = useState<SolidFns.Thing>();
   const [property, setProperty] = useState<string>("fetching in progress");

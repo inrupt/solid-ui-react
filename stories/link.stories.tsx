@@ -24,7 +24,7 @@ import * as SolidFns from "@inrupt/solid-client";
 import Link from "../src/components/link";
 
 export default {
-  title: "Link",
+  title: "Components/Link",
   component: Link,
 };
 

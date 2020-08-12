@@ -28,7 +28,7 @@ import { DatasetProvider } from "../src/context/datasetContext";
 import { ThingProvider } from "../src/context/thingContext";
 
 export default {
-  title: "Text component",
+  title: "Components/Text component",
   component: Text,
   decorators: [withKnobs],
 };
@@ -68,7 +68,7 @@ export function BasicExample(): ReactElement {
   );
 }
 
-export function WithUnsavedData(): ReactElement {
+export function WithLocalData(): ReactElement {
   const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
   const exampleNick = "example value";
 
@@ -92,7 +92,7 @@ export function WithUnsavedData(): ReactElement {
       autosave={boolean("Autosave", false)}
       saveDatasetTo={text(
         "Save Dataset to URL",
-        "https://docs-example.inrupt.net/profile/car"
+        "https://docs-example.inrupt.net/profile/card"
       )}
       inputProps={object("Input options", inputOptions)}
       onError={action("OnError")}
@@ -106,7 +106,7 @@ export function WithFetchedData(): ReactElement {
     <DatasetProvider
       datasetUrl={text(
         "Dataset Url",
-        "https://docs-example.inrupt.net/profile/card#me"
+        "https://docs-example.inrupt.net/profile/card"
       )}
     >
       <ThingProvider

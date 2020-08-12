@@ -21,11 +21,13 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
+import { withKnobs, boolean, number } from "@storybook/addon-knobs";
 import Image from "../src/components/image";
 
 export default {
-  title: "Image",
+  title: "Components/Image",
   component: Image,
+  decorators: [withKnobs],
 };
 
 export function EditFalse(): ReactElement {
@@ -51,9 +53,9 @@ export function EditTrue(): ReactElement {
     <Image
       thing={exampleThing}
       property={exampleProperty}
-      edit
-      autosave
-      maxSize={100}
+      edit={boolean("Edit", true)}
+      autosave={boolean("Autosave", true)}
+      maxSize={number("Max Size", 100)}
     />
   );
 }

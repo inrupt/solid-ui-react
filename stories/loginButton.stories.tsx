@@ -25,7 +25,7 @@ import { SessionProvider } from "../src/context/sessionContext";
 import LoginButton from "../src/components/logIn";
 
 export default {
-  title: "Login Button",
+  title: "Authentication/Login Button",
   component: LoginButton,
 };
 
