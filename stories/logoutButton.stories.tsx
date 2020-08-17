@@ -21,29 +21,21 @@
 
 import React, { ReactElement } from "react";
 import { Button } from "@material-ui/core";
+import { withKnobs } from "@storybook/addon-knobs";
+import { action } from "@storybook/addon-actions";
 import { SessionProvider } from "../src/context/sessionContext";
 import LogoutButton from "../src/components/logOut";
 
 export default {
   title: "Logout Button",
   component: LogoutButton,
+  decorators: [withKnobs],
 };
-
-async function logoutTest() {
-  alert("you have logged out");
-}
-
-async function logoutFailed(error: Error) {
-  console.log("ERROR", error.message);
-}
 
 export function WithChildren(): ReactElement {
   return (
     <SessionProvider>
-      <LogoutButton
-        onLogout={() => logoutTest()}
-        onError={(error) => logoutFailed(error)}
-      >
+      <LogoutButton onLogout={action("OnLogout")} onError={action("OnError")}>
         <Button color="primary">Log Out</Button>
       </LogoutButton>
     </SessionProvider>
@@ -53,10 +45,7 @@ export function WithChildren(): ReactElement {
 export function WithoutChildren(): ReactElement {
   return (
     <SessionProvider>
-      <LogoutButton
-        onLogout={() => logoutTest()}
-        onError={(error) => logoutFailed(error)}
-      />
+      <LogoutButton onLogout={action("OnLogout")} onError={action("OnError")} />
     </SessionProvider>
   );
 }

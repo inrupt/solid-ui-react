@@ -21,29 +21,24 @@
 
 import React, { ReactElement } from "react";
 import { Button } from "@material-ui/core";
+import { withKnobs, text } from "@storybook/addon-knobs";
+import { action } from "@storybook/addon-actions";
 import { SessionProvider } from "../src/context/sessionContext";
 import LoginButton from "../src/components/logIn";
 
 export default {
   title: "Login Button",
   component: LoginButton,
+  decorators: [withKnobs],
 };
-
-async function loginTest() {
-  alert("you have logged in");
-}
-
-async function loginFailed(error: Error) {
-  console.log("ERROR", error.message);
-}
 
 export function WithChildren(): ReactElement {
   return (
     <SessionProvider>
       <LoginButton
-        popupUrl="./popup.html"
-        onLogin={() => loginTest()}
-        onError={(error) => loginFailed(error)}
+        popupUrl={text("Popup URL", "./popup.html")}
+        onLogin={action("OnLogin")}
+        onError={action("OnError")}
       >
         <Button color="primary">Log In</Button>
       </LoginButton>
@@ -56,8 +51,8 @@ export function WithoutChildren(): ReactElement {
     <SessionProvider>
       <LoginButton
         popupUrl="./popup.html"
-        onLogin={() => loginTest()}
-        onError={(error) => loginFailed(error)}
+        onLogin={action("OnLogin")}
+        onError={action("OnError")}
       />
     </SessionProvider>
   );

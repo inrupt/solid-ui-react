@@ -21,6 +21,8 @@
 
 import React, { ReactElement } from "react";
 import { Button } from "@material-ui/core";
+import { text, withKnobs } from "@storybook/addon-knobs";
+import { action } from "@storybook/addon-actions";
 import useSession from "../src/hooks/useSession";
 import { SessionProvider } from "../src/context/sessionContext";
 import LoginButton from "../src/components/logIn";
@@ -28,15 +30,17 @@ import LogoutButton from "../src/components/logOut";
 
 export default {
   title: "Session Provider",
+  component: SessionProvider,
+  decorators: [withKnobs],
 };
 
 export function ProviderWithHook(): ReactElement {
   return (
     <SessionProvider>
-      <LoginButton popupUrl="./popup.html">
+      <LoginButton popupUrl={text("Popup URL", "./popup.html")}>
         <Button color="primary">Log In</Button>
       </LoginButton>
-      <LogoutButton>
+      <LogoutButton onLogout={action("OnLogout")} onError={action("OnError")}>
         <Button color="primary">Log Out</Button>
       </LogoutButton>
       <Dashboard />
