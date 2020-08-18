@@ -62,6 +62,7 @@ describe("<Value /> component snapshot test", () => {
   it("matches snapshot", () => {
     const documentBody = render(
       <Value
+        dataType="string"
         dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -75,7 +76,7 @@ describe("<Value /> component snapshot test", () => {
     const documentBody = render(
       <DatasetProvider dataset={mockDataSetWithResourceInfo}>
         <ThingProvider thing={mockThing}>
-          <Value property={mockPredicate} edit autosave />
+          <Value dataType="string" property={mockPredicate} edit autosave />
         </ThingProvider>
       </DatasetProvider>
     );
@@ -86,6 +87,7 @@ describe("<Value /> component snapshot test", () => {
   it("matches snapshot with edit true and inputOptions", () => {
     const documentBody = render(
       <Value
+        dataType="string"
         edit
         inputProps={inputOptions}
         dataSet={mockDataSetWithResourceInfo}
@@ -105,6 +107,7 @@ describe("<Value /> component functional testing", () => {
       .mockImplementation(() => mockNick);
     const { getByText } = render(
       <Value
+        dataType="string"
         dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -120,6 +123,7 @@ describe("<Value /> component functional testing", () => {
       .mockImplementation(() => mockNick);
     const { getByText } = render(
       <Value
+        dataType="string"
         dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -138,6 +142,7 @@ describe("<Value /> component functional testing", () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
       <Value
+        dataType="string"
         dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -159,6 +164,7 @@ describe("<Value /> component functional testing", () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
       <Value
+        dataType="string"
         dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -180,6 +186,7 @@ describe("<Value /> component functional testing", () => {
       .mockImplementation(() => mockThing);
     const { getByDisplayValue } = render(
       <Value
+        dataType="string"
         dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -198,6 +205,7 @@ describe("<Value /> component functional testing", () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
       <Value
+        dataType="string"
         dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -216,6 +224,7 @@ describe("<Value /> component functional testing", () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
       <Value
+        dataType="string"
         dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -238,6 +247,7 @@ describe("<Value /> component functional testing", () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
       <Value
+        dataType="string"
         dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -260,6 +270,7 @@ describe("<Value /> component functional testing", () => {
     const onError = jest.fn();
     const { getByDisplayValue } = render(
       <Value
+        dataType="string"
         dataSet={mockDataSet}
         thing={mockThing}
         property={mockPredicate}
@@ -281,6 +292,7 @@ describe("<Value /> component functional testing", () => {
     const onError = jest.fn();
     const { getByDisplayValue } = render(
       <Value
+        dataType="string"
         dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -305,6 +317,7 @@ describe("<Value /> component functional testing", () => {
     const { getByText, getByDisplayValue } = render(
       <ErrorBoundary fallbackRender={({ error }) => <div>{error}</div>}>
         <Value
+          dataType="string"
           dataSet={mockDataSetWithResourceInfo}
           thing={mockThing}
           property={mockPredicate}
@@ -331,6 +344,7 @@ describe("<Value /> component functional testing", () => {
         fallbackRender={({ error }) => <div>{JSON.stringify(error)}</div>}
       >
         <Value
+          dataType="string"
           dataSet={mockDataSet}
           thing={mockThing}
           property={mockPredicate}
