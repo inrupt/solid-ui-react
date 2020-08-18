@@ -70,7 +70,7 @@ export function BasicExample(): ReactElement {
 
   return (
     <Value
-      dataType={select("dataType", dataTypeOptions, dataTypeOptions[0])}
+      dataType="string"
       dataSet={exampleDataSet}
       thing={exampleThing}
       property={examplePredicate}
@@ -100,7 +100,7 @@ export function WithUnsavedData(): ReactElement {
 
   return (
     <Value
-      dataType={select("dataType", dataTypeOptions, "string")}
+      dataType="string"
       dataSet={exampleDataSet}
       thing={exampleThing}
       property={examplePredicate}
