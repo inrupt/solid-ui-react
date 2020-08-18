@@ -38,15 +38,28 @@ import {
   getDecimal,
   getInteger,
   getUrl,
+  setBoolean,
+  setDatetime,
+  setDecimal,
+  setInteger,
+  setUrl,
 } from "@inrupt/solid-client";
 import { DatasetContext } from "../../context/datasetContext";
 import { ThingContext } from "../../context/thingContext";
+
+export type DataType =
+  | "boolean"
+  | "datetime"
+  | "decimal"
+  | "integer"
+  | "string"
+  | "url";
 
 type Props = {
   dataSet?: SolidDataset;
   property: Url | UrlString;
   thing?: Thing;
-  dataType: "boolean" | "datetime" | "decimal" | "integer" | "string" | "url";
+  dataType: DataType;
   saveDatasetTo?: Url | UrlString;
   autosave?: boolean;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
@@ -70,12 +83,10 @@ export default function Value({
   inputProps,
   ...other
 }: Props): ReactElement {
-  const [value, setValue] = useState<string | boolean | Date | number | null>(
-    null
-  );
+  const [value, setValue] = useState<string | number | boolean | null>("");
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setErrorState] = useState<string | null>();
-  const [initialValue, setInitialValue] = useState<string | null>("");
+  const [initialValue, setInitialValue] = useState<string | number | null>("");
 
   const [dataset, SetDataset] = useState<SolidDataset>();
   const [thing, SetThing] = useState<Thing>();
@@ -95,11 +106,18 @@ export default function Value({
     if (thing) {
       switch (dataType) {
         case "boolean":
-          setValue(getBoolean(thing, property));
+          setValue(getBoolean(thing, property) ?? false);
           break;
-        case "datetime":
-          setValue(getDatetime(thing, property));
+        case "datetime": {
+          const datetime = getDatetime(thing, property);
+          const datetimeString = datetime
+            ? datetime
+                .toISOString()
+                .substring(0, datetime.toISOString().length - 5)
+            : null;
+          setValue(datetimeString);
           break;
+        }
         case "decimal":
           setValue(getDecimal(thing, property));
           break;
@@ -123,14 +141,67 @@ export default function Value({
   }, [thing, property, locale, dataType]);
 
   /* Save Value value in the pod */
-  const saveHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (initialValue !== e.target.value && thing && dataset) {
-      const newValue = e.target.value;
-      let updatedResource: Thing;
-      if (locale) {
-        updatedResource = setStringInLocale(thing, property, newValue, locale);
-      } else {
-        updatedResource = setStringUnlocalized(thing, property, newValue);
+  const saveHandler = async () => {
+    if (initialValue !== value && thing && dataset) {
+      let updatedResource = thing;
+      if (value) {
+        switch (dataType) {
+          case "boolean":
+            if (typeof value === "boolean") {
+              updatedResource = setBoolean(thing, property, value);
+            }
+            break;
+          case "datetime":
+            if (typeof value === "string") {
+              updatedResource = setDatetime(
+                thing,
+                property,
+                new Date(`${value}Z`)
+              );
+            }
+            break;
+          case "decimal": {
+            let newDecimalValue = value;
+            if (typeof value === "string") {
+              newDecimalValue = parseFloat(value);
+            }
+            if (typeof newDecimalValue === "number") {
+              updatedResource = setDecimal(thing, property, newDecimalValue);
+            }
+            break;
+          }
+          case "integer": {
+            let newIntegerValue = value;
+            if (typeof value === "string") {
+              newIntegerValue = parseInt(value, 10);
+            }
+            if (typeof newIntegerValue === "number") {
+              updatedResource = setInteger(thing, property, newIntegerValue);
+            }
+            break;
+          }
+          case "string":
+            if (typeof value === "string") {
+              if (locale) {
+                updatedResource = setStringInLocale(
+                  thing,
+                  property,
+                  value,
+                  locale
+                );
+              } else {
+                updatedResource = setStringUnlocalized(thing, property, value);
+              }
+            }
+            break;
+          case "url":
+            if (typeof value === "string") {
+              updatedResource = setUrl(thing, property, value);
+            }
+            break;
+          default:
+            throw new Error("Unexpected dataType");
+        }
       }
 
       try {
@@ -171,6 +242,34 @@ export default function Value({
     return <h3>fetching data in progress</h3>;
   }
 
+  let inputType;
+  if (inputProps?.type) {
+    inputType = inputProps.type;
+  } else {
+    switch (dataType) {
+      case "boolean":
+        inputType = "checkbox";
+        break;
+      case "datetime":
+        inputType = "datetime-local";
+        break;
+      case "decimal":
+        inputType = "number";
+        break;
+      case "integer":
+        inputType = "number";
+        break;
+      case "string":
+        inputType = "text";
+        break;
+      case "url":
+        inputType = "url";
+        break;
+      default:
+        throw new Error("Unexpected dataType");
+    }
+  }
+
   return (
     <>
       {
@@ -179,13 +278,28 @@ export default function Value({
       }
       {edit && dataset && thing && (
         <input
-          type={inputProps && inputProps.type ? inputProps.type : "text"}
+          type={inputType}
+          checked={
+            dataType === "boolean" && typeof value === "boolean"
+              ? value
+              : undefined
+          }
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...inputProps}
           onFocus={(e) => setInitialValue(e.target.value)}
-          onChange={(e) => setValue(e.target.value)}
-          onBlur={(e) => autosave && saveHandler(e)}
-          value={value || ""}
+          onChange={(e) => {
+            if (dataType === "boolean") {
+              setValue(e.target.checked);
+            } else {
+              setValue(e.target.value);
+            }
+          }}
+          onBlur={() => autosave && saveHandler()}
+          value={
+            dataType !== "boolean" && typeof value !== "boolean"
+              ? value || ""
+              : "on"
+          }
         />
       )}
     </>
