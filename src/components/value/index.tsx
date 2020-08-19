@@ -226,7 +226,7 @@ export default function Value({
 
   if (!dataset && !thing) {
     // TODO: provide option for user to pass in loader
-    return <h3>fetching data in progress</h3>;
+    return <span>fetching data in progress</span>;
   }
 
   let inputType;
