@@ -141,8 +141,13 @@ export default function Value({
   }, [thing, property, locale, dataType]);
 
   /* Save Value value in the pod */
-  const saveHandler = async () => {
-    if (initialValue !== value && thing && dataset) {
+  const saveHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (
+      initialValue !== value &&
+      thing &&
+      dataset &&
+      e.target.reportValidity()
+    ) {
       let updatedResource = thing;
       if (value) {
         switch (dataType) {
@@ -294,12 +299,18 @@ export default function Value({
               setValue(e.target.value);
             }
           }}
-          onBlur={() => autosave && saveHandler()}
+          onBlur={(e) => autosave && saveHandler(e)}
           value={
             dataType !== "boolean" && typeof value !== "boolean"
               ? value || ""
               : "on"
           }
+          pattern={
+            dataType === "datetime"
+              ? "[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"
+              : undefined
+          }
+          placeholder={dataType === "datetime" ? "yyyy-mm-ddThh:mm" : undefined}
         />
       )}
     </>
