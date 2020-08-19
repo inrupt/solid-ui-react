@@ -146,61 +146,49 @@ export default function Value({
       e.target.reportValidity()
     ) {
       let updatedResource = thing;
-      if (value) {
-        switch (dataType) {
-          case "boolean":
-            if (typeof value === "boolean") {
-              updatedResource = setBoolean(thing, property, value);
-            }
-            break;
-          case "datetime":
-            if (typeof value === "string") {
-              updatedResource = setDatetime(
-                thing,
-                property,
-                new Date(`${value}Z`)
-              );
-            }
-            break;
-          case "decimal": {
-            let newDecimalValue = value;
-            if (typeof value === "string") {
-              newDecimalValue = parseFloat(value);
-            }
-            if (typeof newDecimalValue === "number") {
-              updatedResource = setDecimal(thing, property, newDecimalValue);
-            }
-            break;
-          }
-          case "integer": {
-            let newIntegerValue = value;
-            if (typeof value === "string") {
-              newIntegerValue = parseInt(value, 10);
-            }
-            if (typeof newIntegerValue === "number") {
-              updatedResource = setInteger(thing, property, newIntegerValue);
-            }
-            break;
-          }
-          case "url":
-            if (typeof value === "string") {
-              updatedResource = setUrl(thing, property, value);
-            }
-            break;
-          default:
-            if (typeof value === "string") {
-              if (locale) {
-                updatedResource = setStringInLocale(
-                  thing,
-                  property,
-                  value,
-                  locale
-                );
-              } else {
-                updatedResource = setStringUnlocalized(thing, property, value);
-              }
-            }
+      switch (dataType) {
+        case "boolean":
+          updatedResource = setBoolean(thing, property, value as boolean);
+          break;
+        case "datetime":
+          updatedResource = setDatetime(thing, property, new Date(`${value}Z`));
+          break;
+        case "decimal": {
+          updatedResource = setDecimal(
+            thing,
+            property,
+            parseFloat(value as string)
+          );
+
+          break;
         }
+        case "integer": {
+          updatedResource = setInteger(
+            thing,
+            property,
+            parseInt(value as string, 10)
+          );
+
+          break;
+        }
+        case "url":
+          updatedResource = setUrl(thing, property, value as string);
+          break;
+        default:
+          if (locale) {
+            updatedResource = setStringInLocale(
+              thing,
+              property,
+              value as string,
+              locale
+            );
+          } else {
+            updatedResource = setStringUnlocalized(
+              thing,
+              property,
+              value as string
+            );
+          }
       }
 
       try {
