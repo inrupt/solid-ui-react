@@ -230,28 +230,24 @@ export default function Value({
   }
 
   let inputType;
-  if (inputProps?.type) {
-    inputType = inputProps.type;
-  } else {
-    switch (dataType) {
-      case "boolean":
-        inputType = "checkbox";
-        break;
-      case "datetime":
-        inputType = "datetime-local";
-        break;
-      case "decimal":
-        inputType = "number";
-        break;
-      case "integer":
-        inputType = "number";
-        break;
-      case "url":
-        inputType = "url";
-        break;
-      default:
-        inputType = "text";
-    }
+  switch (dataType) {
+    case "boolean":
+      inputType = "checkbox";
+      break;
+    case "datetime":
+      inputType = "datetime-local";
+      break;
+    case "decimal":
+      inputType = "number";
+      break;
+    case "integer":
+      inputType = "number";
+      break;
+    case "url":
+      inputType = "url";
+      break;
+    default:
+      inputType = "text";
   }
 
   return (
