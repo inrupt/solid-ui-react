@@ -124,18 +124,15 @@ export default function Value({
         case "integer":
           setValue(getInteger(thing, property));
           break;
-        case "string":
+        case "url":
+          setValue(getUrl(thing, property));
+          break;
+        default:
           if (locale) {
             setValue(getStringInLocaleOne(thing, property, locale));
           } else {
             setValue(getStringUnlocalizedOne(thing, property));
           }
-          break;
-        case "url":
-          setValue(getUrl(thing, property));
-          break;
-        default:
-          throw new Error("Unexpected dataType");
       }
     }
   }, [thing, property, locale, dataType]);
@@ -185,7 +182,12 @@ export default function Value({
             }
             break;
           }
-          case "string":
+          case "url":
+            if (typeof value === "string") {
+              updatedResource = setUrl(thing, property, value);
+            }
+            break;
+          default:
             if (typeof value === "string") {
               if (locale) {
                 updatedResource = setStringInLocale(
@@ -198,14 +200,6 @@ export default function Value({
                 updatedResource = setStringUnlocalized(thing, property, value);
               }
             }
-            break;
-          case "url":
-            if (typeof value === "string") {
-              updatedResource = setUrl(thing, property, value);
-            }
-            break;
-          default:
-            throw new Error("Unexpected dataType");
         }
       }
 
@@ -264,14 +258,11 @@ export default function Value({
       case "integer":
         inputType = "number";
         break;
-      case "string":
-        inputType = "text";
-        break;
       case "url":
         inputType = "url";
         break;
       default:
-        throw new Error("Unexpected dataType");
+        inputType = "text";
     }
   }
 
