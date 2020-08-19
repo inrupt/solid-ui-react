@@ -34,7 +34,7 @@ import { DatasetProvider } from "../src/context/datasetContext";
 import { ThingProvider } from "../src/context/thingContext";
 
 export default {
-  title: "Value component",
+  title: "Components/Value component",
   component: Value,
   decorators: [withKnobs],
 };
