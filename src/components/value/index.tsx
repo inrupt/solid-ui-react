@@ -274,7 +274,7 @@ export default function Value({
     <>
       {
         // eslint-disable-next-line react/jsx-props-no-spreading
-        !edit && dataset && thing && <span {...other}>{value}</span>
+        !edit && dataset && thing && <span {...other}>{`${value}`}</span>
       }
       {edit && dataset && thing && (
         <input
