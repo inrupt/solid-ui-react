@@ -24,7 +24,7 @@ import * as React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
-import Value from "./index";
+import Value, { DataType } from "./index";
 import { DatasetProvider } from "../../context/datasetContext";
 import { ThingProvider } from "../../context/thingContext";
 
@@ -101,45 +101,92 @@ describe("<Value /> component snapshot test", () => {
 });
 
 describe("<Value /> component functional testing", () => {
-  it("Should call getStringUnlocalizedOne function if no locale is passed", async () => {
-    jest
-      .spyOn(SolidFns, "getStringUnlocalizedOne")
-      .mockImplementation(() => mockNick);
-    const { getByText } = render(
-      <Value
-        dataType="string"
-        dataSet={mockDataSetWithResourceInfo}
-        thing={mockThing}
-        property={mockPredicate}
-      />
-    );
-    expect(SolidFns.getStringUnlocalizedOne).toHaveBeenCalled();
-    expect(getByText(mockNick)).toBeDefined();
-  });
+  it.each([
+    ["string", "getStringUnlocalizedOne", "mockString", undefined],
+    ["string", "getStringInLocaleOne", "mockString", "en"],
+    ["boolean", "getBoolean", true, undefined],
+    ["datetime", "getDatetime", new Date(), undefined],
+    ["decimal", "getDecimal", 1.23, undefined],
+    ["integer", "getInteger", 100, undefined],
+    ["url", "getUrl", "http://mock.url", undefined],
+  ])(
+    "when dataType is %s, calls %s and sets value",
+    (dataType, getter, mockValue, locale) => {
+      const mockGetter = jest
+        .spyOn(SolidFns, getter as any)
+        .mockImplementationOnce(() => mockValue);
+      const { getByText } = render(
+        <Value
+          dataType={dataType as DataType}
+          dataSet={mockDataSetWithResourceInfo}
+          thing={mockThing}
+          property={mockPredicate}
+          locale={locale}
+        />
+      );
+      expect(mockGetter).toHaveBeenCalled();
+      const expectedDisplayValue =
+        dataType === "datetime"
+          ? (mockValue as Date)
+              .toISOString()
+              .substring(0, (mockValue as Date).toISOString().length - 5)
+          : `${mockValue}`;
+      expect(getByText(expectedDisplayValue)).toBeDefined();
+    }
+  );
 
-  it("Should call getStringInLocaleOne function if locale is passed", async () => {
-    jest
-      .spyOn(SolidFns, "getStringInLocaleOne")
-      .mockImplementation(() => mockNick);
-    const { getByText } = render(
-      <Value
-        dataType="string"
-        dataSet={mockDataSetWithResourceInfo}
-        thing={mockThing}
-        property={mockPredicate}
-        locale="en"
-        autosave
-      />
-    );
-    expect(SolidFns.getStringInLocaleOne).toHaveBeenCalled();
-    expect(getByText(mockNick)).toBeDefined();
-  });
+  it.each([
+    [
+      "string",
+      "getStringUnlocalizedOne",
+      "setStringUnlocalized",
+      "mockString",
+      undefined,
+    ],
+    ["string", "getStringInLocaleOne", "setStringInLocale", "mockString", "en"],
+    ["boolean", "getBoolean", "setBoolean", true, undefined],
+    ["datetime", "getDatetime", "setDatetime", "2020-12-30T12:30", undefined],
+    ["decimal", "getDecimal", "setDecimal", "1.23", undefined],
+    ["integer", "getInteger", "setInteger", "100", undefined],
+    ["url", "getUrl", "setUrl", "http://mock.url", undefined],
+  ])(
+    "when dataType is %s, should call %s setter on blur",
+    (dataType, getter, setter, newValue, locale) => {
+      jest.spyOn(SolidFns, getter as any).mockImplementationOnce(() => null);
+      const mockSetter = jest
+        .spyOn(SolidFns, setter as any)
+        .mockImplementation(() => mockThing);
+      jest
+        .spyOn(SolidFns, "saveSolidDatasetAt")
+        .mockResolvedValue(savedDataSet);
+      const { getByTitle } = render(
+        <Value
+          dataType={dataType as DataType}
+          dataSet={mockDataSetWithResourceInfo}
+          thing={mockThing}
+          property={mockPredicate}
+          locale={locale}
+          edit
+          autosave
+          inputProps={{ title: "test title" }}
+        />
+      );
+      const input = getByTitle("test title");
+      input.focus();
+      if (dataType === "boolean") {
+        fireEvent.click(input);
+      } else {
+        fireEvent.change(input, { target: { value: newValue } });
+      }
+      input.blur();
+      expect(mockSetter).toHaveBeenCalled();
+    }
+  );
 
-  it("Should call setStringUnlocalized onBlur if no locale is set", async () => {
+  it("Should not call setter on blur if the value of the input hasn't changed", async () => {
     jest
       .spyOn(SolidFns, "setStringUnlocalized")
       .mockImplementation(() => mockThing);
-    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
       <Value
         dataType="string"
@@ -152,53 +199,8 @@ describe("<Value /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
     input.blur();
-    expect(SolidFns.setStringUnlocalized).toHaveBeenCalled();
-  });
-
-  it("Should call setStringInLocale onBlur if locale is set", async () => {
-    jest
-      .spyOn(SolidFns, "setStringInLocale")
-      .mockImplementation(() => mockThing);
-    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
-    const { getByDisplayValue } = render(
-      <Value
-        dataType="string"
-        dataSet={mockDataSetWithResourceInfo}
-        thing={mockThing}
-        property={mockPredicate}
-        locale="en"
-        edit
-        autosave
-      />
-    );
-    const input = getByDisplayValue(mockNick);
-    input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    expect(SolidFns.setStringInLocale).toHaveBeenCalled();
-  });
-
-  it("Should not call setString onBlur if the value of the input hasn't changed", async () => {
-    jest
-      .spyOn(SolidFns, "setStringInLocale")
-      .mockImplementation(() => mockThing);
-    const { getByDisplayValue } = render(
-      <Value
-        dataType="string"
-        dataSet={mockDataSetWithResourceInfo}
-        thing={mockThing}
-        property={mockPredicate}
-        locale="en"
-        edit
-        autosave
-      />
-    );
-    const input = getByDisplayValue(mockNick);
-    input.focus();
-    input.blur();
-    expect(SolidFns.setStringInLocale).toHaveBeenCalledTimes(0);
+    expect(SolidFns.setStringUnlocalized).toHaveBeenCalledTimes(0);
   });
 
   it("Should not call saveSolidDatasetAt onBlur if autosave is false", async () => {
@@ -209,7 +211,6 @@ describe("<Value /> component functional testing", () => {
         dataSet={mockDataSetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
-        locale="en"
         edit
       />
     );
