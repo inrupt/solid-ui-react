@@ -37,7 +37,7 @@ import config from "./config";
 const { host } = config();
 
 export default {
-  title: "Components/Value component",
+  title: "Components/Value",
   component: Value,
   decorators: [withKnobs],
 };
@@ -56,11 +56,11 @@ const dataTypeOptions: Array<DataType> = [
   "url",
 ];
 
-export function BasicExample(): ReactElement {
+export function String(): ReactElement {
   const examplePredicate = `http://xmlns.com/foaf/0.1/name`;
-  const exampleNick = true;
+  const exampleNick = "example value";
 
-  const exampleThing = SolidFns.setBoolean(
+  const exampleThing = SolidFns.setStringUnlocalized(
     SolidFns.createThing(),
     examplePredicate,
     exampleNick
@@ -74,6 +74,156 @@ export function BasicExample(): ReactElement {
   return (
     <Value
       dataType="string"
+      dataSet={exampleDataSet}
+      thing={exampleThing}
+      property={examplePredicate}
+      autosave={boolean("Autosave", false)}
+      edit={boolean("Edit", false)}
+      inputProps={object("Input options", inputOptions)}
+      onError={action("OnError")}
+      onSave={action("onSave")}
+    />
+  );
+}
+
+export function Boolean(): ReactElement {
+  const examplePredicate = `http://xmlns.com/foaf/0.1/name`;
+  const exampleBoolean = true;
+
+  const exampleThing = SolidFns.setBoolean(
+    SolidFns.createThing(),
+    examplePredicate,
+    exampleBoolean
+  );
+
+  const exampleDataSet = SolidFns.setThing(
+    SolidFns.createLitDataset(),
+    exampleThing
+  );
+
+  return (
+    <Value
+      dataType="boolean"
+      dataSet={exampleDataSet}
+      thing={exampleThing}
+      property={examplePredicate}
+      autosave={boolean("Autosave", false)}
+      edit={boolean("Edit", false)}
+      inputProps={object("Input options", inputOptions)}
+      onError={action("OnError")}
+      onSave={action("onSave")}
+    />
+  );
+}
+
+export function Datetime(): ReactElement {
+  const examplePredicate = `http://xmlns.com/foaf/0.1/name`;
+  const exampleDatetime = new Date();
+
+  const exampleThing = SolidFns.setDatetime(
+    SolidFns.createThing(),
+    examplePredicate,
+    exampleDatetime
+  );
+
+  const exampleDataSet = SolidFns.setThing(
+    SolidFns.createLitDataset(),
+    exampleThing
+  );
+
+  return (
+    <Value
+      dataType="datetime"
+      dataSet={exampleDataSet}
+      thing={exampleThing}
+      property={examplePredicate}
+      autosave={boolean("Autosave", false)}
+      edit={boolean("Edit", false)}
+      inputProps={object("Input options", inputOptions)}
+      onError={action("OnError")}
+      onSave={action("onSave")}
+    />
+  );
+}
+
+export function Decimal(): ReactElement {
+  const examplePredicate = `http://xmlns.com/foaf/0.1/name`;
+  const exampleDecimal = 123.456;
+
+  const exampleThing = SolidFns.setDecimal(
+    SolidFns.createThing(),
+    examplePredicate,
+    exampleDecimal
+  );
+
+  const exampleDataSet = SolidFns.setThing(
+    SolidFns.createLitDataset(),
+    exampleThing
+  );
+
+  return (
+    <Value
+      dataType="decimal"
+      dataSet={exampleDataSet}
+      thing={exampleThing}
+      property={examplePredicate}
+      autosave={boolean("Autosave", false)}
+      edit={boolean("Edit", false)}
+      inputProps={object("Input options", inputOptions)}
+      onError={action("OnError")}
+      onSave={action("onSave")}
+    />
+  );
+}
+
+export function Integer(): ReactElement {
+  const examplePredicate = `http://xmlns.com/foaf/0.1/name`;
+  const exampleInteger = 123;
+
+  const exampleThing = SolidFns.setInteger(
+    SolidFns.createThing(),
+    examplePredicate,
+    exampleInteger
+  );
+
+  const exampleDataSet = SolidFns.setThing(
+    SolidFns.createLitDataset(),
+    exampleThing
+  );
+
+  return (
+    <Value
+      dataType="integer"
+      dataSet={exampleDataSet}
+      thing={exampleThing}
+      property={examplePredicate}
+      autosave={boolean("Autosave", false)}
+      edit={boolean("Edit", false)}
+      inputProps={object("Input options", inputOptions)}
+      onError={action("OnError")}
+      onSave={action("onSave")}
+    />
+  );
+}
+
+export function Url(): ReactElement {
+  const examplePredicate = `http://xmlns.com/foaf/0.1/name`;
+  const exampleUrl = "http://test.url";
+
+  const exampleThing = SolidFns.setUrl(
+    SolidFns.createThing(),
+    examplePredicate,
+    exampleUrl
+  );
+
+  const exampleDataSet = SolidFns.setThing(
+    SolidFns.createLitDataset(),
+    exampleThing
+  );
+
+  return (
+    <Value
+      dataType="url"
       dataSet={exampleDataSet}
       thing={exampleThing}
       property={examplePredicate}

@@ -31,7 +31,7 @@ import config from "./config";
 const { host } = config();
 
 export default {
-  title: "Components/Text component",
+  title: "Components/Text",
   component: Text,
   decorators: [withKnobs],
 };
