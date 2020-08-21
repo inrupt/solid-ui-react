@@ -54,12 +54,12 @@ export function WithThingUrl(): ReactElement {
 
   const datasetUrl = text(
     "Dataset Url",
-    "https://docs-example.inrupt.net/profile/card"
+    "https://localhost:3000/example.ttl"
   );
 
   const thingUrl = text(
     "Thing Url",
-    "https://docs-example.inrupt.net/profile/card#me"
+    "https://localhost:3000/example.ttl#me"
   );
 
   const setDataset = async (url: string) => {

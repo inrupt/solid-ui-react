@@ -92,7 +92,7 @@ export function WithLocalData(): ReactElement {
       autosave={boolean("Autosave", false)}
       saveDatasetTo={text(
         "Save Dataset to URL",
-        "https://docs-example.inrupt.net/profile/card"
+        "https://localhost:3000/example.ttl"
       )}
       inputProps={object("Input options", inputOptions)}
       onError={action("OnError")}
@@ -106,13 +106,13 @@ export function WithFetchedData(): ReactElement {
     <DatasetProvider
       datasetUrl={text(
         "Dataset Url",
-        "https://docs-example.inrupt.net/profile/card"
+        "https://localhost:3000/example.ttl"
       )}
     >
       <ThingProvider
         thingUrl={text(
           "Thing Url",
-          "https://docs-example.inrupt.net/profile/card#me"
+          "https://localhost:3000/example.ttl#me"
         )}
       >
         <Text

@@ -50,7 +50,7 @@ export function WithLocalDataset(): ReactElement {
 export function WithDatasetUrl(): ReactElement {
   const datasetUrl = text(
     "Dataset Url",
-    "https://docs-example.inrupt.net/profile/card"
+    "https://localhost:3000/example.ttl"
   );
   return (
     <DatasetProvider datasetUrl={datasetUrl}>
@@ -62,7 +62,7 @@ export function WithDatasetUrl(): ReactElement {
 function ExampleComponentWithDatasetUrl(): ReactElement {
   const datasetUrl = text(
     "Thing Url",
-    "https://docs-example.inrupt.net/profile/card#me"
+    "https://localhost:3000/example.ttl#me"
   );
 
   const examplePredicate = text(

@@ -1,0 +1,37 @@
+@prefix : <#>.
+@prefix solid: <http://www.w3.org/ns/solid/terms#>.
+@prefix pro: <./>.
+@prefix n0: <http://xmlns.com/foaf/0.1/>.
+@prefix schem: <http://schema.org/>.
+@prefix n: <http://www.w3.org/2006/vcard/ns#>.
+@prefix ldp: <http://www.w3.org/ns/ldp#>.
+@prefix inbox: </inbox/>.
+@prefix sp: <http://www.w3.org/ns/pim/space#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix doc: </>.
+
+pro:card a n0:PersonalProfileDocument; n0:maker :me; n0:primaryTopic :me.
+
+:me
+    a schem:Person, n0:Person;
+    n:fn "Docs Example";
+    n:note "Sample Account for docs. ";
+    n:organization-name "Inrupt";
+    n:role "Documentation";
+    ldp:inbox inbox:;
+    sp:preferencesFile <https://docs-example.inrupt.net/settings/prefs.ttl>;
+    sp:storage doc:;
+    solid:account doc:;
+    solid:privateTypeIndex <https://docs-example.inrupt.net/settings/privateTypeIndex.ttl>;
+    solid:publicTypeIndex <https://docs-example.inrupt.net/settings/publicTypeIndex.ttl>;
+    n0:name "Docs Example".
+
+:exampleImage
+    schem:author "Marc Heckner" ;
+    schem:contentLocation "Munich, Deutschland" ;
+    schem:contentUrl <example.jpg> ;
+    schem:datePublished "2016-12-01T15:31:10-05:00"^^xsd:dateTime;
+    schem:description "Shiny industrial in Munich." ;
+    schem:name "white metal roll up door photo" ;
+    schem:url <https://unsplash.com/photos/cILBVKMxnbA> ;
+    schem:isAccessibleForFree true .
