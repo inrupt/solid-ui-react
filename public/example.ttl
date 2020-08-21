@@ -26,12 +26,27 @@ pro:card a n0:PersonalProfileDocument; n0:maker :me; n0:primaryTopic :me.
     solid:publicTypeIndex <https://docs-example.inrupt.net/settings/publicTypeIndex.ttl>;
     n0:name "Docs Example".
 
+:alterEgo
+    a schem:Person, n0:Person;
+    n:fn "Super Inrupt";
+    n:note "Secret superhero account. ";
+    n:organization-name "Inrupt";
+    n:role "Documentation";
+    n0:name "Super Inrupt".
+
 :exampleImage
-    schem:author "Marc Heckner" ;
-    schem:contentLocation "Munich, Deutschland" ;
+    schem:author "Snapwire" ;
     schem:contentUrl <example.jpg> ;
-    schem:datePublished "2016-12-01T15:31:10-05:00"^^xsd:dateTime;
-    schem:description "Shiny industrial in Munich." ;
-    schem:name "white metal roll up door photo" ;
-    schem:url <https://unsplash.com/photos/cILBVKMxnbA> ;
+    schem:datePublished "2017-12-12T15:31:10-05:00"^^xsd:dateTime;
+    schem:description "Photo of Gray Cat Looking Up Against Black Background" ;
+    schem:name "Gray Cat" ;
+    schem:url <https://www.pexels.com/photo/photo-of-gray-cat-looking-up-against-black-background-730896/> ;
+    schem:isAccessibleForFree true .
+
+:exampleVideo
+    schem:author "Blender Foundation / Netherlands Media Art Institute" ;
+    schem:contentUrl <https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4> ;
+    schem:description "The world's first open movie." ;
+    schem:name "Elephant's Dream" ;
+    schem:url <https://orange.blender.org/> ;
     schem:isAccessibleForFree true .
