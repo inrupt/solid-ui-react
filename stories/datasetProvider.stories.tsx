@@ -23,6 +23,9 @@ import React, { ReactElement, useContext, useState, useEffect } from "react";
 import { withKnobs, text } from "@storybook/addon-knobs";
 import * as SolidFns from "@inrupt/solid-client";
 import { DatasetProvider, DatasetContext } from "../src/context/datasetContext";
+import config from "./config";
+
+const { host } = config();
 
 export default {
   title: "Providers/Dataset Provider",
@@ -48,10 +51,7 @@ export function WithLocalDataset(): ReactElement {
 }
 
 export function WithDatasetUrl(): ReactElement {
-  const datasetUrl = text(
-    "Dataset Url",
-    "https://docs-example.inrupt.net/profile/card"
-  );
+  const datasetUrl = text("Dataset Url", `${host}/example.ttl`);
   return (
     <DatasetProvider datasetUrl={datasetUrl}>
       <ExampleComponentWithDatasetUrl />
@@ -60,10 +60,7 @@ export function WithDatasetUrl(): ReactElement {
 }
 
 function ExampleComponentWithDatasetUrl(): ReactElement {
-  const datasetUrl = text(
-    "Thing Url",
-    "https://docs-example.inrupt.net/profile/card#me"
-  );
+  const datasetUrl = text("Thing Url", `${host}/example.ttl#me`);
 
   const examplePredicate = text(
     "property",

@@ -23,6 +23,9 @@ import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
 import { withKnobs, boolean, number } from "@storybook/addon-knobs";
 import Image from "../src/components/image";
+import config from "./config";
+
+const { host } = config();
 
 export default {
   title: "Components/Image",
@@ -31,7 +34,7 @@ export default {
 };
 
 export function EditFalse(): ReactElement {
-  const exampleUrl = "https://picsum.photos/200/300";
+  const exampleUrl = `${host}/example.jpg`;
   const exampleProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
@@ -42,7 +45,7 @@ export function EditFalse(): ReactElement {
 }
 
 export function EditTrue(): ReactElement {
-  const exampleUrl = "https://picsum.photos/200/300";
+  const exampleUrl = `${host}/example.jpg`;
   const exampleProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),

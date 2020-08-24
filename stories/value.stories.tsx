@@ -32,6 +32,9 @@ import { action } from "@storybook/addon-actions";
 import Value, { DataType } from "../src/components/value";
 import { DatasetProvider } from "../src/context/datasetContext";
 import { ThingProvider } from "../src/context/thingContext";
+import config from "./config";
+
+const { host } = config();
 
 export default {
   title: "Components/Value component",
@@ -106,10 +109,7 @@ export function WithUnsavedData(): ReactElement {
       property={examplePredicate}
       edit={boolean("Edit", false)}
       autosave={boolean("Autosave", false)}
-      saveDatasetTo={text(
-        "Save Dataset to URL",
-        "https://docs-example.inrupt.net/profile/card"
-      )}
+      saveDatasetTo={text("Save Dataset to URL", `${host}/example.ttl`)}
       inputProps={object("Input options", inputOptions)}
       onError={action("OnError")}
       onSave={action("onSave")}
@@ -119,27 +119,14 @@ export function WithUnsavedData(): ReactElement {
 
 export function WithFetchedData(): ReactElement {
   return (
-    <DatasetProvider
-      datasetUrl={text(
-        "Dataset Url",
-        "https://docs-example.inrupt.net/profile/card"
-      )}
-    >
-      <ThingProvider
-        thingUrl={text(
-          "Thing Url",
-          "https://docs-example.inrupt.net/profile/card#me"
-        )}
-      >
+    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
+      <ThingProvider thingUrl={text("Thing Url", `${host}/example.ttl#me`)}>
         <Value
           dataType={select("dataType", dataTypeOptions, "string")}
           property={text("property", "http://xmlns.com/foaf/0.1/name")}
           edit={boolean("Edit", true)}
           autosave={boolean("Autosave", true)}
-          saveDatasetTo={text(
-            "Save Dataset to URL",
-            "https://docs-example.inrupt.net/profile/card"
-          )}
+          saveDatasetTo={text("Save Dataset to URL", `${host}/example.ttl`)}
           onError={action("OnError")}
           onSave={action("onSave")}
         />

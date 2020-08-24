@@ -24,6 +24,9 @@ import { withKnobs, text } from "@storybook/addon-knobs";
 import * as SolidFns from "@inrupt/solid-client";
 import { ThingContext } from "../src/context/thingContext";
 import CombinedDataProvider from "../src/context/combinedDataContext";
+import config from "./config";
+
+const { host } = config();
 
 export default {
   title: "Providers/Combined Provider (name TBC)",
@@ -51,14 +54,8 @@ export function WithLocalData(): ReactElement {
 export function WithDataUrls(): ReactElement {
   return (
     <CombinedDataProvider
-      datasetUrl={text(
-        "Dataset Url",
-        "https://docs-example.inrupt.net/profile/card"
-      )}
-      thingUrl={text(
-        "Thing Url",
-        "https://docs-example.inrupt.net/profile/card#me"
-      )}
+      datasetUrl={text("Dataset Url", `${host}/example.ttl`)}
+      thingUrl={text("Thing Url", `${host}/example.ttl#me`)}
     >
       <ExampleComponentFetchedData />
     </CombinedDataProvider>
