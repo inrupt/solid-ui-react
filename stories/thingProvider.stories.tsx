@@ -24,6 +24,9 @@ import { withKnobs, text } from "@storybook/addon-knobs";
 import * as SolidFns from "@inrupt/solid-client";
 import { DatasetProvider } from "../src/context/datasetContext";
 import { ThingProvider, ThingContext } from "../src/context/thingContext";
+import config from "./config";
+
+const { host } = config();
 
 export default {
   title: "Providers/Thing Provider",
@@ -52,15 +55,9 @@ export function WithThingUrl(): ReactElement {
     SolidFns.LitDataset & SolidFns.WithResourceInfo
   >();
 
-  const datasetUrl = text(
-    "Dataset Url",
-    "https://localhost:3000/example.ttl"
-  );
+  const datasetUrl = text("Dataset Url", `${host}/example.ttl`);
 
-  const thingUrl = text(
-    "Thing Url",
-    "https://localhost:3000/example.ttl#me"
-  );
+  const thingUrl = text("Thing Url", `${host}/example.ttl#me`);
 
   const setDataset = async (url: string) => {
     await SolidFns.fetchLitDataset(url).then((result) => {

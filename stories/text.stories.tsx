@@ -26,6 +26,9 @@ import { action } from "@storybook/addon-actions";
 import Text from "../src/components/text";
 import { DatasetProvider } from "../src/context/datasetContext";
 import { ThingProvider } from "../src/context/thingContext";
+import config from "./config";
+
+const { host } = config();
 
 export default {
   title: "Components/Text component",
@@ -90,10 +93,7 @@ export function WithLocalData(): ReactElement {
       property={examplePredicate}
       edit={boolean("Edit", false)}
       autosave={boolean("Autosave", false)}
-      saveDatasetTo={text(
-        "Save Dataset to URL",
-        "https://localhost:3000/example.ttl"
-      )}
+      saveDatasetTo={text("Save Dataset to URL", `${host}/example.ttl`)}
       inputProps={object("Input options", inputOptions)}
       onError={action("OnError")}
       onSave={action("onSave")}
@@ -103,18 +103,8 @@ export function WithLocalData(): ReactElement {
 
 export function WithFetchedData(): ReactElement {
   return (
-    <DatasetProvider
-      datasetUrl={text(
-        "Dataset Url",
-        "https://localhost:3000/example.ttl"
-      )}
-    >
-      <ThingProvider
-        thingUrl={text(
-          "Thing Url",
-          "https://localhost:3000/example.ttl#me"
-        )}
-      >
+    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
+      <ThingProvider thingUrl={text("Thing Url", `${host}/example.ttl#me`)}>
         <Text
           property={text("property", "http://xmlns.com/foaf/0.1/name")}
           edit={boolean("Edit", true)}
