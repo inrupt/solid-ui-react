@@ -106,12 +106,10 @@ export default function Value({
     if (thing) {
       switch (dataType) {
         case "boolean":
-          console.log(getBoolean(thing, property), thing, property);
           setValue(getBoolean(thing, property) ?? false);
           break;
         case "datetime": {
           const datetime = getDatetime(thing, property);
-          console.log(getDatetime(thing, property), thing, property);
           const datetimeString = datetime
             ? datetime
                 .toISOString()
