@@ -24,7 +24,8 @@ interface Config {
 }
 
 const config = (): Config => ({
-  host: process.env.NEXT_PUBLIC_HOST_URL || "https://localhost:3000",
+  host:
+    `https://${process.env.NEXT_PUBLIC_HOST_URL}` || "https://localhost:3000",
 });
 
 export default config;
