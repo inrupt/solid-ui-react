@@ -23,11 +23,7 @@ import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
 import { withKnobs, text, boolean, object } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
-import {
-  Table,
-  TableColumn,
-  TableColumnHeading,
-} from "../src/components/table";
+import { Table, TableColumn } from "../src/components/table";
 
 export default {
   title: "Components/Table",
@@ -43,7 +39,7 @@ const inputOptions = {
 
 export function BasicExample(): ReactElement {
   const namePredicate = `http://xmlns.com/foaf/0.1/name`;
-  const nickPredicate = `http://xmlns.com/foaf/0.1/nick`;
+  const datePredicate = `http://schema.org/datePublished`;
 
   const thing1A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
@@ -51,11 +47,7 @@ export function BasicExample(): ReactElement {
     `example name 1`
   );
 
-  const thing1 = SolidFns.addStringNoLocale(
-    thing1A,
-    nickPredicate,
-    `example nick 1`
-  );
+  const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
 
   const thing2A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
@@ -63,22 +55,28 @@ export function BasicExample(): ReactElement {
     `example name 2`
   );
 
-  const thing2 = SolidFns.addStringNoLocale(
+  const thing2 = SolidFns.addDatetime(
     thing2A,
-    nickPredicate,
-    `example nick 2`
+    datePredicate,
+    new Date("1999-01-02")
   );
+
+  type bodyProps = {
+    value?: string;
+  };
+
+  const BodyComponent = ({ value }: bodyProps) => {
+    return <span>{`Value: ${value}`}</span>;
+  };
 
   return (
     <Table things={[thing1, thing2]}>
-      <TableColumn>
-        <TableColumnHeading property={namePredicate}>
-          <span>Test heading testing testing</span>
-        </TableColumnHeading>
-      </TableColumn>
-      <TableColumn>
-        <TableColumnHeading property={nickPredicate} />
-      </TableColumn>
+      <TableColumn property={namePredicate} header="Name" />
+      <TableColumn
+        property={datePredicate}
+        dataType="datetime"
+        body={BodyComponent}
+      />
     </Table>
   );
 }

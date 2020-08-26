@@ -27,34 +27,43 @@ import {
   getStringUnlocalizedOne,
   Url,
   UrlString,
+  getBoolean,
+  getDatetime,
+  getDecimal,
+  getInteger,
+  getUrl,
+  getStringInLocaleOne,
 } from "@inrupt/solid-client";
 import { useTable, Column } from "react-table";
 
-type TableColumnHeadingProps = {
-  property: Url | UrlString;
-  children?: ReactNode;
-};
-export function TableColumnHeading({
-  property,
-}: TableColumnHeadingProps): ReactElement {
-  return <>{property}</>;
-}
+export type DataType =
+  | "boolean"
+  | "datetime"
+  | "decimal"
+  | "integer"
+  | "string"
+  | "url";
 
 type TableColumnProps = {
-  children: ReactElement<TableColumnHeadingProps>;
+  body?: ReactNode;
+  header?: ReactNode;
+  property: Url | UrlString;
+  dataType?: DataType;
+  locale?: string;
 };
-export function TableColumn({ children }: TableColumnProps): ReactElement {
-  return <>{children}</>;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function TableColumn(props: TableColumnProps): ReactElement {
+  return <span>Can&apos;t use TableColumn outside a Table.</span>;
 }
 
-type Props = {
+type TableProps = {
   children:
     | ReactElement<TableColumnProps>
     | Array<ReactElement<TableColumnProps>>;
   things: Array<Thing>;
 };
 
-export function Table({ children, things }: Props): ReactElement {
+export function Table({ children, things }: TableProps): ReactElement {
   const { columns, data } = useMemo(() => {
     const columnsArray: Array<Column<Record<string, unknown>>> = [];
     const dataArray: Array<Record<string, unknown>> = [];
@@ -65,24 +74,44 @@ export function Table({ children, things }: Props): ReactElement {
     // loop through each column
     // TODO check they're TableColumn, or is ReactElement<TableColumnProps> enough
     Children.forEach(children, (column, colIndex) => {
-      const columnChildren = column.props.children;
-      // TODO check type — TableColumnHeading or TableColumnBody
-      // loop through each TableColumnHeading
-      Children.forEach(columnChildren, (child) => {
-        const { property, children: headingChildren } = child.props;
-        // add heading
-        columnsArray.push({
-          Header: headingChildren ? <>{headingChildren}</> : `${property}`,
-          accessor: `col${colIndex}`,
-        });
-
-        // add each each value to data
-        for (let i = 0; i < things.length; i += 1) {
-          const thing = things[i];
-          const value = getStringUnlocalizedOne(thing, property);
-          dataArray[i][`col${colIndex}`] = value;
-        }
+      const { property, header, body, dataType, locale } = column.props;
+      // add heading
+      columnsArray.push({
+        Header: header ?? `${property}`,
+        accessor: `col${colIndex}`,
+        ...(body && { Cell: body }),
       });
+
+      // add each each value to data
+      for (let i = 0; i < things.length; i += 1) {
+        let value;
+        const thing = things[i];
+        switch (dataType) {
+          case "boolean":
+            value = getBoolean(thing, property);
+            break;
+          case "datetime": {
+            value = getDatetime(thing, property);
+            break;
+          }
+          case "decimal":
+            value = getDecimal(thing, property);
+            break;
+          case "integer":
+            value = getInteger(thing, property);
+            break;
+          case "url":
+            value = getUrl(thing, property);
+            break;
+          default:
+            if (locale) {
+              value = getStringInLocaleOne(thing, property, locale);
+            } else {
+              value = getStringUnlocalizedOne(thing, property);
+            }
+        }
+        dataArray[i][`col${colIndex}`] = value;
+      }
     });
 
     return { columns: columnsArray, data: dataArray };
