@@ -1,3 +1,9 @@
+## 0.9.1 ( August 26, 2020)
+
+### Added
+
+- Exported all components, contexts, and providers from src/index.js.
+
 ## 0.9.0 ( August 26, 2020)
 
 ### Changed
