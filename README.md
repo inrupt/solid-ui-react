@@ -15,7 +15,7 @@ Import components from this package, such as:
 
 ## Development
 
-All development should follow the [Inrupt Coding Guidelines](https://github.com/inrupt/public-documentation/tree/master/coding-conventions).
+All development should follow the [Inrupt Coding Guidelines](https://github.com/inrupt/public-documentation/tree/master/coding-conventions). The existing linting and testing tools should automate most of this.
 
 1. Clone the repository
 2. From the directory you cloned to, run `npm install` to install dependencies
