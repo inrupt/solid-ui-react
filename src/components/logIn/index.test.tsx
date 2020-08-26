@@ -20,52 +20,58 @@
  */
 
 import * as React from "react";
-import {
-  render,
-  RenderResult,
-  fireEvent,
-  waitFor,
-} from "@testing-library/react";
-import auth from "solid-auth-client";
-import LoginButton from "./index";
-import { SessionContext } from "../../context/sessionContext";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 
-jest.mock("solid-auth-client");
-let documentBody: RenderResult;
-const onLogin = jest.fn();
-const onError = jest.fn();
-const setSessionRequestInProgress = jest.fn();
+import LoginButton from "./index";
+import { SessionProvider } from "../../context/sessionContext";
+
+const onError = jest.fn().mockResolvedValue(null);
+const setSessionRequestInProgress = jest.fn().mockResolvedValue(null);
 
 describe("<LoginButton /> component snapshot test", () => {
-  beforeEach(() => {
-    documentBody = render(
-      <SessionContext.Provider value={{ setSessionRequestInProgress }}>
+  it("matches snapshot", () => {
+    const session = {
+      info: { isLoggedIn: false },
+      login: jest.fn().mockResolvedValue(null),
+      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
+      on: jest.fn(),
+    } as any;
+
+    const documentBody = render(
+      <SessionProvider session={session}>
         <LoginButton
-          popupUrl="./popup.html"
-          onLogin={onLogin}
+          oidcIssuer="https://test.url"
+          redirectUrl="https://test.url/redirect"
           onError={onError}
         />
-      </SessionContext.Provider>
+      </SessionProvider>
     );
-  });
-  it("matches snapshot", () => {
+
     const { baseElement } = documentBody;
+
     expect(baseElement).toMatchSnapshot();
   });
 });
 
 describe("<LoginButton /> component visual testing", () => {
   it("Renders child element", () => {
+    const session = {
+      info: { isLoggedIn: false },
+      login: jest.fn().mockResolvedValue(null),
+      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
+      on: jest.fn(),
+    } as any;
+
     const { getByText } = render(
-      <SessionContext.Provider value={{ setSessionRequestInProgress }}>
+      <SessionProvider session={session}>
         <LoginButton
-          popupUrl="./popup.html"
-          onLogin={onLogin}
+          oidcIssuer="https://test.url"
+          redirectUrl="https://test.url/redirect"
           onError={onError}
         >
           <div>Custom child element</div>
         </LoginButton>
-      </SessionContext.Provider>
+      </SessionProvider>
     );
 
     expect(getByText("Custom child element")).toBeTruthy();
@@ -73,69 +79,70 @@ describe("<LoginButton /> component visual testing", () => {
 });
 
 describe("<LoginButton /> component functional testing", () => {
-  it("fires the onClick function and calls OnLogin", async () => {
-    (auth.popupLogin as jest.Mock).mockImplementationOnce(() =>
-      Promise.resolve()
-    );
+  it("fires the onClick function", async () => {
+    const session = {
+      info: { isLoggedIn: false },
+      login: jest.fn().mockResolvedValue(null),
+      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
+      on: jest.fn(),
+    } as any;
+
+    const oidcIssuer = "https://test.url";
+    const redirectUrl = "https://local.url/redirect";
 
     const { getByText } = render(
-      <SessionContext.Provider value={{ setSessionRequestInProgress }}>
+      <SessionProvider session={session}>
         <LoginButton
-          popupUrl="./popup.html"
-          onLogin={onLogin}
+          oidcIssuer={oidcIssuer}
+          redirectUrl={redirectUrl}
           onError={onError}
         />
-      </SessionContext.Provider>
+      </SessionProvider>
     );
 
     fireEvent.click(getByText("Log In"));
-    expect(setSessionRequestInProgress).toHaveBeenCalledTimes(1);
-    expect(auth.popupLogin).toHaveBeenCalled();
-
-    await waitFor(() => expect(onLogin).toHaveBeenCalledTimes(1));
-  });
-
-  it("fires the onClick function and doesn't call OnLogin if it wasn't provided", async () => {
-    (auth.popupLogin as jest.Mock).mockImplementationOnce(() =>
-      Promise.resolve()
-    );
-
-    const { getByText } = render(
-      <SessionContext.Provider value={{ setSessionRequestInProgress }}>
-        <LoginButton popupUrl="./popup.html" onError={onError} />
-      </SessionContext.Provider>
-    );
-
-    fireEvent.click(getByText("Log In"));
-    await waitFor(() => expect(onLogin).toHaveBeenCalledTimes(0));
+    expect(session.login).toHaveBeenCalledWith({
+      oidcIssuer: new URL(oidcIssuer),
+      redirectUrl: new URL(redirectUrl),
+    });
   });
 
   it("fires the onClick function and calls OnError", async () => {
-    (auth.popupLogin as jest.Mock).mockImplementationOnce(() =>
-      Promise.reject()
-    );
+    const session = {
+      info: { isLoggedIn: false },
+      login: jest.fn().mockRejectedValue(null),
+      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
+      on: jest.fn(),
+    } as any;
+
     const { getByText } = render(
-      <SessionContext.Provider value={{ setSessionRequestInProgress }}>
+      <SessionProvider session={session}>
         <LoginButton
-          popupUrl="./popup.html"
-          onLogin={onLogin}
+          oidcIssuer="https://test.url"
+          redirectUrl="https://test.url/redirect"
           onError={onError}
         />
-      </SessionContext.Provider>
+      </SessionProvider>
     );
     fireEvent.click(getByText("Log In"));
-    expect(auth.popupLogin).toHaveBeenCalled();
     await waitFor(() => expect(onError).toHaveBeenCalledTimes(1));
   });
 
   it("fires the onClick function and doesn't call OnError if it wasn't provided", async () => {
-    (auth.popupLogin as jest.Mock).mockImplementationOnce(() =>
-      Promise.reject()
-    );
+    const session = {
+      info: { isLoggedIn: false },
+      login: jest.fn().mockRejectedValue(null),
+      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
+      on: jest.fn(),
+    } as any;
+
     const { getByText } = render(
-      <SessionContext.Provider value={{ setSessionRequestInProgress }}>
-        <LoginButton popupUrl="./popup.html" onLogin={onLogin} />
-      </SessionContext.Provider>
+      <SessionProvider session={session}>
+        <LoginButton
+          oidcIssuer="https://test.url"
+          redirectUrl="https://test.url/redirect"
+        />
+      </SessionProvider>
     );
     fireEvent.click(getByText("Log In"));
     await waitFor(() => expect(onError).toHaveBeenCalledTimes(0));

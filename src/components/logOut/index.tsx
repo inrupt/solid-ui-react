@@ -19,8 +19,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React from "react";
-import auth from "solid-auth-client";
+import React, { useContext } from "react";
+import SessionContext from "../../context/sessionContext";
 
 interface Props {
   onLogout?(): void;
@@ -29,10 +29,11 @@ interface Props {
 }
 
 const LogoutButton: React.FC<Props> = (propsLogout: Props) => {
+  const { session } = useContext(SessionContext);
   const { children, onLogout, onError } = propsLogout;
   async function LogoutHandler() {
     try {
-      await auth.logout();
+      await session.logout();
       if (onLogout) onLogout();
     } catch (error) {
       if (onError) onError(error);

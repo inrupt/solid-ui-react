@@ -21,7 +21,8 @@
 
 import * as React from "react";
 import { renderHook } from "@testing-library/react-hooks";
-import { SessionContext } from "../../context/sessionContext";
+import { Session } from "@inrupt/solid-client-authn-browser";
+import SessionContext from "../../context/sessionContext";
 import useSession from "./index";
 
 describe("useSession() hook functional testing", () => {
@@ -33,15 +34,25 @@ describe("useSession() hook functional testing", () => {
     const wrapper = ({ children }: IProps) => (
       <SessionContext.Provider
         value={{
+          fetch: jest.fn(),
           sessionRequestInProgress: true,
-          session: { webId: "https://solid.community/" },
+          session: {
+            info: {
+              webId: "https://solid.community/",
+              isLoggedIn: true,
+              sessionId: "some-session-id",
+            },
+          } as Session,
         }}
       >
         {children}
       </SessionContext.Provider>
     );
+
     const { result } = renderHook(() => useSession(), { wrapper });
-    expect(result.current.session?.webId).toEqual("https://solid.community/");
+    expect(result.current.session.info.webId).toEqual(
+      "https://solid.community/"
+    );
     expect(result.current.sessionRequestInProgress).toEqual(true);
   });
 });

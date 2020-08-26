@@ -29,10 +29,6 @@ export default {
   component: LoginButton,
 };
 
-async function loginTest() {
-  alert("you have logged in");
-}
-
 async function loginFailed(error: Error) {
   console.log("ERROR", error.message);
 }
@@ -40,9 +36,15 @@ async function loginFailed(error: Error) {
 export function WithChildren(): ReactElement {
   return (
     <SessionProvider>
+      <p>
+        <em>{"Note: "}</em>
+        to test out the Authentication examples, you will need to click the
+        pop-out icon on the top right to open this example in a new tab first.
+      </p>
+
       <LoginButton
-        popupUrl="./popup.html"
-        onLogin={() => loginTest()}
+        oidcIssuer="https://broker.demo-ess.inrupt.com/"
+        redirectUrl={window.location.href}
         onError={(error) => loginFailed(error)}
       >
         <Button color="primary">Log In</Button>
@@ -54,9 +56,15 @@ export function WithChildren(): ReactElement {
 export function WithoutChildren(): ReactElement {
   return (
     <SessionProvider>
+      <p>
+        <em>{"Note: "}</em>
+        to test out the Authentication examples, you will need to click the
+        pop-out icon on the top right to open this example in a new tab first.
+      </p>
+
       <LoginButton
-        popupUrl="./popup.html"
-        onLogin={() => loginTest()}
+        oidcIssuer="https://inrupt.net"
+        redirectUrl={window.location.href}
         onError={(error) => loginFailed(error)}
       />
     </SessionProvider>

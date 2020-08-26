@@ -34,8 +34,9 @@ import {
   getFetchedFrom,
   hasResourceInfo,
 } from "@inrupt/solid-client";
-import { DatasetContext } from "../../context/datasetContext";
-import { ThingContext } from "../../context/thingContext";
+import DatasetContext from "../../context/datasetContext";
+import ThingContext from "../../context/thingContext";
+import SessionContext from "../../context/sessionContext";
 
 type Props = {
   dataSet?: SolidDataset;
@@ -63,6 +64,7 @@ export default function Text({
   inputProps,
   ...other
 }: Props): ReactElement {
+  const { fetch } = useContext(SessionContext);
   const [text, setText] = useState<string | null>("");
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setErrorState] = useState<string | null>();
@@ -107,12 +109,14 @@ export default function Text({
         if (saveDatasetTo) {
           await saveSolidDatasetAt(
             saveDatasetTo,
-            setThing(dataset, updatedResource)
+            setThing(dataset, updatedResource),
+            { fetch }
           );
         } else if (hasResourceInfo(dataset)) {
           await saveSolidDatasetAt(
             getFetchedFrom(dataset),
-            setThing(dataset, updatedResource)
+            setThing(dataset, updatedResource),
+            { fetch }
           );
         } else {
           setErrorState(() => {

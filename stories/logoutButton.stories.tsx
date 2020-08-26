@@ -40,6 +40,12 @@ async function logoutFailed(error: Error) {
 export function WithChildren(): ReactElement {
   return (
     <SessionProvider>
+      <p>
+        <em>{"Note: "}</em>
+        to test out the Authentication examples, you will need to click the
+        pop-out icon on the top right to open this example in a new tab first.
+      </p>
+
       <LogoutButton
         onLogout={() => logoutTest()}
         onError={(error) => logoutFailed(error)}
@@ -53,6 +59,12 @@ export function WithChildren(): ReactElement {
 export function WithoutChildren(): ReactElement {
   return (
     <SessionProvider>
+      <p>
+        <em>{"Note: "}</em>
+        to test out the Authentication examples, you will need to click the
+        pop-out icon on the top right to open this example in a new tab first.
+      </p>
+
       <LogoutButton
         onLogout={() => logoutTest()}
         onError={(error) => logoutFailed(error)}

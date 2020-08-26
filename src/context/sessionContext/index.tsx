@@ -28,54 +28,88 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import auth from "solid-auth-client";
 
-export interface ISession {
-  webId: string;
-}
+import {
+  Session,
+  getClientAuthenticationWithDependencies,
+} from "@inrupt/solid-client-authn-browser";
 
 interface ISessionContext {
-  session?: ISession | undefined;
-  setSession?: Dispatch<SetStateAction<ISession>> | any;
-  sessionRequestInProgress?: boolean;
+  session: Session;
+  sessionRequestInProgress: boolean;
   setSessionRequestInProgress?: Dispatch<SetStateAction<boolean>> | any;
+  fetch: typeof window.fetch;
 }
 
-export const SessionContext = createContext<ISessionContext>({});
+/* eslint @typescript-eslint/explicit-module-boundary-types: 0 */
+export const unauthenticatedFetch = (url: any, options: any): any => {
+  return window.fetch.bind(window)(url, options);
+};
 
+export const defaultSession = (): Session =>
+  new Session({
+    clientAuthentication: getClientAuthenticationWithDependencies({}),
+  });
+
+const SessionContext = createContext<ISessionContext>({
+  session: defaultSession(),
+  sessionRequestInProgress: true,
+  fetch: unauthenticatedFetch,
+});
+
+export default SessionContext;
+
+/* eslint react/require-default-props: 0 */
 interface ISessionProvider {
   children: ReactNode;
-  session?: ISession;
-  sessionRequestInProgress?: boolean;
+  session: Session;
 }
 
 export const SessionProvider = ({
   session: initialSession,
-  sessionRequestInProgress: initialSessionRequestInProgress,
   children,
 }: ISessionProvider): ReactElement => {
-  const [session, setSession] = useState<ISession | undefined>(initialSession);
   const [sessionRequestInProgress, setSessionRequestInProgress] = useState(
-    initialSessionRequestInProgress
+    true
   );
 
-  useEffect(() => {
-    auth.trackSession(setSession).catch((error) => {
-      throw error;
-    });
+  const [session, setSession] = useState<Session>(initialSession);
 
-    return function cleanup() {
-      auth.stopTrackSession(setSession);
-    };
-  }, [setSession]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setErrorState] = useState<string | null>();
+
+  const fetch = session.info.isLoggedIn ? session.fetch : unauthenticatedFetch;
+
+  useEffect(() => {
+    // The first time the component is loaded, check for a querystring and
+    // attempt to handle it.
+    session
+      .handleIncomingRedirect(window.location.href)
+      .then(() => {
+        setSessionRequestInProgress(false);
+      })
+      .catch((error) => {
+        setSessionRequestInProgress(false);
+        setErrorState(() => {
+          throw error;
+        });
+      });
+
+    session.on("logout", () => {
+      // Workaround for a solid-client-authn bug.
+      // It leaves dirty data in localstorage, and doesn't set isLoggedIn to false after logging out.
+      window.localStorage.clear();
+      setSession(defaultSession());
+    });
+  }, [session]);
 
   return (
     <SessionContext.Provider
       value={{
         session,
-        setSession,
         sessionRequestInProgress,
         setSessionRequestInProgress,
+        fetch,
       }}
     >
       {children}
@@ -83,7 +117,7 @@ export const SessionProvider = ({
   );
 };
 
+/* eslint react/default-props-match-prop-types: 0 */
 SessionProvider.defaultProps = {
-  session: undefined,
-  sessionRequestInProgress: false,
+  session: defaultSession(),
 };

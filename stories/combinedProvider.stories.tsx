@@ -22,7 +22,7 @@
 import React, { ReactElement, useContext, useState, useEffect } from "react";
 import { withKnobs, text } from "@storybook/addon-knobs";
 import * as SolidFns from "@inrupt/solid-client";
-import { ThingContext } from "../src/context/thingContext";
+import ThingContext from "../src/context/thingContext";
 import CombinedDataProvider from "../src/context/combinedDataContext";
 import config from "./config";
 
