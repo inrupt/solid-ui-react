@@ -5,7 +5,7 @@ exports[`Testing SessionContext matches snapshot matches snapshot 1`] = `
   <div>
     <div>
       <div
-        data-testid="sesssion"
+        data-testid="session"
       >
         {"info":{"isLoggedIn":true,"webId":"https://fakeurl.com/me"}}
       </div>
