@@ -36,7 +36,7 @@ function ChildComponent(): React.ReactElement {
           sessionRequestInProgress
         </div>
       )}
-      <div data-testid="sesssion">{JSON.stringify(session)}</div>
+      <div data-testid="session">{JSON.stringify(session)}</div>
     </div>
   );
 }
