@@ -26,7 +26,10 @@ import LogoutButton from "./components/logOut";
 import Text from "./components/text";
 import Value from "./components/value";
 import Video from "./components/video";
-import { SessionProvider } from "./context/sessionContext";
+import SessionContext, { SessionProvider } from "./context/sessionContext";
+import CombinedDataProvider from "./context/combinedDataContext";
+import ThingContext, { ThingProvider } from "./context/thingContext";
+import DatasetContext, { DatasetProvider } from "./context/datasetContext";
 import useSession from "./hooks/useSession";
 
 export default {
@@ -37,6 +40,12 @@ export default {
   Text,
   Value,
   Video,
+  SessionContext,
   SessionProvider,
+  CombinedDataProvider,
+  ThingContext,
+  ThingProvider,
+  DatasetContext,
+  DatasetProvider,
   useSession,
 };
