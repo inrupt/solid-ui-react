@@ -73,7 +73,6 @@ export const DatasetProvider = ({
         const resource = await fetchLitDataset(url, { fetch });
         setLitDataset(resource);
       } catch (error) {
-        console.log(error);
         if (onError) {
           onError(error);
         }

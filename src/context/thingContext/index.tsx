@@ -26,11 +26,7 @@ import React, {
   useEffect,
   useContext,
 } from "react";
-import {
-  Thing,
-  UrlString,
-  getThing,
-} from "@inrupt/solid-client";
+import { Thing, UrlString, getThing } from "@inrupt/solid-client";
 import DatasetContext from "../datasetContext";
 
 interface IThingContext {

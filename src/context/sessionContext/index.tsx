@@ -41,6 +41,7 @@ interface ISessionContext {
   fetch: typeof window.fetch;
 }
 
+/* eslint @typescript-eslint/explicit-module-boundary-types: 0 */
 export const unauthenticatedFetch = (url: any, options: any): any => {
   return window.fetch.bind(window)(url, options);
 };
@@ -74,6 +75,9 @@ export const SessionProvider = ({
 
   const [session, setSession] = useState<Session>(initialSession);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setErrorState] = useState<string | null>();
+
   const fetch = session.info.isLoggedIn ? session.fetch : unauthenticatedFetch;
 
   useEffect(() => {
@@ -86,7 +90,9 @@ export const SessionProvider = ({
       })
       .catch((error) => {
         setSessionRequestInProgress(false);
-        throw error;
+        setErrorState(() => {
+          throw error;
+        });
       });
 
     session.on("logout", () => {
