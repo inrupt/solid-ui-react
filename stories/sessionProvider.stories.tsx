@@ -19,10 +19,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
+import React, { ReactElement, useContext } from "react";
 import { Button } from "@material-ui/core";
-import useSession from "../src/hooks/useSession";
-import { SessionProvider } from "../src/context/sessionContext";
+import SessionContext, { SessionProvider } from "../src/context/sessionContext";
 import LoginButton from "../src/components/logIn";
 import LogoutButton from "../src/components/logOut";
 
@@ -33,26 +32,35 @@ export default {
 export function ProviderWithHook(): ReactElement {
   return (
     <SessionProvider>
-      <LoginButton popupUrl="./popup.html">
-        <Button color="primary">Log In</Button>
-      </LoginButton>
-      <LogoutButton>
-        <Button color="primary">Log Out</Button>
-      </LogoutButton>
+      <p>
+        <em>{"Note: "}</em>
+        to test out the Authentication examples, you will need to click the
+        pop-out icon on the top right to open this example in a new tab first.
+      </p>
+
+      <LoginButton
+        oidcIssuer="https://inrupt.net"
+        redirectUrl={window.location.href}
+      />
+
+      <LogoutButton />
+
       <Dashboard />
     </SessionProvider>
   );
 }
 
-function Dashboard() {
-  const { session, sessionRequestInProgress } = useSession();
+function Dashboard(): ReactElement {
+  const { session, sessionRequestInProgress } = useContext(SessionContext);
+
   const sessionRequestText = sessionRequestInProgress
     ? "Session request is in progress"
     : "No session request is in progress";
+
   return (
     <div>
       <h1>Current Session:</h1>
-      <h2>{session?.webId || "logged out"}</h2>
+      <h2>{session.info.webId || "logged out"}</h2>
       <h1>Session Request:</h1>
       <h2>{sessionRequestText}</h2>
     </div>

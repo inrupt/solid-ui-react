@@ -20,9 +20,16 @@
  */
 
 import { useContext } from "react";
-import { SessionContext } from "../../context/sessionContext";
+import SessionContext from "../../context/sessionContext";
 
-export default function useSession() {
-  const { session, sessionRequestInProgress } = useContext(SessionContext);
-  return { session, sessionRequestInProgress };
+export default function useSession(): any {
+  const { session, sessionRequestInProgress, fetch } = useContext(
+    SessionContext
+  );
+
+  return {
+    session,
+    sessionRequestInProgress,
+    fetch,
+  };
 }

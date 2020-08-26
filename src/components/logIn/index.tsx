@@ -20,28 +20,44 @@
  */
 
 import React, { useContext } from "react";
-import auth from "solid-auth-client";
-import { SessionContext } from "../../context/sessionContext";
+import { ILoginInputOptions } from "@inrupt/solid-client-authn-browser";
+import SessionContext from "../../context/sessionContext";
 
 interface Props {
-  popupUrl?: string;
-  authOptions?: Record<string, unknown>;
+  authOptions?: ILoginInputOptions;
   children?: React.ReactNode;
-  onLogin?(): void;
   onError?(error: Error): void;
+  oidcIssuer: string;
+  redirectUrl: string;
 }
 
 const LoginButton: React.FC<Props> = (propsLogin: Props) => {
-  const { popupUrl, children, authOptions, onLogin, onError } = propsLogin;
-  const options = authOptions || { popupUri: popupUrl };
-  const { setSessionRequestInProgress } = useContext(SessionContext);
+  const {
+    oidcIssuer,
+    redirectUrl,
+    children,
+    authOptions,
+    onError,
+  } = propsLogin;
+
+  const options = {
+    redirectUrl: new URL(redirectUrl),
+    oidcIssuer: new URL(oidcIssuer),
+    ...authOptions,
+  };
+
+  const { session, setSessionRequestInProgress } = useContext(SessionContext);
 
   async function LoginHandler() {
     setSessionRequestInProgress(true);
+
     try {
-      await auth.popupLogin(options);
+      // Workaround for a solid-client-authn bug.
+      window.localStorage.clear();
+
+      // Typescript is mad about something.
+      await session.login(options as any);
       setSessionRequestInProgress(false);
-      if (onLogin) onLogin();
     } catch (error) {
       setSessionRequestInProgress(false);
       if (onError) onError(error);

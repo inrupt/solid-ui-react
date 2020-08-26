@@ -23,7 +23,7 @@
 import * as React from "react";
 import { RenderResult, render, waitFor } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
-import { DatasetProvider, DatasetContext } from "./index";
+import DatasetContext, { DatasetProvider } from "./index";
 
 let documentBody: RenderResult;
 

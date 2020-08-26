@@ -28,6 +28,7 @@ export const overwriteFile = async (
   src: string,
   file: File,
   input: EventTarget & HTMLInputElement,
+  fetch: typeof window.fetch,
   maxSize?: number,
   onSave?: () => void,
   onError?: (error: Error) => void
@@ -41,7 +42,7 @@ export const overwriteFile = async (
       return null;
     }
     input.setCustomValidity("");
-    await unstableOverwriteFile(src, file);
+    await unstableOverwriteFile(src, file, { fetch });
     if (onSave) {
       onSave();
     }
@@ -55,8 +56,8 @@ export const overwriteFile = async (
   }
 };
 
-export const retrieveFile = async (src: string): Promise<string> => {
-  const imageBlob = await unstableFetchFile(src);
+export const retrieveFile = async (src: string, fetch: typeof window.fetch): Promise<string> => {
+  const imageBlob = await unstableFetchFile(src, { fetch });
   return URL.createObjectURL(imageBlob);
 };
 

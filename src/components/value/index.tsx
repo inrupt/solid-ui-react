@@ -44,8 +44,9 @@ import {
   setInteger,
   setUrl,
 } from "@inrupt/solid-client";
-import { DatasetContext } from "../../context/datasetContext";
-import { ThingContext } from "../../context/thingContext";
+import DatasetContext from "../../context/datasetContext";
+import ThingContext from "../../context/thingContext";
+import SessionContext from "../../context/sessionContext";
 
 export type DataType =
   | "boolean"
@@ -83,6 +84,7 @@ export default function Value({
   inputProps,
   ...other
 }: Props): ReactElement {
+  const { fetch } = useContext(SessionContext);
   const [value, setValue] = useState<string | number | boolean | null>("");
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setErrorState] = useState<string | null>();
@@ -195,12 +197,14 @@ export default function Value({
         if (saveDatasetTo) {
           await saveSolidDatasetAt(
             saveDatasetTo,
-            setThing(dataset, updatedResource)
+            setThing(dataset, updatedResource),
+            { fetch }
           );
         } else if (hasResourceInfo(dataset)) {
           await saveSolidDatasetAt(
             getFetchedFrom(dataset),
-            setThing(dataset, updatedResource)
+            setThing(dataset, updatedResource),
+            { fetch }
           );
         } else {
           setErrorState(() => {

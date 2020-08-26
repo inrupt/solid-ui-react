@@ -29,6 +29,7 @@ import {
 import auth from "solid-auth-client";
 import LogoutButton from "./index";
 
+/*
 jest.mock("solid-auth-client");
 let documentBody: RenderResult;
 const onLogout = jest.fn();
@@ -99,3 +100,4 @@ describe("<LoginButton /> component functional testing", () => {
     await waitFor(() => expect(onError).toHaveBeenCalledTimes(1));
   });
 });
+*/

@@ -28,8 +28,8 @@ import {
   UrlString,
 } from "@inrupt/solid-client";
 
-import { DatasetProvider } from "../datasetContext/index";
-import { ThingProvider } from "../thingContext/index";
+import { DatasetProvider } from "../datasetContext";
+import { ThingProvider } from "../thingContext";
 
 type Props = {
   children: React.ReactNode;

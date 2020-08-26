@@ -83,5 +83,8 @@
   "bugs": {
     "url": "https://github.com/inrupt/solid-ui-react/issues"
   },
-  "homepage": "https://github.com/inrupt/solid-ui-react#readme"
+  "homepage": "https://github.com/inrupt/solid-ui-react#readme",
+  "dependencies": {
+    "@inrupt/solid-client-authn-browser": "^0.1.1"
+  }
 }

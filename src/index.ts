@@ -27,7 +27,6 @@ import Text from "./components/text";
 import Value from "./components/value";
 import Video from "./components/video";
 import { SessionProvider } from "./context/sessionContext";
-import useSession from "./hooks/useSession";
 
 export default {
   Image,
@@ -38,5 +37,4 @@ export default {
   Value,
   Video,
   SessionProvider,
-  useSession,
 };

@@ -28,20 +28,20 @@ import React, {
 } from "react";
 import {
   Thing,
-  LitDataset,
-  WithResourceInfo,
   UrlString,
   getThing,
 } from "@inrupt/solid-client";
-import { DatasetContext } from "../datasetContext";
+import DatasetContext from "../datasetContext";
 
 interface IThingContext {
   thing: Thing | undefined;
 }
 
-export const ThingContext = createContext<IThingContext>({
+const ThingContext = createContext<IThingContext>({
   thing: undefined,
 });
+
+export default ThingContext;
 
 interface IThingProvider {
   children: React.ReactNode;

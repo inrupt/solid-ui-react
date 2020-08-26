@@ -19,9 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useState, useEffect } from "react";
+import React, { ReactElement, useState, useEffect, useContext } from "react";
 import { Thing, Url, UrlString, getUrl } from "@inrupt/solid-client";
 import { overwriteFile, retrieveFile } from "../../helpers";
+import SessionContext from "../../context/sessionContext";
 
 type Props = {
   thing: Thing;
@@ -46,6 +47,7 @@ export default function Image({
   inputProps,
   ...imgOptions
 }: Props): ReactElement {
+  const { fetch } = useContext(SessionContext);
   const src = getUrl(thing, property);
   if (!src) {
     throw new Error("URL not found for given property");
@@ -53,7 +55,7 @@ export default function Image({
   const [imgObjectUrl, setImgObjectUrl] = useState("");
 
   useEffect(() => {
-    retrieveFile(src)
+    retrieveFile(src, fetch)
       .then(setImgObjectUrl)
       .catch((error) => {
         if (onError) {
@@ -64,7 +66,7 @@ export default function Image({
           });
         }
       });
-  }, [src, onError]);
+  }, [src, onError, fetch]);
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
@@ -73,6 +75,7 @@ export default function Image({
         src,
         fileList[0],
         input,
+        fetch,
         maxSize,
         onSave,
         onError

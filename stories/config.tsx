@@ -23,9 +23,12 @@ interface Config {
   host: string;
 }
 
+const host = process.env.NEXT_PUBLIC_HOST_URL
+  ? `https://${process.env.NEXT_PUBLIC_HOST_URL}`
+  : "https://localhost:3000";
+
 const config = (): Config => ({
-  host:
-    `https://${process.env.NEXT_PUBLIC_HOST_URL}` || "https://localhost:3000",
+  host,
 });
 
 export default config;

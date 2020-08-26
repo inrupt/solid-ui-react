@@ -25,6 +25,7 @@ import React, {
   useState,
   useEffect,
   useCallback,
+  useContext,
 } from "react";
 import {
   fetchLitDataset,
@@ -33,13 +34,17 @@ import {
   UrlString,
 } from "@inrupt/solid-client";
 
+import SessionContext from "../sessionContext";
+
 interface IDatasetContext {
   dataset: LitDataset | (LitDataset & WithResourceInfo) | undefined;
 }
 
-export const DatasetContext = createContext<IDatasetContext>({
+const DatasetContext = createContext<IDatasetContext>({
   dataset: undefined,
 });
+
+export default DatasetContext;
 
 interface IDatasetProvider {
   children: React.ReactNode;
@@ -59,20 +64,22 @@ export const DatasetProvider = ({
   dataset,
   datasetUrl,
 }: RequireDatasetOrDatasetUrl): ReactElement => {
+  const { fetch } = useContext(SessionContext);
   const [litDataset, setLitDataset] = useState<LitDataset & WithResourceInfo>();
 
   const fetchDataset = useCallback(
     async (url: string) => {
       try {
-        const resource = await fetchLitDataset(url);
+        const resource = await fetchLitDataset(url, { fetch });
         setLitDataset(resource);
       } catch (error) {
+        console.log(error);
         if (onError) {
           onError(error);
         }
       }
     },
-    [onError]
+    [onError, fetch]
   );
 
   useEffect(() => {
