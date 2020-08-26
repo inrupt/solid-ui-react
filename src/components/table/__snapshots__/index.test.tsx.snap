@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Table /> component snapshot test TableColumn used in isolation matches snpshot 1`] = `
+<body>
+  <div>
+    <span>
+      Can't use TableColumn outside a Table.
+    </span>
+  </div>
+</body>
+`;
+
+exports[`<Table /> component snapshot test matches snapshot 1`] = `
+<body>
+  <div>
+    <table
+      role="table"
+    >
+      <thead>
+        <tr
+          role="row"
+        >
+          <th
+            colspan="1"
+            role="columnheader"
+          >
+            Name
+          </th>
+          <th
+            colspan="1"
+            role="columnheader"
+          >
+            http://xmlns.com/foaf/0.1/nick
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        role="rowgroup"
+      >
+        <tr
+          role="row"
+        >
+          <td
+            role="cell"
+          >
+            example name 1
+          </td>
+          <td
+            role="cell"
+          >
+            example nick 1
+          </td>
+        </tr>
+        <tr
+          role="row"
+        >
+          <td
+            role="cell"
+          >
+            example name 2
+          </td>
+          <td
+            role="cell"
+          >
+            example nick 2
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+`;
