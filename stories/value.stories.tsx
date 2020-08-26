@@ -121,62 +121,46 @@ export function Datetime(): ReactElement {
 }
 
 export function Decimal(): ReactElement {
-  const examplePredicate = `https://schema.org/ratingValue`;
-  const exampleDecimal = 3.5;
-
-  const exampleThing = SolidFns.setDecimal(
-    SolidFns.createThing(),
-    examplePredicate,
-    exampleDecimal
-  );
-
-  const exampleDataSet = SolidFns.setThing(
-    SolidFns.createLitDataset(),
-    exampleThing
-  );
+  const examplePredicate = `http://schema.org/version`;
 
   return (
-    <Value
-      dataType="decimal"
-      dataSet={exampleDataSet}
-      thing={exampleThing}
-      property={examplePredicate}
-      autosave={boolean("Autosave", false)}
-      edit={boolean("Edit", false)}
-      inputProps={object("Input options", inputOptions)}
-      onError={action("OnError")}
-      onSave={action("onSave")}
-    />
+    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
+      <ThingProvider
+        thingUrl={text("Thing Url", `${host}/example.ttl#exampleImage`)}
+      >
+        <Value
+          dataType="decimal"
+          property={examplePredicate}
+          autosave={boolean("Autosave", false)}
+          edit={boolean("Edit", false)}
+          inputProps={object("Input options", inputOptions)}
+          onError={action("OnError")}
+          onSave={action("onSave")}
+        />
+      </ThingProvider>
+    </DatasetProvider>
   );
 }
 
 export function Integer(): ReactElement {
-  const examplePredicate = `https://schema.org/ratingValue`;
-  const exampleInteger = 123;
-
-  const exampleThing = SolidFns.setInteger(
-    SolidFns.createThing(),
-    examplePredicate,
-    exampleInteger
-  );
-
-  const exampleDataSet = SolidFns.setThing(
-    SolidFns.createLitDataset(),
-    exampleThing
-  );
+  const examplePredicate = `http://schema.org/copyrightYear`;
 
   return (
-    <Value
-      dataType="integer"
-      dataSet={exampleDataSet}
-      thing={exampleThing}
-      property={examplePredicate}
-      autosave={boolean("Autosave", false)}
-      edit={boolean("Edit", false)}
-      inputProps={object("Input options", inputOptions)}
-      onError={action("OnError")}
-      onSave={action("onSave")}
-    />
+    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
+      <ThingProvider
+        thingUrl={text("Thing Url", `${host}/example.ttl#exampleImage`)}
+      >
+        <Value
+          dataType="integer"
+          property={examplePredicate}
+          autosave={boolean("Autosave", false)}
+          edit={boolean("Edit", false)}
+          inputProps={object("Input options", inputOptions)}
+          onError={action("OnError")}
+          onSave={action("onSave")}
+        />
+      </ThingProvider>
+    </DatasetProvider>
   );
 }
 
