@@ -56,12 +56,12 @@ export function TableColumn(props: TableColumnProps): ReactElement {
   return <span>Can&apos;t use TableColumn outside a Table.</span>;
 }
 
-type TableProps = {
+interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> {
   children:
     | ReactElement<TableColumnProps>
     | Array<ReactElement<TableColumnProps>>;
   things: Array<Thing>;
-} & React.HTMLAttributes<HTMLTableElement>;
+}
 
 export function Table({
   children,
