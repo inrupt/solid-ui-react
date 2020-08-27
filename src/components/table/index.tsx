@@ -61,9 +61,13 @@ type TableProps = {
     | ReactElement<TableColumnProps>
     | Array<ReactElement<TableColumnProps>>;
   things: Array<Thing>;
-};
+} & React.HTMLAttributes<HTMLTableElement>;
 
-export function Table({ children, things }: TableProps): ReactElement {
+export function Table({
+  children,
+  things,
+  ...tableProps
+}: TableProps): ReactElement {
   const { columns, data } = useMemo(() => {
     const columnsArray: Array<Column<Record<string, unknown>>> = [];
     const dataArray: Array<Record<string, unknown>> = [];
@@ -126,7 +130,7 @@ export function Table({ children, things }: TableProps): ReactElement {
     prepareRow,
   } = tableInstance;
   return (
-    <table {...getTableProps()}>
+    <table {...getTableProps()} {...tableProps}>
       <thead>
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>

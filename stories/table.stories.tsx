@@ -46,7 +46,6 @@ export function BasicExample(): ReactElement {
     namePredicate,
     `example name 1`
   );
-
   const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
 
   const thing2A = SolidFns.addStringNoLocale(
@@ -54,7 +53,6 @@ export function BasicExample(): ReactElement {
     namePredicate,
     `example name 2`
   );
-
   const thing2 = SolidFns.addDatetime(
     thing2A,
     datePredicate,
@@ -64,18 +62,17 @@ export function BasicExample(): ReactElement {
   type bodyProps = {
     value?: string;
   };
-
-  const BodyComponent = ({ value }: bodyProps) => {
-    return <span>{`Value: ${value}`}</span>;
+  const CustomBodyComponent = ({ value }: bodyProps) => {
+    return <span style={{ color: "#7C4DFF" }}>{`${value}`}</span>;
   };
 
   return (
-    <Table things={[thing1, thing2]}>
+    <Table things={[thing1, thing2]} style={{ border: "1px solid black" }}>
       <TableColumn property={namePredicate} header="Name" />
       <TableColumn
         property={datePredicate}
         dataType="datetime"
-        body={BodyComponent}
+        body={CustomBodyComponent}
       />
     </Table>
   );
