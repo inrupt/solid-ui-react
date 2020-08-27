@@ -64,7 +64,7 @@ export function String(): ReactElement {
       <ThingProvider thingUrl={text("Thing Url", `${host}/example.ttl#me`)}>
         <Value
           dataType="string"
-          property={examplePredicate}
+          property={text("Property", examplePredicate)}
           autosave={boolean("Autosave", false)}
           edit={boolean("Edit", false)}
           inputProps={object("Input options", inputOptions)}
@@ -86,7 +86,7 @@ export function Boolean(): ReactElement {
       >
         <Value
           dataType="boolean"
-          property={examplePredicate}
+          property={text("Property", examplePredicate)}
           autosave={boolean("Autosave", false)}
           edit={boolean("Edit", false)}
           inputProps={object("Input options", inputOptions)}
@@ -108,7 +108,7 @@ export function Datetime(): ReactElement {
       >
         <Value
           dataType="datetime"
-          property={examplePredicate}
+          property={text("Property", examplePredicate)}
           autosave={boolean("Autosave", false)}
           edit={boolean("Edit", false)}
           inputProps={object("Input options", inputOptions)}
@@ -130,7 +130,7 @@ export function Decimal(): ReactElement {
       >
         <Value
           dataType="decimal"
-          property={examplePredicate}
+          property={text("Property", examplePredicate)}
           autosave={boolean("Autosave", false)}
           edit={boolean("Edit", false)}
           inputProps={object("Input options", inputOptions)}
@@ -152,7 +152,7 @@ export function Integer(): ReactElement {
       >
         <Value
           dataType="integer"
-          property={examplePredicate}
+          property={text("Property", examplePredicate)}
           autosave={boolean("Autosave", false)}
           edit={boolean("Edit", false)}
           inputProps={object("Input options", inputOptions)}
@@ -174,7 +174,7 @@ export function Url(): ReactElement {
       >
         <Value
           dataType="url"
-          property={examplePredicate}
+          property={text("Property", examplePredicate)}
           autosave={boolean("Autosave", false)}
           edit={boolean("Edit", false)}
           inputProps={object("Input options", inputOptions)}
@@ -206,7 +206,7 @@ export function WithUnsavedData(): ReactElement {
       dataType="string"
       dataSet={exampleDataSet}
       thing={exampleThing}
-      property={examplePredicate}
+      property={text("Property", examplePredicate)}
       edit={boolean("Edit", false)}
       autosave={boolean("Autosave", false)}
       saveDatasetTo={text("Save Dataset to URL", `${host}/example.ttl`)}
