@@ -127,6 +127,7 @@ describe("Testing DatasetContext", () => {
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
   });
+
   it("matches snapshot when fetching fails", async () => {
     jest.spyOn(SolidFns, "fetchLitDataset").mockRejectedValue(null);
 
@@ -135,6 +136,20 @@ describe("Testing DatasetContext", () => {
         <ExampleComponentWithDataset />
       </DatasetProvider>
     );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("matches snapshot when fetching", async () => {
+    documentBody = render(
+      <DatasetProvider
+        datasetUrl="https://some-broken-resource.com"
+        loading={() => "loading"}
+      >
+        <ExampleComponentWithDataset />
+      </DatasetProvider>
+    );
+
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
   });

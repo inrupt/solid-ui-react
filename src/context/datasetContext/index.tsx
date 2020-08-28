@@ -48,6 +48,7 @@ export default DatasetContext;
 
 export interface IDatasetProvider {
   children: React.ReactNode;
+  loading?: React.ReactNode;
   onError?(error: Error): void | null;
   dataset?: LitDataset | (LitDataset & WithResourceInfo);
   datasetUrl?: UrlString | string;
@@ -65,6 +66,7 @@ export const DatasetProvider = ({
   onError,
   dataset,
   datasetUrl,
+  loading,
 }: RequireDatasetOrDatasetUrl): ReactElement => {
   const { fetch } = useContext(SessionContext);
   const [litDataset, setLitDataset] = useState<LitDataset & WithResourceInfo>();
@@ -98,7 +100,7 @@ export const DatasetProvider = ({
         dataset: datasetValue,
       }}
     >
-      {children}
+      {dataset ? children : loading || <span>Fetching data...</span>}
     </DatasetContext.Provider>
   );
 };

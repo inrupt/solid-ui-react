@@ -1,3 +1,9 @@
+## 0.9.5 ( August 28, 2020 )
+
+### Added
+
+- Allow `<DatasetProvider>` to render a `loading` property or component instead of its children
+
 ## 0.9.3 ( August 28, 2020 )
 
 ### Added
