@@ -26,7 +26,7 @@ import SessionContext from "../../context/sessionContext";
 import ThingContext from "../../context/thingContext";
 
 export type Props = {
-  thing: Thing;
+  thing?: Thing;
   property: Url | UrlString;
   edit?: boolean;
   autosave?: boolean;
@@ -54,6 +54,10 @@ export default function Image({
   const { thing: contextThing } = thingContext;
 
   const thing = propThing || contextThing;
+
+  if (!thing) {
+    throw new Error("Thing not found as property or in context");
+  }
 
   const src = getUrl(thing, property);
 
