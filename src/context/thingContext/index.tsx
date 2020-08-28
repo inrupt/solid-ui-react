@@ -19,11 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, {
-  createContext,
-  ReactElement,
-  useContext,
-} from "react";
+import React, { createContext, ReactElement, useContext } from "react";
 import { Thing, UrlString, getThing } from "@inrupt/solid-client";
 import DatasetContext from "../datasetContext";
 
