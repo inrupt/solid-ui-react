@@ -1,3 +1,9 @@
+## 0.9.7 ( August 28, 2020 )
+
+### Changed
+
+- Improve handling of unloaded datasets with `<Image>`, `<Text>`, and `<Value>` components.
+
 ## 0.9.6 ( August 28, 2020 )
 
 ### Added

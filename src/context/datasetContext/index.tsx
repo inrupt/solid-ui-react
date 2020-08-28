@@ -64,19 +64,20 @@ export type RequireDatasetOrDatasetUrl =
 export const DatasetProvider = ({
   children,
   onError,
-  dataset,
+  dataset: propDataset,
   datasetUrl,
   loading,
 }: RequireDatasetOrDatasetUrl): ReactElement => {
   const { fetch } = useContext(SessionContext);
-  const [litDataset, setLitDataset] = useState<LitDataset & WithResourceInfo>();
+  const [dataset, setDataset] = useState<
+    LitDataset | (LitDataset & WithResourceInfo) | undefined
+  >(propDataset);
 
   const fetchDataset = useCallback(
     async (url: string) => {
       try {
         const resource = await fetchLitDataset(url, { fetch });
-        console.log(resource);
-        setLitDataset(resource);
+        setDataset(resource);
       } catch (error) {
         if (onError) {
           onError(error);
@@ -93,15 +94,9 @@ export const DatasetProvider = ({
     }
   }, [dataset, datasetUrl, fetchDataset]);
 
-  const datasetValue = dataset || litDataset;
-
   return (
-    <DatasetContext.Provider
-      value={{
-        dataset: datasetValue,
-      }}
-    >
-      {datasetValue ? children : loading || <span>Fetching data...</span>}
+    <DatasetContext.Provider value={{ dataset }}>
+      {dataset ? children : loading || <span>Fetching data...</span>}
     </DatasetContext.Provider>
   );
 };

@@ -90,19 +90,14 @@ export default function Value({
   const [_, setErrorState] = useState<string | null>();
   const [initialValue, setInitialValue] = useState<string | number | null>("");
 
-  const [dataset, SetDataset] = useState<SolidDataset>();
-  const [thing, SetThing] = useState<Thing>();
-
   const datasetContext = useContext(DatasetContext);
   const { dataset: contextDataset } = datasetContext;
 
   const thingContext = useContext(ThingContext);
   const { thing: contextThing } = thingContext;
 
-  useEffect(() => {
-    SetDataset(propDataset || contextDataset);
-    SetThing(propThing || contextThing);
-  }, [contextDataset, contextThing, propDataset, propThing]);
+  const dataset = propDataset || contextDataset;
+  const thing = propThing || contextThing;
 
   useEffect(() => {
     if (thing) {

@@ -21,8 +21,9 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
-import { withKnobs, boolean, number } from "@storybook/addon-knobs";
+import { withKnobs, boolean, number, text } from "@storybook/addon-knobs";
 import Image from "../src/components/image";
+import CombinedDataProvider from "../src/context/combinedDataContext";
 import config from "./config";
 
 const { host } = config();
@@ -32,6 +33,17 @@ export default {
   component: Image,
   decorators: [withKnobs],
 };
+
+export function WithDatasetProvider(): ReactElement {
+  return (
+    <CombinedDataProvider
+      datasetUrl={text("Dataset Url", `${host}/example.ttl`)}
+      thingUrl={text("Thing Url", `${host}/example.ttl#exampleImage`)}
+    >
+      <Image property="http://schema.org/contentUrl" />
+    </CombinedDataProvider>
+  );
+}
 
 export function EditFalse(): ReactElement {
   const exampleUrl = `${host}/example.jpg`;

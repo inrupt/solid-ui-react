@@ -65,13 +65,6 @@ export default function Text({
   ...other
 }: Props): ReactElement {
   const { fetch } = useContext(SessionContext);
-  const [text, setText] = useState<string | null>("");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setErrorState] = useState<string | null>();
-  const [initialValue, setInitialValue] = useState<string | null>("");
-
-  const [dataset, SetDataset] = useState<SolidDataset>();
-  const [thing, SetThing] = useState<Thing>();
 
   const datasetContext = useContext(DatasetContext);
   const { dataset: contextDataset } = datasetContext;
@@ -79,10 +72,13 @@ export default function Text({
   const thingContext = useContext(ThingContext);
   const { thing: contextThing } = thingContext;
 
-  useEffect(() => {
-    SetDataset(propDataset || contextDataset);
-    SetThing(propThing || contextThing);
-  }, [contextDataset, contextThing, propDataset, propThing]);
+  const [text, setText] = useState<string | null>("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setErrorState] = useState<string | null>();
+  const [initialValue, setInitialValue] = useState<string | null>("");
+
+  const dataset = propDataset || contextDataset;
+  const thing = propThing || contextThing;
 
   useEffect(() => {
     if (thing) {

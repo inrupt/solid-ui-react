@@ -22,8 +22,6 @@
 import React, {
   createContext,
   ReactElement,
-  useState,
-  useEffect,
   useContext,
 } from "react";
 import { Thing, UrlString, getThing } from "@inrupt/solid-client";
@@ -54,28 +52,18 @@ export type RequireThingOrThingUrl =
 
 export const ThingProvider = ({
   children,
-  thing,
+  thing: propThing,
   thingUrl,
 }: RequireThingOrThingUrl): ReactElement => {
   const datasetContext = useContext(DatasetContext);
   const { dataset } = datasetContext;
-  const [litThing, setLitThing] = useState<Thing>();
+  let thing = propThing;
 
-  useEffect(() => {
-    if (dataset && thingUrl) {
-      setLitThing(getThing(dataset, thingUrl));
-    }
-  }, [dataset, thingUrl]);
-
-  const thingValue = thing || litThing;
+  if (dataset && thingUrl) {
+    thing = getThing(dataset, thingUrl);
+  }
 
   return (
-    <ThingContext.Provider
-      value={{
-        thing: thingValue,
-      }}
-    >
-      {children}
-    </ThingContext.Provider>
+    <ThingContext.Provider value={{ thing }}>{children}</ThingContext.Provider>
   );
 };
