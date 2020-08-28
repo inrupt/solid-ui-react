@@ -75,6 +75,7 @@ export const DatasetProvider = ({
     async (url: string) => {
       try {
         const resource = await fetchLitDataset(url, { fetch });
+        console.log(resource);
         setLitDataset(resource);
       } catch (error) {
         if (onError) {
@@ -100,7 +101,7 @@ export const DatasetProvider = ({
         dataset: datasetValue,
       }}
     >
-      {dataset ? children : loading || <span>Fetching data...</span>}
+      {datasetValue ? children : loading || <span>Fetching data...</span>}
     </DatasetContext.Provider>
   );
 };
