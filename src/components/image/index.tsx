@@ -23,6 +23,7 @@ import React, { ReactElement, useState, useEffect, useContext } from "react";
 import { Thing, Url, UrlString, getUrl } from "@inrupt/solid-client";
 import { overwriteFile, retrieveFile } from "../../helpers";
 import SessionContext from "../../context/sessionContext";
+import ThingContext from "../../context/thingContext";
 
 export type Props = {
   thing: Thing;
@@ -37,7 +38,7 @@ export type Props = {
 
 export default function Image({
   property,
-  thing,
+  thing: propThing,
   edit,
   autosave,
   onSave,
@@ -48,10 +49,18 @@ export default function Image({
   ...imgOptions
 }: Props): ReactElement {
   const { fetch } = useContext(SessionContext);
+
+  const thingContext = useContext(ThingContext);
+  const { thing: contextThing } = thingContext;
+
+  const thing = propThing || contextThing;
+
   const src = getUrl(thing, property);
+
   if (!src) {
     throw new Error("URL not found for given property");
   }
+
   const [imgObjectUrl, setImgObjectUrl] = useState("");
 
   useEffect(() => {
