@@ -1,3 +1,10 @@
+## 0.9.2 ( August 28, 2020)
+
+### Added
+
+- Generate TypeScript definition files
+- Simplify NPM package structure and files
+
 ## 0.9.1 ( August 26, 2020)
 
 ### Added

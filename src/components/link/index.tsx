@@ -22,7 +22,7 @@
 import React, { ReactElement } from "react";
 import { Thing, Url, UrlString, getUrl } from "@inrupt/solid-client";
 
-type Props = {
+export type Props = {
   thing: Thing;
   property: Url | UrlString;
 } & React.AnchorHTMLAttributes<HTMLAnchorElement>;

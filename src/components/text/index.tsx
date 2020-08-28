@@ -38,7 +38,7 @@ import DatasetContext from "../../context/datasetContext";
 import ThingContext from "../../context/thingContext";
 import SessionContext from "../../context/sessionContext";
 
-type Props = {
+export type Props = {
   dataSet?: SolidDataset;
   property: Url | UrlString;
   thing?: Thing;

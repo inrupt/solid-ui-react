@@ -29,7 +29,7 @@ import React, {
 import { Thing, UrlString, getThing } from "@inrupt/solid-client";
 import DatasetContext from "../datasetContext";
 
-interface IThingContext {
+export interface IThingContext {
   thing: Thing | undefined;
 }
 
@@ -39,14 +39,16 @@ const ThingContext = createContext<IThingContext>({
 
 export default ThingContext;
 
-interface IThingProvider {
+export interface IThingProvider {
   children: React.ReactNode;
   thing?: Thing;
   thingUrl?: UrlString | string;
 }
 
-type RequireProperty<T, Prop extends keyof T> = T & { [key in Prop]-?: T[key] };
-type RequireThingOrThingUrl =
+export type RequireProperty<T, Prop extends keyof T> = T &
+  { [key in Prop]-?: T[key] };
+
+export type RequireThingOrThingUrl =
   | RequireProperty<IThingProvider, "thing">
   | RequireProperty<IThingProvider, "thingUrl">;
 
