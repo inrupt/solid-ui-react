@@ -31,26 +31,28 @@ import {
 import { DatasetProvider } from "../datasetContext";
 import { ThingProvider } from "../thingContext";
 
-type Props = {
+export type Props = {
   children: React.ReactNode;
   onError?(error: Error): void | null;
 };
 
-type ThingOrThingUrl = {
+export type ThingOrThingUrl = {
   thing?: Thing;
   thingUrl?: UrlString | string;
 };
 
-interface Dataset extends Props {
+export interface Dataset extends Props {
   dataset: LitDataset | (LitDataset & WithResourceInfo);
 }
 
-interface DatasetUrl extends Props {
+export interface DatasetUrl extends Props {
   datasetUrl: UrlString | string;
 }
 
-type RequireProperty<T, Prop extends keyof T> = T & { [key in Prop]-?: T[key] };
-type RequireThingOrThingUrl =
+export type RequireProperty<T, Prop extends keyof T> = T &
+  { [key in Prop]-?: T[key] };
+
+export type RequireThingOrThingUrl =
   | RequireProperty<ThingOrThingUrl, "thing">
   | RequireProperty<ThingOrThingUrl, "thingUrl">;
 
@@ -58,9 +60,11 @@ type RequireThingOrThingUrl =
 function CombinedDataProvider(
   props: Dataset & RequireThingOrThingUrl
 ): ReactElement;
+
 function CombinedDataProvider(
   props: DatasetUrl & RequireThingOrThingUrl
 ): ReactElement;
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function CombinedDataProvider(props: any): ReactElement {
   const { children, dataset, datasetUrl, thing, thingUrl, onError } = props;

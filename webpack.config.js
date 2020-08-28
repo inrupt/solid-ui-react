@@ -2,6 +2,7 @@ const path = require("path");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
+  devtool: "source-map",
   entry: "./src/index.ts",
   module: {
     rules: [
@@ -18,15 +19,16 @@ module.exports = {
   output: {
     filename: "index.js",
     path: path.resolve(__dirname, "dist"),
-    libraryTarget: "commonjs",
+    library: "",
+    libraryTarget: "commonjs"
   },
   plugins: [
     new CleanWebpackPlugin(),
   ],
   externals: [
     "@inrupt/solid-client",
+    "@inrupt/solid-client-authn-browser",
     "@material-ui/core",
     "react",
-    "solid-auth-client",
   ],
 };

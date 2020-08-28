@@ -24,7 +24,7 @@ import { Thing, Url, UrlString, getUrl } from "@inrupt/solid-client";
 import { overwriteFile, retrieveFile } from "../../helpers";
 import SessionContext from "../../context/sessionContext";
 
-type Props = {
+export type Props = {
   thing: Thing;
   property: Url | UrlString;
   edit?: boolean;

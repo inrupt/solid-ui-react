@@ -36,7 +36,7 @@ import {
 
 import SessionContext from "../sessionContext";
 
-interface IDatasetContext {
+export interface IDatasetContext {
   dataset: LitDataset | (LitDataset & WithResourceInfo) | undefined;
 }
 
@@ -46,15 +46,17 @@ const DatasetContext = createContext<IDatasetContext>({
 
 export default DatasetContext;
 
-interface IDatasetProvider {
+export interface IDatasetProvider {
   children: React.ReactNode;
   onError?(error: Error): void | null;
   dataset?: LitDataset | (LitDataset & WithResourceInfo);
   datasetUrl?: UrlString | string;
 }
 
-type RequireProperty<T, Prop extends keyof T> = T & { [key in Prop]-?: T[key] };
-type RequireDatasetOrDatasetUrl =
+export type RequireProperty<T, Prop extends keyof T> = T &
+  { [key in Prop]-?: T[key] };
+
+export type RequireDatasetOrDatasetUrl =
   | RequireProperty<IDatasetProvider, "dataset">
   | RequireProperty<IDatasetProvider, "datasetUrl">;
 

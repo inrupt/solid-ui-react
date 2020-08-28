@@ -56,7 +56,7 @@ export type DataType =
   | "string"
   | "url";
 
-type Props = {
+export type Props = {
   dataSet?: SolidDataset;
   property: Url | UrlString;
   thing?: Thing;

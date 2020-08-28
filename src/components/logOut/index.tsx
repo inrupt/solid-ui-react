@@ -22,7 +22,7 @@
 import React, { useContext } from "react";
 import SessionContext from "../../context/sessionContext";
 
-interface Props {
+export interface Props {
   onLogout?(): void;
   onError?(error: Error): void;
   children?: React.ReactElement;

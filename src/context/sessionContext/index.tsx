@@ -34,7 +34,7 @@ import {
   getClientAuthenticationWithDependencies,
 } from "@inrupt/solid-client-authn-browser";
 
-interface ISessionContext {
+export interface ISessionContext {
   session: Session;
   sessionRequestInProgress: boolean;
   setSessionRequestInProgress?: Dispatch<SetStateAction<boolean>> | any;
@@ -60,7 +60,7 @@ const SessionContext = createContext<ISessionContext>({
 export default SessionContext;
 
 /* eslint react/require-default-props: 0 */
-interface ISessionProvider {
+export interface ISessionProvider {
   children: ReactNode;
   session: Session;
 }

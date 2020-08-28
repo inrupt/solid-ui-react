@@ -66,6 +66,7 @@ jobs:
       env:
         TAG_SLUG: ${{ needs.prepare-deployment.outputs.tag-slug }}
     - run: npm ci
+    - run: npm run build
     - name: Publish an npm tag for this branch
       run: |
         npm publish --access public --tag "$TAG_SLUG"

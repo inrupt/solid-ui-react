@@ -23,7 +23,7 @@ import React, { useContext } from "react";
 import { ILoginInputOptions } from "@inrupt/solid-client-authn-browser";
 import SessionContext from "../../context/sessionContext";
 
-interface Props {
+export interface Props {
   authOptions?: ILoginInputOptions;
   children?: React.ReactNode;
   onError?(error: Error): void;

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "./dist/",
-    "target": "es5",
+    "target": "es2015",
     "lib": [
       "dom",
       "dom.iterable",
@@ -17,10 +17,13 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "jsx": "react",
-    "sourceMap": true
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true
   },
   "exclude": [
     "node_modules",
+    "dist",
     "**/__mocks__/**",
     "**/__snapshots__/**"
   ],

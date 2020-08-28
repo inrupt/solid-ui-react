@@ -19,33 +19,21 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import Image from "./components/image";
-import Link from "./components/link";
-import LoginButton from "./components/logIn";
-import LogoutButton from "./components/logOut";
-import Text from "./components/text";
-import Value from "./components/value";
-import Video from "./components/video";
-import SessionContext, { SessionProvider } from "./context/sessionContext";
-import CombinedDataProvider from "./context/combinedDataContext";
-import ThingContext, { ThingProvider } from "./context/thingContext";
-import DatasetContext, { DatasetProvider } from "./context/datasetContext";
-import useSession from "./hooks/useSession";
-
-export default {
-  Image,
-  Link,
-  LoginButton,
-  LogoutButton,
-  Text,
-  Value,
-  Video,
-  SessionContext,
+export { default as Image } from "./components/image";
+export { default as Link } from "./components/link";
+export { default as LoginButton } from "./components/logIn";
+export { default as LogoutButton } from "./components/logOut";
+export { default as Text } from "./components/text";
+export { default as Value } from "./components/value";
+export { default as Video } from "./components/video";
+export {
+  default as SessionContext,
   SessionProvider,
-  CombinedDataProvider,
-  ThingContext,
-  ThingProvider,
-  DatasetContext,
+} from "./context/sessionContext";
+export { default as CombinedDataProvider } from "./context/combinedDataContext";
+export { default as ThingContext, ThingProvider } from "./context/thingContext";
+export {
+  default as DatasetContext,
   DatasetProvider,
-  useSession,
-};
+} from "./context/datasetContext";
+export { default as useSession } from "./hooks/useSession";
