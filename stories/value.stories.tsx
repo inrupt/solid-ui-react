@@ -37,7 +37,7 @@ import config from "./config";
 const { host } = config();
 
 export default {
-  title: "Components/Value component",
+  title: "Components/Value",
   component: Value,
   decorators: [withKnobs],
 };
@@ -56,33 +56,133 @@ const dataTypeOptions: Array<DataType> = [
   "url",
 ];
 
-export function BasicExample(): ReactElement {
+export function String(): ReactElement {
   const examplePredicate = `http://xmlns.com/foaf/0.1/name`;
-  const exampleNick = true;
-
-  const exampleThing = SolidFns.setBoolean(
-    SolidFns.createThing(),
-    examplePredicate,
-    exampleNick
-  );
-
-  const exampleDataSet = SolidFns.setThing(
-    SolidFns.createLitDataset(),
-    exampleThing
-  );
 
   return (
-    <Value
-      dataType="string"
-      dataSet={exampleDataSet}
-      thing={exampleThing}
-      property={examplePredicate}
-      autosave={boolean("Autosave", false)}
-      edit={boolean("Edit", false)}
-      inputProps={object("Input options", inputOptions)}
-      onError={action("OnError")}
-      onSave={action("onSave")}
-    />
+    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
+      <ThingProvider thingUrl={text("Thing Url", `${host}/example.ttl#me`)}>
+        <Value
+          dataType="string"
+          property={text("Property", examplePredicate)}
+          autosave={boolean("Autosave", false)}
+          edit={boolean("Edit", false)}
+          inputProps={object("Input options", inputOptions)}
+          onError={action("OnError")}
+          onSave={action("onSave")}
+        />
+      </ThingProvider>
+    </DatasetProvider>
+  );
+}
+
+export function Boolean(): ReactElement {
+  const examplePredicate = `http://schema.org/isAccessibleForFree`;
+
+  return (
+    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
+      <ThingProvider
+        thingUrl={text("Thing Url", `${host}/example.ttl#exampleImage`)}
+      >
+        <Value
+          dataType="boolean"
+          property={text("Property", examplePredicate)}
+          autosave={boolean("Autosave", false)}
+          edit={boolean("Edit", false)}
+          inputProps={object("Input options", inputOptions)}
+          onError={action("OnError")}
+          onSave={action("onSave")}
+        />
+      </ThingProvider>
+    </DatasetProvider>
+  );
+}
+
+export function Datetime(): ReactElement {
+  const examplePredicate = `http://schema.org/datePublished`;
+
+  return (
+    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
+      <ThingProvider
+        thingUrl={text("Thing Url", `${host}/example.ttl#exampleImage`)}
+      >
+        <Value
+          dataType="datetime"
+          property={text("Property", examplePredicate)}
+          autosave={boolean("Autosave", false)}
+          edit={boolean("Edit", false)}
+          inputProps={object("Input options", inputOptions)}
+          onError={action("OnError")}
+          onSave={action("onSave")}
+        />
+      </ThingProvider>
+    </DatasetProvider>
+  );
+}
+
+export function Decimal(): ReactElement {
+  const examplePredicate = `http://schema.org/version`;
+
+  return (
+    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
+      <ThingProvider
+        thingUrl={text("Thing Url", `${host}/example.ttl#exampleImage`)}
+      >
+        <Value
+          dataType="decimal"
+          property={text("Property", examplePredicate)}
+          autosave={boolean("Autosave", false)}
+          edit={boolean("Edit", false)}
+          inputProps={object("Input options", inputOptions)}
+          onError={action("OnError")}
+          onSave={action("onSave")}
+        />
+      </ThingProvider>
+    </DatasetProvider>
+  );
+}
+
+export function Integer(): ReactElement {
+  const examplePredicate = `http://schema.org/copyrightYear`;
+
+  return (
+    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
+      <ThingProvider
+        thingUrl={text("Thing Url", `${host}/example.ttl#exampleImage`)}
+      >
+        <Value
+          dataType="integer"
+          property={text("Property", examplePredicate)}
+          autosave={boolean("Autosave", false)}
+          edit={boolean("Edit", false)}
+          inputProps={object("Input options", inputOptions)}
+          onError={action("OnError")}
+          onSave={action("onSave")}
+        />
+      </ThingProvider>
+    </DatasetProvider>
+  );
+}
+
+export function Url(): ReactElement {
+  const examplePredicate = `http://schema.org/url`;
+
+  return (
+    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
+      <ThingProvider
+        thingUrl={text("Thing Url", `${host}/example.ttl#exampleImage`)}
+      >
+        <Value
+          dataType="url"
+          property={text("Property", examplePredicate)}
+          autosave={boolean("Autosave", false)}
+          edit={boolean("Edit", false)}
+          inputProps={object("Input options", inputOptions)}
+          onError={action("OnError")}
+          onSave={action("onSave")}
+        />
+      </ThingProvider>
+    </DatasetProvider>
   );
 }
 
@@ -106,7 +206,7 @@ export function WithUnsavedData(): ReactElement {
       dataType="string"
       dataSet={exampleDataSet}
       thing={exampleThing}
-      property={examplePredicate}
+      property={text("Property", examplePredicate)}
       edit={boolean("Edit", false)}
       autosave={boolean("Autosave", false)}
       saveDatasetTo={text("Save Dataset to URL", `${host}/example.ttl`)}

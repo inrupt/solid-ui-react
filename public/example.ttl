@@ -41,6 +41,8 @@ pro:card a n0:PersonalProfileDocument; n0:maker :me; n0:primaryTopic :me.
     schem:description "Photo of Gray Cat Looking Up Against Black Background" ;
     schem:name "Gray Cat" ;
     schem:url <https://www.pexels.com/photo/photo-of-gray-cat-looking-up-against-black-background-730896/> ;
+    schem:copyrightYear 2017 ;
+    schem:version 1.1 ;
     schem:isAccessibleForFree true .
 
 :exampleVideo
