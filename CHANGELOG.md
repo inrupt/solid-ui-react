@@ -1,17 +1,23 @@
-## 0.9.2 ( August 28, 2020)
+## 0.9.3 ( August 28, 2020 )
+
+### Added
+
+- Allow `<Image>` and `<Video>` to read data from ThingContext
+
+## 0.9.2 ( August 28, 2020 )
 
 ### Added
 
 - Generate TypeScript definition files
 - Simplify NPM package structure and files
 
-## 0.9.1 ( August 26, 2020)
+## 0.9.1 ( August 26, 2020 )
 
 ### Added
 
 - Exported all components, contexts, and providers from src/index.js.
 
-## 0.9.0 ( August 26, 2020)
+## 0.9.0 ( August 26, 2020 )
 
 ### Changed
 
