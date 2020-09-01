@@ -22,19 +22,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { ReactElement, useMemo, Children, ReactNode } from "react";
-import {
-  Thing,
-  getStringUnlocalizedOne,
-  Url,
-  UrlString,
-  getBoolean,
-  getDatetime,
-  getDecimal,
-  getInteger,
-  getUrl,
-  getStringInLocaleOne,
-} from "@inrupt/solid-client";
+import { Thing, Url, UrlString } from "@inrupt/solid-client";
 import { useTable, Column } from "react-table";
+import { getValueByType } from "../../helpers";
 
 export type DataType =
   | "boolean"
@@ -48,7 +38,7 @@ type TableColumnProps = {
   body?: ReactNode;
   header?: ReactNode;
   property: Url | UrlString;
-  dataType?: DataType;
+  dataType: DataType;
   locale?: string;
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -88,33 +78,13 @@ export function Table({
 
       // add each each value to data
       for (let i = 0; i < things.length; i += 1) {
-        let value;
         const thing = things[i];
-        switch (dataType) {
-          case "boolean":
-            value = getBoolean(thing, property);
-            break;
-          case "datetime": {
-            value = getDatetime(thing, property);
-            break;
-          }
-          case "decimal":
-            value = getDecimal(thing, property);
-            break;
-          case "integer":
-            value = getInteger(thing, property);
-            break;
-          case "url":
-            value = getUrl(thing, property);
-            break;
-          default:
-            if (locale) {
-              value = getStringInLocaleOne(thing, property, locale);
-            } else {
-              value = getStringUnlocalizedOne(thing, property);
-            }
-        }
-        dataArray[i][`col${colIndex}`] = value;
+        dataArray[i][`col${colIndex}`] = getValueByType(
+          dataType,
+          thing,
+          property,
+          locale
+        );
       }
     });
 

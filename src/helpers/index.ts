@@ -22,6 +22,16 @@
 import {
   unstable_overwriteFile as unstableOverwriteFile,
   unstable_fetchFile as unstableFetchFile,
+  Thing,
+  UrlString,
+  Url,
+  getBoolean,
+  getDatetime,
+  getDecimal,
+  getInteger,
+  getUrl,
+  getStringInLocaleOne,
+  getStringUnlocalizedOne,
 } from "@inrupt/solid-client";
 
 export const overwriteFile = async (
@@ -64,4 +74,29 @@ export const retrieveFile = async (
   return URL.createObjectURL(imageBlob);
 };
 
-export default { overwriteFile, retrieveFile };
+export function getValueByType(
+  type: "boolean" | "datetime" | "decimal" | "integer" | "string" | "url",
+  thing: Thing,
+  property: UrlString | Url,
+  locale?: string
+): string | boolean | number | Date | null {
+  switch (type) {
+    case "boolean":
+      return getBoolean(thing, property);
+    case "datetime":
+      return getDatetime(thing, property);
+    case "decimal":
+      return getDecimal(thing, property);
+    case "integer":
+      return getInteger(thing, property);
+    case "url":
+      return getUrl(thing, property);
+    default:
+      if (locale) {
+        return getStringInLocaleOne(thing, property, locale);
+      }
+      return getStringUnlocalizedOne(thing, property);
+  }
+}
+
+export default { overwriteFile, retrieveFile, getValueByType };
