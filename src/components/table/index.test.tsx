@@ -90,9 +90,8 @@ describe("<Table /> component functional tests", () => {
   it("uses property as header text unless header prop supplied", () => {
     const { getByText, queryByText } = render(
       <Table things={[thing1, thing2]}>
-        <TableColumn property={namePredicate} header="Name" sortable />
+        <TableColumn property={namePredicate} header="Name" />
         <TableColumn property={nickPredicate} />
-        <TableColumn property={booleanPredicate} dataType="boolean" />
       </Table>
     );
 
@@ -104,12 +103,10 @@ describe("<Table /> component functional tests", () => {
   it("does not sort columns without sortable prop", () => {
     const { getByText, queryByText } = render(
       <Table things={[thing1, thing2]}>
-        <TableColumn property={namePredicate} header="Name" sortable />
-        <TableColumn property={nickPredicate} />
-        <TableColumn property={booleanPredicate} dataType="boolean" />
+        <TableColumn property={namePredicate} />
       </Table>
     );
-    fireEvent.click(getByText(nickPredicate));
+    fireEvent.click(getByText(namePredicate));
     expect(queryByText("🔽")).toBeNull();
     expect(queryByText("🔼")).toBeNull();
   });
@@ -118,8 +115,6 @@ describe("<Table /> component functional tests", () => {
     const { getByText, queryByText } = render(
       <Table things={[thing1, thing2]}>
         <TableColumn property={namePredicate} header="Name" sortable />
-        <TableColumn property={nickPredicate} />
-        <TableColumn property={booleanPredicate} dataType="boolean" />
       </Table>
     );
 
@@ -153,9 +148,7 @@ describe("<Table /> component functional tests", () => {
     const filterTerm = "example name 1";
     const { queryByText } = render(
       <Table things={[thing1, thing2]} filter={filterTerm}>
-        <TableColumn property={namePredicate} header="Name" />
-        <TableColumn property={nickPredicate} />
-        <TableColumn property={booleanPredicate} dataType="boolean" />
+        <TableColumn property={namePredicate} />
       </Table>
     );
 
@@ -167,9 +160,7 @@ describe("<Table /> component functional tests", () => {
     const excludedRowText = "example name 2";
     const { getByText, queryByText } = render(
       <Table things={[thing1, thing2]} filter={filterTerm}>
-        <TableColumn property={namePredicate} header="Name" filterable />
-        <TableColumn property={nickPredicate} />
-        <TableColumn property={booleanPredicate} dataType="boolean" />
+        <TableColumn property={namePredicate} filterable />
       </Table>
     );
 
