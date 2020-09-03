@@ -25,19 +25,12 @@ import {
   SolidDataset,
   Url,
   UrlString,
-  getStringInLocaleOne,
-  getStringUnlocalizedOne,
   setStringInLocale,
   setStringUnlocalized,
   setThing,
   saveSolidDatasetAt,
   getFetchedFrom,
   hasResourceInfo,
-  getBoolean,
-  getDatetime,
-  getDecimal,
-  getInteger,
-  getUrl,
   setBoolean,
   setDatetime,
   setDecimal,
@@ -47,6 +40,7 @@ import {
 import DatasetContext from "../../context/datasetContext";
 import ThingContext from "../../context/thingContext";
 import SessionContext from "../../context/sessionContext";
+import { getValueByType } from "../../helpers";
 
 export type DataType =
   | "boolean"
@@ -101,35 +95,22 @@ export default function Value({
 
   useEffect(() => {
     if (thing) {
+      const valueFromThing = getValueByType(dataType, thing, property, locale);
       switch (dataType) {
         case "boolean":
-          setValue(getBoolean(thing, property) ?? false);
+          setValue((valueFromThing as boolean | null) ?? false);
           break;
         case "datetime": {
-          const datetime = getDatetime(thing, property);
-          const datetimeString = datetime
-            ? datetime
+          const datetimeString = valueFromThing
+            ? (valueFromThing as Date)
                 .toISOString()
-                .substring(0, datetime.toISOString().length - 5)
+                .substring(0, (valueFromThing as Date).toISOString().length - 5)
             : null;
           setValue(datetimeString);
           break;
         }
-        case "decimal":
-          setValue(getDecimal(thing, property));
-          break;
-        case "integer":
-          setValue(getInteger(thing, property));
-          break;
-        case "url":
-          setValue(getUrl(thing, property));
-          break;
         default:
-          if (locale) {
-            setValue(getStringInLocaleOne(thing, property, locale));
-          } else {
-            setValue(getStringUnlocalizedOne(thing, property));
-          }
+          setValue(valueFromThing as string | number);
       }
     }
   }, [thing, property, locale, dataType]);
