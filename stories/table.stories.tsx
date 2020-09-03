@@ -67,12 +67,18 @@ export function BasicExample(): ReactElement {
   };
 
   return (
-    <Table things={[thing1, thing2]} style={{ border: "1px solid black" }}>
-      <TableColumn property={namePredicate} header="Name" />
+    <Table
+      things={[thing1, thing2]}
+      style={{ border: "1px solid black" }}
+      filter={text("Filter", "")}
+    >
+      <TableColumn property={namePredicate} header="Name" sortable filterable />
       <TableColumn
         property={datePredicate}
         dataType="datetime"
         body={CustomBodyComponent}
+        sortable
+        filterable
       />
     </Table>
   );

@@ -23,7 +23,7 @@
 
 import React, { ReactElement, useMemo, Children, ReactNode } from "react";
 import { Thing, Url, UrlString } from "@inrupt/solid-client";
-import { useTable, Column } from "react-table";
+import { useTable, Column, useSortBy, useGlobalFilter } from "react-table";
 import { getValueByType } from "../../helpers";
 
 export type DataType =
@@ -38,8 +38,10 @@ type TableColumnProps = {
   body?: ReactNode;
   header?: ReactNode;
   property: Url | UrlString;
-  dataType: DataType;
+  dataType?: DataType;
   locale?: string;
+  sortable?: boolean;
+  filterable?: boolean;
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function TableColumn(props: TableColumnProps): ReactElement {
@@ -51,11 +53,13 @@ interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> {
     | ReactElement<TableColumnProps>
     | Array<ReactElement<TableColumnProps>>;
   things: Array<Thing>;
+  filter?: string;
 }
 
 export function Table({
   children,
   things,
+  filter,
   ...tableProps
 }: TableProps): ReactElement {
   const { columns, data } = useMemo(() => {
@@ -68,12 +72,22 @@ export function Table({
     // loop through each column
     // TODO check they're TableColumn, or is ReactElement<TableColumnProps> enough
     Children.forEach(children, (column, colIndex) => {
-      const { property, header, body, dataType, locale } = column.props;
+      const {
+        property,
+        header,
+        body,
+        dataType = "string",
+        locale,
+        sortable,
+        filterable,
+      } = column.props;
       // add heading
       columnsArray.push({
         Header: header ?? `${property}`,
         accessor: `col${colIndex}`,
-        ...(body && { Cell: body }),
+        disableGlobalFilter: !filterable,
+        disableSortBy: !sortable,
+        Cell: body ?? (({ value }: any) => `${value}`),
       });
 
       // add each each value to data
@@ -91,7 +105,11 @@ export function Table({
     return { columns: columnsArray, data: dataArray };
   }, [children, things]);
 
-  const tableInstance = useTable({ columns, data });
+  const tableInstance = useTable(
+    { columns, data, initialState: { globalFilter: filter || undefined } },
+    useGlobalFilter,
+    useSortBy
+  );
   const {
     getTableProps,
     getTableBodyProps,
@@ -105,7 +123,12 @@ export function Table({
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (
-              <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+              <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                {column.render("Header")}
+                {column.isSorted && (
+                  <span>{column.isSortedDesc ? " 🔽" : " 🔼"}</span>
+                )}
+              </th>
             ))}
           </tr>
         ))}
@@ -125,3 +148,7 @@ export function Table({
     </table>
   );
 }
+
+Table.defaultProps = {
+  filter: undefined,
+};
