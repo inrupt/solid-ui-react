@@ -52,26 +52,114 @@ export function BasicExample(): ReactElement {
     new Date("1999-01-02")
   );
 
-  type bodyProps = {
-    value?: string;
-  };
-  const CustomBodyComponent = ({ value }: bodyProps) => {
-    return <span style={{ color: "#7C4DFF" }}>{`${value}`}</span>;
-  };
+  return (
+    <Table things={[thing1, thing2]} style={{ border: "1px solid black" }}>
+      <TableColumn property={namePredicate} />
+      <TableColumn property={datePredicate} dataType="datetime" />
+    </Table>
+  );
+}
+
+export function SortableColumns(): ReactElement {
+  const namePredicate = `http://xmlns.com/foaf/0.1/name`;
+  const datePredicate = `http://schema.org/datePublished`;
+
+  const thing1A = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    namePredicate,
+    `example name 1`
+  );
+  const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
+
+  const thing2A = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    namePredicate,
+    `example name 2`
+  );
+  const thing2 = SolidFns.addDatetime(
+    thing2A,
+    datePredicate,
+    new Date("1999-01-02")
+  );
+
+  return (
+    <Table things={[thing1, thing2]} style={{ border: "1px solid black" }}>
+      <TableColumn property={namePredicate} header="Name" sortable />
+      <TableColumn property={datePredicate} dataType="datetime" sortable />
+    </Table>
+  );
+}
+
+export function FilterOnFirstColumn(): ReactElement {
+  const namePredicate = `http://xmlns.com/foaf/0.1/name`;
+  const datePredicate = `http://schema.org/datePublished`;
+
+  const thing1A = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    namePredicate,
+    `example name 1`
+  );
+  const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
+
+  const thing2A = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    namePredicate,
+    `example name 2`
+  );
+  const thing2 = SolidFns.addDatetime(
+    thing2A,
+    datePredicate,
+    new Date("1999-01-02")
+  );
 
   return (
     <Table
       things={[thing1, thing2]}
       style={{ border: "1px solid black" }}
-      filter={text("Filter", "")}
+      filter={text("Filter", "example name 2")}
     >
-      <TableColumn property={namePredicate} header="Name" sortable filterable />
+      <TableColumn property={namePredicate} header="Name" filterable />
+      <TableColumn property={datePredicate} dataType="datetime" />
+    </Table>
+  );
+}
+
+export function CustomBodyComponent(): ReactElement {
+  const namePredicate = `http://xmlns.com/foaf/0.1/name`;
+  const datePredicate = `http://schema.org/datePublished`;
+
+  const thing1A = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    namePredicate,
+    `example name 1`
+  );
+  const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
+
+  const thing2A = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    namePredicate,
+    `example name 2`
+  );
+  const thing2 = SolidFns.addDatetime(
+    thing2A,
+    datePredicate,
+    new Date("1999-01-02")
+  );
+
+  type bodyProps = {
+    value?: string;
+  };
+  const CustomBody = ({ value }: bodyProps) => {
+    return <span style={{ color: "#7C4DFF" }}>{`${value}`}</span>;
+  };
+
+  return (
+    <Table things={[thing1, thing2]} style={{ border: "1px solid black" }}>
+      <TableColumn property={namePredicate} header="Name" />
       <TableColumn
         property={datePredicate}
         dataType="datetime"
-        body={CustomBodyComponent}
-        sortable
-        filterable
+        body={CustomBody}
       />
     </Table>
   );
