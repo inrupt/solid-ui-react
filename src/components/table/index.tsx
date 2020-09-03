@@ -34,7 +34,7 @@ export type DataType =
   | "string"
   | "url";
 
-type TableColumnProps = {
+export type TableColumnProps = {
   body?: ReactNode;
   header?: ReactNode;
   property: Url | UrlString;
@@ -48,7 +48,8 @@ export function TableColumn(props: TableColumnProps): ReactElement {
   return <span>Can&apos;t use TableColumn outside a Table.</span>;
 }
 
-interface TableProps extends React.TableHTMLAttributes<HTMLTableElement> {
+export interface TableProps
+  extends React.TableHTMLAttributes<HTMLTableElement> {
   children:
     | ReactElement<TableColumnProps>
     | Array<ReactElement<TableColumnProps>>;
