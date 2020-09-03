@@ -21,43 +21,57 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
-import { render } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
 import { Table, TableColumn } from "./index";
 
 const namePredicate = `http://xmlns.com/foaf/0.1/name`;
 const nickPredicate = `http://xmlns.com/foaf/0.1/nick`;
+const booleanPredicate = `http://schema.org/isAccessibleForFree`;
 
-const thing1A = SolidFns.addStringNoLocale(
+const thing1A = SolidFns.addBoolean(
   SolidFns.createThing(),
+  booleanPredicate,
+  true
+);
+
+const thing1B = SolidFns.addStringNoLocale(
+  thing1A,
   namePredicate,
   `example name 1`
 );
 
 const thing1 = SolidFns.addStringNoLocale(
-  thing1A,
+  thing1B,
   nickPredicate,
   `example nick 1`
 );
 
-const thing2A = SolidFns.addStringNoLocale(
+const thing2A = SolidFns.addBoolean(
   SolidFns.createThing(),
+  booleanPredicate,
+  false
+);
+
+const thing2B = SolidFns.addStringNoLocale(
+  thing2A,
   namePredicate,
   `example name 2`
 );
 
 const thing2 = SolidFns.addStringNoLocale(
-  thing2A,
+  thing2B,
   nickPredicate,
   `example nick 2`
 );
 
-describe("<Table /> component snapshot test", () => {
+describe("<Table /> component snapshot tests", () => {
   it("matches snapshot", () => {
     const documentBody = render(
       <Table things={[thing1, thing2]}>
         <TableColumn property={namePredicate} header="Name" />
         <TableColumn property={nickPredicate} />
+        <TableColumn property={booleanPredicate} dataType="boolean" />
       </Table>
     );
     const { baseElement } = documentBody;
@@ -69,5 +83,97 @@ describe("<Table /> component snapshot test", () => {
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
+  });
+});
+
+describe("<Table /> component functional tests", () => {
+  it("uses property as header text unless header prop supplied", () => {
+    const { getByText, queryByText } = render(
+      <Table things={[thing1, thing2]}>
+        <TableColumn property={namePredicate} header="Name" sortable />
+        <TableColumn property={nickPredicate} />
+        <TableColumn property={booleanPredicate} dataType="boolean" />
+      </Table>
+    );
+
+    getByText(nickPredicate);
+    getByText("Name");
+    expect(queryByText(namePredicate)).toBeNull();
+  });
+
+  it("does not sort columns without sortable prop", () => {
+    const { getByText, queryByText } = render(
+      <Table things={[thing1, thing2]}>
+        <TableColumn property={namePredicate} header="Name" sortable />
+        <TableColumn property={nickPredicate} />
+        <TableColumn property={booleanPredicate} dataType="boolean" />
+      </Table>
+    );
+    fireEvent.click(getByText(nickPredicate));
+    expect(queryByText("🔽")).toBeNull();
+    expect(queryByText("🔼")).toBeNull();
+  });
+
+  it("updates header when sorting", () => {
+    const { getByText, queryByText } = render(
+      <Table things={[thing1, thing2]}>
+        <TableColumn property={namePredicate} header="Name" sortable />
+        <TableColumn property={nickPredicate} />
+        <TableColumn property={booleanPredicate} dataType="boolean" />
+      </Table>
+    );
+
+    expect(queryByText("🔽")).toBeNull();
+    expect(queryByText("🔼")).toBeNull();
+
+    fireEvent.click(getByText("Name"));
+    expect(queryByText("🔽")).toBeNull();
+    getByText("🔼");
+
+    fireEvent.click(getByText("Name"));
+    expect(queryByText("🔼")).toBeNull();
+    getByText("🔽");
+  });
+
+  it("renders cells using the body prop if provided", () => {
+    const CustomBodyComponent = ({ value }: any) => {
+      return <span>{`${value} custom cell`}</span>;
+    };
+
+    const { getAllByText } = render(
+      <Table things={[thing1, thing2]}>
+        <TableColumn property={namePredicate} body={CustomBodyComponent} />
+      </Table>
+    );
+
+    expect(getAllByText(/custom cell/)).toHaveLength(2);
+  });
+
+  it("does not filter by columns not marked as filterable", () => {
+    const filterTerm = "example name 1";
+    const { queryByText } = render(
+      <Table things={[thing1, thing2]} filter={filterTerm}>
+        <TableColumn property={namePredicate} header="Name" />
+        <TableColumn property={nickPredicate} />
+        <TableColumn property={booleanPredicate} dataType="boolean" />
+      </Table>
+    );
+
+    expect(queryByText(filterTerm)).toBeNull();
+  });
+
+  it("filters by columns marked as filterable", () => {
+    const filterTerm = "example name 1";
+    const excludedRowText = "example name 2";
+    const { getByText, queryByText } = render(
+      <Table things={[thing1, thing2]} filter={filterTerm}>
+        <TableColumn property={namePredicate} header="Name" filterable />
+        <TableColumn property={nickPredicate} />
+        <TableColumn property={booleanPredicate} dataType="boolean" />
+      </Table>
+    );
+
+    expect(getByText(filterTerm)).not.toBeNull();
+    expect(queryByText(excludedRowText)).toBeNull();
   });
 });

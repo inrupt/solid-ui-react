@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Table /> component snapshot test TableColumn used in isolation matches snpshot 1`] = `
+exports[`<Table /> component snapshot tests TableColumn used in isolation matches snpshot 1`] = `
 <body>
   <div>
     <span>
@@ -10,7 +10,7 @@ exports[`<Table /> component snapshot test TableColumn used in isolation matches
 </body>
 `;
 
-exports[`<Table /> component snapshot test matches snapshot 1`] = `
+exports[`<Table /> component snapshot tests matches snapshot 1`] = `
 <body>
   <div>
     <table
@@ -32,6 +32,12 @@ exports[`<Table /> component snapshot test matches snapshot 1`] = `
           >
             http://xmlns.com/foaf/0.1/nick
           </th>
+          <th
+            colspan="1"
+            role="columnheader"
+          >
+            http://schema.org/isAccessibleForFree
+          </th>
         </tr>
       </thead>
       <tbody
@@ -50,6 +56,11 @@ exports[`<Table /> component snapshot test matches snapshot 1`] = `
           >
             example nick 1
           </td>
+          <td
+            role="cell"
+          >
+            true
+          </td>
         </tr>
         <tr
           role="row"
@@ -63,6 +74,11 @@ exports[`<Table /> component snapshot test matches snapshot 1`] = `
             role="cell"
           >
             example nick 2
+          </td>
+          <td
+            role="cell"
+          >
+            false
           </td>
         </tr>
       </tbody>
