@@ -21,20 +21,13 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
-import { withKnobs, text, boolean, object } from "@storybook/addon-knobs";
-import { action } from "@storybook/addon-actions";
+import { withKnobs, text } from "@storybook/addon-knobs";
 import { Table, TableColumn } from "../src/components/table";
 
 export default {
   title: "Components/Table",
   component: Table,
   decorators: [withKnobs],
-};
-
-const inputOptions = {
-  type: "text",
-  name: "test-name",
-  className: "test-class",
 };
 
 export function BasicExample(): ReactElement {
