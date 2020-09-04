@@ -21,9 +21,17 @@
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { ReactElement, useMemo, Children, ReactNode } from "react";
+import React, { ReactElement, useMemo, Children } from "react";
 import { Thing, Url, UrlString } from "@inrupt/solid-client";
-import { useTable, Column, useSortBy, useGlobalFilter } from "react-table";
+import {
+  useTable,
+  Column,
+  useSortBy,
+  useGlobalFilter,
+  Renderer,
+  CellProps,
+  HeaderProps,
+} from "react-table";
 import { getValueByType } from "../../helpers";
 
 export type DataType =
@@ -35,8 +43,8 @@ export type DataType =
   | "url";
 
 export type TableColumnProps = {
-  body?: ReactNode;
-  header?: ReactNode;
+  body?: Renderer<CellProps<any>>;
+  header?: Renderer<HeaderProps<any>> | string;
   property: Url | UrlString;
   dataType?: DataType;
   locale?: string;
