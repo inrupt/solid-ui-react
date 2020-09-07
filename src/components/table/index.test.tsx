@@ -95,8 +95,8 @@ describe("<Table /> component functional tests", () => {
       </Table>
     );
 
-    getByText(nickPredicate);
-    getByText("Name");
+    expect(getByText(nickPredicate)).not.toBeNull();
+    expect(getByText("Name")).not.toBeNull();
     expect(queryByText(namePredicate)).toBeNull();
   });
 
@@ -123,11 +123,11 @@ describe("<Table /> component functional tests", () => {
 
     fireEvent.click(getByText("Name"));
     expect(queryByText("🔽")).toBeNull();
-    getByText("🔼");
+    expect(getByText("🔼")).not.toBeNull();
 
     fireEvent.click(getByText("Name"));
     expect(queryByText("🔼")).toBeNull();
-    getByText("🔽");
+    expect(getByText("🔽")).not.toBeNull();
   });
 
   it("renders cells using the body prop if provided", () => {
