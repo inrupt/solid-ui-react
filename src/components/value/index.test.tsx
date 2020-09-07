@@ -102,8 +102,8 @@ describe("<Value /> component snapshot test", () => {
 
 describe("<Value /> component functional testing", () => {
   it.each([
-    ["string", "getStringUnlocalizedOne", "mockString", undefined],
-    ["string", "getStringInLocaleOne", "mockString", "en"],
+    ["string", "getStringNoLocale", "mockString", undefined],
+    ["string", "getStringWithLocale", "mockString", "en"],
     ["boolean", "getBoolean", true, undefined],
     ["datetime", "getDatetime", new Date(), undefined],
     ["decimal", "getDecimal", 1.23, undefined],
@@ -138,12 +138,12 @@ describe("<Value /> component functional testing", () => {
   it.each([
     [
       "string",
-      "getStringUnlocalizedOne",
+      "getStringNoLocale",
       "setStringUnlocalized",
       "mockString",
       undefined,
     ],
-    ["string", "getStringInLocaleOne", "setStringInLocale", "mockString", "en"],
+    ["string", "getStringWithLocale", "setStringInLocale", "mockString", "en"],
     ["boolean", "getBoolean", "setBoolean", true, undefined],
     ["datetime", "getDatetime", "setDatetime", "2020-12-30T12:30", undefined],
     ["decimal", "getDecimal", "setDecimal", "1.23", undefined],

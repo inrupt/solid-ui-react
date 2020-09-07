@@ -30,8 +30,8 @@ import {
   getDecimal,
   getInteger,
   getUrl,
-  getStringInLocaleOne,
-  getStringUnlocalizedOne,
+  getStringNoLocale,
+  getStringWithLocale,
 } from "@inrupt/solid-client";
 
 export const overwriteFile = async (
@@ -75,6 +75,53 @@ export const retrieveFile = async (
 };
 
 export function getValueByType(
+  type: "boolean",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getBoolean>;
+export function getValueByType(
+  type: "datetime",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getDatetime>;
+export function getValueByType(
+  type: "decimal",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getDecimal>;
+export function getValueByType(
+  type: "integer",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getInteger>;
+export function getValueByType(
+  type: "string",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getStringNoLocale>;
+export function getValueByType(
+  type: "string",
+  thing: Thing,
+  property: UrlString | Url,
+  locale: string
+): ReturnType<typeof getStringWithLocale>;
+export function getValueByType(
+  type: "string",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getStringNoLocale>;
+export function getValueByType(
+  type: "url",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getUrl>;
+export function getValueByType(
+  type: "boolean" | "datetime" | "decimal" | "integer" | "string" | "url",
+  thing: Thing,
+  property: UrlString | Url,
+  locale?: string
+): string | boolean | number | Date | null;
+export function getValueByType(
   type: "boolean" | "datetime" | "decimal" | "integer" | "string" | "url",
   thing: Thing,
   property: UrlString | Url,
@@ -93,9 +140,9 @@ export function getValueByType(
       return getUrl(thing, property);
     default:
       if (locale) {
-        return getStringInLocaleOne(thing, property, locale);
+        return getStringWithLocale(thing, property, locale);
       }
-      return getStringUnlocalizedOne(thing, property);
+      return getStringNoLocale(thing, property);
   }
 }
 
