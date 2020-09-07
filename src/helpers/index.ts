@@ -74,6 +74,14 @@ export const retrieveFile = async (
   return URL.createObjectURL(imageBlob);
 };
 
+export type DataType =
+  | "boolean"
+  | "datetime"
+  | "decimal"
+  | "integer"
+  | "string"
+  | "url";
+
 export function getValueByType(
   type: "boolean",
   thing: Thing,
@@ -116,13 +124,13 @@ export function getValueByType(
   property: UrlString | Url
 ): ReturnType<typeof getUrl>;
 export function getValueByType(
-  type: "boolean" | "datetime" | "decimal" | "integer" | "string" | "url",
+  type: DataType,
   thing: Thing,
   property: UrlString | Url,
   locale?: string
 ): string | boolean | number | Date | null;
 export function getValueByType(
-  type: "boolean" | "datetime" | "decimal" | "integer" | "string" | "url",
+  type: DataType,
   thing: Thing,
   property: UrlString | Url,
   locale?: string

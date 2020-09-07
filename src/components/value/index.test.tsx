@@ -24,7 +24,8 @@ import * as React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
-import Value, { DataType } from "./index";
+import Value from "./index";
+import { DataType } from "../../helpers";
 import { DatasetProvider } from "../../context/datasetContext";
 import { ThingProvider } from "../../context/thingContext";
 

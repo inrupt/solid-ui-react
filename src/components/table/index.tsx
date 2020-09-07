@@ -32,15 +32,7 @@ import {
   CellProps,
   HeaderProps,
 } from "react-table";
-import { getValueByType } from "../../helpers";
-
-export type DataType =
-  | "boolean"
-  | "datetime"
-  | "decimal"
-  | "integer"
-  | "string"
-  | "url";
+import { DataType, getValueByType } from "../../helpers";
 
 export type TableColumnProps = {
   body?: Renderer<CellProps<any>>;

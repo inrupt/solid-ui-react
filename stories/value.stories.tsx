@@ -29,7 +29,8 @@ import {
   select,
 } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
-import Value, { DataType } from "../src/components/value";
+import { DataType } from "../src/helpers";
+import Value from "../src/components/value";
 import { DatasetProvider } from "../src/context/datasetContext";
 import { ThingProvider } from "../src/context/thingContext";
 import config from "./config";

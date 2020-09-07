@@ -40,15 +40,7 @@ import {
 import DatasetContext from "../../context/datasetContext";
 import ThingContext from "../../context/thingContext";
 import SessionContext from "../../context/sessionContext";
-import { getValueByType } from "../../helpers";
-
-export type DataType =
-  | "boolean"
-  | "datetime"
-  | "decimal"
-  | "integer"
-  | "string"
-  | "url";
+import { DataType, getValueByType } from "../../helpers";
 
 export type Props = {
   dataSet?: SolidDataset;
