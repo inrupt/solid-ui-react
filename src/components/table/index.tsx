@@ -97,15 +97,14 @@ export function Table({
       });
 
       // add each each value to data
-      for (let i = 0; i < things.length; i += 1) {
-        const thing = things[i];
+      things.forEach((thing, i) => {
         dataArray[i][`col${colIndex}`] = getValueByType(
           dataType,
           thing,
           property,
           locale
         );
-      }
+      });
     });
 
     return { columns: columnsArray, data: dataArray };
