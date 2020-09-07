@@ -73,10 +73,7 @@ export function Table({
 }: TableProps): ReactElement {
   const { columns, data } = useMemo(() => {
     const columnsArray: Array<Column<Record<string, unknown>>> = [];
-    const dataArray: Array<Record<string, unknown>> = [];
-    for (let i = 0; i < things.length; i += 1) {
-      dataArray.push({});
-    }
+    const dataArray: Array<Record<string, unknown>> = things.map(() => ({}));
 
     // loop through each column
     // TODO check they're TableColumn, or is ReactElement<TableColumnProps> enough
