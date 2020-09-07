@@ -39,7 +39,6 @@
     "@testing-library/react-hooks": "^3.4.1",
     "@types/jest": "^26.0.5",
     "@types/react": "^16.9.43",
-    "@types/react-table": "^7.0.22",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
     "babel-loader": "^8.1.0",
@@ -88,6 +87,7 @@
   "dependencies": {
     "@inrupt/solid-client": "^0.2.0",
     "@inrupt/solid-client-authn-browser": "^0.1.1",
+    "@types/react-table": "^7.0.22",
     "react-table": "^7.5.0"
   }
 }
