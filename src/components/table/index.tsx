@@ -122,9 +122,18 @@ export function Table({
             {headerGroup.headers.map((column) => (
               <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                 {column.render("Header")}
-                {column.isSorted && (
-                  <span>{column.isSortedDesc ? " 🔽" : " 🔼"}</span>
-                )}
+                {column.isSorted &&
+                  (column.isSortedDesc ? (
+                    <span role="img" aria-label="Sorted in descending order">
+                      {" "}
+                      🔽
+                    </span>
+                  ) : (
+                    <span role="img" aria-label="Sorted in ascending order">
+                      {" "}
+                      🔼
+                    </span>
+                  ))}
               </th>
             ))}
           </tr>
