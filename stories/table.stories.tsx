@@ -60,6 +60,50 @@ export function BasicExample(): ReactElement {
   );
 }
 
+export function MultipleValues(): ReactElement {
+  const namePredicate = `http://xmlns.com/foaf/0.1/name`;
+  const nickPredicate = `http://xmlns.com/foaf/0.1/nick`;
+
+  const thing1A = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    namePredicate,
+    `example name 1`
+  );
+  const thing1B = SolidFns.addStringNoLocale(
+    thing1A,
+    nickPredicate,
+    `Nickname`
+  );
+  const thing1C = SolidFns.addStringNoLocale(
+    thing1B,
+    nickPredicate,
+    `Alt Nickname`
+  );
+  const thing1 = SolidFns.addStringNoLocale(
+    thing1C,
+    nickPredicate,
+    `Final Nickname`
+  );
+
+  const thing2A = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    namePredicate,
+    `example name 2`
+  );
+  const thing2 = SolidFns.addStringNoLocale(
+    thing2A,
+    nickPredicate,
+    `example nickname 2`
+  );
+
+  return (
+    <Table things={[thing1, thing2]} style={{ border: "1px solid black" }}>
+      <TableColumn property={namePredicate} header="Name" />
+      <TableColumn property={nickPredicate} header="Nickname" multiple />
+    </Table>
+  );
+}
+
 export function SortableColumns(): ReactElement {
   const namePredicate = `http://xmlns.com/foaf/0.1/name`;
   const datePredicate = `http://schema.org/datePublished`;
