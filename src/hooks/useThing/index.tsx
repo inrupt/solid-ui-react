@@ -19,26 +19,19 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { useContext } from "react";
-import useSWR from "swr";
-import {
-  getSolidDataset,
-  SolidDataset,
-  WithResourceInfo,
-} from "@inrupt/solid-client";
-import SessionContext from "../../context/sessionContext";
+import { getThing, Thing } from "@inrupt/solid-client";
+import useDataset from "../useDataset";
 
-export default function useDataset(
+export default function useThing(
   datasetIri: string,
+  thingIri: string,
   options?: any
-): { dataset: (SolidDataset & WithResourceInfo) | undefined; error: any } {
-  const { session } = useContext(SessionContext);
-  const { data, error } = useSWR(datasetIri, () => {
-    const getSolidDatasetOptions = {
-      ...(session && { fetch: session.fetch }),
-      ...options,
-    };
-    return getSolidDataset(datasetIri, getSolidDatasetOptions);
-  });
-  return { dataset: data, error };
+): { thing: Thing | undefined; error: any } {
+  const { dataset, error } = useDataset(datasetIri, options);
+  if (!dataset) {
+    return { thing: undefined, error };
+  }
+
+  const thing = getThing(dataset, thingIri);
+  return { thing, error };
 }
