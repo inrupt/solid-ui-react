@@ -43,6 +43,7 @@ export type TableColumnProps = {
   multiple?: boolean;
   sortable?: boolean;
   filterable?: boolean;
+  children?: undefined | null | [];
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function TableColumn(props: TableColumnProps): ReactElement {
