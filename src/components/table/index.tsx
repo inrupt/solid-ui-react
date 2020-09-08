@@ -32,7 +32,7 @@ import {
   CellProps,
   HeaderProps,
 } from "react-table";
-import { DataType, getValueByType } from "../../helpers";
+import { DataType, getValueByType, getValueByTypeAll } from "../../helpers";
 
 export type TableColumnProps = {
   body?: Renderer<CellProps<any>>;
@@ -40,6 +40,7 @@ export type TableColumnProps = {
   property: Url | UrlString;
   dataType?: DataType;
   locale?: string;
+  multiple?: boolean;
   sortable?: boolean;
   filterable?: boolean;
 };
@@ -76,6 +77,7 @@ export function Table({
         body,
         dataType = "string",
         locale,
+        multiple = false,
         sortable,
         filterable,
       } = column.props;
@@ -90,12 +92,9 @@ export function Table({
 
       // add each each value to data
       things.forEach((thing, i) => {
-        dataArray[i][`col${colIndex}`] = getValueByType(
-          dataType,
-          thing,
-          property,
-          locale
-        );
+        dataArray[i][`col${colIndex}`] = multiple
+          ? getValueByTypeAll(dataType, thing, property, locale)
+          : getValueByType(dataType, thing, property, locale);
       });
     });
 

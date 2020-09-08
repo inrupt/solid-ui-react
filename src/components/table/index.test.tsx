@@ -167,4 +167,38 @@ describe("<Table /> component functional tests", () => {
     expect(getByText(filterTerm)).not.toBeNull();
     expect(queryByText(excludedRowText)).toBeNull();
   });
+
+  it("renders multiple values for given property only when multiple prop is passed", () => {
+    const thingMultipleA = SolidFns.addStringNoLocale(
+      SolidFns.createThing(),
+      namePredicate,
+      `multiple name 1`
+    );
+    const thingMultipleB = SolidFns.addStringNoLocale(
+      thingMultipleA,
+      nickPredicate,
+      `multiple nick 1`
+    );
+    const thingMultipleC = SolidFns.addStringNoLocale(
+      thingMultipleB,
+      namePredicate,
+      `multiple name 2`
+    );
+    const thingMultiple = SolidFns.addStringNoLocale(
+      thingMultipleC,
+      nickPredicate,
+      `multiple nick 2`
+    );
+    const { getByText, queryByText } = render(
+      <Table things={[thing1, thing2, thingMultiple]}>
+        <TableColumn property={namePredicate} filterable multiple />
+        <TableColumn property={nickPredicate} filterable />
+      </Table>
+    );
+
+    expect(getByText(/multiple name 1/)).not.toBeNull();
+    expect(getByText(/multiple name 2/)).not.toBeNull();
+    expect(getByText(/multiple nick 1/)).not.toBeNull();
+    expect(queryByText(/multiple nick 2/)).toBeNull();
+  });
 });

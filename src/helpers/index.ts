@@ -32,6 +32,13 @@ import {
   getUrl,
   getStringNoLocale,
   getStringWithLocale,
+  getBooleanAll,
+  getDatetimeAll,
+  getDecimalAll,
+  getIntegerAll,
+  getStringNoLocaleAll,
+  getStringWithLocaleAll,
+  getUrlAll,
 } from "@inrupt/solid-client";
 
 export const overwriteFile = async (
@@ -154,4 +161,81 @@ export function getValueByType(
   }
 }
 
-export default { overwriteFile, retrieveFile, getValueByType };
+export function getValueByTypeAll(
+  type: "boolean",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getBooleanAll>;
+export function getValueByTypeAll(
+  type: "datetime",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getDatetimeAll>;
+export function getValueByTypeAll(
+  type: "decimal",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getDecimalAll>;
+export function getValueByTypeAll(
+  type: "integer",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getIntegerAll>;
+export function getValueByTypeAll(
+  type: "string",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getStringNoLocaleAll>;
+export function getValueByTypeAll(
+  type: "string",
+  thing: Thing,
+  property: UrlString | Url,
+  locale: string
+): ReturnType<typeof getStringWithLocaleAll>;
+export function getValueByTypeAll(
+  type: "string",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getStringNoLocaleAll>;
+export function getValueByTypeAll(
+  type: "url",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getUrlAll>;
+export function getValueByTypeAll(
+  type: DataType,
+  thing: Thing,
+  property: UrlString | Url,
+  locale?: string
+): Array<string | boolean | number | Date | null>;
+export function getValueByTypeAll(
+  type: DataType,
+  thing: Thing,
+  property: UrlString | Url,
+  locale?: string
+): Array<string | boolean | number | Date | null> {
+  switch (type) {
+    case "boolean":
+      return getBooleanAll(thing, property);
+    case "datetime":
+      return getDatetimeAll(thing, property);
+    case "decimal":
+      return getDecimalAll(thing, property);
+    case "integer":
+      return getIntegerAll(thing, property);
+    case "url":
+      return getUrlAll(thing, property);
+    default:
+      if (locale) {
+        return getStringWithLocaleAll(thing, property, locale);
+      }
+      return getStringNoLocaleAll(thing, property);
+  }
+}
+
+export default {
+  overwriteFile,
+  retrieveFile,
+  getValueByType,
+  getValueByTypeAll,
+};
