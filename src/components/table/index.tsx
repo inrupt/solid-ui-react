@@ -87,7 +87,7 @@ export function Table({
         accessor: `col${colIndex}`,
         disableGlobalFilter: !filterable,
         disableSortBy: !sortable,
-        Cell: body ?? (({ value }: any) => `${value}`),
+        Cell: body ?? (({ value }: any) => (value != null ? `${value}` : "")),
       });
 
       // add each each value to data

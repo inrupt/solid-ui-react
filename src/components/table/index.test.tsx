@@ -72,6 +72,7 @@ describe("<Table /> component snapshot tests", () => {
         <TableColumn property={namePredicate} header="Name" />
         <TableColumn property={nickPredicate} />
         <TableColumn property={booleanPredicate} dataType="boolean" />
+        <TableColumn property="http://missing.property" />
       </Table>
     );
     const { baseElement } = documentBody;

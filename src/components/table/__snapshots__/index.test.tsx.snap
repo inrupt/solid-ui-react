@@ -38,6 +38,12 @@ exports[`<Table /> component snapshot tests matches snapshot 1`] = `
           >
             http://schema.org/isAccessibleForFree
           </th>
+          <th
+            colspan="1"
+            role="columnheader"
+          >
+            http://missing.property
+          </th>
         </tr>
       </thead>
       <tbody
@@ -61,6 +67,11 @@ exports[`<Table /> component snapshot tests matches snapshot 1`] = `
           >
             true
           </td>
+          <td
+            role="cell"
+          >
+            
+          </td>
         </tr>
         <tr
           role="row"
@@ -79,6 +90,11 @@ exports[`<Table /> component snapshot tests matches snapshot 1`] = `
             role="cell"
           >
             false
+          </td>
+          <td
+            role="cell"
+          >
+            
           </td>
         </tr>
       </tbody>
