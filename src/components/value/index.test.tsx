@@ -24,7 +24,8 @@ import * as React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
-import Value, { DataType } from "./index";
+import Value from "./index";
+import { DataType } from "../../helpers";
 import { DatasetProvider } from "../../context/datasetContext";
 import { ThingProvider } from "../../context/thingContext";
 
@@ -102,8 +103,8 @@ describe("<Value /> component snapshot test", () => {
 
 describe("<Value /> component functional testing", () => {
   it.each([
-    ["string", "getStringUnlocalizedOne", "mockString", undefined],
-    ["string", "getStringInLocaleOne", "mockString", "en"],
+    ["string", "getStringNoLocale", "mockString", undefined],
+    ["string", "getStringWithLocale", "mockString", "en"],
     ["boolean", "getBoolean", true, undefined],
     ["datetime", "getDatetime", new Date(), undefined],
     ["decimal", "getDecimal", 1.23, undefined],
@@ -138,12 +139,12 @@ describe("<Value /> component functional testing", () => {
   it.each([
     [
       "string",
-      "getStringUnlocalizedOne",
+      "getStringNoLocale",
       "setStringUnlocalized",
       "mockString",
       undefined,
     ],
-    ["string", "getStringInLocaleOne", "setStringInLocale", "mockString", "en"],
+    ["string", "getStringWithLocale", "setStringInLocale", "mockString", "en"],
     ["boolean", "getBoolean", "setBoolean", true, undefined],
     ["datetime", "getDatetime", "setDatetime", "2020-12-30T12:30", undefined],
     ["decimal", "getDecimal", "setDecimal", "1.23", undefined],
@@ -311,7 +312,7 @@ describe("<Value /> component functional testing", () => {
   });
 
   it("Should throw error if saving data fails and on OnError is passed", async () => {
-    jest.spyOn(console, "error").mockImplementationOnce(() => {});
+    jest.spyOn(console, "error").mockImplementation(() => {});
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(
       "Saving data failed"
     );
@@ -338,8 +339,7 @@ describe("<Value /> component functional testing", () => {
   });
 
   it("Should throw error if SaveDatasetTo is missing for new data", async () => {
-    // eslint-disable-next-line no-console
-    console.error = jest.fn();
+    jest.spyOn(console, "error").mockImplementation(() => {});
     const { getByText, getByDisplayValue } = render(
       <ErrorBoundary
         fallbackRender={({ error }) => <div>{JSON.stringify(error)}</div>}

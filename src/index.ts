@@ -23,6 +23,7 @@ export { default as Image } from "./components/image";
 export { default as Link } from "./components/link";
 export { default as LoginButton } from "./components/logIn";
 export { default as LogoutButton } from "./components/logOut";
+export { Table, TableColumn } from "./components/table";
 export { default as Text } from "./components/text";
 export { default as Value } from "./components/value";
 export { default as Video } from "./components/video";

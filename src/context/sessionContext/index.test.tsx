@@ -90,8 +90,7 @@ describe("SessionContext functionality", () => {
   });
 
   it("throws an error if handling incoming redirect fails", async () => {
-    // eslint-disable-next-line no-console
-    console.error = jest.fn();
+    jest.spyOn(console, "error").mockImplementation(() => {});
     const error = "Failed to handle";
 
     const session = {

@@ -22,6 +22,23 @@
 import {
   unstable_overwriteFile as unstableOverwriteFile,
   unstable_fetchFile as unstableFetchFile,
+  Thing,
+  UrlString,
+  Url,
+  getBoolean,
+  getDatetime,
+  getDecimal,
+  getInteger,
+  getUrl,
+  getStringNoLocale,
+  getStringWithLocale,
+  getBooleanAll,
+  getDatetimeAll,
+  getDecimalAll,
+  getIntegerAll,
+  getStringNoLocaleAll,
+  getStringWithLocaleAll,
+  getUrlAll,
 } from "@inrupt/solid-client";
 
 export const overwriteFile = async (
@@ -64,4 +81,161 @@ export const retrieveFile = async (
   return URL.createObjectURL(imageBlob);
 };
 
-export default { overwriteFile, retrieveFile };
+export type DataType =
+  | "boolean"
+  | "datetime"
+  | "decimal"
+  | "integer"
+  | "string"
+  | "url";
+
+export function getValueByType(
+  type: "boolean",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getBoolean>;
+export function getValueByType(
+  type: "datetime",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getDatetime>;
+export function getValueByType(
+  type: "decimal",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getDecimal>;
+export function getValueByType(
+  type: "integer",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getInteger>;
+export function getValueByType(
+  type: "string",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getStringNoLocale>;
+export function getValueByType(
+  type: "string",
+  thing: Thing,
+  property: UrlString | Url,
+  locale: string
+): ReturnType<typeof getStringWithLocale>;
+export function getValueByType(
+  type: "string",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getStringNoLocale>;
+export function getValueByType(
+  type: "url",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getUrl>;
+export function getValueByType(
+  type: DataType,
+  thing: Thing,
+  property: UrlString | Url,
+  locale?: string
+): string | boolean | number | Date | null;
+export function getValueByType(
+  type: DataType,
+  thing: Thing,
+  property: UrlString | Url,
+  locale?: string
+): string | boolean | number | Date | null {
+  switch (type) {
+    case "boolean":
+      return getBoolean(thing, property);
+    case "datetime":
+      return getDatetime(thing, property);
+    case "decimal":
+      return getDecimal(thing, property);
+    case "integer":
+      return getInteger(thing, property);
+    case "url":
+      return getUrl(thing, property);
+    default:
+      if (locale) {
+        return getStringWithLocale(thing, property, locale);
+      }
+      return getStringNoLocale(thing, property);
+  }
+}
+
+export function getValueByTypeAll(
+  type: "boolean",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getBooleanAll>;
+export function getValueByTypeAll(
+  type: "datetime",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getDatetimeAll>;
+export function getValueByTypeAll(
+  type: "decimal",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getDecimalAll>;
+export function getValueByTypeAll(
+  type: "integer",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getIntegerAll>;
+export function getValueByTypeAll(
+  type: "string",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getStringNoLocaleAll>;
+export function getValueByTypeAll(
+  type: "string",
+  thing: Thing,
+  property: UrlString | Url,
+  locale: string
+): ReturnType<typeof getStringWithLocaleAll>;
+export function getValueByTypeAll(
+  type: "string",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getStringNoLocaleAll>;
+export function getValueByTypeAll(
+  type: "url",
+  thing: Thing,
+  property: UrlString | Url
+): ReturnType<typeof getUrlAll>;
+export function getValueByTypeAll(
+  type: DataType,
+  thing: Thing,
+  property: UrlString | Url,
+  locale?: string
+): Array<string | boolean | number | Date | null>;
+export function getValueByTypeAll(
+  type: DataType,
+  thing: Thing,
+  property: UrlString | Url,
+  locale?: string
+): Array<string | boolean | number | Date | null> {
+  switch (type) {
+    case "boolean":
+      return getBooleanAll(thing, property);
+    case "datetime":
+      return getDatetimeAll(thing, property);
+    case "decimal":
+      return getDecimalAll(thing, property);
+    case "integer":
+      return getIntegerAll(thing, property);
+    case "url":
+      return getUrlAll(thing, property);
+    default:
+      if (locale) {
+        return getStringWithLocaleAll(thing, property, locale);
+      }
+      return getStringNoLocaleAll(thing, property);
+  }
+}
+
+export default {
+  overwriteFile,
+  retrieveFile,
+  getValueByType,
+  getValueByTypeAll,
+};

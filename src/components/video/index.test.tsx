@@ -87,7 +87,7 @@ describe("Video component", () => {
     });
 
     it("When getUrl returns null, should throw an error", () => {
-      jest.spyOn(console, "error").mockImplementationOnce(() => {});
+      jest.spyOn(console, "error").mockImplementation(() => {});
 
       (SolidFns.getUrl as jest.Mock).mockReturnValueOnce(null);
       expect(() =>
@@ -102,7 +102,7 @@ describe("Video component", () => {
     });
 
     it("Should throw error if initial fetch fails, if onError is not passed", async () => {
-      jest.spyOn(console, "error").mockImplementationOnce(() => {});
+      jest.spyOn(console, "error").mockImplementation(() => {});
       (SolidFns.unstable_fetchFile as jest.Mock).mockRejectedValueOnce(
         "Error in fetch"
       );

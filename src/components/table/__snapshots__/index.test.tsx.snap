@@ -1,0 +1,94 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Table /> component snapshot tests matches snapshot 1`] = `
+<body>
+  <div>
+    <table
+      role="table"
+    >
+      <thead>
+        <tr
+          role="row"
+        >
+          <th
+            colspan="1"
+            role="columnheader"
+          >
+            Name
+          </th>
+          <th
+            colspan="1"
+            role="columnheader"
+          >
+            http://xmlns.com/foaf/0.1/nick
+          </th>
+          <th
+            colspan="1"
+            role="columnheader"
+          >
+            http://schema.org/isAccessibleForFree
+          </th>
+          <th
+            colspan="1"
+            role="columnheader"
+          >
+            http://missing.property
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        role="rowgroup"
+      >
+        <tr
+          role="row"
+        >
+          <td
+            role="cell"
+          >
+            example name 1
+          </td>
+          <td
+            role="cell"
+          >
+            example nick 1
+          </td>
+          <td
+            role="cell"
+          >
+            true
+          </td>
+          <td
+            role="cell"
+          >
+            
+          </td>
+        </tr>
+        <tr
+          role="row"
+        >
+          <td
+            role="cell"
+          >
+            example name 2
+          </td>
+          <td
+            role="cell"
+          >
+            example nick 2
+          </td>
+          <td
+            role="cell"
+          >
+            false
+          </td>
+          <td
+            role="cell"
+          >
+            
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+`;
