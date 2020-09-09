@@ -39,7 +39,7 @@ async function logoutFailed(error: Error) {
 
 export function WithChildren(): ReactElement {
   return (
-    <SessionProvider>
+    <SessionProvider sessionId="log-out-example">
       <p>
         <em>{"Note: "}</em>
         to test out the Authentication examples, you will need to click the
@@ -58,7 +58,7 @@ export function WithChildren(): ReactElement {
 
 export function WithoutChildren(): ReactElement {
   return (
-    <SessionProvider>
+    <SessionProvider sessionId="log-out-example">
       <p>
         <em>{"Note: "}</em>
         to test out the Authentication examples, you will need to click the

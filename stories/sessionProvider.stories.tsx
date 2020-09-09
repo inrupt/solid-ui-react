@@ -19,8 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useContext } from "react";
-import { Button } from "@material-ui/core";
+import React, { ReactElement, useContext, useState } from "react";
 import SessionContext, { SessionProvider } from "../src/context/sessionContext";
 import LoginButton from "../src/components/logIn";
 import LogoutButton from "../src/components/logOut";
@@ -32,18 +31,19 @@ export default {
 };
 
 export function ProviderWithHook(): ReactElement {
+  const [idp, setIdp] = useState("https://inrupt.net");
+
   return (
-    <SessionProvider>
+    <SessionProvider sessionId="session-provider-example">
       <p>
         <em>{"Note: "}</em>
         to test out the Authentication examples, you will need to click the
         pop-out icon on the top right to open this example in a new tab first.
       </p>
 
-      <LoginButton
-        oidcIssuer="https://inrupt.net"
-        redirectUrl={window.location.href}
-      />
+      <input type="url" value={idp} onChange={(e) => setIdp(e.target.value)} />
+
+      <LoginButton oidcIssuer={idp} redirectUrl={window.location.href} />
 
       <LogoutButton />
 

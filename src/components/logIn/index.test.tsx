@@ -38,7 +38,7 @@ describe("<LoginButton /> component snapshot test", () => {
     } as any;
 
     const documentBody = render(
-      <SessionProvider session={session}>
+      <SessionProvider session={session} sessionId="key">
         <LoginButton
           oidcIssuer="https://test.url"
           redirectUrl="https://test.url/redirect"
@@ -63,7 +63,7 @@ describe("<LoginButton /> component visual testing", () => {
     } as any;
 
     const { getByText } = render(
-      <SessionProvider session={session}>
+      <SessionProvider session={session} sessionId="key">
         <LoginButton
           oidcIssuer="https://test.url"
           redirectUrl="https://test.url/redirect"
@@ -91,7 +91,7 @@ describe("<LoginButton /> component functional testing", () => {
     const redirectUrl = "https://local.url/redirect";
 
     const { getByText } = render(
-      <SessionProvider session={session}>
+      <SessionProvider session={session} sessionId="key">
         <LoginButton
           oidcIssuer={oidcIssuer}
           redirectUrl={redirectUrl}
@@ -116,7 +116,7 @@ describe("<LoginButton /> component functional testing", () => {
     } as any;
 
     const { getByText } = render(
-      <SessionProvider session={session}>
+      <SessionProvider session={session} sessionId="key">
         <LoginButton
           oidcIssuer="https://test.url"
           redirectUrl="https://test.url/redirect"
@@ -137,7 +137,7 @@ describe("<LoginButton /> component functional testing", () => {
     } as any;
 
     const { getByText } = render(
-      <SessionProvider session={session}>
+      <SessionProvider session={session} sessionId="key">
         <LoginButton
           oidcIssuer="https://test.url"
           redirectUrl="https://test.url/redirect"

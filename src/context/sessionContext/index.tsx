@@ -43,16 +43,19 @@ export interface ISessionContext {
 
 /* eslint @typescript-eslint/explicit-module-boundary-types: 0 */
 export const unauthenticatedFetch = (url: any, options: any): any => {
-  return window.fetch.bind(window)(url, options);
+  return window.fetch.call(window, url, options);
 };
 
-export const defaultSession = (): Session =>
-  new Session({
-    clientAuthentication: getClientAuthenticationWithDependencies({}),
-  });
+export const buildSession = (sessionId: string): Session =>
+  new Session(
+    {
+      clientAuthentication: getClientAuthenticationWithDependencies({}),
+    },
+    sessionId
+  );
 
 const SessionContext = createContext<ISessionContext>({
-  session: defaultSession(),
+  session: buildSession(""),
   sessionRequestInProgress: true,
   fetch: unauthenticatedFetch,
 });
@@ -62,23 +65,29 @@ export default SessionContext;
 /* eslint react/require-default-props: 0 */
 export interface ISessionProvider {
   children: ReactNode;
-  session: Session;
+  sessionId: string;
+  session?: Session;
 }
 
 export const SessionProvider = ({
-  session: initialSession,
+  sessionId,
   children,
+  session: propsSession,
 }: ISessionProvider): ReactElement => {
   const [sessionRequestInProgress, setSessionRequestInProgress] = useState(
     true
   );
 
-  const [session, setSession] = useState<Session>(initialSession);
+  const [session, setSession] = useState<Session>(
+    propsSession || buildSession(sessionId)
+  );
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setErrorState] = useState<string | null>();
 
-  const fetch = session.info.isLoggedIn ? session.fetch : unauthenticatedFetch;
+  const fetch = session.info.isLoggedIn
+    ? session.fetch.bind(session)
+    : unauthenticatedFetch;
 
   useEffect(() => {
     // The first time the component is loaded, check for a querystring and
@@ -99,9 +108,9 @@ export const SessionProvider = ({
       // Workaround for a solid-client-authn bug.
       // It leaves dirty data in localstorage, and doesn't set isLoggedIn to false after logging out.
       window.localStorage.clear();
-      setSession(defaultSession());
+      setSession(buildSession(sessionId));
     });
-  }, [session]);
+  }, [session, sessionId]);
 
   return (
     <SessionContext.Provider
@@ -115,9 +124,4 @@ export const SessionProvider = ({
       {children}
     </SessionContext.Provider>
   );
-};
-
-/* eslint react/default-props-match-prop-types: 0 */
-SessionProvider.defaultProps = {
-  session: defaultSession(),
 };

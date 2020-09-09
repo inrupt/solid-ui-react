@@ -38,7 +38,7 @@ describe("<LogoutButton /> component snapshot test", () => {
     } as any;
 
     const documentBody = render(
-      <SessionProvider session={session}>
+      <SessionProvider session={session} sessionId="key">
         <LogoutButton onLogout={onLogout} onError={onError} />
       </SessionProvider>
     );
@@ -58,7 +58,7 @@ describe("<LogoutButton /> component visual testing", () => {
     } as any;
 
     const { getByText } = render(
-      <SessionProvider session={session}>
+      <SessionProvider session={session} sessionId="key">
         <LogoutButton onLogout={onLogout} onError={onError}>
           <div>Custom child element</div>
         </LogoutButton>
@@ -79,7 +79,7 @@ describe("<LogOutButton /> component functional testing", () => {
     } as any;
 
     const { getByText } = render(
-      <SessionProvider session={session}>
+      <SessionProvider session={session} sessionId="key">
         <LogoutButton onLogout={onLogout} onError={onError} />
       </SessionProvider>
     );
@@ -98,7 +98,7 @@ describe("<LogOutButton /> component functional testing", () => {
     } as any;
 
     const { getByText } = render(
-      <SessionProvider session={session}>
+      <SessionProvider session={session} sessionId="key">
         <LogoutButton onError={onError} />
       </SessionProvider>
     );
@@ -117,7 +117,7 @@ describe("<LogOutButton /> component functional testing", () => {
     } as any;
 
     const { getByText } = render(
-      <SessionProvider session={session}>
+      <SessionProvider session={session} sessionId="key">
         <LogoutButton onLogout={onLogout} />
       </SessionProvider>
     );
@@ -136,7 +136,7 @@ describe("<LogOutButton /> component functional testing", () => {
     } as any;
 
     const { getByText } = render(
-      <SessionProvider session={session}>
+      <SessionProvider session={session} sessionId="key">
         <LogoutButton onLogout={onLogout} onError={onError} />
       </SessionProvider>
     );
