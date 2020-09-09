@@ -24,6 +24,8 @@ import { Button } from "@material-ui/core";
 import SessionContext, { SessionProvider } from "../src/context/sessionContext";
 import LoginButton from "../src/components/logIn";
 import LogoutButton from "../src/components/logOut";
+import Text from "../src/components/text";
+import CombinedDataProvider from "../src/context/combinedDataContext";
 
 export default {
   title: "Authentication/Session Provider",
@@ -61,8 +63,18 @@ function Dashboard(): ReactElement {
     <div>
       <h1>Current Session:</h1>
       <h2>{session.info.webId || "logged out"}</h2>
+
       <h1>Session Request:</h1>
       <h2>{sessionRequestText}</h2>
+
+      {session.info.webId ? (
+        <CombinedDataProvider
+          datasetUrl={session.info.webId}
+          thingUrl={session.info.webId}
+        >
+          <Text property="http://www.w3.org/2006/vcard/ns#fn" autosave edit />
+        </CombinedDataProvider>
+      ) : null}
     </div>
   );
 }
