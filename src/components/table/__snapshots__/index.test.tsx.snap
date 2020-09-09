@@ -1,15 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Table /> component snapshot tests TableColumn used in isolation matches snpshot 1`] = `
-<body>
-  <div>
-    <span>
-      Can't use TableColumn outside a Table.
-    </span>
-  </div>
-</body>
-`;
-
 exports[`<Table /> component snapshot tests matches snapshot 1`] = `
 <body>
   <div>

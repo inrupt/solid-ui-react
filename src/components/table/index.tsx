@@ -47,7 +47,7 @@ export type TableColumnProps = {
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function TableColumn(props: TableColumnProps): ReactElement {
-  return <span>Can&apos;t use TableColumn outside a Table.</span>;
+  throw new Error("Can't use TableColumn outside a Table.");
 }
 
 export interface TableProps

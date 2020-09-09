@@ -21,7 +21,8 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
+import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
 import { Table, TableColumn } from "./index";
 
@@ -78,16 +79,27 @@ describe("<Table /> component snapshot tests", () => {
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
   });
-  it("TableColumn used in isolation matches snpshot", () => {
-    const documentBody = render(
-      <TableColumn property={namePredicate} header="Name" />
-    );
-    const { baseElement } = documentBody;
-    expect(baseElement).toMatchSnapshot();
-  });
 });
 
 describe("<Table /> component functional tests", () => {
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+  it("TableColumn used in isolation throws an error", async () => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
+
+    const { getByText } = render(
+      <ErrorBoundary
+        fallbackRender={({ error }) => <div>{error?.message}</div>}
+      >
+        <TableColumn property={namePredicate} />
+      </ErrorBoundary>
+    );
+
+    await waitFor(() =>
+      expect(getByText("Can't use TableColumn outside a Table.")).toBeDefined()
+    );
+  });
   it("uses property as header text unless header prop supplied", () => {
     const { getByText, queryByText } = render(
       <Table things={[thing1, thing2]}>
