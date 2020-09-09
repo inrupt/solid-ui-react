@@ -21,7 +21,7 @@
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { ReactElement, useMemo, Children } from "react";
+import React, { ReactElement, useMemo, Children, ReactNode } from "react";
 import { Thing, Url, UrlString } from "@inrupt/solid-client";
 import {
   useTable,
@@ -57,12 +57,16 @@ export interface TableProps
     | Array<ReactElement<TableColumnProps>>;
   things: Array<Thing>;
   filter?: string;
+  ascIndicator?: ReactNode;
+  descIndicator?: ReactNode;
 }
 
 export function Table({
   children,
   things,
   filter,
+  ascIndicator,
+  descIndicator,
   ...tableProps
 }: TableProps): ReactElement {
   const { columns, data } = useMemo(() => {
@@ -123,17 +127,7 @@ export function Table({
               <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                 {column.render("Header")}
                 {column.isSorted &&
-                  (column.isSortedDesc ? (
-                    <span role="img" aria-label="Sorted in descending order">
-                      {" "}
-                      🔽
-                    </span>
-                  ) : (
-                    <span role="img" aria-label="Sorted in ascending order">
-                      {" "}
-                      🔼
-                    </span>
-                  ))}
+                  (column.isSortedDesc ? descIndicator : ascIndicator)}
               </th>
             ))}
           </tr>
@@ -157,4 +151,16 @@ export function Table({
 
 Table.defaultProps = {
   filter: undefined,
+  ascIndicator: (
+    <span role="img" aria-label="Sorted in ascending order">
+      {" "}
+      🔼
+    </span>
+  ),
+  descIndicator: (
+    <span role="img" aria-label="Sorted in descending order">
+      {" "}
+      🔽
+    </span>
+  ),
 };
