@@ -298,7 +298,7 @@ describe("<Text /> component functional testing", () => {
   });
 
   it("Should throw error if saving data fails and on OnError is passed", async () => {
-    jest.spyOn(console, "error").mockImplementationOnce(() => {});
+    jest.spyOn(console, "error").mockImplementation(() => {});
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(
       "Saving data failed"
     );
@@ -324,8 +324,7 @@ describe("<Text /> component functional testing", () => {
   });
 
   it("Should throw error if SaveDatasetTo is missing for new data", async () => {
-    // eslint-disable-next-line no-console
-    console.error = jest.fn();
+    jest.spyOn(console, "error").mockImplementation(() => {});
     const { getByText, getByDisplayValue } = render(
       <ErrorBoundary
         fallbackRender={({ error }) => <div>{JSON.stringify(error)}</div>}
