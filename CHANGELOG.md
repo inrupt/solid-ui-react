@@ -1,3 +1,10 @@
+## 0.9.8 ( September 9, 2020 )
+
+### Added
+
+- Added sortable/filterable `<Table>` and `<TableColumn>`, to display rows of Things and columns of properties
+- Tidied logs when testing intentionally thrown errors
+
 ## 0.9.7 ( August 28, 2020 )
 
 ### Changed

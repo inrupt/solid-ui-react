@@ -1,6 +1,6 @@
 {
   "name": "@inrupt/solid-ui-react",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "description": "Set of UI libraries using @solid/core",
   "main": "dist/index.js",
   "types": "dist/src/index.d.ts",
