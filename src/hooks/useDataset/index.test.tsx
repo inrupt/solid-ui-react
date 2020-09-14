@@ -21,11 +21,11 @@
 
 import * as React from "react";
 import { renderHook } from "@testing-library/react-hooks";
-import { waitFor } from "@testing-library/react";
+import { SWRConfig, cache } from "swr";
 import * as SolidFns from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import SessionContext from "../../context/sessionContext";
-import useDataset from "./index";
+import useDataset from ".";
 
 describe("useDataset() hook", () => {
   const mockDatasetIri = "https://mock.url";
@@ -42,16 +42,17 @@ describe("useDataset() hook", () => {
         session: {} as Session,
       }}
     >
-      {children}
+      <SWRConfig value={{ dedupingInterval: 0 }}>{children}</SWRConfig>
     </SessionContext.Provider>
   );
 
   afterEach(() => {
     jest.clearAllMocks();
+    cache.clear();
   });
 
   it("should call getSolidDataset with given Iri", async () => {
-    const { result } = renderHook(() => useDataset(mockDatasetIri), {
+    const { result, waitFor } = renderHook(() => useDataset(mockDatasetIri), {
       wrapper,
     });
 
@@ -70,7 +71,7 @@ describe("useDataset() hook", () => {
       additionalOption: mockAdditionalOption,
     };
 
-    const { result } = renderHook(
+    const { result, waitFor } = renderHook(
       () => useDataset(mockDatasetIri, mockOptions),
       {
         wrapper,
@@ -85,33 +86,19 @@ describe("useDataset() hook", () => {
     await waitFor(() => expect(result.current.dataset).toBe(mockDataset));
   });
 
-  // it("The hook should return values set in the SessionContext", async () => {
-  //   interface IProps {
-  //     children: React.ReactNode;
-  //   }
+  it("should return error if getSolidDataset call fails", async () => {
+    mockGetSolidDataset.mockRejectedValue(new Error("async error"));
 
-  // const wrapper = ({ children }: IProps) => (
-  //   <SessionContext.Provider
-  //     value={{
-  //       fetch: jest.fn(),
-  //       sessionRequestInProgress: true,
-  //       session: {
-  //         info: {
-  //           webId: "https://solid.community/",
-  //           isLoggedIn: true,
-  //           sessionId: "some-session-id",
-  //         },
-  //       } as Session,
-  //     }}
-  //   >
-  //     {children}
-  //   </SessionContext.Provider>
-  // );
+    const { result, waitFor } = renderHook(() => useDataset(mockDatasetIri), {
+      wrapper,
+    });
 
-  //   const { result } = renderHook(() => useDataset(), { wrapper });
-  //   expect(result.current.session.info.webId).toEqual(
-  //     "https://solid.community/"
-  //   );
-  //   expect(result.current.sessionRequestInProgress).toEqual(true);
-  // });
+    expect(mockGetSolidDataset).toHaveBeenCalledTimes(1);
+    expect(mockGetSolidDataset).toHaveBeenCalledWith(mockDatasetIri, {
+      fetch: mockFetch,
+    });
+    await waitFor(() =>
+      expect(result.current.error.message).toBe("async error")
+    );
+  });
 });
