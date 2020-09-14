@@ -38,3 +38,5 @@ export {
   DatasetProvider,
 } from "./context/datasetContext";
 export { default as useSession } from "./hooks/useSession";
+export { default as useDataset } from "./hooks/useDataset";
+export { default as useThing } from "./hooks/useThing";
