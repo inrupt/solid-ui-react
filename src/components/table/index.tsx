@@ -74,7 +74,6 @@ export function Table({
     const dataArray: Array<Record<string, unknown>> = things.map(() => ({}));
 
     // loop through each column
-    // TODO check they're TableColumn, or is ReactElement<TableColumnProps> enough
     Children.forEach(children, (column, colIndex) => {
       const {
         property,

@@ -12,9 +12,16 @@
 
 pro:card a n0:PersonalProfileDocument; n0:maker :me; n0:primaryTopic :me.
 
+:id100 a n:Home; n:value <tel:01234567890>.
+
+:id101 a n:Work; n:value <tel:02468135790>.
+
+:id102 a n:Work; n:value <tel:09876543210>.
+
 :me
     a schem:Person, n0:Person;
     n:fn "Docs Example";
+    n:hasTelephone :id100, :id101;
     n:note "Sample Account for docs. ";
     n:organization-name "Inrupt";
     n:role "Documentation";
@@ -29,6 +36,7 @@ pro:card a n0:PersonalProfileDocument; n0:maker :me; n0:primaryTopic :me.
 :alterEgo
     a schem:Person, n0:Person;
     n:fn "Super Inrupt";
+    n:hasTelephone :id102;
     n:note "Secret superhero account. ";
     n:organization-name "Inrupt";
     n:role "Documentation";

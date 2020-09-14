@@ -19,10 +19,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
+import React, { ReactElement, useContext } from "react";
 import * as SolidFns from "@inrupt/solid-client";
 import { withKnobs, text } from "@storybook/addon-knobs";
+import DatasetContext, { DatasetProvider } from "../src/context/datasetContext";
 import { Table, TableColumn } from "../src/components/table";
+import config from "./config";
+
+const { host } = config();
 
 export default {
   title: "Components/Table",
@@ -104,6 +108,131 @@ export function MultipleValues(): ReactElement {
   );
 }
 
+export function CustomBodyComponent(): ReactElement {
+  const namePredicate = `http://xmlns.com/foaf/0.1/name`;
+  const datePredicate = `http://schema.org/datePublished`;
+
+  const thing1A = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    namePredicate,
+    `example name 1`
+  );
+  const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
+
+  const thing2A = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    namePredicate,
+    `example name 2`
+  );
+  const thing2 = SolidFns.addDatetime(
+    thing2A,
+    datePredicate,
+    new Date("1999-01-02")
+  );
+
+  type bodyProps = {
+    value?: string;
+  };
+  const CustomBody = ({ value }: bodyProps) => {
+    return <span style={{ color: "#7C4DFF" }}>{`${value}`}</span>;
+  };
+
+  return (
+    <Table things={[thing1, thing2]} style={{ border: "1px solid black" }}>
+      <TableColumn property={namePredicate} header="Name" />
+      <TableColumn
+        property={datePredicate}
+        dataType="datetime"
+        body={CustomBody}
+      />
+    </Table>
+  );
+}
+
+export function NestedDataExample(): ReactElement {
+  const typeProperty = `http://www.w3.org/1999/02/22-rdf-syntax-ns#type`;
+  const firstNameProperty = `http://www.w3.org/2006/vcard/ns#fn`;
+  const hasTelephoneProperty = `http://www.w3.org/2006/vcard/ns#hasTelephone`;
+  const homeProperty = `http://www.w3.org/2006/vcard/ns#Home`;
+  const workProperty = `http://www.w3.org/2006/vcard/ns#Work`;
+  const valueProperty = `http://www.w3.org/2006/vcard/ns#value`;
+
+  const PhoneNumberDisplay = ({
+    numberThingIris,
+    numberType,
+    dataset,
+  }: {
+    numberThingIris: [string];
+    numberType: string;
+    dataset: SolidFns.SolidDataset;
+  }) => {
+    let phoneNumber = "";
+    numberThingIris.some((numberThingIri) => {
+      const numberThing = SolidFns.getThing(dataset, numberThingIri);
+      if (SolidFns.getUrl(numberThing, typeProperty) === numberType) {
+        phoneNumber = SolidFns.getUrl(numberThing, valueProperty) ?? "";
+        return true;
+      }
+      return false;
+    });
+    return <>{phoneNumber}</>;
+  };
+
+  const NestedDataExampleContent = () => {
+    const datasetContext = useContext(DatasetContext);
+    const { dataset } = datasetContext;
+    if (!dataset) {
+      return null;
+    }
+    const personThing = SolidFns.getThing(dataset, `${host}/example.ttl#me`);
+    const alterEgoThing = SolidFns.getThing(
+      dataset,
+      `${host}/example.ttl#alterEgo`
+    );
+
+    return (
+      <Table
+        things={[personThing, alterEgoThing]}
+        style={{ border: "1px solid black" }}
+      >
+        <TableColumn property={firstNameProperty} header="Name" />
+        <TableColumn
+          property={hasTelephoneProperty}
+          header="Home Phone"
+          dataType="url"
+          multiple
+          body={({ value }) => (
+            <PhoneNumberDisplay
+              numberThingIris={value}
+              dataset={dataset}
+              numberType={homeProperty}
+            />
+          )}
+        />
+        <TableColumn
+          property={hasTelephoneProperty}
+          header="Work Phone"
+          dataType="url"
+          multiple
+          body={({ value }) => (
+            <PhoneNumberDisplay
+              numberThingIris={value}
+              dataset={dataset}
+              numberType={workProperty}
+            />
+          )}
+        />
+      </Table>
+    );
+  };
+
+  return (
+    <DatasetProvider datasetUrl={`${host}/example.ttl`}>
+      <NestedDataExampleContent />
+    </DatasetProvider>
+  );
+}
+
 export function SortableColumns(): ReactElement {
   const namePredicate = `http://xmlns.com/foaf/0.1/name`;
   const datePredicate = `http://schema.org/datePublished`;
@@ -164,47 +293,6 @@ export function FilterOnFirstColumn(): ReactElement {
     >
       <TableColumn property={namePredicate} header="Name" filterable />
       <TableColumn property={datePredicate} dataType="datetime" />
-    </Table>
-  );
-}
-
-export function CustomBodyComponent(): ReactElement {
-  const namePredicate = `http://xmlns.com/foaf/0.1/name`;
-  const datePredicate = `http://schema.org/datePublished`;
-
-  const thing1A = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
-    namePredicate,
-    `example name 1`
-  );
-  const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
-
-  const thing2A = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
-    namePredicate,
-    `example name 2`
-  );
-  const thing2 = SolidFns.addDatetime(
-    thing2A,
-    datePredicate,
-    new Date("1999-01-02")
-  );
-
-  type bodyProps = {
-    value?: string;
-  };
-  const CustomBody = ({ value }: bodyProps) => {
-    return <span style={{ color: "#7C4DFF" }}>{`${value}`}</span>;
-  };
-
-  return (
-    <Table things={[thing1, thing2]} style={{ border: "1px solid black" }}>
-      <TableColumn property={namePredicate} header="Name" />
-      <TableColumn
-        property={datePredicate}
-        dataType="datetime"
-        body={CustomBody}
-      />
     </Table>
   );
 }
