@@ -23,7 +23,10 @@
 import * as React from "react";
 import { RenderResult, render, waitFor } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
+import useDataset from "../../hooks/useDataset";
 import DatasetContext, { DatasetProvider } from "./index";
+
+jest.mock("../../hooks/useDataset");
 
 let documentBody: RenderResult;
 
@@ -119,6 +122,10 @@ function ExampleComponentWithDatasetUrl(): React.ReactElement {
 
 describe("Testing DatasetContext", () => {
   it("matches snapshot with Dataset provided", () => {
+    (useDataset as jest.Mock).mockReturnValue({
+      dataset: undefined,
+      error: undefined,
+    });
     documentBody = render(
       <DatasetProvider dataset={mockDataSetWithResourceInfo}>
         <ExampleComponentWithDataset />
@@ -129,7 +136,10 @@ describe("Testing DatasetContext", () => {
   });
 
   it("matches snapshot when fetching fails", async () => {
-    jest.spyOn(SolidFns, "fetchLitDataset").mockRejectedValue(null);
+    (useDataset as jest.Mock).mockReturnValue({
+      dataset: undefined,
+      error: "Error",
+    });
 
     documentBody = render(
       <DatasetProvider datasetUrl="https://some-broken-resource.com">
@@ -141,6 +151,10 @@ describe("Testing DatasetContext", () => {
   });
 
   it("matches snapshot when fetching", async () => {
+    (useDataset as jest.Mock).mockReturnValue({
+      dataset: undefined,
+      error: undefined,
+    });
     documentBody = render(
       <DatasetProvider
         datasetUrl="https://some-broken-resource.com"
@@ -156,21 +170,25 @@ describe("Testing DatasetContext", () => {
 });
 
 describe("Functional testing", () => {
-  it("Should call fetchLitDataset", async () => {
-    jest
-      .spyOn(SolidFns, "fetchLitDataset")
-      .mockResolvedValue(mockDataSetWithResourceInfo);
+  it("Should call useDataset", async () => {
+    (useDataset as jest.Mock).mockReturnValue({
+      dataset: mockDataSetWithResourceInfo,
+      error: undefined,
+    });
 
     render(
       <DatasetProvider datasetUrl={mockUrl}>
         <ExampleComponentWithDatasetUrl />
       </DatasetProvider>
     );
-    expect(SolidFns.fetchLitDataset).toHaveBeenCalled();
+    expect(useDataset).toHaveBeenCalled();
   });
-  it("When fetchLitDataset fails, should call onError if passed", async () => {
+  it("When useDataset return an error, should call onError if passed", async () => {
+    (useDataset as jest.Mock).mockReturnValue({
+      dataset: undefined,
+      error: "Error",
+    });
     const onError = jest.fn();
-    (SolidFns.fetchLitDataset as jest.Mock).mockRejectedValue(null);
     render(
       <DatasetProvider
         onError={onError}
@@ -179,6 +197,6 @@ describe("Functional testing", () => {
         <ExampleComponentWithDatasetUrl />
       </DatasetProvider>
     );
-    await waitFor(() => expect(onError).toHaveBeenCalled());
+    await waitFor(() => expect(onError).toHaveBeenCalledWith("Error"));
   });
 });

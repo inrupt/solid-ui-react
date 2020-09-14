@@ -19,22 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, {
-  createContext,
-  ReactElement,
-  useState,
-  useEffect,
-  useCallback,
-  useContext,
-} from "react";
-import {
-  fetchLitDataset,
-  LitDataset,
-  WithResourceInfo,
-  UrlString,
-} from "@inrupt/solid-client";
+import React, { createContext, ReactElement } from "react";
+import { LitDataset, WithResourceInfo, UrlString } from "@inrupt/solid-client";
 
-import SessionContext from "../sessionContext";
+import useDataset from "../../hooks/useDataset";
 
 export interface IDatasetContext {
   dataset: LitDataset | (LitDataset & WithResourceInfo) | undefined;
@@ -68,35 +56,16 @@ export const DatasetProvider = ({
   datasetUrl,
   loading,
 }: RequireDatasetOrDatasetUrl): ReactElement => {
-  const { fetch } = useContext(SessionContext);
-  const [dataset, setDataset] = useState<
-    LitDataset | (LitDataset & WithResourceInfo) | undefined
-  >(propDataset);
+  const { dataset, error } = useDataset(datasetUrl);
 
-  const fetchDataset = useCallback(
-    async (url: string) => {
-      try {
-        const resource = await fetchLitDataset(url, { fetch });
-        setDataset(resource);
-      } catch (error) {
-        if (onError) {
-          onError(error);
-        }
-      }
-    },
-    [onError, fetch]
-  );
+  if (error && onError) {
+    onError(error);
+  }
 
-  useEffect(() => {
-    if (!dataset && datasetUrl) {
-      // eslint-disable-next-line no-void
-      void fetchDataset(datasetUrl);
-    }
-  }, [dataset, datasetUrl, fetchDataset]);
-
+  const datasetToUse = propDataset ?? dataset;
   return (
-    <DatasetContext.Provider value={{ dataset }}>
-      {dataset ? children : loading || <span>Fetching data...</span>}
+    <DatasetContext.Provider value={{ dataset: datasetToUse }}>
+      {datasetToUse ? children : loading || <span>Fetching data...</span>}
     </DatasetContext.Provider>
   );
 };
