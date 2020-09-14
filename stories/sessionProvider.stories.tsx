@@ -19,29 +19,31 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement, useContext } from "react";
-import { Button } from "@material-ui/core";
+import React, { ReactElement, useContext, useState } from "react";
 import SessionContext, { SessionProvider } from "../src/context/sessionContext";
 import LoginButton from "../src/components/logIn";
 import LogoutButton from "../src/components/logOut";
+import Text from "../src/components/text";
+import CombinedDataProvider from "../src/context/combinedDataContext";
 
 export default {
   title: "Authentication/Session Provider",
 };
 
 export function ProviderWithHook(): ReactElement {
+  const [idp, setIdp] = useState("https://inrupt.net");
+
   return (
-    <SessionProvider>
+    <SessionProvider sessionId="session-provider-example">
       <p>
         <em>{"Note: "}</em>
         to test out the Authentication examples, you will need to click the
         pop-out icon on the top right to open this example in a new tab first.
       </p>
 
-      <LoginButton
-        oidcIssuer="https://inrupt.net"
-        redirectUrl={window.location.href}
-      />
+      <input type="url" value={idp} onChange={(e) => setIdp(e.target.value)} />
+
+      <LoginButton oidcIssuer={idp} redirectUrl={window.location.href} />
 
       <LogoutButton />
 
@@ -61,8 +63,18 @@ function Dashboard(): ReactElement {
     <div>
       <h1>Current Session:</h1>
       <h2>{session.info.webId || "logged out"}</h2>
+
       <h1>Session Request:</h1>
       <h2>{sessionRequestText}</h2>
+
+      {session.info.webId ? (
+        <CombinedDataProvider
+          datasetUrl={session.info.webId}
+          thingUrl={session.info.webId}
+        >
+          <Text property="http://www.w3.org/2006/vcard/ns#fn" autosave edit />
+        </CombinedDataProvider>
+      ) : null}
     </div>
   );
 }

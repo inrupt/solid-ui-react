@@ -50,10 +50,11 @@ describe("Testing SessionContext matches snapshot", () => {
       },
       handleIncomingRedirect: jest.fn().mockResolvedValue(null),
       on: jest.fn(),
+      fetch: jest.fn(),
     } as any;
 
     const documentBody = render(
-      <SessionProvider session={session}>
+      <SessionProvider session={session} sessionId="key">
         <ChildComponent />
       </SessionProvider>
     );
@@ -76,10 +77,11 @@ describe("SessionContext functionality", () => {
       },
       handleIncomingRedirect: jest.fn().mockResolvedValue(null),
       on: jest.fn(),
+      fetch: jest.fn(),
     } as any;
 
     render(
-      <SessionProvider session={session}>
+      <SessionProvider session={session} sessionId="key">
         <ChildComponent />
       </SessionProvider>
     );
@@ -100,11 +102,12 @@ describe("SessionContext functionality", () => {
       },
       handleIncomingRedirect: jest.fn().mockRejectedValue(error),
       on: jest.fn(),
+      fetch: jest.fn(),
     } as any;
 
     const { getByText } = render(
       <ErrorBoundary fallbackRender={({ error: e }) => <div>{e}</div>}>
-        <SessionProvider session={session}>
+        <SessionProvider session={session} sessionId="key">
           <ChildComponent />
         </SessionProvider>
       </ErrorBoundary>
