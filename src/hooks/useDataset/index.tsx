@@ -29,16 +29,22 @@ import {
 import SessionContext from "../../context/sessionContext";
 
 export default function useDataset(
-  datasetIri: string,
+  datasetIri: string | null | undefined,
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   options?: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): { dataset: (SolidDataset & WithResourceInfo) | undefined; error: any } {
   const { fetch } = useContext(SessionContext);
-  const { data, error } = useSWR([datasetIri, options, fetch], () => {
-    const requestOptions = {
-      fetch,
-      ...options,
-    };
-    return getSolidDataset(datasetIri, requestOptions);
-  });
+  const { data, error } = useSWR(
+    datasetIri ? [datasetIri, options, fetch] : null,
+    () => {
+      const requestOptions = {
+        fetch,
+        ...options,
+      };
+      // useSWR will only call this fetcher if datasetUri is defined
+      return getSolidDataset(datasetIri as string, requestOptions);
+    }
+  );
   return { dataset: data, error };
 }

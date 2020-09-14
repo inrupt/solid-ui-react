@@ -101,4 +101,14 @@ describe("useDataset() hook", () => {
       expect(result.current.error.message).toBe("async error")
     );
   });
+
+  it("should return dataset undefined if uri is not defined", async () => {
+    const { result, waitFor } = renderHook(() => useDataset(null), {
+      wrapper,
+    });
+
+    expect(mockGetSolidDataset).toHaveBeenCalledTimes(0);
+
+    await waitFor(() => expect(result.current.dataset).toBeUndefined());
+  });
 });

@@ -23,9 +23,11 @@ import { getThing, Thing } from "@inrupt/solid-client";
 import useDataset from "../useDataset";
 
 export default function useThing(
-  datasetIri: string,
+  datasetIri: string | null | undefined,
   thingIri: string,
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   options?: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): { thing: Thing | undefined; error: any } {
   const { dataset, error } = useDataset(datasetIri, options);
   if (!dataset) {
