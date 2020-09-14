@@ -19,15 +19,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import React from "react";
 import { renderHook } from "@testing-library/react-hooks";
 import * as SolidFns from "@inrupt/solid-client";
 import useDataset from "../useDataset";
+import ThingContext from "../../context/thingContext";
 import useThing from ".";
 
 const mockDatasetIri = "https://mock.url";
 const mockThingIri = "https://mock.url#thing";
 const mockDataset = SolidFns.mockSolidDatasetFrom(mockDatasetIri);
 const mockThing = SolidFns.mockThingFrom(mockThingIri);
+const mockContextThing = SolidFns.mockThingFrom(mockThingIri);
 const mockGetThing = jest
   .spyOn(SolidFns, "getThing")
   .mockReturnValue(mockThing);
@@ -91,5 +94,24 @@ describe("useThing() hook", () => {
     await waitFor(() =>
       expect(result.current.error.message).toBe("useDataset error")
     );
+  });
+
+  it("should attempt to return thing from context if thing uri is not defined", async () => {
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <ThingContext.Provider value={{ thing: mockContextThing }}>
+        {children}
+      </ThingContext.Provider>
+    );
+    (useDataset as jest.Mock).mockReturnValue({
+      dataset: mockDataset,
+      error: undefined,
+    });
+    const { result, waitFor } = renderHook(
+      () => useThing(mockDatasetIri, undefined),
+      { wrapper }
+    );
+
+    expect(mockGetThing).not.toHaveBeenCalled();
+    await waitFor(() => expect(result.current.thing).toBe(mockContextThing));
   });
 });

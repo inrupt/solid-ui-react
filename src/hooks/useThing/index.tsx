@@ -20,16 +20,22 @@
  */
 
 import { getThing, Thing } from "@inrupt/solid-client";
+import { useContext } from "react";
+import ThingContext from "../../context/thingContext";
 import useDataset from "../useDataset";
 
 export default function useThing(
-  datasetIri: string | null | undefined,
-  thingIri: string,
+  datasetIri?: string | null | undefined,
+  thingIri?: string | null | undefined,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   options?: any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): { thing: Thing | undefined; error: any } {
   const { dataset, error } = useDataset(datasetIri, options);
+  const { thing: thingFromContext } = useContext(ThingContext);
+  if (!thingIri) {
+    return { thing: thingFromContext, error };
+  }
   if (!dataset) {
     return { thing: undefined, error };
   }
