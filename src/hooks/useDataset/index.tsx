@@ -33,7 +33,7 @@ export default function useDataset(
   options?: any
 ): { dataset: (SolidDataset & WithResourceInfo) | undefined; error: any } {
   const { fetch } = useContext(SessionContext);
-  const { data, error } = useSWR(datasetIri, () => {
+  const { data, error } = useSWR([datasetIri, options, fetch], () => {
     const requestOptions = {
       fetch,
       ...options,
