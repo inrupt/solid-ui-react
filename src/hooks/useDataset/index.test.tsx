@@ -24,12 +24,14 @@ import { renderHook } from "@testing-library/react-hooks";
 import { SWRConfig, cache } from "swr";
 import * as SolidFns from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
+import DatasetContext from "../../context/datasetContext";
 import SessionContext from "../../context/sessionContext";
 import useDataset from ".";
 
 describe("useDataset() hook", () => {
   const mockDatasetIri = "https://mock.url";
   const mockDataset = SolidFns.mockSolidDatasetFrom(mockDatasetIri);
+  const mockContextDataset = SolidFns.mockSolidDatasetFrom(mockDatasetIri);
   const mockGetSolidDataset = jest
     .spyOn(SolidFns, "getSolidDataset")
     .mockResolvedValue(mockDataset);
@@ -42,7 +44,9 @@ describe("useDataset() hook", () => {
         session: {} as Session,
       }}
     >
-      <SWRConfig value={{ dedupingInterval: 0 }}>{children}</SWRConfig>
+      <DatasetContext.Provider value={{ dataset: mockContextDataset }}>
+        <SWRConfig value={{ dedupingInterval: 0 }}>{children}</SWRConfig>
+      </DatasetContext.Provider>
     </SessionContext.Provider>
   );
 
@@ -102,13 +106,15 @@ describe("useDataset() hook", () => {
     );
   });
 
-  it("should return dataset undefined if uri is not defined", async () => {
-    const { result, waitFor } = renderHook(() => useDataset(null), {
+  it("should attempt to return dataset from context if uri is not defined", async () => {
+    const { result, waitFor } = renderHook(() => useDataset(), {
       wrapper,
     });
 
     expect(mockGetSolidDataset).toHaveBeenCalledTimes(0);
 
-    await waitFor(() => expect(result.current.dataset).toBeUndefined());
+    await waitFor(() =>
+      expect(result.current.dataset).toBe(mockContextDataset)
+    );
   });
 });

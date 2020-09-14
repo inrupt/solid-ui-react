@@ -27,14 +27,19 @@ import {
   WithResourceInfo,
 } from "@inrupt/solid-client";
 import SessionContext from "../../context/sessionContext";
+import DatasetContext from "../../context/datasetContext";
 
 export default function useDataset(
-  datasetIri: string | null | undefined,
+  datasetIri?: string | null | undefined,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   options?: any
+): {
+  dataset: SolidDataset | (SolidDataset & WithResourceInfo) | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): { dataset: (SolidDataset & WithResourceInfo) | undefined; error: any } {
+  error: any;
+} {
   const { fetch } = useContext(SessionContext);
+  const { dataset: datasetFromContext } = useContext(DatasetContext);
   const { data, error } = useSWR(
     datasetIri ? [datasetIri, options, fetch] : null,
     () => {
@@ -46,5 +51,7 @@ export default function useDataset(
       return getSolidDataset(datasetIri as string, requestOptions);
     }
   );
-  return { dataset: data, error };
+
+  const dataset = datasetIri ? data : datasetFromContext;
+  return { dataset, error };
 }
