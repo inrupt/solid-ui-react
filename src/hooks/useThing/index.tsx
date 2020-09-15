@@ -19,24 +19,27 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export { default as Image } from "./components/image";
-export { default as Link } from "./components/link";
-export { default as LoginButton } from "./components/logIn";
-export { default as LogoutButton } from "./components/logOut";
-export { Table, TableColumn } from "./components/table";
-export { default as Text } from "./components/text";
-export { default as Value } from "./components/value";
-export { default as Video } from "./components/video";
-export {
-  default as SessionContext,
-  SessionProvider,
-} from "./context/sessionContext";
-export { default as CombinedDataProvider } from "./context/combinedDataContext";
-export { default as ThingContext, ThingProvider } from "./context/thingContext";
-export {
-  default as DatasetContext,
-  DatasetProvider,
-} from "./context/datasetContext";
-export { default as useSession } from "./hooks/useSession";
-export { default as useDataset } from "./hooks/useDataset";
-export { default as useThing } from "./hooks/useThing";
+import { getThing, Thing } from "@inrupt/solid-client";
+import { useContext } from "react";
+import ThingContext from "../../context/thingContext";
+import useDataset from "../useDataset";
+
+export default function useThing(
+  datasetIri?: string | null | undefined,
+  thingIri?: string | null | undefined,
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+  options?: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): { thing: Thing | undefined; error: any } {
+  const { dataset, error } = useDataset(datasetIri, options);
+  const { thing: thingFromContext } = useContext(ThingContext);
+  if (!thingIri) {
+    return { thing: thingFromContext, error };
+  }
+  if (!dataset) {
+    return { thing: undefined, error };
+  }
+
+  const thing = getThing(dataset, thingIri);
+  return { thing, error };
+}

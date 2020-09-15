@@ -1,3 +1,9 @@
+## 0.11.0 ( September 14, 2020 )
+
+### Added
+
+- Add useThing and useDataset hooks
+
 ## 0.9.8 ( September 9, 2020 )
 
 ### Added
