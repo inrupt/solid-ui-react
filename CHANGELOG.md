@@ -2,7 +2,7 @@
 
 ### Changed
 
-- @inrupt/solid-client version to 0.3.0
+- @inrupt/solid-client version to 0.4.0
 
 ## 0.11.0 ( September 14, 2020 )
 
