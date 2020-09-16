@@ -147,19 +147,22 @@ describe("<Value /> component functional testing", () => {
     ["string", "getStringWithLocale", "setStringInLocale", "mockString", "en"],
     ["boolean", "getBoolean", "setBoolean", true, undefined],
     ["datetime", "getDatetime", "setDatetime", "2020-12-30T12:30", undefined],
-    ["decimal", "getDecimal", "setDecimal", "1.23", undefined],
-    ["integer", "getInteger", "setInteger", "100", undefined],
+    ["decimal", "getDecimal", "setDecimal", 1.23, undefined],
+    ["integer", "getInteger", "setInteger", 100, undefined],
     ["url", "getUrl", "setUrl", "http://mock.url", undefined],
   ])(
     "when dataType is %s, should call %s setter on blur",
     (dataType, getter, setter, newValue, locale) => {
       jest.spyOn(SolidFns, getter as any).mockImplementationOnce(() => null);
+
       const mockSetter = jest
         .spyOn(SolidFns, setter as any)
         .mockImplementation(() => mockThing);
+
       jest
         .spyOn(SolidFns, "saveSolidDatasetAt")
         .mockResolvedValue(savedDataSet);
+
       const { getByTitle } = render(
         <Value
           dataType={dataType as DataType}

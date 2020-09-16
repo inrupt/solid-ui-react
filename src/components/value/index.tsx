@@ -202,15 +202,19 @@ export default function Value({
   }
 
   let inputType;
+  let inputStep;
+
   switch (dataType) {
     case "boolean":
       inputType = "checkbox";
       break;
     case "datetime":
       inputType = "datetime-local";
+      inputStep = "any";
       break;
     case "decimal":
       inputType = "number";
+      inputStep = "any";
       break;
     case "integer":
       inputType = "number";
@@ -236,6 +240,7 @@ export default function Value({
               ? value
               : undefined
           }
+          step={inputStep}
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...inputProps}
           onFocus={(e) => setInitialValue(e.target.value)}
