@@ -20,8 +20,6 @@
  */
 
 import React, { ReactElement } from "react";
-import * as SolidFns from "@inrupt/solid-client";
-import { withKnobs, boolean, number, text } from "@storybook/addon-knobs";
 import Image from "../src/components/image";
 import CombinedDataProvider from "../src/context/combinedDataContext";
 import config from "./config";
@@ -31,46 +29,32 @@ const { host } = config();
 export default {
   title: "Components/Image",
   component: Image,
-  decorators: [withKnobs],
 };
 
-export function WithDatasetProvider(): ReactElement {
+interface IWithDatasetProvider {
+  datasetUrl: string;
+  thingUrl: string;
+  property: string;
+  edit: boolean;
+  maxSize: number;
+}
+
+export function WithDatasetProvider({
+  thingUrl,
+  datasetUrl,
+  property,
+  edit,
+  maxSize,
+}: IWithDatasetProvider): ReactElement {
   return (
-    <CombinedDataProvider
-      datasetUrl={text("Dataset Url", `${host}/example.ttl`)}
-      thingUrl={text("Thing Url", `${host}/example.ttl#exampleImage`)}
-    >
-      <Image property="http://schema.org/contentUrl" />
+    <CombinedDataProvider datasetUrl={datasetUrl} thingUrl={thingUrl}>
+      <Image property={property} edit={edit} maxSize={maxSize} />
     </CombinedDataProvider>
   );
 }
 
-export function EditFalse(): ReactElement {
-  const exampleUrl = `${host}/example.jpg`;
-  const exampleProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
-  const exampleThing = SolidFns.addUrl(
-    SolidFns.createThing(),
-    exampleProperty,
-    exampleUrl
-  );
-  return <Image thing={exampleThing} property={exampleProperty} />;
-}
-
-export function EditTrue(): ReactElement {
-  const exampleUrl = `${host}/example.jpg`;
-  const exampleProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
-  const exampleThing = SolidFns.addUrl(
-    SolidFns.createThing(),
-    exampleProperty,
-    exampleUrl
-  );
-  return (
-    <Image
-      thing={exampleThing}
-      property={exampleProperty}
-      edit={boolean("Edit", true)}
-      autosave={boolean("Autosave", true)}
-      maxSize={number("Max Size", 100)}
-    />
-  );
-}
+WithDatasetProvider.args = {
+  datasetUrl: `${host}/example.ttl`,
+  thingUrl: `${host}/example.ttl#exampleImage`,
+  property: "http://schema.org/contentUrl",
+};

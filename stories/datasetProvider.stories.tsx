@@ -20,7 +20,6 @@
  */
 
 import React, { ReactElement, useContext, useState, useEffect } from "react";
-import { withKnobs, text } from "@storybook/addon-knobs";
 import * as SolidFns from "@inrupt/solid-client";
 import DatasetContext, { DatasetProvider } from "../src/context/datasetContext";
 import config from "./config";
@@ -29,7 +28,7 @@ const { host } = config();
 
 export default {
   title: "Providers/Dataset Provider",
-  decorators: [withKnobs],
+  component: DatasetProvider,
 };
 
 export function WithLocalDataset(): ReactElement {
@@ -50,22 +49,37 @@ export function WithLocalDataset(): ReactElement {
   );
 }
 
-export function WithDatasetUrl(): ReactElement {
-  const datasetUrl = text("Dataset Url", `${host}/example.ttl`);
+interface IWithDatasetUrl {
+  datasetUrl: string;
+  thingUrl: string;
+  property: string;
+}
+
+export function WithDatasetUrl(props: IWithDatasetUrl): ReactElement {
+  const { datasetUrl, thingUrl, property } = props;
+
   return (
     <DatasetProvider datasetUrl={datasetUrl}>
-      <ExampleComponentWithDatasetUrl />
+      <ExampleComponentWithDatasetUrl thingUrl={thingUrl} property={property} />
     </DatasetProvider>
   );
 }
 
-function ExampleComponentWithDatasetUrl(): ReactElement {
-  const datasetUrl = text("Thing Url", `${host}/example.ttl#me`);
+WithDatasetUrl.args = {
+  datasetUrl: `${host}/example.ttl`,
+  thingUrl: `${host}/example.ttl#me`,
+  property: "http://www.w3.org/2006/vcard/ns#role",
+};
 
-  const examplePredicate = text(
-    "property",
-    "http://www.w3.org/2006/vcard/ns#role"
-  );
+interface IExampleComponentWithDatasetUrl {
+  thingUrl: string;
+  property: string;
+}
+
+function ExampleComponentWithDatasetUrl(
+  props: IExampleComponentWithDatasetUrl
+): ReactElement {
+  const { thingUrl, property: propertyUrl } = props;
 
   const [exampleThing, setExampleThing] = useState<SolidFns.Thing>();
   const [property, setProperty] = useState<string>("fetching in progress");
@@ -75,22 +89,22 @@ function ExampleComponentWithDatasetUrl(): ReactElement {
 
   useEffect(() => {
     if (dataset) {
-      const thing = SolidFns.getThing(dataset, datasetUrl);
+      const thing = SolidFns.getThing(dataset, thingUrl);
       setExampleThing(thing);
     }
-  }, [dataset, datasetUrl]);
+  }, [dataset, thingUrl]);
 
   useEffect(() => {
     if (exampleThing) {
       const fetchedProperty = SolidFns.getStringUnlocalizedOne(
         exampleThing,
-        examplePredicate
+        propertyUrl
       );
       if (fetchedProperty) {
         setProperty(fetchedProperty);
       }
     }
-  }, [examplePredicate, exampleThing]);
+  }, [propertyUrl, exampleThing]);
 
   return (
     <div>

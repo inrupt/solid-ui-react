@@ -20,7 +20,6 @@
  */
 
 import React, { ReactElement, useContext, useState, useEffect } from "react";
-import { withKnobs, text } from "@storybook/addon-knobs";
 import * as SolidFns from "@inrupt/solid-client";
 import ThingContext from "../src/context/thingContext";
 import CombinedDataProvider from "../src/context/combinedDataContext";
@@ -29,8 +28,8 @@ import config from "./config";
 const { host } = config();
 
 export default {
-  title: "Providers/Combined Provider (name TBC)",
-  decorators: [withKnobs],
+  title: "Providers/Combined Data Provider",
+  component: CombinedDataProvider,
 };
 
 export function WithLocalData(): ReactElement {
@@ -46,24 +45,51 @@ export function WithLocalData(): ReactElement {
 
   return (
     <CombinedDataProvider dataset={dataSet} thing={exampleThing}>
-      <ExampleComponent />
+      <ExampleComponent propertyUrl={property} />
     </CombinedDataProvider>
   );
 }
 
-export function WithDataUrls(): ReactElement {
+WithLocalData.story = {
+  parameters: {
+    actions: { disable: true },
+    controls: { disable: true },
+  },
+};
+
+export function WithDataUrls({
+  datasetUrl,
+  thingUrl,
+  propertyUrl,
+}: {
+  datasetUrl: string;
+  thingUrl: string;
+  propertyUrl: string;
+}): ReactElement {
   return (
-    <CombinedDataProvider
-      datasetUrl={text("Dataset Url", `${host}/example.ttl`)}
-      thingUrl={text("Thing Url", `${host}/example.ttl#me`)}
-    >
-      <ExampleComponentFetchedData />
+    <CombinedDataProvider datasetUrl={datasetUrl} thingUrl={thingUrl}>
+      <ExampleComponentFetchedData propertyUrl={propertyUrl} />
     </CombinedDataProvider>
   );
 }
 
-function ExampleComponent(): ReactElement {
-  const examplePredicate = "http://xmlns.com/foaf/0.1/name";
+WithDataUrls.story = {
+  parameters: {
+    actions: { disable: true },
+  },
+};
+
+WithDataUrls.args = {
+  datasetUrl: `${host}/example.ttl`,
+  thingUrl: `${host}/example.ttl#me`,
+  propertyUrl: "http://xmlns.com/foaf/0.1/name",
+};
+
+function ExampleComponent({
+  propertyUrl,
+}: {
+  propertyUrl: string;
+}): ReactElement {
   const [property, setProperty] = useState<string>("fetching in progress");
 
   const thingContext = useContext(ThingContext);
@@ -73,13 +99,14 @@ function ExampleComponent(): ReactElement {
     if (thing) {
       const fetchedProperty = SolidFns.getStringUnlocalizedOne(
         thing,
-        examplePredicate
+        propertyUrl
       );
+
       if (fetchedProperty) {
         setProperty(fetchedProperty);
       }
     }
-  }, [examplePredicate, thing]);
+  }, [thing, propertyUrl]);
 
   return (
     <div>
@@ -88,11 +115,11 @@ function ExampleComponent(): ReactElement {
   );
 }
 
-function ExampleComponentFetchedData(): ReactElement {
-  const examplePredicate = text(
-    "Property",
-    "http://www.w3.org/2006/vcard/ns#organization-name"
-  );
+function ExampleComponentFetchedData({
+  propertyUrl,
+}: {
+  propertyUrl: string;
+}): ReactElement {
   const [property, setProperty] = useState<string>("fetching in progress");
 
   const thingContext = useContext(ThingContext);
@@ -102,13 +129,13 @@ function ExampleComponentFetchedData(): ReactElement {
     if (thing) {
       const fetchedProperty = SolidFns.getStringUnlocalizedOne(
         thing,
-        examplePredicate
+        propertyUrl
       );
       if (fetchedProperty) {
         setProperty(fetchedProperty);
       }
     }
-  }, [examplePredicate, thing]);
+  }, [propertyUrl, thing]);
 
   return (
     <div>

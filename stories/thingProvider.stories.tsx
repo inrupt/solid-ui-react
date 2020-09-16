@@ -20,7 +20,6 @@
  */
 
 import React, { ReactElement, useContext, useState, useEffect } from "react";
-import { withKnobs, text } from "@storybook/addon-knobs";
 import * as SolidFns from "@inrupt/solid-client";
 import { DatasetProvider } from "../src/context/datasetContext";
 import ThingContext, { ThingProvider } from "../src/context/thingContext";
@@ -30,7 +29,7 @@ const { host } = config();
 
 export default {
   title: "Providers/Thing Provider",
-  decorators: [withKnobs],
+  component: ThingProvider,
 };
 
 export function WithLocalThing(): ReactElement {
@@ -50,14 +49,17 @@ export function WithLocalThing(): ReactElement {
   );
 }
 
-export function WithThingUrl(): ReactElement {
+interface IWithThingUrl {
+  datasetUrl: string;
+  thingUrl: string;
+  property: string;
+}
+
+export function WithThingUrl(props: IWithThingUrl): ReactElement {
+  const { datasetUrl, thingUrl, property } = props;
   const [litDataset, setLitDataset] = useState<
     SolidFns.LitDataset & SolidFns.WithResourceInfo
   >();
-
-  const datasetUrl = text("Dataset Url", `${host}/example.ttl`);
-
-  const thingUrl = text("Thing Url", `${host}/example.ttl#me`);
 
   const setDataset = async (url: string) => {
     await SolidFns.fetchLitDataset(url).then((result) => {
@@ -74,7 +76,7 @@ export function WithThingUrl(): ReactElement {
     return (
       <DatasetProvider dataset={litDataset}>
         <ThingProvider thingUrl={thingUrl}>
-          <ExampleComponentWithThingUrl />
+          <ExampleComponentWithThingUrl property={property} />
         </ThingProvider>
       </DatasetProvider>
     );
@@ -82,11 +84,21 @@ export function WithThingUrl(): ReactElement {
   return <span>no dataset</span>;
 }
 
-function ExampleComponentWithThingUrl(): ReactElement {
-  const examplePredicate = text(
-    "Property",
-    "http://www.w3.org/2006/vcard/ns#note"
-  );
+WithThingUrl.args = {
+  datasetUrl: `${host}/example.ttl`,
+  thingUrl: `${host}/example.ttl#me`,
+  property: "http://www.w3.org/2006/vcard/ns#note",
+};
+
+interface IExampleComponentWithThingUrl {
+  property?: string;
+}
+
+function ExampleComponentWithThingUrl(
+  props: IExampleComponentWithThingUrl
+): ReactElement {
+  const { property: propertyUrl } = props;
+
   const [property, setProperty] = useState<string>("fetching in progress");
 
   const thingContext = useContext(ThingContext);
@@ -96,13 +108,14 @@ function ExampleComponentWithThingUrl(): ReactElement {
     if (thing) {
       const fetchedProperty = SolidFns.getStringUnlocalizedOne(
         thing,
-        examplePredicate
+        propertyUrl as string
       );
+
       if (fetchedProperty) {
         setProperty(fetchedProperty);
       }
     }
-  }, [examplePredicate, thing]);
+  }, [propertyUrl, thing]);
 
   return (
     <div>
@@ -110,6 +123,10 @@ function ExampleComponentWithThingUrl(): ReactElement {
     </div>
   );
 }
+
+ExampleComponentWithThingUrl.defaultProps = {
+  property: "http://www.w3.org/2006/vcard/ns#note",
+};
 
 function ExampleComponentWithThing(): ReactElement {
   const [property, setProperty] = useState<string>("fetching in progress");

@@ -21,7 +21,6 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
-import { withKnobs, text, boolean, object } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
 import Text from "../src/components/text";
 import { DatasetProvider } from "../src/context/datasetContext";
@@ -33,22 +32,36 @@ const { host } = config();
 export default {
   title: "Components/Text",
   component: Text,
-  decorators: [withKnobs],
 };
 
-const inputOptions = {
+const defaultInputOptions = {
   type: "text",
   name: "test-name",
   className: "test-class",
 };
 
-export function BasicExample(): ReactElement {
-  const examplePredicate = `http://xmlns.com/foaf/0.1/name`;
+// Not sure why this is complaining.
+/* eslint react/no-unused-prop-types: 0 */
+interface IText {
+  property: string;
+  autosave: boolean;
+  edit: boolean;
+  inputProps: any;
+  datasetUrl: string;
+  thingUrl: string;
+}
+
+export function BasicExample({
+  autosave,
+  edit,
+  inputProps,
+  property,
+}: IText): ReactElement {
   const exampleNick = "example value";
 
   const exampleThing = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
-    examplePredicate,
+    property,
     exampleNick
   );
 
@@ -61,17 +74,29 @@ export function BasicExample(): ReactElement {
     <Text
       dataSet={exampleDataSet}
       thing={exampleThing}
-      property={examplePredicate}
-      autosave={boolean("Autosave", false)}
-      edit={boolean("Edit", false)}
-      inputProps={object("Input options", inputOptions)}
+      property={property}
+      autosave={autosave}
+      edit={edit}
+      inputProps={inputProps}
       onError={action("OnError")}
       onSave={action("onSave")}
     />
   );
 }
 
-export function WithLocalData(): ReactElement {
+BasicExample.args = {
+  autosave: false,
+  edit: false,
+  inputProps: { ...defaultInputOptions },
+  property: "http://xmlns.com/foaf/0.1/name",
+};
+
+export function WithLocalData({
+  autosave,
+  edit,
+  inputProps,
+  property,
+}: IText): ReactElement {
   const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
   const exampleNick = "example value";
 
@@ -91,29 +116,53 @@ export function WithLocalData(): ReactElement {
       dataSet={exampleDataSet}
       thing={exampleThing}
       property={examplePredicate}
-      edit={boolean("Edit", false)}
-      autosave={boolean("Autosave", false)}
-      saveDatasetTo={text("Save Dataset to URL", `${host}/example.ttl`)}
-      inputProps={object("Input options", inputOptions)}
+      edit={edit}
+      autosave={autosave}
+      saveDatasetTo={`${host}/example.ttl`}
+      inputProps={inputProps}
       onError={action("OnError")}
       onSave={action("onSave")}
     />
   );
 }
 
-export function WithFetchedData(): ReactElement {
+WithLocalData.args = {
+  autosave: false,
+  edit: false,
+  inputProps: { ...defaultInputOptions },
+  property: "http://xmlns.com/foaf/0.1/name",
+};
+
+export function WithFetchedData({
+  autosave,
+  edit,
+  property,
+  inputProps,
+  datasetUrl,
+  thingUrl,
+}: IText): ReactElement {
   return (
-    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
-      <ThingProvider thingUrl={text("Thing Url", `${host}/example.ttl#me`)}>
+    <DatasetProvider datasetUrl={datasetUrl}>
+      <ThingProvider thingUrl={thingUrl}>
         <Text
-          property={text("property", "http://xmlns.com/foaf/0.1/name")}
-          edit={boolean("Edit", true)}
-          autosave={boolean("Autosave", true)}
-          saveDatasetTo="https://docs-example.inrupt.net/profile/card#me"
+          property={property}
+          edit={edit}
+          autosave={autosave}
+          saveDatasetTo={`${host}/example.ttl#me`}
           onError={action("OnError")}
           onSave={action("onSave")}
+          inputProps={inputProps}
         />
       </ThingProvider>
     </DatasetProvider>
   );
 }
+
+WithFetchedData.args = {
+  autosave: true,
+  edit: true,
+  inputProps: { ...defaultInputOptions },
+  property: "http://xmlns.com/foaf/0.1/name",
+  datasetUrl: `${host}/example.ttl`,
+  thingUrl: `${host}/example.ttl#me`,
+};

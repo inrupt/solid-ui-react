@@ -21,13 +21,6 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
-import {
-  withKnobs,
-  text,
-  boolean,
-  object,
-  select,
-} from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
 import { DataType } from "../src/helpers";
 import Value from "../src/components/value";
@@ -36,17 +29,6 @@ import { ThingProvider } from "../src/context/thingContext";
 import config from "./config";
 
 const { host } = config();
-
-export default {
-  title: "Components/Value",
-  component: Value,
-  decorators: [withKnobs],
-};
-
-const inputOptions = {
-  name: "test-name",
-  className: "test-class",
-};
 
 const dataTypeOptions: Array<DataType> = [
   "string",
@@ -57,18 +39,64 @@ const dataTypeOptions: Array<DataType> = [
   "url",
 ];
 
-export function String(): ReactElement {
-  const examplePredicate = `http://xmlns.com/foaf/0.1/name`;
+export default {
+  title: "Components/Value",
+  component: Value,
+  argTypes: {
+    dataType: {
+      control: {
+        type: "select",
+        options: {
+          string: "string",
+          boolean: "boolean",
+          datetime: "datetime",
+          decimal: "decimal",
+          integer: "integer",
+          url: "url",
+        },
+      },
+    },
+  },
+};
+
+const inputOptions = {
+  name: "test-name",
+  className: "test-class",
+};
+
+// No idea why this is complaining.
+/* eslint react/no-unused-prop-types: 0 */
+interface IValue {
+  datasetUrl: string;
+  thingUrl: string;
+  property: string;
+  autosave: boolean;
+  edit: boolean;
+  inputProps: any;
+}
+
+const defaultArgs = {
+  datasetUrl: `${host}/example.ttl`,
+  thingUrl: `${host}/example.ttl#me`,
+  property: "http://xmlns.com/foaf/0.1/name",
+  autosave: false,
+  edit: false,
+  dataType: dataTypeOptions[1],
+  inputOptions,
+};
+
+export function String(props: IValue): ReactElement {
+  const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
 
   return (
-    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
-      <ThingProvider thingUrl={text("Thing Url", `${host}/example.ttl#me`)}>
+    <DatasetProvider datasetUrl={datasetUrl}>
+      <ThingProvider thingUrl={thingUrl}>
         <Value
           dataType="string"
-          property={text("Property", examplePredicate)}
-          autosave={boolean("Autosave", false)}
-          edit={boolean("Edit", false)}
-          inputProps={object("Input options", inputOptions)}
+          property={property}
+          autosave={autosave}
+          edit={edit}
+          inputProps={inputProps}
           onError={action("OnError")}
           onSave={action("onSave")}
         />
@@ -77,20 +105,22 @@ export function String(): ReactElement {
   );
 }
 
-export function Boolean(): ReactElement {
-  const examplePredicate = `http://schema.org/isAccessibleForFree`;
+String.args = {
+  ...defaultArgs,
+};
+
+export function Boolean(props: IValue): ReactElement {
+  const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
 
   return (
-    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
-      <ThingProvider
-        thingUrl={text("Thing Url", `${host}/example.ttl#exampleImage`)}
-      >
+    <DatasetProvider datasetUrl={datasetUrl}>
+      <ThingProvider thingUrl={thingUrl}>
         <Value
           dataType="boolean"
-          property={text("Property", examplePredicate)}
-          autosave={boolean("Autosave", false)}
-          edit={boolean("Edit", false)}
-          inputProps={object("Input options", inputOptions)}
+          property={property}
+          autosave={autosave}
+          edit={edit}
+          inputProps={inputProps}
           onError={action("OnError")}
           onSave={action("onSave")}
         />
@@ -99,20 +129,23 @@ export function Boolean(): ReactElement {
   );
 }
 
-export function Datetime(): ReactElement {
-  const examplePredicate = `http://schema.org/datePublished`;
+Boolean.args = {
+  ...defaultArgs,
+  thingUrl: `${host}/example.ttl#exampleImage`,
+};
+
+export function Datetime(props: IValue): ReactElement {
+  const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
 
   return (
-    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
-      <ThingProvider
-        thingUrl={text("Thing Url", `${host}/example.ttl#exampleImage`)}
-      >
+    <DatasetProvider datasetUrl={datasetUrl}>
+      <ThingProvider thingUrl={thingUrl}>
         <Value
           dataType="datetime"
-          property={text("Property", examplePredicate)}
-          autosave={boolean("Autosave", false)}
-          edit={boolean("Edit", false)}
-          inputProps={object("Input options", inputOptions)}
+          property={property}
+          autosave={autosave}
+          edit={edit}
+          inputProps={inputProps}
           onError={action("OnError")}
           onSave={action("onSave")}
         />
@@ -121,20 +154,24 @@ export function Datetime(): ReactElement {
   );
 }
 
-export function Decimal(): ReactElement {
-  const examplePredicate = `http://schema.org/version`;
+Datetime.args = {
+  ...defaultArgs,
+  thingUrl: `${host}/example.ttl#exampleImage`,
+  property: `http://schema.org/datePublished`,
+};
+
+export function Decimal(props: IValue): ReactElement {
+  const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
 
   return (
-    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
-      <ThingProvider
-        thingUrl={text("Thing Url", `${host}/example.ttl#exampleImage`)}
-      >
+    <DatasetProvider datasetUrl={datasetUrl}>
+      <ThingProvider thingUrl={thingUrl}>
         <Value
           dataType="decimal"
-          property={text("Property", examplePredicate)}
-          autosave={boolean("Autosave", false)}
-          edit={boolean("Edit", false)}
-          inputProps={object("Input options", inputOptions)}
+          property={property}
+          autosave={autosave}
+          edit={edit}
+          inputProps={inputProps}
           onError={action("OnError")}
           onSave={action("onSave")}
         />
@@ -143,20 +180,24 @@ export function Decimal(): ReactElement {
   );
 }
 
-export function Integer(): ReactElement {
-  const examplePredicate = `http://schema.org/copyrightYear`;
+Decimal.args = {
+  ...defaultArgs,
+  property: "http://schema.org/version",
+  thingUrl: `${host}/example.ttl#exampleImage`,
+};
+
+export function Integer(props: IValue): ReactElement {
+  const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
 
   return (
-    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
-      <ThingProvider
-        thingUrl={text("Thing Url", `${host}/example.ttl#exampleImage`)}
-      >
+    <DatasetProvider datasetUrl={datasetUrl}>
+      <ThingProvider thingUrl={thingUrl}>
         <Value
           dataType="integer"
-          property={text("Property", examplePredicate)}
-          autosave={boolean("Autosave", false)}
-          edit={boolean("Edit", false)}
-          inputProps={object("Input options", inputOptions)}
+          property={property}
+          autosave={autosave}
+          edit={edit}
+          inputProps={inputProps}
           onError={action("OnError")}
           onSave={action("onSave")}
         />
@@ -165,20 +206,24 @@ export function Integer(): ReactElement {
   );
 }
 
-export function Url(): ReactElement {
-  const examplePredicate = `http://schema.org/url`;
+Integer.args = {
+  ...defaultArgs,
+  property: "http://schema.org/copyrightYear",
+  thingUrl: `${host}/example.ttl#exampleImage`,
+};
+
+export function Url(props: IValue): ReactElement {
+  const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
 
   return (
-    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
-      <ThingProvider
-        thingUrl={text("Thing Url", `${host}/example.ttl#exampleImage`)}
-      >
+    <DatasetProvider datasetUrl={datasetUrl}>
+      <ThingProvider thingUrl={thingUrl}>
         <Value
           dataType="url"
-          property={text("Property", examplePredicate)}
-          autosave={boolean("Autosave", false)}
-          edit={boolean("Edit", false)}
-          inputProps={object("Input options", inputOptions)}
+          property={property}
+          autosave={autosave}
+          edit={edit}
+          inputProps={inputProps}
           onError={action("OnError")}
           onSave={action("onSave")}
         />
@@ -187,13 +232,21 @@ export function Url(): ReactElement {
   );
 }
 
-export function WithUnsavedData(): ReactElement {
-  const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
+Url.args = {
+  ...defaultArgs,
+  property: "http://schema.org/url",
+  thingUrl: `${host}/example.ttl#exampleImage`,
+};
+
+export function WithUnsavedData(
+  props: IValue & { saveDatasetTo: string }
+): ReactElement {
+  const { property, autosave, edit, inputProps, saveDatasetTo } = props;
   const exampleNick = "example value";
 
   const exampleThing = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
-    examplePredicate,
+    property,
     exampleNick
   );
 
@@ -207,27 +260,39 @@ export function WithUnsavedData(): ReactElement {
       dataType="string"
       dataSet={exampleDataSet}
       thing={exampleThing}
-      property={text("Property", examplePredicate)}
-      edit={boolean("Edit", false)}
-      autosave={boolean("Autosave", false)}
-      saveDatasetTo={text("Save Dataset to URL", `${host}/example.ttl`)}
-      inputProps={object("Input options", inputOptions)}
+      property={property}
+      edit={edit}
+      autosave={autosave}
+      saveDatasetTo={saveDatasetTo}
+      inputProps={inputProps}
       onError={action("OnError")}
       onSave={action("onSave")}
     />
   );
 }
 
-export function WithFetchedData(): ReactElement {
+export function WithFetchedData(
+  props: IValue & { saveDatasetTo: string; dataType: any }
+): ReactElement {
+  const {
+    datasetUrl,
+    thingUrl,
+    property,
+    autosave,
+    edit,
+    dataType,
+    saveDatasetTo,
+  } = props;
+
   return (
-    <DatasetProvider datasetUrl={text("Dataset Url", `${host}/example.ttl`)}>
-      <ThingProvider thingUrl={text("Thing Url", `${host}/example.ttl#me`)}>
+    <DatasetProvider datasetUrl={datasetUrl}>
+      <ThingProvider thingUrl={thingUrl}>
         <Value
-          dataType={select("dataType", dataTypeOptions, "string")}
-          property={text("property", "http://xmlns.com/foaf/0.1/name")}
-          edit={boolean("Edit", true)}
-          autosave={boolean("Autosave", true)}
-          saveDatasetTo={text("Save Dataset to URL", `${host}/example.ttl`)}
+          dataType={dataType}
+          property={property}
+          edit={edit}
+          autosave={autosave}
+          saveDatasetTo={saveDatasetTo}
           onError={action("OnError")}
           onSave={action("onSave")}
         />
