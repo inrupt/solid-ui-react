@@ -1,3 +1,12 @@
+## 0.11.3 ( September 17, 2020 )
+
+### Changed
+
+- Added type for `useSession` return value
+- Updated decimal and datetime `<Value>` types to add "step="any" by default
+- Reduced bundle size (making react-table and swr external imports)
+- Upgraded to storybook 6
+
 ## 0.11.2 ( September 15, 2020 )
 
 ### Changed
