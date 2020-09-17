@@ -41,14 +41,14 @@ const defaultInputOptions = {
 };
 
 // Not sure why this is complaining.
-/* eslint react/no-unused-prop-types: 0 */
+/* eslint react/require-default-props: 0, react/no-unused-prop-types: 0 */
 interface IText {
   property: string;
   autosave: boolean;
   edit: boolean;
   inputProps: any;
-  datasetUrl: string;
-  thingUrl: string;
+  datasetUrl?: string;
+  thingUrl?: string;
 }
 
 export function BasicExample({
@@ -95,7 +95,6 @@ export function WithLocalData({
   autosave,
   edit,
   inputProps,
-  property,
 }: IText): ReactElement {
   const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
   const exampleNick = "example value";
@@ -142,8 +141,8 @@ export function WithFetchedData({
   thingUrl,
 }: IText): ReactElement {
   return (
-    <DatasetProvider datasetUrl={datasetUrl}>
-      <ThingProvider thingUrl={thingUrl}>
+    <DatasetProvider datasetUrl={datasetUrl as string}>
+      <ThingProvider thingUrl={thingUrl as string}>
         <Text
           property={property}
           edit={edit}
