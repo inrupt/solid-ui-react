@@ -21,7 +21,6 @@
 
 import React, { ReactElement, useContext } from "react";
 import * as SolidFns from "@inrupt/solid-client";
-import { withKnobs, text } from "@storybook/addon-knobs";
 import DatasetContext, { DatasetProvider } from "../src/context/datasetContext";
 import { Table, TableColumn } from "../src/components/table";
 import config from "./config";
@@ -31,7 +30,6 @@ const { host } = config();
 export default {
   title: "Components/Table",
   component: Table,
-  decorators: [withKnobs],
 };
 
 export function BasicExample(): ReactElement {
@@ -263,7 +261,13 @@ export function SortableColumns(): ReactElement {
   );
 }
 
-export function FilterOnFirstColumn(): ReactElement {
+interface IFilterOnFirstColumn {
+  filter: string;
+}
+
+export function FilterOnFirstColumn({
+  filter,
+}: IFilterOnFirstColumn): ReactElement {
   const namePredicate = `http://xmlns.com/foaf/0.1/name`;
   const datePredicate = `http://schema.org/datePublished`;
 
@@ -289,10 +293,14 @@ export function FilterOnFirstColumn(): ReactElement {
     <Table
       things={[thing1, thing2]}
       style={{ border: "1px solid black" }}
-      filter={text("Filter", "example name 2")}
+      filter={filter}
     >
       <TableColumn property={namePredicate} header="Name" filterable />
       <TableColumn property={datePredicate} dataType="datetime" />
     </Table>
   );
 }
+
+FilterOnFirstColumn.args = {
+  filter: "name 2",
+};

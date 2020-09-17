@@ -53,7 +53,7 @@ describe("Video component", () => {
         <Video thing={mockThing} property={mockProperty} title={mockTitle} />
       );
       await waitFor(() =>
-        expect(getByTitle("").getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
       );
       expect(asFragment()).toMatchSnapshot();
     });

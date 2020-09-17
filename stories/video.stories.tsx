@@ -21,13 +21,11 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
-import { withKnobs, boolean, number } from "@storybook/addon-knobs";
 import Video from "../src/components/video";
 
 export default {
   title: "Components/Video",
   component: Video,
-  decorators: [withKnobs],
 };
 
 export function EditFalse(): ReactElement {
@@ -42,7 +40,15 @@ export function EditFalse(): ReactElement {
   return <Video thing={exampleThing} property={exampleProperty} />;
 }
 
-export function EditTrue(): ReactElement {
+export function EditTrue({
+  edit,
+  autosave,
+  maxSize,
+}: {
+  edit: boolean;
+  autosave: boolean;
+  maxSize: number;
+}): ReactElement {
   const exampleUrl =
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
   const exampleProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
@@ -55,9 +61,15 @@ export function EditTrue(): ReactElement {
     <Video
       thing={exampleThing}
       property={exampleProperty}
-      edit={boolean("Edit", true)}
-      autosave={boolean("Autosave", true)}
-      maxSize={number("Max Size", 100)}
+      edit={edit}
+      autosave={autosave}
+      maxSize={maxSize}
     />
   );
 }
+
+EditTrue.args = {
+  edit: true,
+  autosave: true,
+  maxSize: 100,
+};

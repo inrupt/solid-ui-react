@@ -20,9 +20,16 @@
  */
 
 import { useContext } from "react";
+import { Session } from "@inrupt/solid-client-authn-browser";
 import SessionContext from "../../context/sessionContext";
 
-export default function useSession(): any {
+export interface SessionInfo {
+  session: Session;
+  sessionRequestInProgress: boolean;
+  fetch: typeof window.fetch;
+}
+
+export default function useSession(): SessionInfo {
   const { session, sessionRequestInProgress, fetch } = useContext(
     SessionContext
   );

@@ -1,14 +1,9 @@
 module.exports = {
   stories: [
-    '../stories/**/*.stories.tsx'
+    '../stories/**/*.stories.(tsx|mdx)',
   ],
   addons: [
-    '@storybook/addon-actions',
-    '@storybook/addon-knobs/',
-    '@storybook/addon-links',
-    '@storybook/addon-docs',
-    '@storybook/preset-typescript',
-    '@storybook/addon-storysource',
+    '@storybook/addon-essentials',
   ],
   webpackFinal: async config => {
     return config;

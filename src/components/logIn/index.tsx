@@ -20,7 +20,7 @@
  */
 
 import React, { useContext } from "react";
-import { ILoginInputOptions } from "@inrupt/solid-client-authn-browser";
+import { ILoginInputOptions } from "@inrupt/solid-client-authn-core";
 import SessionContext from "../../context/sessionContext";
 
 export interface Props {

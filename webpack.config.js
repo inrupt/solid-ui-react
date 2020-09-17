@@ -30,5 +30,7 @@ module.exports = {
     "@inrupt/solid-client-authn-browser",
     "@material-ui/core",
     "react",
+    "react-table",
+    "swr",
   ],
 };
