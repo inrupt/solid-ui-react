@@ -54,8 +54,24 @@ export function BasicExample(): ReactElement {
     new Date("1999-01-02")
   );
 
+  const emptyDataset = SolidFns.createSolidDataset();
+  const datasetWithThing1 = SolidFns.setThing(emptyDataset, thing1);
+  const dataset = SolidFns.setThing(datasetWithThing1, thing2);
+
   return (
-    <Table things={[thing1, thing2]} style={{ border: "1px solid black" }}>
+    <Table
+      things={[
+        {
+          dataset,
+          thing: thing1,
+        },
+        {
+          dataset,
+          thing: thing2,
+        },
+      ]}
+      style={{ border: "1px solid black" }}
+    >
       <TableColumn property={namePredicate} />
       <TableColumn property={datePredicate} dataType="datetime" />
     </Table>
@@ -98,8 +114,24 @@ export function MultipleValues(): ReactElement {
     `example nickname 2`
   );
 
+  const emptyDataset = SolidFns.createSolidDataset();
+  const datasetWithThing1 = SolidFns.setThing(emptyDataset, thing1);
+  const dataset = SolidFns.setThing(datasetWithThing1, thing2);
+
   return (
-    <Table things={[thing1, thing2]} style={{ border: "1px solid black" }}>
+    <Table
+      things={[
+        {
+          dataset,
+          thing: thing1,
+        },
+        {
+          dataset,
+          thing: thing2,
+        },
+      ]}
+      style={{ border: "1px solid black" }}
+    >
       <TableColumn property={namePredicate} header="Name" />
       <TableColumn property={nickPredicate} header="Nickname" multiple />
     </Table>
@@ -128,6 +160,10 @@ export function CustomBodyComponent(): ReactElement {
     new Date("1999-01-02")
   );
 
+  const emptyDataset = SolidFns.createSolidDataset();
+  const datasetWithThing1 = SolidFns.setThing(emptyDataset, thing1);
+  const dataset = SolidFns.setThing(datasetWithThing1, thing2);
+
   type bodyProps = {
     value?: string;
   };
@@ -136,7 +172,19 @@ export function CustomBodyComponent(): ReactElement {
   };
 
   return (
-    <Table things={[thing1, thing2]} style={{ border: "1px solid black" }}>
+    <Table
+      things={[
+        {
+          dataset,
+          thing: thing1,
+        },
+        {
+          dataset,
+          thing: thing2,
+        },
+      ]}
+      style={{ border: "1px solid black" }}
+    >
       <TableColumn property={namePredicate} header="Name" />
       <TableColumn
         property={datePredicate}
@@ -190,7 +238,16 @@ export function NestedDataExample(): ReactElement {
 
     return (
       <Table
-        things={[personThing, alterEgoThing]}
+        things={[
+          {
+            dataset,
+            thing: personThing,
+          },
+          {
+            dataset,
+            thing: alterEgoThing,
+          },
+        ]}
         style={{ border: "1px solid black" }}
       >
         <TableColumn property={firstNameProperty} header="Name" />
@@ -253,8 +310,24 @@ export function SortableColumns(): ReactElement {
     new Date("1999-01-02")
   );
 
+  const emptyDataset = SolidFns.createSolidDataset();
+  const datasetWithThing1 = SolidFns.setThing(emptyDataset, thing1);
+  const dataset = SolidFns.setThing(datasetWithThing1, thing2);
+
   return (
-    <Table things={[thing1, thing2]} style={{ border: "1px solid black" }}>
+    <Table
+      things={[
+        {
+          dataset,
+          thing: thing1,
+        },
+        {
+          dataset,
+          thing: thing2,
+        },
+      ]}
+      style={{ border: "1px solid black" }}
+    >
       <TableColumn property={namePredicate} header="Name" sortable />
       <TableColumn property={datePredicate} dataType="datetime" sortable />
     </Table>
@@ -289,9 +362,22 @@ export function FilterOnFirstColumn({
     new Date("1999-01-02")
   );
 
+  const emptyDataset = SolidFns.createSolidDataset();
+  const datasetWithThing1 = SolidFns.setThing(emptyDataset, thing1);
+  const dataset = SolidFns.setThing(datasetWithThing1, thing2);
+
   return (
     <Table
-      things={[thing1, thing2]}
+      things={[
+        {
+          dataset,
+          thing: thing1,
+        },
+        {
+          dataset,
+          thing: thing2,
+        },
+      ]}
       style={{ border: "1px solid black" }}
       filter={filter}
     >

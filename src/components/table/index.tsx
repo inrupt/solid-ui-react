@@ -22,7 +22,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import React, { ReactElement, useMemo, Children, ReactNode } from "react";
-import { Thing, Url, UrlString } from "@inrupt/solid-client";
+import { SolidDataset, Thing, Url, UrlString } from "@inrupt/solid-client";
 import {
   useTable,
   Column,
@@ -33,6 +33,7 @@ import {
   HeaderProps,
 } from "react-table";
 import { DataType, getValueByType, getValueByTypeAll } from "../../helpers";
+import CombinedDataProvider from "../../context/combinedDataContext";
 
 export type TableColumnProps = {
   body?: Renderer<CellProps<any>>;
@@ -55,7 +56,7 @@ export interface TableProps
   children:
     | ReactElement<TableColumnProps>
     | Array<ReactElement<TableColumnProps>>;
-  things: Array<Thing>;
+  things: Array<{ dataset: SolidDataset; thing: Thing }>;
   filter?: string;
   ascIndicator?: ReactNode;
   descIndicator?: ReactNode;
@@ -97,8 +98,8 @@ export function Table({
       // add each each value to data
       things.forEach((thing, i) => {
         dataArray[i][`col${colIndex}`] = multiple
-          ? getValueByTypeAll(dataType, thing, property, locale)
-          : getValueByType(dataType, thing, property, locale);
+          ? getValueByTypeAll(dataType, thing.thing, property, locale)
+          : getValueByType(dataType, thing.thing, property, locale);
       });
     });
 
@@ -135,11 +136,17 @@ export function Table({
       <tbody {...getTableBodyProps()}>
         {rows.map((row) => {
           prepareRow(row);
+          const rowDataset = things[row.index].dataset;
+          const rowThing = things[row.index].thing;
           return (
             <tr {...row.getRowProps()}>
-              {row.cells.map((cell) => {
-                return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
-              })}
+              <CombinedDataProvider dataset={rowDataset} thing={rowThing}>
+                {row.cells.map((cell) => {
+                  return (
+                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                  );
+                })}
+              </CombinedDataProvider>
             </tr>
           );
         })}
