@@ -271,6 +271,11 @@ export function WithUnsavedData(
   );
 }
 
+WithUnsavedData.args = {
+  ...defaultArgs,
+  saveDatasetTo: `${host}/example.ttl`,
+};
+
 export function WithFetchedData(
   props: IValue & { saveDatasetTo: string; dataType: any }
 ): ReactElement {
