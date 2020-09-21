@@ -66,10 +66,19 @@ const thing2 = SolidFns.addStringNoLocale(
   `example nick 2`
 );
 
+const emptyDataset = SolidFns.createSolidDataset();
+const datasetWithThing1 = SolidFns.setThing(emptyDataset, thing1);
+const dataset = SolidFns.setThing(datasetWithThing1, thing2);
+
 describe("<Table /> component snapshot tests", () => {
   it("matches snapshot", () => {
     const documentBody = render(
-      <Table things={[thing1, thing2]}>
+      <Table
+        things={[
+          { dataset, thing: thing1 },
+          { dataset, thing: thing2 },
+        ]}
+      >
         <TableColumn property={namePredicate} header="Name" />
         <TableColumn property={nickPredicate} />
         <TableColumn property={booleanPredicate} dataType="boolean" />
@@ -102,7 +111,12 @@ describe("<Table /> component functional tests", () => {
   });
   it("uses property as header text unless header prop supplied", () => {
     const { getByText, queryByText } = render(
-      <Table things={[thing1, thing2]}>
+      <Table
+        things={[
+          { dataset, thing: thing1 },
+          { dataset, thing: thing2 },
+        ]}
+      >
         <TableColumn property={namePredicate} header="Name" />
         <TableColumn property={nickPredicate} />
       </Table>
@@ -115,7 +129,12 @@ describe("<Table /> component functional tests", () => {
 
   it("does not sort columns without sortable prop", () => {
     const { getByText, queryByText } = render(
-      <Table things={[thing1, thing2]}>
+      <Table
+        things={[
+          { dataset, thing: thing1 },
+          { dataset, thing: thing2 },
+        ]}
+      >
         <TableColumn property={namePredicate} />
       </Table>
     );
@@ -126,7 +145,12 @@ describe("<Table /> component functional tests", () => {
 
   it("updates header when sorting", () => {
     const { getByText, queryByText } = render(
-      <Table things={[thing1, thing2]}>
+      <Table
+        things={[
+          { dataset, thing: thing1 },
+          { dataset, thing: thing2 },
+        ]}
+      >
         <TableColumn property={namePredicate} header="Name" sortable />
       </Table>
     );
@@ -149,7 +173,12 @@ describe("<Table /> component functional tests", () => {
     };
 
     const { getAllByText } = render(
-      <Table things={[thing1, thing2]}>
+      <Table
+        things={[
+          { dataset, thing: thing1 },
+          { dataset, thing: thing2 },
+        ]}
+      >
         <TableColumn property={namePredicate} body={CustomBodyComponent} />
       </Table>
     );
@@ -160,7 +189,13 @@ describe("<Table /> component functional tests", () => {
   it("does not filter by columns not marked as filterable", () => {
     const filterTerm = "example name 1";
     const { queryByText } = render(
-      <Table things={[thing1, thing2]} filter={filterTerm}>
+      <Table
+        things={[
+          { dataset, thing: thing1 },
+          { dataset, thing: thing2 },
+        ]}
+        filter={filterTerm}
+      >
         <TableColumn property={namePredicate} />
       </Table>
     );
@@ -172,7 +207,13 @@ describe("<Table /> component functional tests", () => {
     const filterTerm = "example name 1";
     const excludedRowText = "example name 2";
     const { getByText, queryByText } = render(
-      <Table things={[thing1, thing2]} filter={filterTerm}>
+      <Table
+        things={[
+          { dataset, thing: thing1 },
+          { dataset, thing: thing2 },
+        ]}
+        filter={filterTerm}
+      >
         <TableColumn property={namePredicate} filterable />
       </Table>
     );
@@ -202,8 +243,17 @@ describe("<Table /> component functional tests", () => {
       nickPredicate,
       `multiple nick 2`
     );
+
+    const datasetWithMultiple = SolidFns.setThing(dataset, thingMultiple);
+
     const { getByText, queryByText } = render(
-      <Table things={[thing1, thing2, thingMultiple]}>
+      <Table
+        things={[
+          { dataset: datasetWithMultiple, thing: thing1 },
+          { dataset: datasetWithMultiple, thing: thing2 },
+          { dataset: datasetWithMultiple, thing: thingMultiple },
+        ]}
+      >
         <TableColumn property={namePredicate} filterable multiple />
         <TableColumn property={nickPredicate} filterable />
       </Table>
