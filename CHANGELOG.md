@@ -1,3 +1,9 @@
+## 1.0.0 ( September 21, 2020 )
+
+### Changed
+
+- Breaking change to Table - `things` prop now takes an array of objects `{ dataset, thing }`
+
 ## 0.11.3 ( September 17, 2020 )
 
 ### Changed
