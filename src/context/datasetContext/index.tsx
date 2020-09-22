@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { createContext, ReactElement, useState } from "react";
+import React, { createContext, ReactElement, useState, useEffect } from "react";
 import { LitDataset, WithResourceInfo, UrlString } from "@inrupt/solid-client";
 
 import useDataset from "../../hooks/useDataset";
@@ -69,9 +69,14 @@ export const DatasetProvider = ({
   // Provide a setDataset function so that child components can update.
   const [stateDataset, setDataset] = useState(datasetToUse);
 
+  // If the dataset is asynchronously loaded, make sure to set the new state value.
+  useEffect(() => {
+    setDataset(dataset);
+  }, [dataset]);
+
   return (
     <DatasetContext.Provider value={{ dataset: stateDataset, setDataset }}>
-      {datasetToUse ? children : loading || <span>Fetching data...</span>}
+      {stateDataset ? children : loading || <span>Fetching data...</span>}
     </DatasetContext.Provider>
   );
 };
