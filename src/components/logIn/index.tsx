@@ -21,7 +21,7 @@
 
 import React, { useContext } from "react";
 import { ILoginInputOptions } from "@inrupt/solid-client-authn-core";
-import SessionContext from "../../context/sessionContext";
+import { SessionContext } from "../../context/sessionContext";
 
 export interface Props {
   authOptions?: ILoginInputOptions;
@@ -31,7 +31,7 @@ export interface Props {
   redirectUrl: string;
 }
 
-const LoginButton: React.FC<Props> = (propsLogin: Props) => {
+export const LoginButton: React.FC<Props> = (propsLogin: Props) => {
   const {
     oidcIssuer,
     redirectUrl,
@@ -79,5 +79,3 @@ const LoginButton: React.FC<Props> = (propsLogin: Props) => {
     </button>
   );
 };
-
-export default LoginButton;

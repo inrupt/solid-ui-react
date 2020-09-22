@@ -73,7 +73,7 @@ function Name() {
   const webId = session.info.webId;
 
   <CombinedDataProvider datasetUrl={webId} thingUrl={webId}>
-    <Text property="http://www.w3.org/2006/vcard/ns#fn" />
+    <Text propertyUrl="http://www.w3.org/2006/vcard/ns#fn" />
   </CombinedDataProvider>
 }
 ```
@@ -95,7 +95,7 @@ function Name() {
   const webId = session.info.webId;
 
   <CombinedDataProvider datasetUrl={webId} thingUrl={webId}>
-    <Text property="http://www.w3.org/2006/vcard/ns#fn" edit autosave />
+    <Text propertyUrl="http://www.w3.org/2006/vcard/ns#fn" edit autosave />
   </CombinedDataProvider>
 }
 ```

@@ -49,11 +49,9 @@ export function WithLocalDataset(): ReactElement {
   );
 }
 
-WithLocalDataset.story = {
-  parameters: {
-    actions: { disable: true },
-    controls: { disable: true },
-  },
+WithLocalDataset.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
 };
 
 interface IWithDatasetUrl {
@@ -72,10 +70,8 @@ export function WithDatasetUrl(props: IWithDatasetUrl): ReactElement {
   );
 }
 
-WithDatasetUrl.story = {
-  parameters: {
-    actions: { disable: true },
-  },
+WithDatasetUrl.parameters = {
+  actions: { disable: true },
 };
 
 WithDatasetUrl.args = {

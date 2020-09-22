@@ -78,11 +78,9 @@ export function BasicExample(): ReactElement {
   );
 }
 
-BasicExample.story = {
-  parameters: {
-    actions: { disable: true },
-    controls: { disable: true },
-  },
+BasicExample.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
 };
 
 export function MultipleValues(): ReactElement {
@@ -145,11 +143,9 @@ export function MultipleValues(): ReactElement {
   );
 }
 
-MultipleValues.story = {
-  parameters: {
-    actions: { disable: true },
-    controls: { disable: true },
-  },
+MultipleValues.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
 };
 
 export function CustomBodyComponent(): ReactElement {
@@ -209,11 +205,9 @@ export function CustomBodyComponent(): ReactElement {
   );
 }
 
-CustomBodyComponent.story = {
-  parameters: {
-    actions: { disable: true },
-    controls: { disable: true },
-  },
+CustomBodyComponent.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
 };
 
 export function NestedDataExample(): ReactElement {
@@ -309,11 +303,9 @@ export function NestedDataExample(): ReactElement {
   );
 }
 
-NestedDataExample.story = {
-  parameters: {
-    actions: { disable: true },
-    controls: { disable: true },
-  },
+NestedDataExample.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
 };
 
 export function SortableColumns(): ReactElement {
@@ -362,11 +354,9 @@ export function SortableColumns(): ReactElement {
   );
 }
 
-SortableColumns.story = {
-  parameters: {
-    actions: { disable: true },
-    controls: { disable: true },
-  },
+SortableColumns.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
 };
 
 interface IFilterOnFirstColumn {
@@ -426,8 +416,6 @@ FilterOnFirstColumn.args = {
   filter: "name 2",
 };
 
-FilterOnFirstColumn.story = {
-  parameters: {
-    actions: { disable: true },
-  },
+FilterOnFirstColumn.parameters = {
+  actions: { disable: true },
 };

@@ -22,7 +22,7 @@
 import React, { ReactElement, useState, useEffect, useContext } from "react";
 import { Thing, Url, UrlString, getUrl } from "@inrupt/solid-client";
 import { overwriteFile, retrieveFile } from "../../helpers";
-import SessionContext from "../../context/sessionContext";
+import { SessionContext } from "../../context/sessionContext";
 import ThingContext from "../../context/thingContext";
 
 export type Props = {
@@ -36,7 +36,7 @@ export type Props = {
   onError?: (error: Error) => void;
 } & React.ImgHTMLAttributes<HTMLImageElement>;
 
-export default function Image({
+export function Image({
   property,
   thing: propThing,
   edit,

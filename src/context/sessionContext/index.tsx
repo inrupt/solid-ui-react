@@ -54,13 +54,11 @@ export const buildSession = (sessionId: string): Session =>
     sessionId
   );
 
-const SessionContext = createContext<ISessionContext>({
+export const SessionContext = createContext<ISessionContext>({
   session: buildSession(""),
   sessionRequestInProgress: true,
   fetch: unauthenticatedFetch,
 });
-
-export default SessionContext;
 
 /* eslint react/require-default-props: 0 */
 export interface ISessionProvider {

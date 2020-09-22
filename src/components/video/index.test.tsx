@@ -23,7 +23,7 @@ import React from "react";
 import { render, waitFor, fireEvent } from "@testing-library/react";
 import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
-import Video from ".";
+import { Video } from ".";
 
 const mockTitle = "test video";
 const mockUrl = "http://test.url/video.mp4";

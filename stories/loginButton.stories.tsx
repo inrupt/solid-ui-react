@@ -22,7 +22,7 @@
 import React, { ReactElement } from "react";
 import { Button } from "@material-ui/core";
 import { SessionProvider } from "../src/context/sessionContext";
-import LoginButton from "../src/components/logIn";
+import { LoginButton } from "../src/components/logIn";
 
 export default {
   title: "Authentication/Login Button",

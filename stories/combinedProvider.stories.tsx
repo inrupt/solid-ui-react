@@ -50,11 +50,9 @@ export function WithLocalData(): ReactElement {
   );
 }
 
-WithLocalData.story = {
-  parameters: {
-    actions: { disable: true },
-    controls: { disable: true },
-  },
+WithLocalData.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
 };
 
 export function WithDataUrls({
@@ -73,10 +71,8 @@ export function WithDataUrls({
   );
 }
 
-WithDataUrls.story = {
-  parameters: {
-    actions: { disable: true },
-  },
+WithDataUrls.parameters = {
+  actions: { disable: true },
 };
 
 WithDataUrls.args = {

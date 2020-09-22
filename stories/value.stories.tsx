@@ -22,7 +22,7 @@
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
 import { DataType } from "../src/helpers";
-import Value from "../src/components/value";
+import { Value } from "../src/components/value";
 import { DatasetProvider } from "../src/context/datasetContext";
 import { ThingProvider } from "../src/context/thingContext";
 import config from "./config";

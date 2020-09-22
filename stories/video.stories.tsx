@@ -21,7 +21,7 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
-import Video from "../src/components/video";
+import { Video } from "../src/components/video";
 
 export default {
   title: "Components/Video",
@@ -40,10 +40,8 @@ export function EditFalse(): ReactElement {
   return <Video thing={exampleThing} property={exampleProperty} />;
 }
 
-EditFalse.story = {
-  parameters: {
-    actions: { disable: true },
-  },
+EditFalse.parameters = {
+  actions: { disable: true },
 };
 
 export function EditTrue({
@@ -80,8 +78,6 @@ EditTrue.args = {
   maxSize: 100,
 };
 
-EditTrue.story = {
-  parameters: {
-    actions: { disable: true },
-  },
+EditTrue.parameters = {
+  actions: { disable: true },
 };

@@ -23,7 +23,7 @@ import React from "react";
 import { render, waitFor, fireEvent } from "@testing-library/react";
 import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
-import Image from ".";
+import { Image } from ".";
 
 const mockAlt = "test img";
 const mockUrl = "http://test.url/image.png";

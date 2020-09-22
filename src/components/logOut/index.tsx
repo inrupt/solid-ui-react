@@ -20,7 +20,7 @@
  */
 
 import React, { useContext } from "react";
-import SessionContext from "../../context/sessionContext";
+import { SessionContext } from "../../context/sessionContext";
 
 export interface Props {
   onLogout?(): void;
@@ -28,7 +28,7 @@ export interface Props {
   children?: React.ReactElement;
 }
 
-const LogoutButton: React.FC<Props> = (propsLogout: Props) => {
+export const LogoutButton: React.FC<Props> = (propsLogout: Props) => {
   const { session } = useContext(SessionContext);
   const { children, onLogout, onError } = propsLogout;
   async function LogoutHandler() {
@@ -54,5 +54,3 @@ const LogoutButton: React.FC<Props> = (propsLogout: Props) => {
     </button>
   );
 };
-
-export default LogoutButton;

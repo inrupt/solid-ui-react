@@ -21,7 +21,7 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
-import Link from "../src/components/link";
+import { Link } from "../src/components/link";
 
 export default {
   title: "Components/Link",
@@ -46,10 +46,8 @@ WithChildren.args = {
   property: "http://xmlns.com/foaf/0.1/homepage",
 };
 
-WithChildren.story = {
-  parameters: {
-    actions: { disable: true },
-  },
+WithChildren.parameters = {
+  actions: { disable: true },
 };
 
 export function WithoutChildren({
@@ -66,10 +64,8 @@ export function WithoutChildren({
   return <Link thing={exampleThing} property={property} />;
 }
 
-WithoutChildren.story = {
-  parameters: {
-    actions: { disable: true },
-  },
+WithoutChildren.parameters = {
+  actions: { disable: true },
 };
 
 WithoutChildren.args = {

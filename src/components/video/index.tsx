@@ -22,7 +22,7 @@
 import React, { ReactElement, useEffect, useState, useContext } from "react";
 import { Thing, Url, UrlString, getUrl } from "@inrupt/solid-client";
 import { retrieveFile, overwriteFile } from "../../helpers";
-import SessionContext from "../../context/sessionContext";
+import { SessionContext } from "../../context/sessionContext";
 import ThingContext from "../../context/thingContext";
 
 export type Props = {
@@ -36,7 +36,7 @@ export type Props = {
   onError?: (error: Error) => void;
 } & React.VideoHTMLAttributes<HTMLVideoElement>;
 
-export default function Image({
+export function Video({
   property,
   thing: propThing,
   edit,

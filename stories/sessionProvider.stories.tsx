@@ -20,14 +20,15 @@
  */
 
 import React, { ReactElement, useContext, useState } from "react";
-import SessionContext, { SessionProvider } from "../src/context/sessionContext";
-import LoginButton from "../src/components/logIn";
-import LogoutButton from "../src/components/logOut";
-import Text from "../src/components/text";
+import { SessionContext, SessionProvider } from "../src/context/sessionContext";
+import { LoginButton } from "../src/components/logIn";
+import { LogoutButton } from "../src/components/logOut";
+import { Text } from "../src/components/text";
 import CombinedDataProvider from "../src/context/combinedDataContext";
 
 export default {
   title: "Authentication/Session Provider",
+  component: SessionProvider,
 };
 
 export function ProviderWithHook(): ReactElement {
@@ -52,11 +53,9 @@ export function ProviderWithHook(): ReactElement {
   );
 }
 
-ProviderWithHook.story = {
-  parameters: {
-    actions: { disable: true },
-    controls: { disable: true },
-  },
+ProviderWithHook.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
 };
 
 function Dashboard(): ReactElement {

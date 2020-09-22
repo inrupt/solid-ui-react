@@ -21,7 +21,7 @@
 
 import React, { ReactElement } from "react";
 import { addUrl, createThing } from "@inrupt/solid-client";
-import Image from "../src/components/image";
+import { Image } from "../src/components/image";
 import CombinedDataProvider from "../src/context/combinedDataContext";
 import config from "./config";
 
@@ -39,11 +39,9 @@ export function BasicExample(): ReactElement {
   return <Image thing={thing} property={property} />;
 }
 
-BasicExample.story = {
-  parameters: {
-    actions: { disable: true },
-    controls: { disable: true },
-  },
+BasicExample.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
 };
 
 interface IWithDatasetProvider {
@@ -75,9 +73,7 @@ WithDatasetProvider.args = {
   maxSize: 100000000,
 };
 
-WithDatasetProvider.story = {
-  parameters: {
-    actions: { disable: true },
-    controls: { disable: true },
-  },
+WithDatasetProvider.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
 };

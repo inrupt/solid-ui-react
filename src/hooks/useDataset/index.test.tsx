@@ -25,7 +25,7 @@ import { SWRConfig, cache } from "swr";
 import * as SolidFns from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import DatasetContext from "../../context/datasetContext";
-import SessionContext from "../../context/sessionContext";
+import { SessionContext } from "../../context/sessionContext";
 import useDataset from ".";
 
 describe("useDataset() hook", () => {

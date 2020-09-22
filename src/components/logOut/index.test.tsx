@@ -23,7 +23,7 @@ import * as React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 
 import { SessionProvider } from "../../context/sessionContext";
-import LogoutButton from "./index";
+import { LogoutButton } from "./index";
 
 const onLogout = jest.fn();
 const onError = jest.fn();

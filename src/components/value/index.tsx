@@ -39,7 +39,7 @@ import {
 } from "@inrupt/solid-client";
 import DatasetContext from "../../context/datasetContext";
 import ThingContext from "../../context/thingContext";
-import SessionContext from "../../context/sessionContext";
+import { SessionContext } from "../../context/sessionContext";
 import { DataType, getValueByType } from "../../helpers";
 
 export type Props = {
@@ -56,7 +56,7 @@ export type Props = {
   onError?(error: Error): void | null;
 } & React.HTMLAttributes<HTMLSpanElement>;
 
-export default function Value({
+export function Value({
   thing: propThing,
   dataSet: propDataset,
   property,

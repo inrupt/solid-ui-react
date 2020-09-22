@@ -22,7 +22,7 @@
 import * as React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 
-import LoginButton from "./index";
+import { LoginButton } from "./index";
 import { SessionProvider } from "../../context/sessionContext";
 
 const onError = jest.fn().mockResolvedValue(null);

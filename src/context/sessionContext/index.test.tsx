@@ -22,7 +22,7 @@
 import * as React from "react";
 import { render, waitFor } from "@testing-library/react";
 import { ErrorBoundary } from "react-error-boundary";
-import SessionContext, { SessionProvider } from ".";
+import { SessionContext, SessionProvider } from ".";
 
 function ChildComponent(): React.ReactElement {
   const { session, sessionRequestInProgress } = React.useContext(
