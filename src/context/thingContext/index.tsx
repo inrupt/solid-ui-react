@@ -19,16 +19,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { createContext, ReactElement, useContext } from "react";
+import React, {
+  useState,
+  createContext,
+  ReactElement,
+  useContext,
+} from "react";
 import { Thing, UrlString, getThing } from "@inrupt/solid-client";
 import DatasetContext from "../datasetContext";
 
 export interface IThingContext {
   thing: Thing | undefined;
+  setThing: (thing: Thing) => void;
 }
 
 const ThingContext = createContext<IThingContext>({
   thing: undefined,
+  setThing: () => {},
 });
 
 export default ThingContext;
@@ -59,7 +66,12 @@ export const ThingProvider = ({
     thing = getThing(dataset, thingUrl);
   }
 
+  // Allow child components to update the thing
+  const [stateThing, setThing] = useState(thing);
+
   return (
-    <ThingContext.Provider value={{ thing }}>{children}</ThingContext.Provider>
+    <ThingContext.Provider value={{ thing: stateThing, setThing }}>
+      {children}
+    </ThingContext.Provider>
   );
 };

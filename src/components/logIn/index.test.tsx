@@ -101,10 +101,7 @@ describe("<LoginButton /> component functional testing", () => {
     );
 
     fireEvent.click(getByText("Log In"));
-    expect(session.login).toHaveBeenCalledWith({
-      oidcIssuer: new URL(oidcIssuer),
-      redirectUrl: new URL(redirectUrl),
-    });
+    expect(session.login).toHaveBeenCalledWith({ oidcIssuer, redirectUrl });
   });
 
   it("fires the onClick function and calls OnError", async () => {

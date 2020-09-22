@@ -44,7 +44,12 @@ describe("useDataset() hook", () => {
         session: {} as Session,
       }}
     >
-      <DatasetContext.Provider value={{ dataset: mockContextDataset }}>
+      <DatasetContext.Provider
+        value={{
+          dataset: mockContextDataset,
+          setDataset: () => {},
+        }}
+      >
         <SWRConfig value={{ dedupingInterval: 0 }}>{children}</SWRConfig>
       </DatasetContext.Provider>
     </SessionContext.Provider>

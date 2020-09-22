@@ -98,7 +98,12 @@ describe("useThing() hook", () => {
 
   it("should attempt to return thing from context if thing uri is not defined", async () => {
     const wrapper = ({ children }: { children: React.ReactNode }) => (
-      <ThingContext.Provider value={{ thing: mockContextThing }}>
+      <ThingContext.Provider
+        value={{
+          thing: mockContextThing,
+          setThing: () => {},
+        }}
+      >
         {children}
       </ThingContext.Provider>
     );

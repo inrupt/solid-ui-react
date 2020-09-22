@@ -85,7 +85,7 @@ const defaultArgs = {
   inputOptions,
 };
 
-export function String(props: IValue): ReactElement {
+export function StringValue(props: IValue): ReactElement {
   const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
 
   return (
@@ -105,11 +105,11 @@ export function String(props: IValue): ReactElement {
   );
 }
 
-String.args = {
+StringValue.args = {
   ...defaultArgs,
 };
 
-export function Boolean(props: IValue): ReactElement {
+export function BooleanValue(props: IValue): ReactElement {
   const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
 
   return (
@@ -129,12 +129,12 @@ export function Boolean(props: IValue): ReactElement {
   );
 }
 
-Boolean.args = {
+BooleanValue.args = {
   ...defaultArgs,
   thingUrl: `${host}/example.ttl#exampleImage`,
 };
 
-export function Datetime(props: IValue): ReactElement {
+export function DatetimeValue(props: IValue): ReactElement {
   const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
 
   return (
@@ -154,13 +154,13 @@ export function Datetime(props: IValue): ReactElement {
   );
 }
 
-Datetime.args = {
+DatetimeValue.args = {
   ...defaultArgs,
   thingUrl: `${host}/example.ttl#exampleImage`,
   property: `http://schema.org/datePublished`,
 };
 
-export function Decimal(props: IValue): ReactElement {
+export function DecimalValue(props: IValue): ReactElement {
   const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
 
   return (
@@ -180,13 +180,13 @@ export function Decimal(props: IValue): ReactElement {
   );
 }
 
-Decimal.args = {
+DecimalValue.args = {
   ...defaultArgs,
   property: "http://schema.org/version",
   thingUrl: `${host}/example.ttl#exampleImage`,
 };
 
-export function Integer(props: IValue): ReactElement {
+export function IntegerValue(props: IValue): ReactElement {
   const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
 
   return (
@@ -206,13 +206,13 @@ export function Integer(props: IValue): ReactElement {
   );
 }
 
-Integer.args = {
+IntegerValue.args = {
   ...defaultArgs,
   property: "http://schema.org/copyrightYear",
   thingUrl: `${host}/example.ttl#exampleImage`,
 };
 
-export function Url(props: IValue): ReactElement {
+export function UrlValue(props: IValue): ReactElement {
   const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
 
   return (
@@ -232,7 +232,7 @@ export function Url(props: IValue): ReactElement {
   );
 }
 
-Url.args = {
+UrlValue.args = {
   ...defaultArgs,
   property: "http://schema.org/url",
   thingUrl: `${host}/example.ttl#exampleImage`,
@@ -305,3 +305,7 @@ export function WithFetchedData(
     </DatasetProvider>
   );
 }
+
+WithFetchedData.args = {
+  ...defaultArgs,
+};
