@@ -1,0 +1,44 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Getting Started" />
+
+# Getting Started
+
+In this guide, we will:
+
+1. Cover how to use storybook
+1. Register a pod
+
+## Using Storybook
+
+From the [Storybook](https://storybook.js.org/) homepage:
+
+> Storybook is an open source tool for developing
+> UI components in isolation for React, Vue,  Angular, and more. It makes
+> building stunning UIs organized and efficient.
+
+In particular, we are using it so that we can show live examples, rather than
+simply documentation. To navigate storybook, click on any of the pages on the
+left column to view a component or page. Some components may have multiple
+examples that you can click through as well.
+
+On the top of each component example are multiple tools: "Canvas", which
+displays the rendered component, and "Docs", which contains the various
+properties that may be applicable to the component.
+
+Additionally, on the top-right of the screen, are three buttons. The middle,
+"open in new tab", will be necessary to test out the authentication components.
+(For security reasons, most identity providers do not allow logging in in an
+iframe, so the page must be opened in a tab.)
+
+Some components may have multiple tabs along the bottom of the screen: "Actions",
+"Controls", and "Story." "Actions" is a list of callbacks that have happened-
+for example, an `onSave` or `onError` event. Components with "Controls" allow you
+to change parameters and see the effects live. Finally, "Story" contains the
+source of the example.
+
+## Registering a Pod
+
+You can visit [inrupt.net](https://www.inrupt.net) to register a new pod,
+whether for personal use or development. Once you've logged in, you will
+see an interface which allows you to view and edit the data in your pod.

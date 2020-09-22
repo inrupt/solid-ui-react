@@ -22,18 +22,23 @@
 import React, { ReactElement } from "react";
 import { Button } from "@material-ui/core";
 import { SessionProvider } from "../src/context/sessionContext";
-import LoginButton from "../src/components/logIn";
+import { LoginButton } from "../src/components/logIn";
 
 export default {
   title: "Authentication/Login Button",
   component: LoginButton,
+  argTypes: {
+    onError: { action: "onError" },
+  },
 };
 
-async function loginFailed(error: Error) {
-  console.log("ERROR", error.message);
-}
-
-export function WithChildren(): ReactElement {
+export function WithChildren({
+  oidcIssuer,
+  onError,
+}: {
+  oidcIssuer: string;
+  onError: (error: Error) => void;
+}): ReactElement {
   return (
     <SessionProvider sessionId="log-in-example">
       <p>
@@ -43,9 +48,9 @@ export function WithChildren(): ReactElement {
       </p>
 
       <LoginButton
-        oidcIssuer="https://broker.demo-ess.inrupt.com/"
+        oidcIssuer={oidcIssuer}
         redirectUrl={window.location.href}
-        onError={(error) => loginFailed(error)}
+        onError={onError}
       >
         <Button color="primary">Log In</Button>
       </LoginButton>
@@ -53,7 +58,17 @@ export function WithChildren(): ReactElement {
   );
 }
 
-export function WithoutChildren(): ReactElement {
+WithChildren.args = {
+  oidcIssuer: "https://inrupt.net",
+};
+
+export function WithoutChildren({
+  oidcIssuer,
+  onError,
+}: {
+  oidcIssuer: string;
+  onError: (error: Error) => void;
+}): ReactElement {
   return (
     <SessionProvider sessionId="log-in-example">
       <p>
@@ -63,10 +78,14 @@ export function WithoutChildren(): ReactElement {
       </p>
 
       <LoginButton
-        oidcIssuer="https://inrupt.net"
+        oidcIssuer={oidcIssuer}
         redirectUrl={window.location.href}
-        onError={(error) => loginFailed(error)}
+        onError={onError}
       />
     </SessionProvider>
   );
 }
+
+WithoutChildren.args = {
+  oidcIssuer: "https://inrupt.net",
+};

@@ -21,35 +21,53 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
-import Link from "../src/components/link";
+import { Link } from "../src/components/link";
 
 export default {
   title: "Components/Link",
   component: Link,
 };
 
-export function WithChildren(): ReactElement {
+export function WithChildren({ property }: { property: string }): ReactElement {
   const exampleUrl = "http://test.url";
-  const examplePredicate = `http://xmlns.com/foaf/0.1/homepage`;
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
-    examplePredicate,
+    property,
     exampleUrl
   );
   return (
-    <Link thing={exampleThing} property={examplePredicate}>
+    <Link thing={exampleThing} property={property}>
       <span>Example child</span>
     </Link>
   );
 }
 
-export function WithoutChildren(): ReactElement {
+WithChildren.args = {
+  property: "http://xmlns.com/foaf/0.1/homepage",
+};
+
+WithChildren.parameters = {
+  actions: { disable: true },
+};
+
+export function WithoutChildren({
+  property,
+}: {
+  property: string;
+}): ReactElement {
   const exampleUrl = "http://test.url";
-  const examplePredicate = `http://xmlns.com/foaf/0.1/homepage`;
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
-    examplePredicate,
+    property,
     exampleUrl
   );
-  return <Link thing={exampleThing} property={examplePredicate} />;
+  return <Link thing={exampleThing} property={property} />;
 }
+
+WithoutChildren.parameters = {
+  actions: { disable: true },
+};
+
+WithoutChildren.args = {
+  property: "http://xmlns.com/foaf/0.1/homepage",
+};

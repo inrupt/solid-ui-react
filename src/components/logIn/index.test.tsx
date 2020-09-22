@@ -22,7 +22,7 @@
 import * as React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 
-import LoginButton from "./index";
+import { LoginButton } from "./index";
 import { SessionProvider } from "../../context/sessionContext";
 
 const onError = jest.fn().mockResolvedValue(null);
@@ -101,10 +101,7 @@ describe("<LoginButton /> component functional testing", () => {
     );
 
     fireEvent.click(getByText("Log In"));
-    expect(session.login).toHaveBeenCalledWith({
-      oidcIssuer: new URL(oidcIssuer),
-      redirectUrl: new URL(redirectUrl),
-    });
+    expect(session.login).toHaveBeenCalledWith({ oidcIssuer, redirectUrl });
   });
 
   it("fires the onClick function and calls OnError", async () => {

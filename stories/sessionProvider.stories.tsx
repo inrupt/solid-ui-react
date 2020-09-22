@@ -20,14 +20,15 @@
  */
 
 import React, { ReactElement, useContext, useState } from "react";
-import SessionContext, { SessionProvider } from "../src/context/sessionContext";
-import LoginButton from "../src/components/logIn";
-import LogoutButton from "../src/components/logOut";
-import Text from "../src/components/text";
+import { SessionContext, SessionProvider } from "../src/context/sessionContext";
+import { LoginButton } from "../src/components/logIn";
+import { LogoutButton } from "../src/components/logOut";
+import { Text } from "../src/components/text";
 import CombinedDataProvider from "../src/context/combinedDataContext";
 
 export default {
   title: "Authentication/Session Provider",
+  component: SessionProvider,
 };
 
 export function ProviderWithHook(): ReactElement {
@@ -52,6 +53,11 @@ export function ProviderWithHook(): ReactElement {
   );
 }
 
+ProviderWithHook.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
+};
+
 function Dashboard(): ReactElement {
   const { session, sessionRequestInProgress } = useContext(SessionContext);
 
@@ -72,6 +78,7 @@ function Dashboard(): ReactElement {
           datasetUrl={session.info.webId}
           thingUrl={session.info.webId}
         >
+          Profile name:
           <Text property="http://www.w3.org/2006/vcard/ns#fn" autosave edit />
         </CombinedDataProvider>
       ) : null}

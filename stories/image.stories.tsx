@@ -20,7 +20,8 @@
  */
 
 import React, { ReactElement } from "react";
-import Image from "../src/components/image";
+import { addUrl, createThing } from "@inrupt/solid-client";
+import { Image } from "../src/components/image";
 import CombinedDataProvider from "../src/context/combinedDataContext";
 import config from "./config";
 
@@ -31,6 +32,18 @@ export default {
   component: Image,
 };
 
+export function BasicExample(): ReactElement {
+  const property = "http://schema.org/contentUrl";
+  const thing = addUrl(createThing(), property, `${host}/example.jpg`);
+
+  return <Image thing={thing} property={property} />;
+}
+
+BasicExample.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
+};
+
 interface IWithDatasetProvider {
   datasetUrl: string;
   thingUrl: string;
@@ -38,7 +51,6 @@ interface IWithDatasetProvider {
   edit: boolean;
   maxSize: number;
 }
-
 export function WithDatasetProvider({
   thingUrl,
   datasetUrl,
@@ -57,4 +69,11 @@ WithDatasetProvider.args = {
   datasetUrl: `${host}/example.ttl`,
   thingUrl: `${host}/example.ttl#exampleImage`,
   property: "http://schema.org/contentUrl",
+  edit: false,
+  maxSize: 100000000,
+};
+
+WithDatasetProvider.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
 };

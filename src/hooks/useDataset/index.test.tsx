@@ -25,7 +25,7 @@ import { SWRConfig, cache } from "swr";
 import * as SolidFns from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import DatasetContext from "../../context/datasetContext";
-import SessionContext from "../../context/sessionContext";
+import { SessionContext } from "../../context/sessionContext";
 import useDataset from ".";
 
 describe("useDataset() hook", () => {
@@ -44,7 +44,12 @@ describe("useDataset() hook", () => {
         session: {} as Session,
       }}
     >
-      <DatasetContext.Provider value={{ dataset: mockContextDataset }}>
+      <DatasetContext.Provider
+        value={{
+          dataset: mockContextDataset,
+          setDataset: () => {},
+        }}
+      >
         <SWRConfig value={{ dedupingInterval: 0 }}>{children}</SWRConfig>
       </DatasetContext.Provider>
     </SessionContext.Provider>

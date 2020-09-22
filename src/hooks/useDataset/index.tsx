@@ -26,7 +26,7 @@ import {
   SolidDataset,
   WithResourceInfo,
 } from "@inrupt/solid-client";
-import SessionContext from "../../context/sessionContext";
+import { SessionContext } from "../../context/sessionContext";
 import DatasetContext from "../../context/datasetContext";
 
 export default function useDataset(

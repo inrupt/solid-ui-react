@@ -27,7 +27,7 @@ export type Props = {
   property: Url | UrlString;
 } & React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
-export default function Link({
+export function Link({
   children,
   property,
   thing,

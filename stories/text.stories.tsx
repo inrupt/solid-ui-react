@@ -21,8 +21,7 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
-import { action } from "@storybook/addon-actions";
-import Text from "../src/components/text";
+import { Text } from "../src/components/text";
 import { DatasetProvider } from "../src/context/datasetContext";
 import { ThingProvider } from "../src/context/thingContext";
 import config from "./config";
@@ -32,6 +31,10 @@ const { host } = config();
 export default {
   title: "Components/Text",
   component: Text,
+  argTypes: {
+    onError: { action: "onError" },
+    onSave: { action: "onSave" },
+  },
 };
 
 const defaultInputOptions = {
@@ -49,6 +52,8 @@ interface IText {
   inputProps: any;
   datasetUrl?: string;
   thingUrl?: string;
+  onError: (error: any) => void;
+  onSave: () => void;
 }
 
 export function BasicExample({
@@ -56,6 +61,8 @@ export function BasicExample({
   edit,
   inputProps,
   property,
+  onError,
+  onSave,
 }: IText): ReactElement {
   const exampleNick = "example value";
 
@@ -78,8 +85,8 @@ export function BasicExample({
       autosave={autosave}
       edit={edit}
       inputProps={inputProps}
-      onError={action("OnError")}
-      onSave={action("onSave")}
+      onError={onError}
+      onSave={onSave}
     />
   );
 }
@@ -95,6 +102,8 @@ export function WithLocalData({
   autosave,
   edit,
   inputProps,
+  onError,
+  onSave,
 }: IText): ReactElement {
   const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
   const exampleNick = "example value";
@@ -119,8 +128,8 @@ export function WithLocalData({
       autosave={autosave}
       saveDatasetTo={`${host}/example.ttl`}
       inputProps={inputProps}
-      onError={action("OnError")}
-      onSave={action("onSave")}
+      onError={onError}
+      onSave={onSave}
     />
   );
 }
@@ -139,6 +148,8 @@ export function WithFetchedData({
   inputProps,
   datasetUrl,
   thingUrl,
+  onError,
+  onSave,
 }: IText): ReactElement {
   return (
     <DatasetProvider datasetUrl={datasetUrl as string}>
@@ -148,8 +159,8 @@ export function WithFetchedData({
           edit={edit}
           autosave={autosave}
           saveDatasetTo={`${host}/example.ttl#me`}
-          onError={action("OnError")}
-          onSave={action("onSave")}
+          onError={onError}
+          onSave={onSave}
           inputProps={inputProps}
         />
       </ThingProvider>

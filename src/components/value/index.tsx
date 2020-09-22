@@ -39,7 +39,7 @@ import {
 } from "@inrupt/solid-client";
 import DatasetContext from "../../context/datasetContext";
 import ThingContext from "../../context/thingContext";
-import SessionContext from "../../context/sessionContext";
+import { SessionContext } from "../../context/sessionContext";
 import { DataType, getValueByType } from "../../helpers";
 
 export type Props = {
@@ -56,7 +56,7 @@ export type Props = {
   onError?(error: Error): void | null;
 } & React.HTMLAttributes<HTMLSpanElement>;
 
-export default function Value({
+export function Value({
   thing: propThing,
   dataSet: propDataset,
   property,
@@ -77,7 +77,7 @@ export default function Value({
   const [initialValue, setInitialValue] = useState<string | number | null>("");
 
   const datasetContext = useContext(DatasetContext);
-  const { dataset: contextDataset } = datasetContext;
+  const { dataset: contextDataset, setDataset } = datasetContext;
 
   const thingContext = useContext(ThingContext);
   const { thing: contextThing } = thingContext;
@@ -163,17 +163,25 @@ export default function Value({
 
       try {
         if (saveDatasetTo) {
-          await saveSolidDatasetAt(
+          const savedDataset = await saveSolidDatasetAt(
             saveDatasetTo,
             setThing(dataset, updatedResource),
             { fetch }
           );
+
+          if (contextDataset) {
+            setDataset(savedDataset);
+          }
         } else if (hasResourceInfo(dataset)) {
-          await saveSolidDatasetAt(
+          const savedDataset = await saveSolidDatasetAt(
             getFetchedFrom(dataset),
             setThing(dataset, updatedResource),
             { fetch }
           );
+
+          if (contextDataset) {
+            setDataset(savedDataset);
+          }
         } else {
           setErrorState(() => {
             throw new Error(

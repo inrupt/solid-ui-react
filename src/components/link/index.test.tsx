@@ -22,7 +22,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
-import Link from ".";
+import { Link } from "./index";
 
 const mockUrl = "http://test.url";
 const mockPredicate = `http://xmlns.com/foaf/0.1/homepage`;

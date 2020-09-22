@@ -19,18 +19,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export { default as Image } from "./components/image";
-export { default as Link } from "./components/link";
-export { default as LoginButton } from "./components/logIn";
-export { default as LogoutButton } from "./components/logOut";
+export { Image } from "./components/image";
+export { Link } from "./components/link";
+export { LoginButton } from "./components/logIn";
+export { LogoutButton } from "./components/logOut";
 export { Table, TableColumn } from "./components/table";
-export { default as Text } from "./components/text";
-export { default as Value } from "./components/value";
-export { default as Video } from "./components/video";
-export {
-  default as SessionContext,
-  SessionProvider,
-} from "./context/sessionContext";
+export { Text } from "./components/text";
+export { Value } from "./components/value";
+export { Video } from "./components/video";
+export { SessionContext, SessionProvider } from "./context/sessionContext";
 export { default as CombinedDataProvider } from "./context/combinedDataContext";
 export { default as ThingContext, ThingProvider } from "./context/thingContext";
 export {

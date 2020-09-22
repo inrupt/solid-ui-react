@@ -36,7 +36,7 @@ import {
 } from "@inrupt/solid-client";
 import DatasetContext from "../../context/datasetContext";
 import ThingContext from "../../context/thingContext";
-import SessionContext from "../../context/sessionContext";
+import { SessionContext } from "../../context/sessionContext";
 
 export type Props = {
   dataSet?: SolidDataset;
@@ -49,9 +49,9 @@ export type Props = {
   locale?: string;
   onSave?(): void | null;
   onError?(error: Error): void | null;
-} & React.HTMLAttributes<HTMLSpanElement>;
+};
 
-export default function Text({
+export function Text({
   thing: propThing,
   dataSet: propDataset,
   property,
@@ -63,11 +63,11 @@ export default function Text({
   autosave,
   inputProps,
   ...other
-}: Props): ReactElement {
+}: Props & React.HTMLAttributes<HTMLSpanElement>): ReactElement {
   const { fetch } = useContext(SessionContext);
 
   const datasetContext = useContext(DatasetContext);
-  const { dataset: contextDataset } = datasetContext;
+  const { dataset: contextDataset, setDataset } = datasetContext;
 
   const thingContext = useContext(ThingContext);
   const { thing: contextThing } = thingContext;
@@ -103,17 +103,25 @@ export default function Text({
 
       try {
         if (saveDatasetTo) {
-          await saveSolidDatasetAt(
+          const savedDataset = await saveSolidDatasetAt(
             saveDatasetTo,
             setThing(dataset, updatedResource),
             { fetch }
           );
+
+          if (contextDataset) {
+            setDataset(savedDataset);
+          }
         } else if (hasResourceInfo(dataset)) {
-          await saveSolidDatasetAt(
+          const savedDataset = await saveSolidDatasetAt(
             getFetchedFrom(dataset),
             setThing(dataset, updatedResource),
             { fetch }
           );
+
+          if (contextDataset) {
+            setDataset(savedDataset);
+          }
         } else {
           setErrorState(() => {
             throw new Error(

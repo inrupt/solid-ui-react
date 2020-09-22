@@ -21,7 +21,7 @@
 
 import { useContext } from "react";
 import { Session } from "@inrupt/solid-client-authn-browser";
-import SessionContext from "../../context/sessionContext";
+import { SessionContext } from "../../context/sessionContext";
 
 export interface SessionInfo {
   session: Session;

@@ -21,9 +21,8 @@
 
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
-import { action } from "@storybook/addon-actions";
 import { DataType } from "../src/helpers";
-import Value from "../src/components/value";
+import { Value } from "../src/components/value";
 import { DatasetProvider } from "../src/context/datasetContext";
 import { ThingProvider } from "../src/context/thingContext";
 import config from "./config";
@@ -43,6 +42,8 @@ export default {
   title: "Components/Value",
   component: Value,
   argTypes: {
+    onError: { action: "onError" },
+    onSave: { action: "onSave" },
     dataType: {
       control: {
         type: "select",
@@ -73,6 +74,8 @@ interface IValue {
   autosave: boolean;
   edit: boolean;
   inputProps: any;
+  onError: (error: any) => void;
+  onSave: () => void;
 }
 
 const defaultArgs = {
@@ -85,8 +88,17 @@ const defaultArgs = {
   inputOptions,
 };
 
-export function String(props: IValue): ReactElement {
-  const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
+export function StringValue(props: IValue): ReactElement {
+  const {
+    datasetUrl,
+    thingUrl,
+    property,
+    autosave,
+    edit,
+    inputProps,
+    onError,
+    onSave,
+  } = props;
 
   return (
     <DatasetProvider datasetUrl={datasetUrl}>
@@ -97,20 +109,29 @@ export function String(props: IValue): ReactElement {
           autosave={autosave}
           edit={edit}
           inputProps={inputProps}
-          onError={action("OnError")}
-          onSave={action("onSave")}
+          onError={onError}
+          onSave={onSave}
         />
       </ThingProvider>
     </DatasetProvider>
   );
 }
 
-String.args = {
+StringValue.args = {
   ...defaultArgs,
 };
 
-export function Boolean(props: IValue): ReactElement {
-  const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
+export function BooleanValue(props: IValue): ReactElement {
+  const {
+    datasetUrl,
+    thingUrl,
+    property,
+    autosave,
+    edit,
+    inputProps,
+    onError,
+    onSave,
+  } = props;
 
   return (
     <DatasetProvider datasetUrl={datasetUrl}>
@@ -121,21 +142,30 @@ export function Boolean(props: IValue): ReactElement {
           autosave={autosave}
           edit={edit}
           inputProps={inputProps}
-          onError={action("OnError")}
-          onSave={action("onSave")}
+          onError={onError}
+          onSave={onSave}
         />
       </ThingProvider>
     </DatasetProvider>
   );
 }
 
-Boolean.args = {
+BooleanValue.args = {
   ...defaultArgs,
   thingUrl: `${host}/example.ttl#exampleImage`,
 };
 
-export function Datetime(props: IValue): ReactElement {
-  const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
+export function DatetimeValue(props: IValue): ReactElement {
+  const {
+    datasetUrl,
+    thingUrl,
+    property,
+    autosave,
+    edit,
+    inputProps,
+    onError,
+    onSave,
+  } = props;
 
   return (
     <DatasetProvider datasetUrl={datasetUrl}>
@@ -146,22 +176,31 @@ export function Datetime(props: IValue): ReactElement {
           autosave={autosave}
           edit={edit}
           inputProps={inputProps}
-          onError={action("OnError")}
-          onSave={action("onSave")}
+          onError={onError}
+          onSave={onSave}
         />
       </ThingProvider>
     </DatasetProvider>
   );
 }
 
-Datetime.args = {
+DatetimeValue.args = {
   ...defaultArgs,
   thingUrl: `${host}/example.ttl#exampleImage`,
   property: `http://schema.org/datePublished`,
 };
 
-export function Decimal(props: IValue): ReactElement {
-  const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
+export function DecimalValue(props: IValue): ReactElement {
+  const {
+    datasetUrl,
+    thingUrl,
+    property,
+    autosave,
+    edit,
+    inputProps,
+    onError,
+    onSave,
+  } = props;
 
   return (
     <DatasetProvider datasetUrl={datasetUrl}>
@@ -172,22 +211,31 @@ export function Decimal(props: IValue): ReactElement {
           autosave={autosave}
           edit={edit}
           inputProps={inputProps}
-          onError={action("OnError")}
-          onSave={action("onSave")}
+          onError={onError}
+          onSave={onSave}
         />
       </ThingProvider>
     </DatasetProvider>
   );
 }
 
-Decimal.args = {
+DecimalValue.args = {
   ...defaultArgs,
   property: "http://schema.org/version",
   thingUrl: `${host}/example.ttl#exampleImage`,
 };
 
-export function Integer(props: IValue): ReactElement {
-  const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
+export function IntegerValue(props: IValue): ReactElement {
+  const {
+    datasetUrl,
+    thingUrl,
+    property,
+    autosave,
+    edit,
+    inputProps,
+    onError,
+    onSave,
+  } = props;
 
   return (
     <DatasetProvider datasetUrl={datasetUrl}>
@@ -198,22 +246,31 @@ export function Integer(props: IValue): ReactElement {
           autosave={autosave}
           edit={edit}
           inputProps={inputProps}
-          onError={action("OnError")}
-          onSave={action("onSave")}
+          onError={onError}
+          onSave={onSave}
         />
       </ThingProvider>
     </DatasetProvider>
   );
 }
 
-Integer.args = {
+IntegerValue.args = {
   ...defaultArgs,
   property: "http://schema.org/copyrightYear",
   thingUrl: `${host}/example.ttl#exampleImage`,
 };
 
-export function Url(props: IValue): ReactElement {
-  const { datasetUrl, thingUrl, property, autosave, edit, inputProps } = props;
+export function UrlValue(props: IValue): ReactElement {
+  const {
+    datasetUrl,
+    thingUrl,
+    property,
+    autosave,
+    edit,
+    inputProps,
+    onError,
+    onSave,
+  } = props;
 
   return (
     <DatasetProvider datasetUrl={datasetUrl}>
@@ -224,15 +281,15 @@ export function Url(props: IValue): ReactElement {
           autosave={autosave}
           edit={edit}
           inputProps={inputProps}
-          onError={action("OnError")}
-          onSave={action("onSave")}
+          onError={onError}
+          onSave={onSave}
         />
       </ThingProvider>
     </DatasetProvider>
   );
 }
 
-Url.args = {
+UrlValue.args = {
   ...defaultArgs,
   property: "http://schema.org/url",
   thingUrl: `${host}/example.ttl#exampleImage`,
@@ -241,7 +298,15 @@ Url.args = {
 export function WithUnsavedData(
   props: IValue & { saveDatasetTo: string }
 ): ReactElement {
-  const { property, autosave, edit, inputProps, saveDatasetTo } = props;
+  const {
+    property,
+    autosave,
+    edit,
+    inputProps,
+    saveDatasetTo,
+    onError,
+    onSave,
+  } = props;
   const exampleNick = "example value";
 
   const exampleThing = SolidFns.addStringNoLocale(
@@ -265,8 +330,8 @@ export function WithUnsavedData(
       autosave={autosave}
       saveDatasetTo={saveDatasetTo}
       inputProps={inputProps}
-      onError={action("OnError")}
-      onSave={action("onSave")}
+      onError={onError}
+      onSave={onSave}
     />
   );
 }
@@ -287,6 +352,8 @@ export function WithFetchedData(
     edit,
     dataType,
     saveDatasetTo,
+    onError,
+    onSave,
   } = props;
 
   return (
@@ -298,10 +365,14 @@ export function WithFetchedData(
           edit={edit}
           autosave={autosave}
           saveDatasetTo={saveDatasetTo}
-          onError={action("OnError")}
-          onSave={action("onSave")}
+          onError={onError}
+          onSave={onSave}
         />
       </ThingProvider>
     </DatasetProvider>
   );
 }
+
+WithFetchedData.args = {
+  ...defaultArgs,
+};

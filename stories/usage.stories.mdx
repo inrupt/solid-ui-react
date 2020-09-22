@@ -1,0 +1,104 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Usage" />
+
+# solid-ui-react
+
+In this guide, we will:
+
+1. Set up authentication
+1. View and edit data in your user profile
+
+You can also view an example application
+[on GitHub](https://github.com/inrupt/solid-ui-react-example-project).
+
+## Authentication
+
+Once you have created a react application, allowing users to register or log in
+is simple. You will want to install the SDK:
+
+```
+npm i -S @inrupt/solid-react-ui
+```
+
+And then import two components:
+
+```
+import { SessionProvider, LoginButton } from "@inrupt/solid-react-ui";
+```
+
+You can then wrap your application in the SessionProvider that you imported.
+Give it a unique sessionId. Finally, anywhere in your component tree, as long
+as you have a SessionProvider above it, you can use a
+[LoginButton](/?path=/story/authentication-login-button--with-children).
+
+```
+<SessionProvider sessionId="some-id">
+  <LoginButton
+    oidcIssuer="https://inrupt.net"
+    redirectUrl="https://localhost:3000/"
+  />
+</SessionProvider>
+```
+
+From there, you can click "login" to be redirected to the OIDC issuer provided.
+You can either log in or register a pod once redirected to the identity provider's
+login page.
+
+## Reading and Writing Data
+
+Now that you have a pod, you can begin reading data. To do this, we will import
+another pair of components: a `CombinedDataProvider`, which will handle fetching
+a dataset for you, and a `Text` component to display that data.
+
+```
+import { useSession, CombinedDataProvider, Text } from "@inrupt/solid-react-ui";
+```
+
+In your component tree, still within the context of the `SessionProvider`, first
+you can read the WebId of your session with the `useSession` hook.
+A WebId is a URL that links to the profile document stored in your pod -
+which was likely automatically generated for you.  A CombinedDataProvider can
+then use that WebId to automatically fetch data, and the Text component can display
+that data.
+
+For further information on "datasets" and "things", refer to the
+[solid-client-js documentation](https://docs.inrupt.com/developer-tools/api/javascript/solid-client/).
+
+```
+function Name() {
+  const { session, sessionRequestInProgress } = useSession();
+  if (sessionRequestInProgress) return "Loading...";
+
+  const webId = session.info.webId;
+
+  <CombinedDataProvider datasetUrl={webId} thingUrl={webId}>
+    <Text propertyUrl="http://www.w3.org/2006/vcard/ns#fn" />
+  </CombinedDataProvider>
+}
+```
+
+The `Text` component, like most other data components, will automatically refer
+to a DatasetContext or CombinedDataContext if there is one in the heirarchy. This
+code will display your full name (assuming a standard profile).
+
+To edit this data, set the `edit` and `autosave` properties to true, which will
+replace the text with an input box. With `autosave`, the data will be automatically
+saved back to the server when you click outside of the textbox:
+
+
+```
+function Name() {
+  const { session, sessionRequestInProgress } = useSession();
+  if (sessionRequestInProgress) return "Loading...";
+
+  const webId = session.info.webId;
+
+  <CombinedDataProvider datasetUrl={webId} thingUrl={webId}>
+    <Text propertyUrl="http://www.w3.org/2006/vcard/ns#fn" edit autosave />
+  </CombinedDataProvider>
+}
+```
+
+View the Component documentation for more examples, such as for images, links,
+and non-string values such as booleans and datetimes.
