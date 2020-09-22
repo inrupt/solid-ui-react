@@ -57,7 +57,7 @@ export function WithChildren({
 
 WithChildren.story = {
   parameters: {
-    actions: { disable: true },
+    controls: { disable: true },
   },
 };
 
@@ -83,6 +83,6 @@ export function WithoutChildren({
 
 WithoutChildren.story = {
   parameters: {
-    actions: { disable: true },
+    controls: { disable: true },
   },
 };

@@ -71,8 +71,8 @@ export const DatasetProvider = ({
 
   // If the dataset is asynchronously loaded, make sure to set the new state value.
   useEffect(() => {
-    setDataset(dataset);
-  }, [dataset]);
+    setDataset(datasetToUse);
+  }, [datasetToUse]);
 
   return (
     <DatasetContext.Provider value={{ dataset: stateDataset, setDataset }}>

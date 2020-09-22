@@ -28,42 +28,50 @@ export default {
   component: Link,
 };
 
-export function WithChildren(): ReactElement {
+export function WithChildren({ property }: { property: string }): ReactElement {
   const exampleUrl = "http://test.url";
-  const examplePredicate = `http://xmlns.com/foaf/0.1/homepage`;
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
-    examplePredicate,
+    property,
     exampleUrl
   );
   return (
-    <Link thing={exampleThing} property={examplePredicate}>
+    <Link thing={exampleThing} property={property}>
       <span>Example child</span>
     </Link>
   );
 }
 
+WithChildren.args = {
+  property: "http://xmlns.com/foaf/0.1/homepage",
+};
+
 WithChildren.story = {
   parameters: {
     actions: { disable: true },
-    controls: { disable: true },
   },
 };
 
-export function WithoutChildren(): ReactElement {
+export function WithoutChildren({
+  property,
+}: {
+  property: string;
+}): ReactElement {
   const exampleUrl = "http://test.url";
-  const examplePredicate = `http://xmlns.com/foaf/0.1/homepage`;
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
-    examplePredicate,
+    property,
     exampleUrl
   );
-  return <Link thing={exampleThing} property={examplePredicate} />;
+  return <Link thing={exampleThing} property={property} />;
 }
 
 WithoutChildren.story = {
   parameters: {
     actions: { disable: true },
-    controls: { disable: true },
   },
+};
+
+WithoutChildren.args = {
+  property: "http://xmlns.com/foaf/0.1/homepage",
 };

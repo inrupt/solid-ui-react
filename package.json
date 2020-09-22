@@ -38,7 +38,7 @@
     "@storybook/react": "^6.0.21",
     "@testing-library/react": "^11.0.4",
     "@testing-library/react-hooks": "^3.4.1",
-    "@types/jest": "^26.0.13",
+    "@types/jest": "^26.0.14",
     "@types/react": "^16.9.49",
     "@types/react-table": "^7.0.23",
     "@typescript-eslint/eslint-plugin": "^3.10.1",
@@ -50,7 +50,7 @@
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jest": "^23.18.0",
+    "eslint-plugin-jest": "^24.0.2",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-license-header": "^0.2.0",
     "eslint-plugin-prettier": "^3.1.4",
@@ -65,10 +65,10 @@
     "react-dom": "^16.13.1",
     "react-error-boundary": "^3.0.2",
     "react-test-renderer": "^16.13.1",
-    "ts-jest": "^26.3.0",
-    "ts-loader": "^8.0.3",
-    "typescript": "^4.0.2",
-    "webpack": "^4.43.0",
+    "ts-jest": "^26.4.0",
+    "ts-loader": "^8.0.4",
+    "typescript": "^4.0.3",
+    "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12"
   },
   "repository": {
@@ -90,7 +90,7 @@
     "@inrupt/solid-client": "^0.4.0",
     "@inrupt/solid-client-authn-browser": "^0.1.4",
     "@inrupt/solid-client-authn-core": "^0.1.4",
-    "react-table": "^7.5.0",
-    "swr": "^0.3.2"
+    "react-table": "^7.5.1",
+    "swr": "^0.3.3"
   }
 }
