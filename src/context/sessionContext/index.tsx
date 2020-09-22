@@ -67,19 +67,27 @@ export interface ISessionProvider {
   children: ReactNode;
   sessionId: string;
   session?: Session;
+  sessionRequestInProgress?: boolean;
 }
 
 export const SessionProvider = ({
   sessionId,
   children,
   session: propsSession,
+  sessionRequestInProgress: defaultSessionRequestInProgress,
 }: ISessionProvider): ReactElement => {
-  const [sessionRequestInProgress, setSessionRequestInProgress] = useState(
-    true
-  );
-
   const [session, setSession] = useState<Session>(
     propsSession || buildSession(sessionId)
+  );
+
+  const defaultInProgress =
+    typeof defaultSessionRequestInProgress === "undefined"
+      ? !session.info.isLoggedIn
+      : defaultSessionRequestInProgress;
+
+  // If loggedin is true, we're not making a session request.
+  const [sessionRequestInProgress, setSessionRequestInProgress] = useState(
+    defaultInProgress
   );
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
