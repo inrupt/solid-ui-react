@@ -34,14 +34,6 @@ All development should follow the [Inrupt Coding Guidelines](https://github.com/
 
 @inrupt/solid-client is part of a family open source JavaScript libraries designed to support developers building Solid applications.
 
-# Installation
-
-For the latest stable version of solid-react-ui:
-
-```bash
-npm i -S @inrupt/solid-react-ui
-```
-
 # Issues & Help
 
 ## Solid Community Forum
