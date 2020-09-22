@@ -3,8 +3,14 @@ module.exports = {
     '../stories/**/*.stories.@(tsx|mdx)',
   ],
   addons: [
-    '@storybook/addon-essentials',
-    '@storybook/addon-storysource'
+    '@storybook/addon-essentials', {
+      name: '@storybook/addon-storysource',
+      options: {
+        sourceLoaderOptions: {
+          injectStoryParameters: false,
+        },
+      },
+    },
   ],
   typescript: {
     check: false,

@@ -20,10 +20,11 @@
  */
 
 import React, {
-  useState,
   createContext,
   ReactElement,
   useContext,
+  useEffect,
+  useState,
 } from "react";
 import { Thing, UrlString, getThing } from "@inrupt/solid-client";
 import DatasetContext from "../datasetContext";
@@ -68,6 +69,13 @@ export const ThingProvider = ({
 
   // Allow child components to update the thing
   const [stateThing, setThing] = useState(thing);
+
+  // Reset the thing if the dataset changes.
+  useEffect(() => {
+    if (dataset && thingUrl) {
+      setThing(getThing(dataset, thingUrl));
+    }
+  }, [dataset, thingUrl]);
 
   return (
     <ThingContext.Provider value={{ thing: stateThing, setThing }}>
