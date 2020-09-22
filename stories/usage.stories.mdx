@@ -29,7 +29,7 @@ import { SessionProvider, LoginButton } from "@inrupt/solid-react-ui";
 
 You can then wrap your application in the SessionProvider that you imported.
 Give it a unique sessionId. Finally, anywhere in your component tree, as long
-as you have a SessionProvider, you can use a
+as you have a SessionProvider above it, you can use a
 [LoginButton](/?path=/story/authentication-login-button--with-children).
 
 ```
@@ -41,9 +41,9 @@ as you have a SessionProvider, you can use a
 </SessionProvider>
 ```
 
-From there, you can click "login" using the default "https://inrupt.net"
-identity provider. Click the "register" link on the bottom. You will then be
-redirected to your new pod.
+From there, you can click "login" to be redirected to the OIDC issuer provided.
+You can either log in or register a pod once redirected to the identity provider's
+login page.
 
 ## Reading and Writing Data
 
