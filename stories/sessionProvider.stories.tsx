@@ -52,6 +52,13 @@ export function ProviderWithHook(): ReactElement {
   );
 }
 
+ProviderWithHook.story = {
+  parameters: {
+    actions: { disable: true },
+    controls: { disable: true },
+  },
+};
+
 function Dashboard(): ReactElement {
   const { session, sessionRequestInProgress } = useContext(SessionContext);
 
@@ -72,6 +79,7 @@ function Dashboard(): ReactElement {
           datasetUrl={session.info.webId}
           thingUrl={session.info.webId}
         >
+          Profile name:
           <Text property="http://www.w3.org/2006/vcard/ns#fn" autosave edit />
         </CombinedDataProvider>
       ) : null}

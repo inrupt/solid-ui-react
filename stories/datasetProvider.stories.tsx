@@ -49,6 +49,13 @@ export function WithLocalDataset(): ReactElement {
   );
 }
 
+WithLocalDataset.story = {
+  parameters: {
+    actions: { disable: true },
+    controls: { disable: true },
+  },
+};
+
 interface IWithDatasetUrl {
   datasetUrl: string;
   thingUrl: string;
@@ -64,6 +71,12 @@ export function WithDatasetUrl(props: IWithDatasetUrl): ReactElement {
     </DatasetProvider>
   );
 }
+
+WithDatasetUrl.story = {
+  parameters: {
+    actions: { disable: true },
+  },
+};
 
 WithDatasetUrl.args = {
   datasetUrl: `${host}/example.ttl`,

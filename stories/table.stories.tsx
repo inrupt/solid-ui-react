@@ -78,6 +78,13 @@ export function BasicExample(): ReactElement {
   );
 }
 
+BasicExample.story = {
+  parameters: {
+    actions: { disable: true },
+    controls: { disable: true },
+  },
+};
+
 export function MultipleValues(): ReactElement {
   const namePredicate = `http://xmlns.com/foaf/0.1/name`;
   const nickPredicate = `http://xmlns.com/foaf/0.1/nick`;
@@ -138,6 +145,13 @@ export function MultipleValues(): ReactElement {
   );
 }
 
+MultipleValues.story = {
+  parameters: {
+    actions: { disable: true },
+    controls: { disable: true },
+  },
+};
+
 export function CustomBodyComponent(): ReactElement {
   const namePredicate = `http://xmlns.com/foaf/0.1/name`;
   const datePredicate = `http://schema.org/datePublished`;
@@ -194,6 +208,13 @@ export function CustomBodyComponent(): ReactElement {
     </Table>
   );
 }
+
+CustomBodyComponent.story = {
+  parameters: {
+    actions: { disable: true },
+    controls: { disable: true },
+  },
+};
 
 export function NestedDataExample(): ReactElement {
   const typeProperty = `http://www.w3.org/1999/02/22-rdf-syntax-ns#type`;
@@ -288,6 +309,13 @@ export function NestedDataExample(): ReactElement {
   );
 }
 
+NestedDataExample.story = {
+  parameters: {
+    actions: { disable: true },
+    controls: { disable: true },
+  },
+};
+
 export function SortableColumns(): ReactElement {
   const namePredicate = `http://xmlns.com/foaf/0.1/name`;
   const datePredicate = `http://schema.org/datePublished`;
@@ -333,6 +361,13 @@ export function SortableColumns(): ReactElement {
     </Table>
   );
 }
+
+SortableColumns.story = {
+  parameters: {
+    actions: { disable: true },
+    controls: { disable: true },
+  },
+};
 
 interface IFilterOnFirstColumn {
   filter: string;
@@ -389,4 +424,10 @@ export function FilterOnFirstColumn({
 
 FilterOnFirstColumn.args = {
   filter: "name 2",
+};
+
+FilterOnFirstColumn.story = {
+  parameters: {
+    actions: { disable: true },
+  },
 };

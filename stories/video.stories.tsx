@@ -40,6 +40,12 @@ export function EditFalse(): ReactElement {
   return <Video thing={exampleThing} property={exampleProperty} />;
 }
 
+EditFalse.story = {
+  parameters: {
+    actions: { disable: true },
+  },
+};
+
 export function EditTrue({
   edit,
   autosave,
@@ -72,4 +78,10 @@ EditTrue.args = {
   edit: true,
   autosave: true,
   maxSize: 100,
+};
+
+EditTrue.story = {
+  parameters: {
+    actions: { disable: true },
+  },
 };

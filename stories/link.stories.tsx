@@ -43,6 +43,13 @@ export function WithChildren(): ReactElement {
   );
 }
 
+WithChildren.story = {
+  parameters: {
+    actions: { disable: true },
+    controls: { disable: true },
+  },
+};
+
 export function WithoutChildren(): ReactElement {
   const exampleUrl = "http://test.url";
   const examplePredicate = `http://xmlns.com/foaf/0.1/homepage`;
@@ -53,3 +60,10 @@ export function WithoutChildren(): ReactElement {
   );
   return <Link thing={exampleThing} property={examplePredicate} />;
 }
+
+WithoutChildren.story = {
+  parameters: {
+    actions: { disable: true },
+    controls: { disable: true },
+  },
+};

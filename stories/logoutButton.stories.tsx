@@ -27,17 +27,19 @@ import LogoutButton from "../src/components/logOut";
 export default {
   title: "Authentication/Logout Button",
   component: LogoutButton,
+  argTypes: {
+    onError: { action: "onError" },
+    onLogout: { action: "onLogout" },
+  },
 };
 
-async function logoutTest() {
-  alert("you have logged out");
-}
-
-async function logoutFailed(error: Error) {
-  console.log("ERROR", error.message);
-}
-
-export function WithChildren(): ReactElement {
+export function WithChildren({
+  onLogout,
+  onError,
+}: {
+  onLogout: () => void;
+  onError: (error: Error) => void;
+}): ReactElement {
   return (
     <SessionProvider sessionId="log-out-example">
       <p>
@@ -46,17 +48,26 @@ export function WithChildren(): ReactElement {
         pop-out icon on the top right to open this example in a new tab first.
       </p>
 
-      <LogoutButton
-        onLogout={() => logoutTest()}
-        onError={(error) => logoutFailed(error)}
-      >
+      <LogoutButton onLogout={onLogout} onError={onError}>
         <Button color="primary">Log Out</Button>
       </LogoutButton>
     </SessionProvider>
   );
 }
 
-export function WithoutChildren(): ReactElement {
+WithChildren.story = {
+  parameters: {
+    actions: { disable: true },
+  },
+};
+
+export function WithoutChildren({
+  onLogout,
+  onError,
+}: {
+  onLogout: () => void;
+  onError: (error: Error) => void;
+}): ReactElement {
   return (
     <SessionProvider sessionId="log-out-example">
       <p>
@@ -65,10 +76,13 @@ export function WithoutChildren(): ReactElement {
         pop-out icon on the top right to open this example in a new tab first.
       </p>
 
-      <LogoutButton
-        onLogout={() => logoutTest()}
-        onError={(error) => logoutFailed(error)}
-      />
+      <LogoutButton onLogout={onLogout} onError={onError} />
     </SessionProvider>
   );
 }
+
+WithoutChildren.story = {
+  parameters: {
+    actions: { disable: true },
+  },
+};

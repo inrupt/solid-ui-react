@@ -58,3 +58,9 @@ WithDatasetProvider.args = {
   thingUrl: `${host}/example.ttl#exampleImage`,
   property: "http://schema.org/contentUrl",
 };
+
+WithDatasetProvider.story = {
+  parameters: {
+    actions: { disable: true },
+  },
+};
