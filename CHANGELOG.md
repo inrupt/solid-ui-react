@@ -1,3 +1,13 @@
+## 1.1.0 ( September 22, 2020 )
+
+### Changed
+
+- Exported `setDataset` and `setThing` from DatasetProvider and ThingProvider, respectively.
+  This allows components which save data to reset the dataset to what the server returns.
+- Allow non- `URL` values to be set for the LoginButton. This prevents some errors from
+  occuring, such as if the value is updated as the user types.
+- Added additional storybook documentation and cleaned up examples.
+
 ## 1.0.0 ( September 21, 2020 )
 
 ### Changed
