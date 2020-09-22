@@ -41,8 +41,8 @@ const LoginButton: React.FC<Props> = (propsLogin: Props) => {
   } = propsLogin;
 
   const options = {
-    redirectUrl: new URL(redirectUrl),
-    oidcIssuer: new URL(oidcIssuer),
+    redirectUrl,
+    oidcIssuer,
     ...authOptions,
   };
 
