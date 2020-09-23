@@ -1,3 +1,9 @@
+## 1.2.0 ( September 23, 2020 )
+
+### Changed
+
+- Pass saved dataset and thing to onSave in Text and Value
+
 ## 1.1.0 ( September 22, 2020 )
 
 ### Changed

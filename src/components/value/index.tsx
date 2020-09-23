@@ -52,7 +52,7 @@ export type Props = {
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   edit?: boolean;
   locale?: string;
-  onSave?(): void | null;
+  onSave?(savedDataset?: SolidDataset, savedThing?: Thing): void | null;
   onError?(error: Error): void | null;
 } & React.HTMLAttributes<HTMLSpanElement>;
 
@@ -162,8 +162,9 @@ export function Value({
       }
 
       try {
+        let savedDataset;
         if (saveDatasetTo) {
-          const savedDataset = await saveSolidDatasetAt(
+          savedDataset = await saveSolidDatasetAt(
             saveDatasetTo,
             setThing(dataset, updatedResource),
             { fetch }
@@ -173,7 +174,7 @@ export function Value({
             setDataset(savedDataset);
           }
         } else if (hasResourceInfo(dataset)) {
-          const savedDataset = await saveSolidDatasetAt(
+          savedDataset = await saveSolidDatasetAt(
             getFetchedFrom(dataset),
             setThing(dataset, updatedResource),
             { fetch }
@@ -190,7 +191,7 @@ export function Value({
           });
         }
         if (onSave) {
-          onSave();
+          onSave(savedDataset, updatedResource);
         }
       } catch (error) {
         if (onError) {
