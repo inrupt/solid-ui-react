@@ -1,3 +1,9 @@
+## 1.2.1 ( September 24, 2020 )
+
+### Changed
+
+- ThingProvider correctly updates its stored Thing in state in response to changes in `thing` prop
+
 ## 1.2.0 ( September 23, 2020 )
 
 ### Changed
