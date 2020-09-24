@@ -1,4 +1,4 @@
-# Solid JavaScript React SDK - solid-ui-react
+# Solid JavaScript React SDK v2 - solid-ui-react
 solid-ui-react is a library of React components made to make development with [Solid](https://solidproject.org/) simple.
 
 The goal of this library is to provide highly flexible, simple components that you can use in any browser-based Solid project and customize to match the UI of your application. It uses the Inrupt Javascript Client Libraries for authentication and data manipulation. It is built with typescript and exports its types.
@@ -10,6 +10,8 @@ In this library, you will find:
 - **Context providers and hooks** to help simplify development when using functional programming
 
 This project is currently in Beta. Interfaces subject to change. Not for production use.
+
+**Note:** this project supersedes [Solid React SDK v1 by Inrupt](https://github.com/inrupt/solid-react-sdk)
 
 ## Installation
 
