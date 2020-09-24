@@ -74,8 +74,10 @@ export const ThingProvider = ({
   useEffect(() => {
     if (dataset && thingUrl) {
       setThing(getThing(dataset, thingUrl));
+    } else {
+      setThing(propThing);
     }
-  }, [dataset, thingUrl]);
+  }, [dataset, thingUrl, propThing]);
 
   return (
     <ThingContext.Provider value={{ thing: stateThing, setThing }}>
