@@ -1,3 +1,10 @@
+## 1.3.0 ( September 30, 2020 )
+
+### Added
+
+- Added `getRowProps` to `<Table>`, allowing a function to be provided to generate attributes for
+  each `<tr>`, based on row data.
+
 ## 1.2.1 ( September 24, 2020 )
 
 ### Changed
