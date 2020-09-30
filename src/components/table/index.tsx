@@ -26,6 +26,7 @@ import { SolidDataset, Thing, Url, UrlString } from "@inrupt/solid-client";
 import {
   useTable,
   Column,
+  Row,
   useSortBy,
   useGlobalFilter,
   Renderer,
@@ -60,6 +61,11 @@ export interface TableProps
   filter?: string;
   ascIndicator?: ReactNode;
   descIndicator?: ReactNode;
+  getRowProps: (
+    row: Row,
+    rowThing: Thing,
+    rowDataset: SolidDataset
+  ) => React.HTMLAttributes<HTMLTableRowElement>;
 }
 
 export function Table({
@@ -68,6 +74,7 @@ export function Table({
   filter,
   ascIndicator,
   descIndicator,
+  getRowProps,
   ...tableProps
 }: TableProps): ReactElement {
   const { columns, data } = useMemo(() => {
@@ -139,7 +146,7 @@ export function Table({
           const rowDataset = things[row.index].dataset;
           const rowThing = things[row.index].thing;
           return (
-            <tr {...row.getRowProps()}>
+            <tr {...row.getRowProps(getRowProps(row, rowThing, rowDataset))}>
               <CombinedDataProvider dataset={rowDataset} thing={rowThing}>
                 {row.cells.map((cell) => {
                   return (
@@ -169,4 +176,5 @@ Table.defaultProps = {
       🔽
     </span>
   ),
+  getRowProps: () => ({}),
 };
