@@ -1,6 +1,6 @@
 {
   "name": "@inrupt/solid-ui-react",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Set of UI libraries using @solid/core",
   "main": "dist/index.js",
   "types": "dist/src/index.d.ts",
@@ -88,8 +88,8 @@
   "homepage": "https://github.com/inrupt/solid-ui-react#readme",
   "dependencies": {
     "@inrupt/solid-client": "^0.4.0",
-    "@inrupt/solid-client-authn-browser": "^0.1.5-revert-breaking-dpop-289475990-1101.0",
-    "@inrupt/solid-client-authn-core": "^0.1.5-revert-breaking-dpop-289475990-1101.0",
+    "@inrupt/solid-client-authn-browser": "^0.2.1",
+    "@inrupt/solid-client-authn-core": "^0.2.1",
     "react-table": "^7.5.1",
     "swr": "^0.3.3"
   }
