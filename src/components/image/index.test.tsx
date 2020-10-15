@@ -33,8 +33,10 @@ const mockThing = SolidFns.addUrl(
   mockProperty,
   mockUrl
 );
+
 const mockFileBlob = new Blob([""], { type: "image/png" }) as Blob &
   SolidFns.WithResourceInfo;
+
 const mockObjectUrl = "mock object url";
 const mockFile = new File(["test file"], "test.png", { type: "image/png" });
 window.URL.createObjectURL = jest.fn(() => mockObjectUrl);
@@ -47,6 +49,7 @@ describe("Image component", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+
   describe("Image snapshots", () => {
     it("matches snapshot with standard props", async () => {
       const { asFragment, getByAltText } = render(
@@ -74,7 +77,20 @@ describe("Image component", () => {
       );
       expect(asFragment()).toMatchSnapshot();
     });
+
+    it("renders an error message if an errorComponent is provided", () => {
+      const { asFragment } = render(
+        <Image
+          thing={undefined}
+          property="https://example.com/bad-url"
+          errorComponent={({ error }) => <span>{error.toString()}</span>}
+        />
+      );
+
+      expect(asFragment()).toMatchSnapshot();
+    });
   });
+
   describe("Image functional tests", () => {
     it("Should call getUrl using given thing and property", async () => {
       const { getByAltText } = render(
@@ -86,7 +102,7 @@ describe("Image component", () => {
       expect(SolidFns.getUrl).toHaveBeenCalledWith(mockThing, mockProperty);
     });
 
-    it("When getUrl returns null, should throw an error", () => {
+    it("When getUrl returns null, with no errorComponent, should throw an error", () => {
       jest.spyOn(console, "error").mockImplementation(() => {});
 
       (SolidFns.getUrl as jest.Mock).mockReturnValueOnce(null);
@@ -101,7 +117,7 @@ describe("Image component", () => {
       (console.error as jest.Mock).mockRestore();
     });
 
-    it("Should throw error if initial fetch fails, if onError is not passed", async () => {
+    it("Should throw error if initial fetch fails, with noErrorComponent, if onError is not passed", async () => {
       jest.spyOn(console, "error").mockImplementation(() => {});
       (SolidFns.unstable_fetchFile as jest.Mock).mockRejectedValueOnce(
         "Error in fetch"

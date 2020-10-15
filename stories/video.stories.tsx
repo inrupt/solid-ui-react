@@ -61,6 +61,7 @@ export function EditTrue({
     exampleProperty,
     exampleUrl
   );
+
   return (
     <Video
       thing={exampleThing}
@@ -81,3 +82,23 @@ EditTrue.args = {
 EditTrue.parameters = {
   actions: { disable: true },
 };
+
+export function ErrorComponent(): ReactElement {
+  const exampleUrl =
+    "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
+
+  const exampleProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
+  const exampleThing = SolidFns.addUrl(
+    SolidFns.createThing(),
+    exampleProperty,
+    exampleUrl
+  );
+
+  return (
+    <Video
+      thing={exampleThing}
+      property="https://example.com/bad-url"
+      errorComponent={({ error }) => <span>{error.toString()}</span>}
+    />
+  );
+}

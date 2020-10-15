@@ -27,3 +27,11 @@ exports[`Video component Video snapshots matches snapshot with standard props 1`
   />
 </DocumentFragment>
 `;
+
+exports[`Video component Video snapshots renders an error message if an errorComponent is provided 1`] = `
+<DocumentFragment>
+  <span>
+    Error: URL not found for given property
+  </span>
+</DocumentFragment>
+`;

@@ -77,3 +77,16 @@ WithDatasetProvider.parameters = {
   actions: { disable: true },
   controls: { disable: true },
 };
+
+export function ErrorComponent(): ReactElement {
+  const property = "http://schema.org/contentUrl";
+  const thing = addUrl(createThing(), property, `${host}/example.jpg`);
+
+  return (
+    <Image
+      thing={thing}
+      property="https://example.com/bad-url"
+      errorComponent={({ error }) => <span>{error.toString()}</span>}
+    />
+  );
+}
