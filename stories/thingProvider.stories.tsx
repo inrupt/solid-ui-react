@@ -57,13 +57,13 @@ interface IWithThingUrl {
 
 export function WithThingUrl(props: IWithThingUrl): ReactElement {
   const { datasetUrl, thingUrl, property } = props;
-  const [litDataset, setLitDataset] = useState<
-    SolidFns.LitDataset & SolidFns.WithResourceInfo
+  const [litDataset, setSolidDataset] = useState<
+    SolidFns.SolidDataset & SolidFns.WithResourceInfo
   >();
 
   const setDataset = async (url: string) => {
-    await SolidFns.fetchLitDataset(url).then((result) => {
-      setLitDataset(result);
+    await SolidFns.getSolidDataset(url).then((result) => {
+      setSolidDataset(result);
     });
   };
 
@@ -106,7 +106,7 @@ function ExampleComponentWithThingUrl(
 
   useEffect(() => {
     if (thing) {
-      const fetchedProperty = SolidFns.getStringUnlocalizedOne(
+      const fetchedProperty = SolidFns.getStringNoLocale(
         thing,
         propertyUrl as string
       );
@@ -135,7 +135,7 @@ function ExampleComponentWithThing(): ReactElement {
 
   useEffect(() => {
     if (thing) {
-      const fetchedProperty = SolidFns.getStringUnlocalizedOne(
+      const fetchedProperty = SolidFns.getStringNoLocale(
         thing,
         "http://xmlns.com/foaf/0.1/name"
       );

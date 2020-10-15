@@ -26,8 +26,11 @@ import React, {
   SetStateAction,
   Dispatch,
   useEffect,
+  useRef,
   ReactNode,
 } from "react";
+
+import qs from "qs";
 
 import {
   Session,
@@ -66,12 +69,14 @@ export interface ISessionProvider {
   sessionId: string;
   session?: Session;
   sessionRequestInProgress?: boolean;
+  onError?: (error: Error) => void;
 }
 
 export const SessionProvider = ({
   sessionId,
   children,
   session: propsSession,
+  onError,
   sessionRequestInProgress: defaultSessionRequestInProgress,
 }: ISessionProvider): ReactElement => {
   const [session, setSession] = useState<Session>(
@@ -89,34 +94,30 @@ export const SessionProvider = ({
   );
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setErrorState] = useState<string | null>();
-
   const fetch = session.info.isLoggedIn
     ? session.fetch.bind(session)
     : unauthenticatedFetch;
 
+  const currentLocation = (window || {}).location;
+
   useEffect(() => {
-    // The first time the component is loaded, check for a querystring and
-    // attempt to handle it.
+    // console.log("handling");
     session
       .handleIncomingRedirect(window.location.href)
-      .then(() => {
-        setSessionRequestInProgress(false);
-      })
       .catch((error) => {
+        if (onError) {
+          onError(error);
+        }
+      })
+      .finally(() => {
+        // console.log("done");
         setSessionRequestInProgress(false);
-        setErrorState(() => {
-          throw error;
-        });
       });
 
     session.on("logout", () => {
-      // Workaround for a solid-client-authn bug.
-      // It leaves dirty data in localstorage, and doesn't set isLoggedIn to false after logging out.
-      window.localStorage.clear();
       setSession(buildSession(sessionId));
     });
-  }, [session, sessionId]);
+  }, [session, sessionId, onError, currentLocation]);
 
   return (
     <SessionContext.Provider

@@ -20,8 +20,8 @@
  */
 
 import {
-  unstable_overwriteFile as unstableOverwriteFile,
-  unstable_fetchFile as unstableFetchFile,
+  overwriteFile as solidOverwriteFile,
+  getFile,
   Thing,
   UrlString,
   Url,
@@ -59,7 +59,7 @@ export const overwriteFile = async (
       return null;
     }
     input.setCustomValidity("");
-    await unstableOverwriteFile(src, file, { fetch });
+    await solidOverwriteFile(src, file, { fetch });
     if (onSave) {
       onSave();
     }
@@ -77,7 +77,7 @@ export const retrieveFile = async (
   src: string,
   fetch: typeof window.fetch
 ): Promise<string> => {
-  const imageBlob = await unstableFetchFile(src, { fetch });
+  const imageBlob = await getFile(src, { fetch });
   return URL.createObjectURL(imageBlob);
 };
 

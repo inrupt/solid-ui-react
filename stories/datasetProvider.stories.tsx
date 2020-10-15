@@ -40,7 +40,10 @@ export function WithLocalDataset(): ReactElement {
     property,
     name
   );
-  const dataSet = SolidFns.setThing(SolidFns.createLitDataset(), exampleThing);
+  const dataSet = SolidFns.setThing(
+    SolidFns.createSolidDataset(),
+    exampleThing
+  );
 
   return (
     <DatasetProvider dataset={dataSet}>
@@ -99,13 +102,13 @@ function ExampleComponentWithDatasetUrl(
   useEffect(() => {
     if (dataset) {
       const thing = SolidFns.getThing(dataset, thingUrl);
-      setExampleThing(thing);
+      setExampleThing(thing || undefined);
     }
   }, [dataset, thingUrl]);
 
   useEffect(() => {
     if (exampleThing) {
-      const fetchedProperty = SolidFns.getStringUnlocalizedOne(
+      const fetchedProperty = SolidFns.getStringNoLocale(
         exampleThing,
         propertyUrl
       );
@@ -138,7 +141,7 @@ function ExampleComponentWithDataset(): ReactElement {
 
   useEffect(() => {
     if (exampleThing) {
-      const fetchedProperty = SolidFns.getStringUnlocalizedOne(
+      const fetchedProperty = SolidFns.getStringNoLocale(
         exampleThing,
         "http://xmlns.com/foaf/0.1/name"
       );

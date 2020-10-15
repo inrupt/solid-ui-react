@@ -25,13 +25,13 @@ import {
   SolidDataset,
   Url,
   UrlString,
-  getStringInLocaleOne,
-  getStringUnlocalizedOne,
-  setStringInLocale,
-  setStringUnlocalized,
+  getStringWithLocale,
+  getStringNoLocale,
+  setStringWithLocale,
+  setStringNoLocale,
   setThing,
   saveSolidDatasetAt,
-  getFetchedFrom,
+  getSourceUrl,
   hasResourceInfo,
 } from "@inrupt/solid-client";
 import DatasetContext from "../../context/datasetContext";
@@ -83,9 +83,9 @@ export function Text({
   useEffect(() => {
     if (thing) {
       if (locale) {
-        setText(getStringInLocaleOne(thing, property, locale));
+        setText(getStringWithLocale(thing, property, locale));
       } else {
-        setText(getStringUnlocalizedOne(thing, property));
+        setText(getStringNoLocale(thing, property));
       }
     }
   }, [thing, property, locale]);
@@ -96,9 +96,14 @@ export function Text({
       const newValue = e.target.value;
       let updatedResource: Thing;
       if (locale) {
-        updatedResource = setStringInLocale(thing, property, newValue, locale);
+        updatedResource = setStringWithLocale(
+          thing,
+          property,
+          newValue,
+          locale
+        );
       } else {
-        updatedResource = setStringUnlocalized(thing, property, newValue);
+        updatedResource = setStringNoLocale(thing, property, newValue);
       }
 
       try {
@@ -115,7 +120,7 @@ export function Text({
           }
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
-            getFetchedFrom(dataset),
+            getSourceUrl(dataset),
             setThing(dataset, updatedResource),
             { fetch }
           );

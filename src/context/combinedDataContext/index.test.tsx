@@ -37,9 +37,9 @@ const mockThing = SolidFns.addStringNoLocale(
   mockNick
 );
 
-// const mockDataSet = SolidFns.setThing(SolidFns.createLitDataset(), mockThing);
+// const mockDataSet = SolidFns.setThing(SolidFns.createSolidDataset(), mockThing);
 const mockDataSetWithResourceInfo = SolidFns.setThing(
-  SolidFns.createLitDataset() as any,
+  SolidFns.createSolidDataset() as any,
   mockThing
 );
 
@@ -58,10 +58,7 @@ function ExampleComponentWithDataset(): React.ReactElement {
 
   React.useEffect(() => {
     if (thing) {
-      const fetchedProperty = SolidFns.getStringUnlocalizedOne(
-        thing,
-        mockPredicate
-      );
+      const fetchedProperty = SolidFns.getStringNoLocale(thing, mockPredicate);
       if (fetchedProperty) {
         setProperty(fetchedProperty);
       }

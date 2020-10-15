@@ -38,9 +38,9 @@ const mockThing = SolidFns.addStringNoLocale(
   mockNick
 );
 
-const mockDataSet = SolidFns.setThing(SolidFns.createLitDataset(), mockThing);
+const mockDataSet = SolidFns.setThing(SolidFns.createSolidDataset(), mockThing);
 const mockDataSetWithResourceInfo = SolidFns.setThing(
-  SolidFns.createLitDataset() as any,
+  SolidFns.createSolidDataset() as any,
   mockThing
 );
 
@@ -54,7 +54,7 @@ const inputOptions = {
   type: "url",
 };
 
-const savedDataSet = SolidFns.createLitDataset() as any;
+const savedDataSet = SolidFns.createSolidDataset() as any;
 jest
   .spyOn(SolidFns, "saveSolidDatasetAt")
   .mockImplementation(() => savedDataSet);
@@ -140,11 +140,17 @@ describe("<Value /> component functional testing", () => {
     [
       "string",
       "getStringNoLocale",
-      "setStringUnlocalized",
+      "setStringNoLocale",
       "mockString",
       undefined,
     ],
-    ["string", "getStringWithLocale", "setStringInLocale", "mockString", "en"],
+    [
+      "string",
+      "getStringWithLocale",
+      "setStringWithLocale",
+      "mockString",
+      "en",
+    ],
     ["boolean", "getBoolean", "setBoolean", true, undefined],
     ["datetime", "getDatetime", "setDatetime", "2020-12-30T12:30", undefined],
     ["decimal", "getDecimal", "setDecimal", 1.23, undefined],
@@ -152,7 +158,7 @@ describe("<Value /> component functional testing", () => {
     ["url", "getUrl", "setUrl", "http://mock.url", undefined],
   ])(
     "when dataType is %s, should call %s setter on blur",
-    (dataType, getter, setter, newValue, locale) => {
+    (dataType, getter, setter, newValue, locale = "") => {
       jest.spyOn(SolidFns, getter as any).mockImplementationOnce(() => null);
 
       const mockSetter = jest
@@ -189,7 +195,7 @@ describe("<Value /> component functional testing", () => {
 
   it("Should not call setter on blur if the value of the input hasn't changed", async () => {
     jest
-      .spyOn(SolidFns, "setStringUnlocalized")
+      .spyOn(SolidFns, "setStringNoLocale")
       .mockImplementation(() => mockThing);
     const { getByDisplayValue } = render(
       <Value
@@ -204,7 +210,7 @@ describe("<Value /> component functional testing", () => {
     const input = getByDisplayValue(mockNick);
     input.focus();
     input.blur();
-    expect(SolidFns.setStringUnlocalized).toHaveBeenCalledTimes(0);
+    expect(SolidFns.setStringNoLocale).toHaveBeenCalledTimes(0);
   });
 
   it("Should not call saveSolidDatasetAt onBlur if autosave is false", async () => {

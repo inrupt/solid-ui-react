@@ -73,7 +73,7 @@ export function BasicExample({
   );
 
   const exampleDataSet = SolidFns.setThing(
-    SolidFns.createLitDataset(),
+    SolidFns.createSolidDataset(),
     exampleThing
   );
 
@@ -115,7 +115,7 @@ export function WithLocalData({
   );
 
   const exampleDataSet = SolidFns.setThing(
-    SolidFns.createLitDataset(),
+    SolidFns.createSolidDataset(),
     exampleThing
   );
 

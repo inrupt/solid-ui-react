@@ -53,8 +53,6 @@ export const LoginButton: React.FC<Props> = (propsLogin: Props) => {
 
     try {
       // Workaround for a solid-client-authn bug.
-      window.localStorage.clear();
-
       // Typescript is mad about something.
       await session.login(options as any);
       setSessionRequestInProgress(false);

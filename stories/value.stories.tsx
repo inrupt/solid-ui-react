@@ -316,7 +316,7 @@ export function WithUnsavedData(
   );
 
   const exampleDataSet = SolidFns.setThing(
-    SolidFns.createLitDataset(),
+    SolidFns.createSolidDataset(),
     exampleThing
   );
 

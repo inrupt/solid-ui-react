@@ -23,7 +23,7 @@ import React, { ReactElement } from "react";
 
 import {
   Thing,
-  LitDataset,
+  SolidDataset,
   WithResourceInfo,
   UrlString,
 } from "@inrupt/solid-client";
@@ -42,7 +42,7 @@ export type ThingOrThingUrl = {
 };
 
 export interface Dataset extends Props {
-  dataset: LitDataset | (LitDataset & WithResourceInfo);
+  dataset: SolidDataset | (SolidDataset & WithResourceInfo);
 }
 
 export interface DatasetUrl extends Props {

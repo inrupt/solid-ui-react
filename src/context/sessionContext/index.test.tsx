@@ -21,7 +21,6 @@
 
 import * as React from "react";
 import { render, waitFor } from "@testing-library/react";
-import { ErrorBoundary } from "react-error-boundary";
 import { SessionContext, SessionProvider } from ".";
 
 function ChildComponent(): React.ReactElement {
@@ -89,32 +88,5 @@ describe("SessionContext functionality", () => {
     await waitFor(() => {
       expect(session.handleIncomingRedirect).toHaveBeenCalled();
     });
-  });
-
-  it("throws an error if handling incoming redirect fails", async () => {
-    jest.spyOn(console, "error").mockImplementation(() => {});
-    const error = "Failed to handle";
-
-    const session = {
-      info: {
-        isLoggedIn: true,
-        webId: "https://fakeurl.com/me",
-      },
-      handleIncomingRedirect: jest.fn().mockRejectedValue(error),
-      on: jest.fn(),
-      fetch: jest.fn(),
-    } as any;
-
-    const { getByText } = render(
-      <ErrorBoundary fallbackRender={({ error: e }) => <div>{e}</div>}>
-        <SessionProvider session={session} sessionId="key">
-          <ChildComponent />
-        </SessionProvider>
-      </ErrorBoundary>
-    );
-
-    await waitFor(() => expect(getByText(error)).toBeDefined());
-    // eslint-disable-next-line no-console
-    (console.error as jest.Mock).mockRestore();
   });
 });

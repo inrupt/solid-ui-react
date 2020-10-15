@@ -35,7 +35,7 @@ export function ProviderWithHook(): ReactElement {
   const [idp, setIdp] = useState("https://inrupt.net");
 
   return (
-    <SessionProvider sessionId="session-provider-example">
+    <SessionProvider sessionId="session-provider-example" onError={console.log}>
       <p>
         <em>{"Note: "}</em>
         to test out the Authentication examples, you will need to click the
@@ -44,9 +44,13 @@ export function ProviderWithHook(): ReactElement {
 
       <input type="url" value={idp} onChange={(e) => setIdp(e.target.value)} />
 
-      <LoginButton oidcIssuer={idp} redirectUrl={window.location.href} />
+      <LoginButton
+        oidcIssuer={idp}
+        redirectUrl={window.location.href}
+        onError={console.log}
+      />
 
-      <LogoutButton />
+      <LogoutButton onError={console.log} />
 
       <Dashboard />
     </SessionProvider>

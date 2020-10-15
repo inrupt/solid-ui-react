@@ -20,22 +20,22 @@
     "build-storybook": "build-storybook -c .storybook -o docs"
   },
   "peerDependencies": {
-    "react": "^16.13.1"
+    "react": ">16.13.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.0",
     "@inrupt/eslint-config-base": "0.0.4",
     "@inrupt/eslint-config-react": "0.0.4",
     "@material-ui/core": "^4.11.0",
-    "@storybook/addon-actions": "^6.0.26",
-    "@storybook/addon-docs": "^6.0.21",
-    "@storybook/addon-essentials": "^6.0.26",
-    "@storybook/addon-knobs": "^6.0.26",
-    "@storybook/addon-links": "^6.0.21",
-    "@storybook/addon-storysource": "^6.0.21",
-    "@storybook/addons": "^6.0.26",
+    "@storybook/addon-actions": "^6.0.27",
+    "@storybook/addon-docs": "^6.0.27",
+    "@storybook/addon-essentials": "^6.0.27",
+    "@storybook/addon-knobs": "^6.0.27",
+    "@storybook/addon-links": "^6.0.27",
+    "@storybook/addon-storysource": "^6.0.27",
+    "@storybook/addons": "^6.0.27",
     "@storybook/preset-typescript": "^3.0.0",
-    "@storybook/react": "^6.0.26",
+    "@storybook/react": "^6.0.27",
     "@testing-library/react": "^11.1.0",
     "@testing-library/react-hooks": "^3.4.2",
     "@types/jest": "^26.0.14",
@@ -57,7 +57,7 @@
     "eslint-plugin-react": "^7.21.4",
     "eslint-plugin-react-hooks": "^4.1.2",
     "fork-ts-checker-webpack-plugin": "^5.2.0",
-    "jest": "^26.5.3",
+    "jest": "^26.6.1",
     "license-checker": "^25.0.1",
     "prettier": "^2.1.2",
     "react": "^16.14.0",
@@ -87,9 +87,9 @@
   },
   "homepage": "https://github.com/inrupt/solid-ui-react#readme",
   "dependencies": {
-    "@inrupt/solid-client": "^0.4.0",
-    "@inrupt/solid-client-authn-browser": "^0.2.1",
-    "@inrupt/solid-client-authn-core": "^0.2.1",
+    "@inrupt/solid-client-authn-browser": "0.2.2",
+    "@inrupt/solid-client": "^0.6.1",
+    "core-js": "^3.6.5",
     "react-table": "^7.6.0",
     "swr": "^0.3.3"
   }

@@ -31,25 +31,17 @@ jest.mock("../../hooks/useDataset");
 let documentBody: RenderResult;
 
 const mockUrl = "https://some-interesting-value.com";
+const mockThingUrl = "https://some-interesting-value.com#thing";
 const mockPredicate = "http://xmlns.com/foaf/0.1/nick";
 const mockNick = "test nick value";
 
-const mockThing = SolidFns.addStringNoLocale(
-  SolidFns.createThing(),
-  mockPredicate,
-  mockNick
-);
-
-// const mockDataSet = SolidFns.setThing(SolidFns.createLitDataset(), mockThing);
-const mockDataSetWithResourceInfo = SolidFns.setThing(
-  SolidFns.createLitDataset() as any,
+let mockDataSetWithResourceInfo = SolidFns.mockSolidDatasetFrom(mockUrl);
+let mockThing = SolidFns.mockThingFrom(mockThingUrl);
+mockThing = SolidFns.addStringNoLocale(mockThing, mockPredicate, mockNick);
+mockDataSetWithResourceInfo = SolidFns.setThing(
+  mockDataSetWithResourceInfo,
   mockThing
 );
-
-// TODO: refactor this once ticket SDK-1157 has been done
-mockDataSetWithResourceInfo.internal_resourceInfo = {};
-mockDataSetWithResourceInfo.internal_resourceInfo.fetchedFrom =
-  "https://some-interesting-value.com";
 
 function ExampleComponentWithDataset(): React.ReactElement {
   const [exampleThing, setExampleThing] = React.useState<SolidFns.Thing>();
@@ -69,7 +61,7 @@ function ExampleComponentWithDataset(): React.ReactElement {
 
   React.useEffect(() => {
     if (exampleThing) {
-      const fetchedProperty = SolidFns.getStringUnlocalizedOne(
+      const fetchedProperty = SolidFns.getStringNoLocale(
         exampleThing,
         mockPredicate
       );
@@ -87,7 +79,11 @@ function ExampleComponentWithDataset(): React.ReactElement {
 }
 
 function ExampleComponentWithDatasetUrl(): React.ReactElement {
-  const [exampleThing, setExampleThing] = React.useState<SolidFns.Thing>();
+  const [
+    exampleThing,
+    setExampleThing,
+  ] = React.useState<SolidFns.Thing | null>();
+
   const [property, setProperty] = React.useState<string>();
 
   const datasetContext = React.useContext(DatasetContext);
@@ -102,7 +98,7 @@ function ExampleComponentWithDatasetUrl(): React.ReactElement {
 
   React.useEffect(() => {
     if (exampleThing) {
-      const fetchedProperty = SolidFns.getStringUnlocalizedOne(
+      const fetchedProperty = SolidFns.getStringNoLocale(
         exampleThing,
         mockPredicate
       );
@@ -121,17 +117,20 @@ function ExampleComponentWithDatasetUrl(): React.ReactElement {
 }
 
 describe("Testing DatasetContext", () => {
-  it("matches snapshot with Dataset provided", () => {
+  it("matches snapshot with Dataset provided", async () => {
     (useDataset as jest.Mock).mockReturnValue({
       dataset: undefined,
       error: undefined,
     });
-    documentBody = render(
+
+    const { baseElement, getByText } = render(
       <DatasetProvider dataset={mockDataSetWithResourceInfo}>
         <ExampleComponentWithDataset />
       </DatasetProvider>
     );
-    const { baseElement } = documentBody;
+
+    await waitFor(() => expect(getByText("test nick value")).toBeDefined());
+
     expect(baseElement).toMatchSnapshot();
   });
 

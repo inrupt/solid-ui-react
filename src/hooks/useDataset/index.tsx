@@ -21,11 +21,7 @@
 
 import { useContext } from "react";
 import useSWR from "swr";
-import {
-  getSolidDataset,
-  SolidDataset,
-  WithResourceInfo,
-} from "@inrupt/solid-client";
+import { getSolidDataset, SolidDataset } from "@inrupt/solid-client";
 import { SessionContext } from "../../context/sessionContext";
 import DatasetContext from "../../context/datasetContext";
 
@@ -34,7 +30,7 @@ export default function useDataset(
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   options?: any
 ): {
-  dataset: SolidDataset | (SolidDataset & WithResourceInfo) | undefined;
+  dataset: SolidDataset | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: any;
 } {
@@ -52,6 +48,6 @@ export default function useDataset(
     }
   );
 
-  const dataset = datasetIri ? data : datasetFromContext;
+  const dataset = datasetIri ? (data as SolidDataset) : datasetFromContext;
   return { dataset, error };
 }
