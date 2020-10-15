@@ -74,6 +74,18 @@ describe("Video component", () => {
       );
       expect(asFragment()).toMatchSnapshot();
     });
+
+    it("renders an error message if an errorComponent is provided", () => {
+      const { asFragment } = render(
+        <Video
+          thing={undefined}
+          property="https://example.com/bad-url"
+          errorComponent={({ error }) => <span>{error.toString()}</span>}
+        />
+      );
+
+      expect(asFragment()).toMatchSnapshot();
+    });
   });
   describe("Video functional tests", () => {
     it("Should call getUrl using given thing and property", async () => {

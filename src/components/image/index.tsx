@@ -34,6 +34,7 @@ export type Props = {
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   onSave?: () => void;
   onError?: (error: Error) => void;
+  errorComponent?: React.ComponentType<any>;
 } & React.ImgHTMLAttributes<HTMLImageElement>;
 
 export function Image({
@@ -46,8 +47,10 @@ export function Image({
   maxSize,
   alt,
   inputProps,
+  errorComponent: ErrorComponent,
   ...imgOptions
 }: Props): ReactElement {
+  const [error, setError] = useState<null | Error>(null);
   const { fetch } = useContext(SessionContext);
 
   const thingContext = useContext(ThingContext);
@@ -55,35 +58,59 @@ export function Image({
 
   const thing = propThing || contextThing;
 
-  if (!thing) {
-    throw new Error("Thing not found as property or in context");
+  if (!thing && !error) {
+    const thingNotFound = new Error(
+      "Thing not found as property or in context"
+    );
+
+    if (!ErrorComponent && !onError) {
+      throw thingNotFound;
+    } else if (onError) {
+      onError(thingNotFound);
+    }
+
+    setError(thingNotFound);
   }
 
-  const src = getUrl(thing, property);
+  const src = thing ? getUrl(thing, property) : null;
 
-  if (!src) {
-    throw new Error("URL not found for given property");
+  if (!src && !error) {
+    const urlNotFound = new Error("URL not found for given property");
+
+    if (!ErrorComponent && !onError) {
+      throw urlNotFound;
+    } else if (onError) {
+      onError(urlNotFound);
+    }
+
+    setError(urlNotFound);
   }
 
   const [imgObjectUrl, setImgObjectUrl] = useState("");
 
   useEffect(() => {
-    retrieveFile(src, fetch)
-      .then(setImgObjectUrl)
-      .catch((error) => {
-        if (onError) {
-          onError(error);
-        } else {
-          setImgObjectUrl(() => {
-            throw error;
-          });
-        }
-      });
-  }, [src, onError, fetch]);
+    if (src) {
+      retrieveFile(src, fetch)
+        .then(setImgObjectUrl)
+        .catch((retrieveError) => {
+          if (onError) {
+            onError(retrieveError);
+            setError(retrieveError);
+          } else if (ErrorComponent) {
+            setImgObjectUrl("");
+            setError(retrieveError);
+          } else {
+            setImgObjectUrl(() => {
+              throw retrieveError;
+            });
+          }
+        });
+    }
+  }, [src, onError, setError, fetch, ErrorComponent]);
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
-    if (autosave && fileList && fileList.length > 0) {
+    if (autosave && fileList && fileList.length > 0 && src) {
       const newObjectUrl = await overwriteFile(
         src,
         fileList[0],
@@ -93,15 +120,25 @@ export function Image({
         onSave,
         onError
       );
+
       if (newObjectUrl) {
         setImgObjectUrl(newObjectUrl);
       }
     }
   };
+
+  let imageComponent = null;
+
+  if (src) {
+    /* eslint-disable-next-line react/jsx-props-no-spreading */
+    imageComponent = <img src={imgObjectUrl} alt={alt ?? ""} {...imgOptions} />;
+  } else if (error && ErrorComponent) {
+    imageComponent = <ErrorComponent error={error} />;
+  }
+
   return (
     <>
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <img src={imgObjectUrl} alt={alt ?? ""} {...imgOptions} />
+      {imageComponent}
       {edit && (
         <input
           // eslint-disable-next-line react/jsx-props-no-spreading
