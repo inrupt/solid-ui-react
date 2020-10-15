@@ -34,7 +34,7 @@ export type Props = {
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   onSave?: () => void;
   onError?: (error: Error) => void;
-  errorComponent?: React.ComponentType<any>;
+  errorComponent?: React.ComponentType<{ error: Error }>;
 } & React.ImgHTMLAttributes<HTMLImageElement>;
 
 export function Image({
