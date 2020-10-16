@@ -90,3 +90,8 @@ export function ErrorComponent(): ReactElement {
     />
   );
 }
+
+ErrorComponent.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
+};
