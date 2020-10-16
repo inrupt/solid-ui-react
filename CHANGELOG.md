@@ -1,3 +1,14 @@
+## 1.4.0 ( October 16, 2020 )
+
+### Added
+
+- Added `errorComponent` to `<Image>` and `<Video>`, allowing a placeholder component to be
+  rendered in the place of either in case a thing or value is not found.
+
+### Changed
+
+- Updated package dependencies
+
 ## 1.3.0 ( September 30, 2020 )
 
 ### Added
