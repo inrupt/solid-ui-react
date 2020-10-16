@@ -111,9 +111,6 @@ export const SessionProvider = ({
       });
 
     session.on("logout", () => {
-      // Workaround for a solid-client-authn bug.
-      // It leaves dirty data in localstorage, and doesn't set isLoggedIn to false after logging out.
-      window.localStorage.clear();
       setSession(buildSession(sessionId));
     });
   }, [session, sessionId]);
