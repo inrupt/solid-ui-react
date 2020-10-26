@@ -36,8 +36,11 @@ import {
   Session,
   getClientAuthenticationWithDependencies,
 } from "@inrupt/solid-client-authn-browser";
+import { ILoginInputOptions } from "@inrupt/solid-client-authn-core";
 
 export interface ISessionContext {
+  login: (options: ILoginInputOptions) => Promise<void>;
+  logout: () => Promise<void>;
   session: Session;
   sessionRequestInProgress: boolean;
   setSessionRequestInProgress?: Dispatch<SetStateAction<boolean>> | any;
@@ -57,10 +60,16 @@ export const buildSession = (sessionId: string): Session =>
     sessionId
   );
 
+const defaultSession = buildSession("");
+const defaultLogin = defaultSession.login;
+const defaultLogout = defaultSession.logout;
+
 export const SessionContext = createContext<ISessionContext>({
-  session: buildSession(""),
+  session: defaultSession,
   sessionRequestInProgress: true,
   fetch: unauthenticatedFetch,
+  login: defaultLogin,
+  logout: defaultLogout,
 });
 
 /* eslint react/require-default-props: 0 */
@@ -123,9 +132,13 @@ export const SessionProvider = ({
     });
   }, [session, sessionId, onError, currentLocation]);
 
+  const { login, logout } = session;
+
   return (
     <SessionContext.Provider
       value={{
+        login,
+        logout,
         session,
         sessionRequestInProgress,
         setSessionRequestInProgress,

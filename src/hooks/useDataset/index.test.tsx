@@ -42,6 +42,8 @@ describe("useDataset() hook", () => {
         fetch: mockFetch,
         sessionRequestInProgress: true,
         session: {} as Session,
+        logout: async () => {},
+        login: async () => {},
       }}
     >
       <DatasetContext.Provider
