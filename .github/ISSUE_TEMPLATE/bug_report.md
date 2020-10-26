@@ -6,10 +6,10 @@ labels: "bug"
 assignees: ""
 ---
 
-### Search terms you've used**
+### Search terms you've used
 <!-- What search terms have you used to check whether this bug was already reported? -->
 
-## Bug description
+### Bug description
 <!-- A short description of what the problem is. -->
 
 ### To Reproduce
