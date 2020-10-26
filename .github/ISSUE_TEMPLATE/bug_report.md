@@ -1,3 +1,11 @@
+---
+name: Bug report
+about: Create a bug report to help us improve
+title: ""
+labels: "bug"
+assignees: ""
+---
+
 ### Search terms you've used**
 <!-- What search terms have you used to check whether this bug was already reported? -->
 
