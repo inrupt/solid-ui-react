@@ -6,39 +6,40 @@ labels: "bug"
 assignees: ""
 ---
 
-**Search terms you've used**
+<!-- 
+Thank you for reporting an issue.
 
+Please fill in as much of the template below as you're able. Feel free to delete any section you don't think applies, but be aware that the more comprehensive your description, the easier it is to take it into account. 
+-->
+
+### Search terms you've used
 <!-- What search terms have you used to check whether this bug was already reported? -->
 
-**Describe the bug**
+### Bug description
+<!-- A short description of what the problem is. -->
 
-<!-- A clear and concise description of what the bug is. -->
+### To Reproduce
+1. 
+2. 
+3. 
+4. 
 
-**To Reproduce**
-Steps to reproduce the behavior:
+### Expected result
+<!-- A clear and concise description of what you expected to happen -->
 
-1. Given this data: `…`
-2. Call this function `…`
-3. See error
+### Actual result
+<!-- A description of what actually happened -->
 
-**Expected behavior**
+### Environment
+Please run
 
-<!-- A clear and concise description of what you expected to happen. -->
+  npx envinfo --system --npmPackages --binaries --npmGlobalPackages --browsers
 
-**Log output**
-
-<!-- If applicable, add log output to help explain your problem. -->
-
-**Environment**
-
-<!-- Please run `npx envinfo` in your project folder and paste the output here: -->
-
-```
-$ npx envinfo
-
+in your project folder and paste the output here:
 
 ```
+$ npx envinfo --system --npmPackages --binaries --npmGlobalPackages --browsers
+```
 
-**Additional context**
-
-<!-- Add any other context about the problem here. -->
+## Additional information
+<!-- Add any other relevant information that might be useful to understand and find a solution to the problem -->
