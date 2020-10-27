@@ -98,7 +98,11 @@ export const SessionProvider = ({
     ? session.fetch.bind(session)
     : unauthenticatedFetch;
 
-  const currentLocation = (window || {}).location;
+  let currentLocation;
+
+  if (typeof window !== "undefined") {
+    currentLocation = window.location;
+  }
 
   useEffect(() => {
     // console.log("handling");
