@@ -28,24 +28,18 @@ import { DatasetProvider } from "../datasetContext";
 
 let documentBody: RenderResult;
 
-const mockPredicate = `http://xmlns.com/foaf/0.1/nick`;
+const mockUrl = "https://some-interesting-value.com";
+const mockThingUrl = "https://some-interesting-value.com#thing";
+const mockPredicate = "http://xmlns.com/foaf/0.1/nick";
 const mockNick = "test nick value";
 
-const mockThing = SolidFns.addStringNoLocale(
-  SolidFns.createThing(),
-  mockPredicate,
-  mockNick
-);
-
-const mockDataSetWithResourceInfo = SolidFns.setThing(
-  SolidFns.createLitDataset() as any,
+let mockDataSetWithResourceInfo = SolidFns.mockSolidDatasetFrom(mockUrl);
+let mockThing = SolidFns.mockThingFrom(mockThingUrl);
+mockThing = SolidFns.addStringNoLocale(mockThing, mockPredicate, mockNick);
+mockDataSetWithResourceInfo = SolidFns.setThing(
+  mockDataSetWithResourceInfo,
   mockThing
 );
-
-// TODO: refactor this once ticket SDK-1157 has been done
-mockDataSetWithResourceInfo.internal_resourceInfo = {};
-mockDataSetWithResourceInfo.internal_resourceInfo.fetchedFrom =
-  "https://some-interesting-value.com";
 
 function ExampleComponentWithThing(): React.ReactElement {
   const [property, setProperty] = React.useState<string>(
@@ -56,7 +50,7 @@ function ExampleComponentWithThing(): React.ReactElement {
 
   React.useEffect(() => {
     if (thing) {
-      const fetchedProperty = SolidFns.getStringUnlocalizedOne(
+      const fetchedProperty = SolidFns.getStringNoLocale(
         thing,
         "http://xmlns.com/foaf/0.1/name"
       );
@@ -84,7 +78,7 @@ function ExampleComponentWithThingUrl(): React.ReactElement {
 
   React.useEffect(() => {
     if (thing) {
-      const fetchedProperty = SolidFns.getStringUnlocalizedOne(
+      const fetchedProperty = SolidFns.getStringNoLocale(
         thing,
         examplePredicate
       );

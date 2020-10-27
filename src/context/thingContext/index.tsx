@@ -59,22 +59,21 @@ export const ThingProvider = ({
   thing: propThing,
   thingUrl,
 }: RequireThingOrThingUrl): ReactElement => {
-  const datasetContext = useContext(DatasetContext);
-  const { dataset } = datasetContext;
+  const { dataset } = useContext(DatasetContext);
   let thing = propThing;
 
   if (dataset && thingUrl) {
-    thing = getThing(dataset, thingUrl);
+    thing = getThing(dataset, thingUrl) || undefined;
   }
 
   // Allow child components to update the thing
-  const [stateThing, setThing] = useState(thing);
+  const [stateThing, setThing] = useState<Thing | undefined>(thing);
 
   // Reset the thing if the dataset changes.
   useEffect(() => {
     if (dataset && thingUrl) {
-      setThing(getThing(dataset, thingUrl));
-    } else {
+      setThing(getThing(dataset, thingUrl) || undefined);
+    } else if (propThing) {
       setThing(propThing);
     }
   }, [dataset, thingUrl, propThing]);

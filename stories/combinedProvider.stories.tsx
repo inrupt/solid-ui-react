@@ -41,7 +41,10 @@ export function WithLocalData(): ReactElement {
     property,
     name
   );
-  const dataSet = SolidFns.setThing(SolidFns.createLitDataset(), exampleThing);
+  const dataSet = SolidFns.setThing(
+    SolidFns.createSolidDataset(),
+    exampleThing
+  );
 
   return (
     <CombinedDataProvider dataset={dataSet} thing={exampleThing}>
@@ -93,10 +96,7 @@ function ExampleComponent({
 
   useEffect(() => {
     if (thing) {
-      const fetchedProperty = SolidFns.getStringUnlocalizedOne(
-        thing,
-        propertyUrl
-      );
+      const fetchedProperty = SolidFns.getStringNoLocale(thing, propertyUrl);
 
       if (fetchedProperty) {
         setProperty(fetchedProperty);
@@ -123,10 +123,7 @@ function ExampleComponentFetchedData({
 
   useEffect(() => {
     if (thing) {
-      const fetchedProperty = SolidFns.getStringUnlocalizedOne(
-        thing,
-        propertyUrl
-      );
+      const fetchedProperty = SolidFns.getStringNoLocale(thing, propertyUrl);
       if (fetchedProperty) {
         setProperty(fetchedProperty);
       }

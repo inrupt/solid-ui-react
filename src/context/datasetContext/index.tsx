@@ -20,13 +20,17 @@
  */
 
 import React, { createContext, ReactElement, useState, useEffect } from "react";
-import { LitDataset, WithResourceInfo, UrlString } from "@inrupt/solid-client";
+import {
+  SolidDataset,
+  WithResourceInfo,
+  UrlString,
+} from "@inrupt/solid-client";
 
 import useDataset from "../../hooks/useDataset";
 
 export interface IDatasetContext {
-  dataset: LitDataset | (LitDataset & WithResourceInfo) | undefined;
-  setDataset: (dataset: LitDataset) => void;
+  dataset: SolidDataset | (SolidDataset & WithResourceInfo) | undefined;
+  setDataset: (dataset: SolidDataset) => void;
 }
 
 const DatasetContext = createContext<IDatasetContext>({
@@ -40,7 +44,7 @@ export interface IDatasetProvider {
   children: React.ReactNode;
   loading?: React.ReactNode;
   onError?(error: Error): void | null;
-  dataset?: LitDataset | (LitDataset & WithResourceInfo);
+  dataset?: SolidDataset | (SolidDataset & WithResourceInfo);
   datasetUrl?: UrlString | string;
 }
 
@@ -67,7 +71,9 @@ export const DatasetProvider = ({
   const datasetToUse = propDataset ?? dataset;
 
   // Provide a setDataset function so that child components can update.
-  const [stateDataset, setDataset] = useState(datasetToUse);
+  const [stateDataset, setDataset] = useState<
+    SolidDataset | (SolidDataset & WithResourceInfo) | undefined
+  >(datasetToUse);
 
   // If the dataset is asynchronously loaded, make sure to set the new state value.
   useEffect(() => {

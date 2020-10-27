@@ -25,11 +25,11 @@ import {
   SolidDataset,
   Url,
   UrlString,
-  setStringInLocale,
-  setStringUnlocalized,
+  setStringWithLocale,
+  setStringNoLocale,
   setThing,
   saveSolidDatasetAt,
-  getFetchedFrom,
+  getSourceUrl,
   hasResourceInfo,
   setBoolean,
   setDatetime,
@@ -146,14 +146,14 @@ export function Value({
           break;
         default:
           if (locale) {
-            updatedResource = setStringInLocale(
+            updatedResource = setStringWithLocale(
               thing,
               property,
               value as string,
               locale
             );
           } else {
-            updatedResource = setStringUnlocalized(
+            updatedResource = setStringNoLocale(
               thing,
               property,
               value as string
@@ -175,7 +175,7 @@ export function Value({
           }
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
-            getFetchedFrom(dataset),
+            getSourceUrl(dataset),
             setThing(dataset, updatedResource),
             { fetch }
           );

@@ -37,9 +37,9 @@ const mockThing = SolidFns.addStringNoLocale(
   mockNick
 );
 
-const mockDataSet = SolidFns.setThing(SolidFns.createLitDataset(), mockThing);
+const mockDataSet = SolidFns.setThing(SolidFns.createSolidDataset(), mockThing);
 const mockDataSetWithResourceInfo = SolidFns.setThing(
-  SolidFns.createLitDataset() as any,
+  SolidFns.createSolidDataset() as any,
   mockThing
 );
 
@@ -53,7 +53,7 @@ const inputOptions = {
   type: "url",
 };
 
-const savedDataSet = SolidFns.createLitDataset() as any;
+const savedDataSet = SolidFns.createSolidDataset() as any;
 jest
   .spyOn(SolidFns, "saveSolidDatasetAt")
   .mockImplementation(() => savedDataSet);
@@ -99,9 +99,9 @@ describe("<Text /> component snapshot test", () => {
 });
 
 describe("<Text /> component functional testing", () => {
-  it("Should call getStringUnlocalizedOne function if no locale is passed", async () => {
+  it("Should call getStringNoLocale function if no locale is passed", async () => {
     jest
-      .spyOn(SolidFns, "getStringUnlocalizedOne")
+      .spyOn(SolidFns, "getStringNoLocale")
       .mockImplementation(() => mockNick);
     const { getByText } = render(
       <Text
@@ -110,13 +110,13 @@ describe("<Text /> component functional testing", () => {
         property={mockPredicate}
       />
     );
-    expect(SolidFns.getStringUnlocalizedOne).toHaveBeenCalled();
+    expect(SolidFns.getStringNoLocale).toHaveBeenCalled();
     expect(getByText(mockNick)).toBeDefined();
   });
 
-  it("Should call getStringInLocaleOne function if locale is passed", async () => {
+  it("Should call getStringWithLocale function if locale is passed", async () => {
     jest
-      .spyOn(SolidFns, "getStringInLocaleOne")
+      .spyOn(SolidFns, "getStringWithLocale")
       .mockImplementation(() => mockNick);
     const { getByText } = render(
       <Text
@@ -127,13 +127,13 @@ describe("<Text /> component functional testing", () => {
         autosave
       />
     );
-    expect(SolidFns.getStringInLocaleOne).toHaveBeenCalled();
+    expect(SolidFns.getStringWithLocale).toHaveBeenCalled();
     expect(getByText(mockNick)).toBeDefined();
   });
 
-  it("Should call setStringUnlocalized onBlur if no locale is set", async () => {
+  it("Should call setStringNoLocale onBlur if no locale is set", async () => {
     jest
-      .spyOn(SolidFns, "setStringUnlocalized")
+      .spyOn(SolidFns, "setStringNoLocale")
       .mockImplementation(() => mockThing);
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
@@ -149,12 +149,12 @@ describe("<Text /> component functional testing", () => {
     input.focus();
     fireEvent.change(input, { target: { value: "updated nick value" } });
     input.blur();
-    expect(SolidFns.setStringUnlocalized).toHaveBeenCalled();
+    expect(SolidFns.setStringNoLocale).toHaveBeenCalled();
   });
 
-  it("Should call setStringInLocale onBlur if locale is set", async () => {
+  it("Should call setStringWithLocale onBlur if locale is set", async () => {
     jest
-      .spyOn(SolidFns, "setStringInLocale")
+      .spyOn(SolidFns, "setStringWithLocale")
       .mockImplementation(() => mockThing);
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
     const { getByDisplayValue } = render(
@@ -171,12 +171,12 @@ describe("<Text /> component functional testing", () => {
     input.focus();
     fireEvent.change(input, { target: { value: "updated nick value" } });
     input.blur();
-    expect(SolidFns.setStringInLocale).toHaveBeenCalled();
+    expect(SolidFns.setStringWithLocale).toHaveBeenCalled();
   });
 
   it("Should not call setString onBlur if the value of the input hasn't changed", async () => {
     jest
-      .spyOn(SolidFns, "setStringInLocale")
+      .spyOn(SolidFns, "setStringWithLocale")
       .mockImplementation(() => mockThing);
     const { getByDisplayValue } = render(
       <Text
@@ -191,7 +191,7 @@ describe("<Text /> component functional testing", () => {
     const input = getByDisplayValue(mockNick);
     input.focus();
     input.blur();
-    expect(SolidFns.setStringInLocale).toHaveBeenCalledTimes(0);
+    expect(SolidFns.setStringWithLocale).toHaveBeenCalledTimes(0);
   });
 
   it("Should not call saveSolidDatasetAt onBlur if autosave is false", async () => {

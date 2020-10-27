@@ -1,3 +1,9 @@
+## 1.5.0 ( October 26, 2020 )
+
+### Changed
+
+- Updated solid-client-auth to 0.2.2, and solid-client to 0.6.1
+
 ## 1.4.0 ( October 16, 2020 )
 
 ### Added

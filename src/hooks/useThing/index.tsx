@@ -36,10 +36,11 @@ export default function useThing(
   if (!thingIri) {
     return { thing: thingFromContext, error };
   }
+
   if (!dataset) {
     return { thing: undefined, error };
   }
 
-  const thing = getThing(dataset, thingIri);
+  const thing = getThing(dataset, thingIri) || undefined;
   return { thing, error };
 }

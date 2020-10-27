@@ -230,7 +230,10 @@ export function NestedDataExample(): ReactElement {
     let phoneNumber = "";
     numberThingIris.some((numberThingIri) => {
       const numberThing = SolidFns.getThing(dataset, numberThingIri);
-      if (SolidFns.getUrl(numberThing, typeProperty) === numberType) {
+      if (
+        numberThing &&
+        SolidFns.getUrl(numberThing, typeProperty) === numberType
+      ) {
         phoneNumber = SolidFns.getUrl(numberThing, valueProperty) ?? "";
         return true;
       }
@@ -250,7 +253,9 @@ export function NestedDataExample(): ReactElement {
       dataset,
       `${host}/example.ttl#alterEgo`
     );
-
+    if (!personThing || !alterEgoThing) {
+      return <p>No matching thing</p>;
+    }
     return (
       <Table
         things={[
