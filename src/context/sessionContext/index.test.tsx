@@ -20,11 +20,11 @@
  */
 
 import * as React from "react";
-import { render, waitFor } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import { SessionContext, SessionProvider } from ".";
 
 function ChildComponent(): React.ReactElement {
-  const { session, sessionRequestInProgress } = React.useContext(
+  const { session, sessionRequestInProgress, login, logout } = React.useContext(
     SessionContext
   );
 
@@ -36,6 +36,12 @@ function ChildComponent(): React.ReactElement {
         </div>
       )}
       <div data-testid="session">{JSON.stringify(session)}</div>
+      <button type="button" onClick={() => login({})}>
+        Login
+      </button>
+      <button type="button" onClick={logout}>
+        Logout
+      </button>
     </div>
   );
 }
@@ -50,6 +56,8 @@ describe("Testing SessionContext matches snapshot", () => {
       handleIncomingRedirect: jest.fn().mockResolvedValue(null),
       on: jest.fn(),
       fetch: jest.fn(),
+      login: jest.fn(),
+      logout: jest.fn(),
     } as any;
 
     const documentBody = render(
@@ -77,6 +85,8 @@ describe("SessionContext functionality", () => {
       handleIncomingRedirect: jest.fn().mockResolvedValue(null),
       on: jest.fn(),
       fetch: jest.fn(),
+      login: jest.fn(),
+      logout: jest.fn(),
     } as any;
 
     render(
@@ -88,5 +98,40 @@ describe("SessionContext functionality", () => {
     await waitFor(() => {
       expect(session.handleIncomingRedirect).toHaveBeenCalled();
     });
+  });
+
+  it("passes the login and logout functions from session", async () => {
+    const login = jest.fn();
+    const logout = jest.fn();
+    const session = {
+      info: {
+        isLoggedIn: true,
+        webId: "https://fakeurl.com/me",
+      },
+      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
+      on: jest.fn(),
+      fetch: jest.fn(),
+      login,
+      logout,
+    } as any;
+
+    const { getByText } = render(
+      <SessionProvider session={session} sessionId="key">
+        <ChildComponent />
+      </SessionProvider>
+    );
+
+    await waitFor(() => {
+      expect(session.handleIncomingRedirect).toHaveBeenCalled();
+    });
+
+    expect(login).not.toHaveBeenCalled();
+    expect(logout).not.toHaveBeenCalled();
+
+    fireEvent.click(getByText("Login"));
+    expect(login).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(getByText("Logout"));
+    expect(logout).toHaveBeenCalledTimes(1);
   });
 });
