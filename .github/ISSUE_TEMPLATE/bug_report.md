@@ -6,6 +6,12 @@ labels: "bug"
 assignees: ""
 ---
 
+<!-- 
+Thank you for reporting an issue.
+
+Please fill in as much of the template below as you're able. Feel free to delete any section you want to skip. 
+-->
+
 ### Search terms you've used
 <!-- What search terms have you used to check whether this bug was already reported? -->
 
