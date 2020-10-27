@@ -2,14 +2,14 @@
 name: Feature request
 about: Suggest an idea for a new feature
 title: ""
-labels: "new feature"
+labels: "enhancement"
 assignees: ""
 ---
 
 <!-- 
 Thank you for reporting an issue.
 
-Please fill in as much of the template below as you're able. Feel free to delete any section you want to skip. 
+Please fill in as much of the template below as you're able. Feel free to delete any section you don't think applies, but be aware that the more comprehensive your description, the easier it is to take it into account. 
 -->
 
 ### Search terms you've used
@@ -21,7 +21,7 @@ Please fill in as much of the template below as you're able. Feel free to delete
 
 ### Expected functionality/enhancement
 
-<!-- How should the new feature work -->
+<!-- How would you like the new feature work -->
 
 ### Actual functionality/enhancement
 
