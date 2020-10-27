@@ -134,4 +134,64 @@ describe("SessionContext functionality", () => {
     fireEvent.click(getByText("Logout"));
     expect(logout).toHaveBeenCalledTimes(1);
   });
+
+  it("calls onError if there is an error logging in", async () => {
+    const login = jest.fn().mockRejectedValue(null);
+    const logout = jest.fn();
+    const onError = jest.fn();
+    const session = {
+      info: {
+        isLoggedIn: true,
+        webId: "https://fakeurl.com/me",
+      },
+      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
+      on: jest.fn(),
+      fetch: jest.fn(),
+      login,
+      logout,
+    } as any;
+
+    const { getByText } = render(
+      <SessionProvider session={session} sessionId="key" onError={onError}>
+        <ChildComponent />
+      </SessionProvider>
+    );
+
+    await waitFor(() => {
+      expect(session.handleIncomingRedirect).toHaveBeenCalled();
+    });
+
+    fireEvent.click(getByText("Login"));
+    await waitFor(() => expect(onError).toHaveBeenCalledTimes(1));
+  });
+
+  it("calls onError if there is an error logging out", async () => {
+    const login = jest.fn();
+    const logout = jest.fn().mockRejectedValue(null);
+    const onError = jest.fn();
+    const session = {
+      info: {
+        isLoggedIn: true,
+        webId: "https://fakeurl.com/me",
+      },
+      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
+      on: jest.fn(),
+      fetch: jest.fn(),
+      login,
+      logout,
+    } as any;
+
+    const { getByText } = render(
+      <SessionProvider session={session} sessionId="key" onError={onError}>
+        <ChildComponent />
+      </SessionProvider>
+    );
+
+    await waitFor(() => {
+      expect(session.handleIncomingRedirect).toHaveBeenCalled();
+    });
+
+    fireEvent.click(getByText("Logout"));
+    await waitFor(() => expect(onError).toHaveBeenCalledTimes(1));
+  });
 });

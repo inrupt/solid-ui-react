@@ -132,7 +132,25 @@ export const SessionProvider = ({
     });
   }, [session, sessionId, onError, currentLocation]);
 
-  const { login, logout } = session;
+  const login = async (options: ILoginInputOptions) => {
+    setSessionRequestInProgress(true);
+
+    try {
+      await session.login(options);
+      setSessionRequestInProgress(false);
+    } catch (error) {
+      setSessionRequestInProgress(false);
+      if (onError) onError(error);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await session.logout();
+    } catch (error) {
+      if (onError) onError(error);
+    }
+  };
 
   return (
     <SessionContext.Provider
