@@ -20,11 +20,14 @@
  */
 
 import React, { ReactElement, useContext, useState } from "react";
-import { SessionContext, SessionProvider } from "../src/context/sessionContext";
-import { LoginButton } from "../src/components/logIn";
-import { LogoutButton } from "../src/components/logOut";
-import { Text } from "../src/components/text";
-import CombinedDataProvider from "../src/context/combinedDataContext";
+import {
+  SessionContext,
+  SessionProvider,
+} from "../../src/context/sessionContext";
+import { LoginButton } from "../../src/components/logIn";
+import { LogoutButton } from "../../src/components/logOut";
+import { Text } from "../../src/components/text";
+import CombinedDataProvider from "../../src/context/combinedDataContext";
 
 export default {
   title: "Authentication/Session Provider",

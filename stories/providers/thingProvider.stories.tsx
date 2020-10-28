@@ -21,18 +21,18 @@
 
 import React, { ReactElement, useContext, useState, useEffect } from "react";
 import * as SolidFns from "@inrupt/solid-client";
-import ThingContext from "../src/context/thingContext";
-import CombinedDataProvider from "../src/context/combinedDataContext";
-import config from "./config";
+import { DatasetProvider } from "../../src/context/datasetContext";
+import ThingContext, { ThingProvider } from "../../src/context/thingContext";
+import config from "../config";
 
 const { host } = config();
 
 export default {
-  title: "Providers/Combined Data Provider",
-  component: CombinedDataProvider,
+  title: "Providers/Thing Provider",
+  component: ThingProvider,
 };
 
-export function WithLocalData(): ReactElement {
+export function WithLocalThing(): ReactElement {
   const property = "http://xmlns.com/foaf/0.1/name";
   const name = "example value";
 
@@ -41,54 +41,64 @@ export function WithLocalData(): ReactElement {
     property,
     name
   );
-  const dataSet = SolidFns.setThing(
-    SolidFns.createSolidDataset(),
-    exampleThing
-  );
 
   return (
-    <CombinedDataProvider dataset={dataSet} thing={exampleThing}>
-      <ExampleComponent propertyUrl={property} />
-    </CombinedDataProvider>
+    <ThingProvider thing={exampleThing}>
+      <ExampleComponentWithThing />
+    </ThingProvider>
   );
 }
 
-WithLocalData.parameters = {
-  actions: { disable: true },
-  controls: { disable: true },
-};
-
-export function WithDataUrls({
-  datasetUrl,
-  thingUrl,
-  propertyUrl,
-}: {
+interface IWithThingUrl {
   datasetUrl: string;
   thingUrl: string;
-  propertyUrl: string;
-}): ReactElement {
-  return (
-    <CombinedDataProvider datasetUrl={datasetUrl} thingUrl={thingUrl}>
-      <ExampleComponentFetchedData propertyUrl={propertyUrl} />
-    </CombinedDataProvider>
-  );
+  property: string;
 }
 
-WithDataUrls.parameters = {
-  actions: { disable: true },
-};
+export function WithThingUrl(props: IWithThingUrl): ReactElement {
+  const { datasetUrl, thingUrl, property } = props;
+  const [litDataset, setSolidDataset] = useState<
+    SolidFns.SolidDataset & SolidFns.WithResourceInfo
+  >();
 
-WithDataUrls.args = {
+  const setDataset = async (url: string) => {
+    await SolidFns.getSolidDataset(url).then((result) => {
+      setSolidDataset(result);
+    });
+  };
+
+  useEffect(() => {
+    // eslint-disable-next-line no-void
+    void setDataset(datasetUrl);
+  }, [datasetUrl]);
+
+  if (litDataset) {
+    return (
+      <DatasetProvider dataset={litDataset}>
+        <ThingProvider thingUrl={thingUrl}>
+          <ExampleComponentWithThingUrl property={property} />
+        </ThingProvider>
+      </DatasetProvider>
+    );
+  }
+  return <span>no dataset</span>;
+}
+
+WithThingUrl.args = {
   datasetUrl: `${host}/example.ttl`,
   thingUrl: `${host}/example.ttl#me`,
-  propertyUrl: "http://xmlns.com/foaf/0.1/name",
+  property: "http://www.w3.org/2006/vcard/ns#note",
 };
 
-function ExampleComponent({
-  propertyUrl,
-}: {
-  propertyUrl: string;
-}): ReactElement {
+interface IExampleComponentWithThingUrl {
+  property?: string;
+}
+
+function ExampleComponentWithThingUrl(
+  props: IExampleComponentWithThingUrl
+): ReactElement {
+  const { property: propertyUrl } = props;
+
   const [property, setProperty] = useState<string>("fetching in progress");
 
   const thingContext = useContext(ThingContext);
@@ -96,13 +106,16 @@ function ExampleComponent({
 
   useEffect(() => {
     if (thing) {
-      const fetchedProperty = SolidFns.getStringNoLocale(thing, propertyUrl);
+      const fetchedProperty = SolidFns.getStringNoLocale(
+        thing,
+        propertyUrl as string
+      );
 
       if (fetchedProperty) {
         setProperty(fetchedProperty);
       }
     }
-  }, [thing, propertyUrl]);
+  }, [propertyUrl, thing]);
 
   return (
     <div>
@@ -111,24 +124,26 @@ function ExampleComponent({
   );
 }
 
-function ExampleComponentFetchedData({
-  propertyUrl,
-}: {
-  propertyUrl: string;
-}): ReactElement {
-  const [property, setProperty] = useState<string>("fetching in progress");
+ExampleComponentWithThingUrl.defaultProps = {
+  property: "http://www.w3.org/2006/vcard/ns#note",
+};
 
+function ExampleComponentWithThing(): ReactElement {
+  const [property, setProperty] = useState<string>("fetching in progress");
   const thingContext = useContext(ThingContext);
   const { thing } = thingContext;
 
   useEffect(() => {
     if (thing) {
-      const fetchedProperty = SolidFns.getStringNoLocale(thing, propertyUrl);
+      const fetchedProperty = SolidFns.getStringNoLocale(
+        thing,
+        "http://xmlns.com/foaf/0.1/name"
+      );
       if (fetchedProperty) {
         setProperty(fetchedProperty);
       }
     }
-  }, [propertyUrl, thing]);
+  }, [thing]);
 
   return (
     <div>
