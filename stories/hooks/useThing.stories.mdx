@@ -14,7 +14,7 @@ const { thing, error } = useThing(datasetIri, thingIri, options)
 
 ## Parameters
 
-- `datasetIri`: (optional) a dataset iri to fetch the Thing from, if both `datasetIri` and `thingIri` are supplied. Uses the Dataset from context if omitted.
+- `datasetIri`: (optional) a [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) [IRI](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-IRI) to fetch the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) from, if both `datasetIri` and `thingIri` are supplied. Uses the Dataset from context if omitted.
 - `thingIri`: (optional) a thing iri to fetch the Thing from. Uses the Thing from context if omitted.
 - `options`: (optional) additional options to pass to the dataset request, if `datasetIri` is supplied
 
