@@ -26,6 +26,45 @@ import { Video } from "../../src/components/video";
 export default {
   title: "Components/Video",
   component: Video,
+  argTypes: {
+    thing: {
+      description: `The [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to retrieve the video src from. Uses a Thing from context if not supplied.`,
+      control: { type: null },
+    },
+    property: {
+      type: { required: true },
+      description: `The property of the Thing to retrieve the src URL from.`,
+      control: { type: null },
+    },
+    edit: {
+      description: `If true, renders an input to allow a new video file to be selected.`,
+      control: { type: null },
+    },
+    autosave: {
+      description: `If true, uploads and persists a new video once selected.`,
+      control: { type: null },
+    },
+    maxSize: {
+      description: `The maximum permitted file size, in kB`,
+      control: { type: null },
+    },
+    inputProps: {
+      description: `Additional attributes to be passed to the file input, if \`edit\` is true`,
+      control: { type: null },
+    },
+    onSave: {
+      description: `Function to be called on saving a new image.`,
+      control: { type: null },
+    },
+    onError: {
+      description: `Function to be called on error.`,
+      control: { type: null },
+    },
+    errorComponent: {
+      description: `Component to be rendered in case of error.`,
+      control: { type: null },
+    },
+  },
 };
 
 export function EditFalse(): ReactElement {
