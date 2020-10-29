@@ -32,8 +32,39 @@ export default {
   title: "Components/Text",
   component: Text,
   argTypes: {
-    onError: { action: "onError" },
-    onSave: { action: "onSave" },
+    onError: {
+      description: `Function to be called on error.`,
+      action: "onError",
+    },
+    onSave: {
+      description: `Function to be called on saving a value.`,
+      action: "onSave",
+    },
+    thing: {
+      description: `The [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to retrieve the text from. Uses a Thing from context if not supplied.`,
+    },
+    dataSet: {
+      description: `The [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) to retrieve the text from. Uses a Dataset from context if not supplied.`,
+    },
+    property: {
+      type: { required: true },
+      description: `The property of the Thing to retrieve the text from.`,
+    },
+    saveDatasetTo: {
+      description: `The location to persist the updated dataset, for example when the dataset has been created locally.`,
+    },
+    locale: {
+      description: `The locale of the string value.`,
+    },
+    edit: {
+      description: `If true, renders an input to allow a new value to be entered.`,
+    },
+    autosave: {
+      description: `If true, persists a new value once entered.`,
+    },
+    inputProps: {
+      description: `Additional attributes to be passed to the file input, if \`edit\` is true`,
+    },
   },
 };
 
