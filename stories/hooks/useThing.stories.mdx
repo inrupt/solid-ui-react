@@ -17,7 +17,7 @@ const { thing, error } = useThing(datasetIri, thingIri, options)
 
 - `datasetIri`: (optional) a [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) [IRI](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-IRI) to fetch the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) from, if both `datasetIri` and `thingIri` are supplied. Uses the Dataset from context if omitted.
 - `thingIri`: (optional) a [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) [IRI](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-IRI) to fetch the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) from. Uses the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) from context if omitted.
-- `options`: (optional) additional options to pass to the dataset request, if `datasetIri` is supplied
+- `options`: (optional) additional options to pass to the [dataset request](https://docs.inrupt.com/developer-tools/api/javascript/solid-client/modules/_resource_soliddataset_.html#getsoliddataset), if `datasetIri` is supplied. Unless an alternative id provided, `options.fetch` is included using the current session automatically.
 
 ## Return Values
 
