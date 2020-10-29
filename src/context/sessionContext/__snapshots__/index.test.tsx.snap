@@ -9,6 +9,16 @@ exports[`Testing SessionContext matches snapshot matches snapshot 1`] = `
       >
         {"info":{"isLoggedIn":true,"webId":"https://fakeurl.com/me"}}
       </div>
+      <button
+        type="button"
+      >
+        Login
+      </button>
+      <button
+        type="button"
+      >
+        Logout
+      </button>
     </div>
   </div>
 </body>

@@ -43,6 +43,8 @@ describe("useSession() hook functional testing", () => {
               sessionId: "some-session-id",
             },
           } as Session,
+          login: jest.fn(),
+          logout: jest.fn(),
         }}
       >
         {children}

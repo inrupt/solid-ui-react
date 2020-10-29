@@ -1,3 +1,9 @@
+## 1.6.0 ( October 27, 2020 )
+
+### Added
+
+- Add login and logout functions to SessionContext/SessionProvider
+
 ## 1.5.1 ( October 26, 2020 )
 
 ### Changed
