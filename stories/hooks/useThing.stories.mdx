@@ -1,4 +1,5 @@
-import { Meta } from "@storybook/addon-docs/blocks";
+import { Meta, Source } from "@storybook/addon-docs/blocks";
+import { useThing } from "../../src";
 
 <Meta title="Hooks/useThing" />
 
@@ -22,3 +23,22 @@ const { thing, error } = useThing(datasetIri, thingIri, options)
 
 - `thing`: the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) retrieved from context or requests using given [IRI](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-IRI) (undefined if loading/missing)
 - `error`: the error thrown by the request (or undefined)
+
+## Example Usage
+
+This example uses the datasetIri and thingIri values to fetch a thing, and pass to a child component when loaded.
+
+<Source
+  code={`
+import { useThing } from "@inrupt/solid-ui-react";
+import Profile from "../components";
+function ProfileLoader() {
+  const datasetIri = "https://example.com/profile";
+  const thingIri = "https://example.com/profile#me";
+  const { thing, error } = useThing(datasetIri, thingIri);
+  if (error) return <div>failed to load</div>;
+  if (!thing) return <div>loading...</div>;
+  return <Profile profile={thing} />;
+}
+`}
+/>

@@ -1,4 +1,4 @@
-import { Meta } from "@storybook/addon-docs/blocks";
+import { Meta, Source } from "@storybook/addon-docs/blocks";
 
 <Meta title="Hooks/useDataset" />
 
@@ -21,3 +21,21 @@ const { thing, error } = useDataset(datasetIri, options)
 
 - `dataset`: the Dataset retrieved from context or request using given iri (undefined if loading/missing)
 - `error`: the error thrown by the request (or undefined)
+
+## Example Usage
+
+This example uses the datasetIri value to fetch a dataset, and pass to a child component when loaded.
+
+<Source
+  code={`
+import { useDataset } from "@inrupt/solid-ui-react";
+import Profile from "../components";
+function ProfileLoader() {
+  const datasetIri = "https://example.com/profile";
+  const { dataset, error } = useDataset(datasetIri);
+  if (error) return <div>failed to load</div>;
+  if (!dataset) return <div>loading...</div>;
+  return <Profile profileDataset={dataset} />;
+}
+`}
+/>
