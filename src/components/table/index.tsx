@@ -68,6 +68,9 @@ export interface TableProps
   ) => React.HTMLAttributes<HTMLTableRowElement>;
 }
 
+/**
+ * Displays values from an array of Things as table rows, with each column showing a given property of those Things.
+ */
 export function Table({
   children,
   things,

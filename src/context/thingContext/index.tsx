@@ -54,6 +54,9 @@ export type RequireThingOrThingUrl =
   | RequireProperty<IThingProvider, "thing">
   | RequireProperty<IThingProvider, "thingUrl">;
 
+/**
+ * Used to provide a Thing to child components through context, as used by various provided components and the useThing hook.
+ */
 export const ThingProvider = ({
   children,
   thing: propThing,

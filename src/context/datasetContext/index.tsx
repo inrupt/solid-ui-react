@@ -55,6 +55,9 @@ export type RequireDatasetOrDatasetUrl =
   | RequireProperty<IDatasetProvider, "dataset">
   | RequireProperty<IDatasetProvider, "datasetUrl">;
 
+/**
+ * Used to provide a Dataset to child components through context, as used by various provided components and the useDataset hook.
+ */
 export const DatasetProvider = ({
   children,
   onError,

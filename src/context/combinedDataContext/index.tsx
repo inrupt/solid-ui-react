@@ -65,6 +65,9 @@ function CombinedDataProvider(
   props: DatasetUrl & RequireThingOrThingUrl
 ): ReactElement;
 
+/**
+ * Used to provide both a Dataset and Thing to child components through context, as used by various provided components and the useDataset and useThing hooks.
+ */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function CombinedDataProvider(props: any): ReactElement {
   const { children, dataset, datasetUrl, thing, thingUrl, onError } = props;
