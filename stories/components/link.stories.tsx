@@ -26,6 +26,15 @@ import { Link } from "../../src/components/link";
 export default {
   title: "Components/Link",
   component: Link,
+  argTypes: {
+    property: {
+      type: { required: true },
+      description: `The property of the Thing to retrieve the link URL from.`,
+    },
+    thing: {
+      description: `The [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to retrieve the link URL from.`,
+    },
+  },
 };
 
 export function WithChildren({ property }: { property: string }): ReactElement {
