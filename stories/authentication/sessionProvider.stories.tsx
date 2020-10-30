@@ -32,6 +32,25 @@ import CombinedDataProvider from "../../src/context/combinedDataContext";
 export default {
   title: "Authentication/Session Provider",
   component: SessionProvider,
+  argTypes: {
+    sessionId: {
+      description: `A unique id to identify the session`,
+      control: { type: null },
+    },
+    session: {
+      description: `An existing [Session](https://docs.inrupt.com/developer-tools/api/javascript/solid-client-authn-browser/classes/_session_.session.html#class-session) object to be used by the provider.`,
+      control: { type: null },
+    },
+    sessionRequestInProgress: {
+      description: `To manually set whether a session request is currently in progress.`,
+      control: { type: null },
+    },
+    onError: {
+      description: `Function to be called on error.`,
+      action: "onError",
+      control: { type: null },
+    },
+  },
 };
 
 export function ProviderWithHook(): ReactElement {

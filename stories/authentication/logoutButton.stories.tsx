@@ -28,8 +28,14 @@ export default {
   title: "Authentication/Logout Button",
   component: LogoutButton,
   argTypes: {
-    onError: { action: "onError" },
-    onLogout: { action: "onLogout" },
+    onError: {
+      description: `Function to be called on error.`,
+      action: "onError",
+    },
+    onLogout: {
+      description: `Function to be called on logout.`,
+      action: "onLogout",
+    },
   },
 };
 

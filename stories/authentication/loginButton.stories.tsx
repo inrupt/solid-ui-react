@@ -28,7 +28,19 @@ export default {
   title: "Authentication/Login Button",
   component: LoginButton,
   argTypes: {
-    onError: { action: "onError" },
+    onError: {
+      description: `Function to be called on error.`,
+      action: "onError",
+    },
+    oidcIssuer: {
+      description: `The user's identity provider.`,
+    },
+    authOptions: {
+      description: `Additional options to be passed to [login](https://docs.inrupt.com/developer-tools/api/javascript/solid-client-authn-browser/classes/_session_.session.html#login).`,
+    },
+    redirectUrl: {
+      description: `The URL to which the user will be redirected after logging in with their identity provider.`,
+    },
   },
 };
 
