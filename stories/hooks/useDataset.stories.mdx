@@ -1,0 +1,41 @@
+import { Meta, Source } from "@storybook/addon-docs/blocks";
+
+<Meta title="Hooks/useDataset" />
+
+# useDataset
+
+A hook to access the nearest [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) from context if no arguments are supplied, or to request a [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) from given [IRI](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-IRI).
+
+Should be located within a [`SessionProvider`](/?path=/docs/authentication-session-provider) if using to fetch.
+
+```
+const { thing, error } = useDataset(datasetIri, options)
+```
+
+## Parameters
+
+- `datasetIri`: (optional) a [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) [IRI](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-IRI) to fetch from
+- `options`: (optional) additional options to pass to the [dataset request](https://docs.inrupt.com/developer-tools/api/javascript/solid-client/modules/_resource_soliddataset_.html#getsoliddataset), if `datasetIri` is supplied. Unless an alternative id provided, `options.fetch` is included using the current session automatically.
+
+## Return Values
+
+- `dataset`: the [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) retrieved from context or request using given [IRI](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-IRI) (undefined if loading/missing)
+- `error`: the error thrown by the request (or undefined)
+
+## Example Usage
+
+This example uses the datasetIri value to fetch a [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset), and pass to a child component when loaded.
+
+<Source
+  code={`
+import { useDataset } from "@inrupt/solid-ui-react";
+import Profile from "../components";
+function ProfileLoader() {
+  const datasetIri = "https://example.com/profile";
+  const { dataset, error } = useDataset(datasetIri);
+  if (error) return <div>failed to load</div>;
+  if (!dataset) return <div>loading...</div>;
+  return <Profile profileDataset={dataset} />;
+}
+`}
+/>

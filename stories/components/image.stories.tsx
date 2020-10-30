@@ -21,9 +21,9 @@
 
 import React, { ReactElement } from "react";
 import { addUrl, createThing } from "@inrupt/solid-client";
-import { Image } from "../src/components/image";
-import CombinedDataProvider from "../src/context/combinedDataContext";
-import config from "./config";
+import { Image } from "../../src/components/image";
+import CombinedDataProvider from "../../src/context/combinedDataContext";
+import config from "../config";
 
 const { host } = config();
 

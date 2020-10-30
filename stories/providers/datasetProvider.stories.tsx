@@ -21,8 +21,10 @@
 
 import React, { ReactElement, useContext, useState, useEffect } from "react";
 import * as SolidFns from "@inrupt/solid-client";
-import DatasetContext, { DatasetProvider } from "../src/context/datasetContext";
-import config from "./config";
+import DatasetContext, {
+  DatasetProvider,
+} from "../../src/context/datasetContext";
+import config from "../config";
 
 const { host } = config();
 

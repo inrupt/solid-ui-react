@@ -21,8 +21,8 @@
 
 import React, { ReactElement } from "react";
 import { Button } from "@material-ui/core";
-import { SessionProvider } from "../src/context/sessionContext";
-import { LogoutButton } from "../src/components/logOut";
+import { SessionProvider } from "../../src/context/sessionContext";
+import { LogoutButton } from "../../src/components/logOut";
 
 export default {
   title: "Authentication/Logout Button",
