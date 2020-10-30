@@ -47,6 +47,10 @@ export type TableColumnProps = {
   filterable?: boolean;
   children?: undefined | null | [];
 };
+
+/**
+ * To be used as the only children of a Table component. Each column represents one property of the Things passed to the Table.
+ */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function TableColumn(props: TableColumnProps): ReactElement {
   throw new Error("Can't use TableColumn outside a Table.");
