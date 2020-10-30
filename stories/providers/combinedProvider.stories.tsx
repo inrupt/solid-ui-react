@@ -30,6 +30,13 @@ const { host } = config();
 export default {
   title: "Providers/Combined Data Provider",
   component: CombinedDataProvider,
+  parameters: {
+    docs: {
+      description: {
+        component: `Used to provide both a [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) and [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to child components through context, as used by various provided components and the [useDataset](/?path=/docs/hooks-usething) and [useThing](/?path=/docs/hooks-usedataset) hooks.`,
+      },
+    },
+  },
   argTypes: {
     dataset: {
       description: `A [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) to be used by the provider`,
