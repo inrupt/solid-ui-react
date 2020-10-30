@@ -29,7 +29,7 @@ export default {
   argTypes: {
     property: {
       type: { required: true },
-      description: `The property of the Thing to retrieve the link URL from.`,
+      description: `The property of the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to retrieve the link URL from.`,
     },
     thing: {
       description: `The [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to retrieve the link URL from.`,
