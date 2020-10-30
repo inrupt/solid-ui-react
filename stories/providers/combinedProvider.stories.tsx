@@ -30,6 +30,29 @@ const { host } = config();
 export default {
   title: "Providers/Combined Data Provider",
   component: CombinedDataProvider,
+  argTypes: {
+    dataset: {
+      description: `A [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) to be used by the provider`,
+      control: { type: null },
+    },
+    datasetUrl: {
+      description: `A url to fetch the [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) from, if \`Dataset\` is not provided.`,
+      control: { type: null },
+    },
+    thing: {
+      description: `A [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to be used by the provider`,
+      control: { type: null },
+    },
+    thingUrl: {
+      description: `A url to retrieve the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) from, if \`Thing\` is not provided. Uses the Dataset from context.`,
+      control: { type: null },
+    },
+    onError: {
+      description: `Function to be called on error.`,
+      action: "onError",
+      control: { type: null },
+    },
+  },
 };
 
 export function WithLocalData(): ReactElement {
