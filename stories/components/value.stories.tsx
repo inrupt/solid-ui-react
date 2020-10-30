@@ -90,6 +90,12 @@ export default {
     inputProps: {
       description: `Additional attributes to be passed to the file input, if \`edit\` is true`,
     },
+    datasetUrl: {
+      description: `**Not passed to Value**. Used to customise values of the wrapping [DatasetProvider](/?path=/docs/providers-dataset-provider) in the storybook examples.`,
+    },
+    thingUrl: {
+      description: `**Not passed to Value**. Used to customise values of the wrapping [ThingProvider](/?path=/docs/providers-thing-provider) in the storybook examples`,
+    },
   },
 };
 
@@ -118,7 +124,7 @@ const defaultArgs = {
   autosave: false,
   edit: false,
   dataType: dataTypeOptions[1],
-  inputOptions,
+  inputProps: inputOptions,
 };
 
 export function StringValue(props: IValue): ReactElement {
