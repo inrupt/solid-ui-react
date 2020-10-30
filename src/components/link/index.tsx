@@ -28,7 +28,7 @@ export type Props = {
 } & React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
 /**
- * Retrieves a URL from given Thing/property, and renders as an anchor tag with the given href.
+ * Retrieves a URL from given [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing)/property, and renders as an anchor tag with the given href.
  */
 export function Link({
   children,
