@@ -73,7 +73,7 @@ export interface TableProps
 }
 
 /**
- * Displays values from an array of Things as table rows, with each column showing a given property of those Things.
+ * Displays values from an array of [Things](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) as table rows, with each column showing a given property of those [Things](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing).
  */
 export function Table({
   children,
