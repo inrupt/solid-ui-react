@@ -51,7 +51,7 @@ For further example usage, please refer to the [Table](/?path=/docs/components-t
       control: { type: null },
     },
     body: {
-      description: `Function which is passed the [cell props](https://react-table.tanstack.com/docs/api/useTable#cell-properties) and returns valid JSX. Equivalent to the [Cell](https://react-table.tanstack.com/docs/api/useTable#column-options) option of React Table.`,
+      description: `Function which is passed the [cell props](https://react-table.tanstack.com/docs/api/useTable#cell-properties) and returns valid JSX. Equivalent to the [Cell](https://react-table.tanstack.com/docs/api/useTable#column-options) option of [React Table](https://www.npmjs.com/package/react-table).`,
       control: { type: null },
     },
     locale: {
