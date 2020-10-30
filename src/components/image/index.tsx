@@ -38,7 +38,7 @@ export type Props = {
 } & React.ImgHTMLAttributes<HTMLImageElement>;
 
 /**
- * Fetches and displays an image, from a src found at a given property of a given Thing. Can also be used to upload a new/replacement image file.
+ * Fetches and displays an image, from a src found at a given property of a given [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing). Can also be used to upload a new/replacement image file.
  */
 export function Image({
   property,
