@@ -31,10 +31,12 @@ export default {
     onError: {
       description: `Function to be called on error.`,
       action: "onError",
+      control: { type: null },
     },
     onLogout: {
       description: `Function to be called on logout.`,
       action: "onLogout",
+      control: { type: null },
     },
   },
 };
