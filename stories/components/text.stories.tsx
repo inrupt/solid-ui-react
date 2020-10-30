@@ -48,7 +48,7 @@ export default {
     },
     property: {
       type: { required: true },
-      description: `The property of the Thing to retrieve the text from.`,
+      description: `The property of the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to retrieve the text from.`,
     },
     saveDatasetTo: {
       description: `The location to persist the updated dataset, for example when the dataset has been created locally.`,
