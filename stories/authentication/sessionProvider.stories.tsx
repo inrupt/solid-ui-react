@@ -32,6 +32,13 @@ import CombinedDataProvider from "../../src/context/combinedDataContext";
 export default {
   title: "Authentication/Session Provider",
   component: SessionProvider,
+  parameters: {
+    docs: {
+      description: {
+        component: `Used to provide session data to child components through context, as used by various provided components and the [useSession](/?path=/docs/hooks-usesession) hook.`,
+      },
+    },
+  },
   argTypes: {
     sessionId: {
       description: `A unique id to identify the session`,
