@@ -47,7 +47,7 @@ For further example usage, please refer to the [Table](/?path=/docs/components-t
       control: { type: null },
     },
     header: {
-      description: `A string, or function which returns valid JSX, to render as the column header. Equivalent to the [Header](https://react-table.tanstack.com/docs/api/useTable#column-options) option of React Table.`,
+      description: `A string, or function which returns valid JSX, to render as the column header. Equivalent to the [Header](https://react-table.tanstack.com/docs/api/useTable#column-options) option of [React Table](https://www.npmjs.com/package/react-table).`,
       control: { type: null },
     },
     body: {
