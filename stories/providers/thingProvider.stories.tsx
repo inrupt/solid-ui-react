@@ -30,6 +30,23 @@ const { host } = config();
 export default {
   title: "Providers/Thing Provider",
   component: ThingProvider,
+  parameters: {
+    docs: {
+      description: {
+        component: `Used to provide a [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to child components through context, as used by various provided components and the [useThing](/?path=/docs/hooks-usething) hook.`,
+      },
+    },
+  },
+  argTypes: {
+    thing: {
+      description: `A [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to be used by the provider`,
+      control: { type: null },
+    },
+    thingUrl: {
+      description: `A url to retrieve the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) from, if \`Thing\` is not provided. Uses the Dataset from context.`,
+      control: { type: null },
+    },
+  },
 };
 
 export function WithLocalThing(): ReactElement {

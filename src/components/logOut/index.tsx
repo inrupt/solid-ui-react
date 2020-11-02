@@ -28,6 +28,9 @@ export interface Props {
   children?: React.ReactElement;
 }
 
+/**
+ * Renders a button which triggers logout on click. Should be used within a `SessionProvider`.
+ */
 export const LogoutButton: React.FC<Props> = (propsLogout: Props) => {
   const { session } = useContext(SessionContext);
   const { children, onLogout, onError } = propsLogout;

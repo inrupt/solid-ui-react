@@ -56,6 +56,9 @@ export type Props = {
   onError?(error: Error): void | null;
 } & React.HTMLAttributes<HTMLSpanElement>;
 
+/**
+ * Retrieves and displays a value of one of a range of types from a given [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset)/[Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing)/property. Can also be used to set/update and persist a value.
+ */
 export function Value({
   thing: propThing,
   dataSet: propDataset,

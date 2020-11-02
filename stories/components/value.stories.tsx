@@ -42,9 +42,17 @@ export default {
   title: "Components/Value",
   component: Value,
   argTypes: {
-    onError: { action: "onError" },
-    onSave: { action: "onSave" },
+    onError: {
+      description: `Function to be called on error.`,
+      action: "onError",
+    },
+    onSave: {
+      description: `Function to be called on saving a value.`,
+      action: "onSave",
+    },
     dataType: {
+      type: { required: true },
+      description: "The type of value to be retrieved",
       control: {
         type: "select",
         options: {
@@ -56,6 +64,37 @@ export default {
           url: "url",
         },
       },
+    },
+    thing: {
+      description: `The [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to retrieve the value from. Uses a Thing from context if not supplied.`,
+    },
+    dataSet: {
+      description: `The [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) to retrieve the value from. Uses a Dataset from context if not supplied.`,
+    },
+    property: {
+      type: { required: true },
+      description: `The property of the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to retrieve the value from.`,
+    },
+    saveDatasetTo: {
+      description: `The location to persist the updated dataset, for example when the dataset has been created locally.`,
+    },
+    locale: {
+      description: `If \`dataType\` is \`string\`, determines the locale of the string.`,
+    },
+    edit: {
+      description: `If true, renders an input to allow a new value to be entered.`,
+    },
+    autosave: {
+      description: `If true, persists a new value once entered.`,
+    },
+    inputProps: {
+      description: `Additional attributes to be passed to the file input, if \`edit\` is true`,
+    },
+    datasetUrl: {
+      description: `**Not passed to Value**. Used to customise values of the wrapping [DatasetProvider](/?path=/docs/providers-dataset-provider) in the storybook examples.`,
+    },
+    thingUrl: {
+      description: `**Not passed to Value**. Used to customise values of the wrapping [ThingProvider](/?path=/docs/providers-thing-provider) in the storybook examples`,
     },
   },
 };
@@ -85,7 +124,7 @@ const defaultArgs = {
   autosave: false,
   edit: false,
   dataType: dataTypeOptions[1],
-  inputOptions,
+  inputProps: inputOptions,
 };
 
 export function StringValue(props: IValue): ReactElement {

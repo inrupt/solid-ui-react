@@ -30,6 +30,45 @@ const { host } = config();
 export default {
   title: "Components/Image",
   component: Image,
+  argTypes: {
+    thing: {
+      description: `The [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to retrieve the image src from. Uses a Thing from context if not supplied.`,
+      control: { type: null },
+    },
+    property: {
+      type: { required: true },
+      description: `The property of the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to retrieve the src URL from.`,
+      control: { type: null },
+    },
+    edit: {
+      description: `If true, renders an input to allow a new image file to be selected.`,
+      control: { type: null },
+    },
+    autosave: {
+      description: `If true, uploads and persists a new image once selected.`,
+      control: { type: null },
+    },
+    maxSize: {
+      description: `The maximum permitted file size, in kB`,
+      control: { type: null },
+    },
+    inputProps: {
+      description: `Additional attributes to be passed to the file input, if \`edit\` is true`,
+      control: { type: null },
+    },
+    onSave: {
+      description: `Function to be called on saving a new image.`,
+      control: { type: null },
+    },
+    onError: {
+      description: `Function to be called on error.`,
+      control: { type: null },
+    },
+    errorComponent: {
+      description: `Component to be rendered in case of error.`,
+      control: { type: null },
+    },
+  },
 };
 
 export function BasicExample(): ReactElement {

@@ -47,6 +47,10 @@ export type TableColumnProps = {
   filterable?: boolean;
   children?: undefined | null | [];
 };
+
+/**
+ * To be used as the only children of a Table component. Each column represents one property of the Things passed to the Table.
+ */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function TableColumn(props: TableColumnProps): ReactElement {
   throw new Error("Can't use TableColumn outside a Table.");
@@ -68,6 +72,9 @@ export interface TableProps
   ) => React.HTMLAttributes<HTMLTableRowElement>;
 }
 
+/**
+ * Displays values from an array of [Things](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) as table rows, with each column showing a given property of those [Things](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing).
+ */
 export function Table({
   children,
   things,

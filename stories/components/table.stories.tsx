@@ -32,6 +32,28 @@ const { host } = config();
 export default {
   title: "Components/Table",
   component: Table,
+  argTypes: {
+    things: {
+      description: `Array of objects, containing [Things](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) and the [Datasets](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) they are part of.`,
+      control: { type: null },
+    },
+    filter: {
+      description: `String term to filter rows by (only applied to columns marked as \`filterable\`)`,
+      control: { type: null },
+    },
+    ascIndicator: {
+      description: `Element to render in column header when sorted in ascending order`,
+      control: { type: null },
+    },
+    descIndicator: {
+      description: `Element to render in column header when sorted in descending order`,
+      control: { type: null },
+    },
+    getRowProps: {
+      description: `Function which is passed the [row](https://react-table.tanstack.com/docs/api/useTable#row-properties) object, as well as the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) and [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) for the current row. Returns an object of attributes to be applied to the <tr>`,
+      control: { type: null },
+    },
+  },
 };
 
 export function BasicExample(): ReactElement {

@@ -31,6 +31,9 @@ export interface Props {
   redirectUrl: string;
 }
 
+/**
+ * Displays a button which triggers the login flow on click. Should be used inside a `SessionProvider`.
+ */
 export const LoginButton: React.FC<Props> = (propsLogin: Props) => {
   const {
     oidcIssuer,

@@ -37,6 +37,9 @@ export type Props = {
   errorComponent?: React.ComponentType<{ error: Error }>;
 } & React.VideoHTMLAttributes<HTMLVideoElement>;
 
+/**
+ * Fetches and displays a video, from a src found at a given property of a given Thing. Can also be used to upload a new/replacement video file.
+ */
 export function Video({
   property,
   thing: propThing,

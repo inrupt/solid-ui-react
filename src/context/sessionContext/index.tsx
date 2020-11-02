@@ -81,6 +81,9 @@ export interface ISessionProvider {
   onError?: (error: Error) => void;
 }
 
+/**
+ * Used to provide session data to child components through context, as used by various provided components and the useSession hook.
+ */
 export const SessionProvider = ({
   sessionId,
   children,

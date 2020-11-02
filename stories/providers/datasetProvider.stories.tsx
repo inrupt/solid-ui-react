@@ -31,6 +31,25 @@ const { host } = config();
 export default {
   title: "Providers/Dataset Provider",
   component: DatasetProvider,
+  argTypes: {
+    dataset: {
+      description: `A [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) to be used by the provider`,
+      control: { type: null },
+    },
+    datasetUrl: {
+      description: `A url to fetch the [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) from, if \`Dataset\` is not provided.`,
+      control: { type: null },
+    },
+    loading: {
+      description: `A loading component to show while fetching the dataset.`,
+      control: { type: null },
+    },
+    onError: {
+      description: `Function to be called on error.`,
+      action: "onError",
+      control: { type: null },
+    },
+  },
 };
 
 export function WithLocalDataset(): ReactElement {

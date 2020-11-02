@@ -51,6 +51,9 @@ export type Props = {
   onError?(error: Error): void | null;
 };
 
+/**
+ * Retrieves and displays a string from a given [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset)/[Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing)/property. Can also be used to set/update and persist a string value.
+ */
 export function Text({
   thing: propThing,
   dataSet: propDataset,
