@@ -46,7 +46,7 @@ function ChildComponent(): React.ReactElement {
   );
 }
 
-describe("Testing SessionContext matches snapshot", () => {
+describe("Testing SessionContext", () => {
   it("matches snapshot", async () => {
     const session = {
       info: {
@@ -62,6 +62,33 @@ describe("Testing SessionContext matches snapshot", () => {
 
     const documentBody = render(
       <SessionProvider session={session} sessionId="key">
+        <ChildComponent />
+      </SessionProvider>
+    );
+
+    await waitFor(() => {
+      expect(session.handleIncomingRedirect).toHaveBeenCalled();
+    });
+
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("matches snapshot without optional sessionId", async () => {
+    const session = {
+      info: {
+        isLoggedIn: true,
+        webId: "https://fakeurl.com/me",
+      },
+      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
+      on: jest.fn(),
+      fetch: jest.fn(),
+      login: jest.fn(),
+      logout: jest.fn(),
+    } as any;
+
+    const documentBody = render(
+      <SessionProvider session={session}>
         <ChildComponent />
       </SessionProvider>
     );

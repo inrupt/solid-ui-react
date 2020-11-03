@@ -52,7 +52,7 @@ export const unauthenticatedFetch = (url: any, options: any): any => {
   return window.fetch.call(window, url, options);
 };
 
-export const buildSession = (sessionId: string): Session =>
+export const buildSession = (sessionId?: string): Session =>
   new Session(
     {
       clientAuthentication: getClientAuthenticationWithDependencies({}),
@@ -75,7 +75,7 @@ export const SessionContext = createContext<ISessionContext>({
 /* eslint react/require-default-props: 0 */
 export interface ISessionProvider {
   children: ReactNode;
-  sessionId: string;
+  sessionId?: string;
   session?: Session;
   sessionRequestInProgress?: boolean;
   onError?: (error: Error) => void;
