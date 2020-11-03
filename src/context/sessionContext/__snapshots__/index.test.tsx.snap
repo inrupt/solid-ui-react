@@ -1,6 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Testing SessionContext matches snapshot matches snapshot 1`] = `
+exports[`Testing SessionContext matches snapshot 1`] = `
+<body>
+  <div>
+    <div>
+      <div
+        data-testid="session"
+      >
+        {"info":{"isLoggedIn":true,"webId":"https://fakeurl.com/me"}}
+      </div>
+      <button
+        type="button"
+      >
+        Login
+      </button>
+      <button
+        type="button"
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`Testing SessionContext matches snapshot without optional sessionId 1`] = `
 <body>
   <div>
     <div>

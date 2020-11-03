@@ -1,3 +1,9 @@
+## 1.6.1 ( November 3, 2020 )
+
+### Changed
+
+- `sessionId` is now optional for `SessionProvider`
+
 ## 1.6.0 ( October 27, 2020 )
 
 ### Added
