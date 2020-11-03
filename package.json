@@ -87,7 +87,7 @@
   },
   "homepage": "https://github.com/inrupt/solid-ui-react#readme",
   "dependencies": {
-    "@inrupt/solid-client": "^0.6.1",
+    "@inrupt/solid-client": "^0.6.4",
     "@inrupt/solid-client-authn-browser": "^0.3.0",
     "core-js": "^3.6.5",
     "react-table": "^7.6.0",
