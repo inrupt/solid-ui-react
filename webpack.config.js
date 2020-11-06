@@ -30,6 +30,7 @@ module.exports = {
     "@inrupt/solid-client",
     "@inrupt/solid-client-authn-browser",
     "@material-ui/core",
+    "core-js",
     "react",
     "react-table",
     "swr",
