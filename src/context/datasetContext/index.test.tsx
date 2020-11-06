@@ -35,11 +35,11 @@ const mockThingUrl = "https://some-interesting-value.com#thing";
 const mockPredicate = "http://xmlns.com/foaf/0.1/nick";
 const mockNick = "test nick value";
 
-let mockDataSetWithResourceInfo = SolidFns.mockSolidDatasetFrom(mockUrl);
+let mockDatasetWithResourceInfo = SolidFns.mockSolidDatasetFrom(mockUrl);
 let mockThing = SolidFns.mockThingFrom(mockThingUrl);
 mockThing = SolidFns.addStringNoLocale(mockThing, mockPredicate, mockNick);
-mockDataSetWithResourceInfo = SolidFns.setThing(
-  mockDataSetWithResourceInfo,
+mockDatasetWithResourceInfo = SolidFns.setThing(
+  mockDatasetWithResourceInfo,
   mockThing
 );
 
@@ -50,14 +50,14 @@ function ExampleComponentWithDataset(): React.ReactElement {
   );
 
   const datasetContext = React.useContext(DatasetContext);
-  const { dataset } = datasetContext;
+  const { solidDataset } = datasetContext;
 
   React.useEffect(() => {
-    if (dataset) {
-      const things = SolidFns.getThingAll(dataset);
+    if (solidDataset) {
+      const things = SolidFns.getThingAll(solidDataset);
       setExampleThing(things[0]);
     }
-  }, [dataset]);
+  }, [solidDataset]);
 
   React.useEffect(() => {
     if (exampleThing) {
@@ -87,14 +87,14 @@ function ExampleComponentWithDatasetUrl(): React.ReactElement {
   const [property, setProperty] = React.useState<string>();
 
   const datasetContext = React.useContext(DatasetContext);
-  const { dataset } = datasetContext;
+  const { solidDataset } = datasetContext;
 
   React.useEffect(() => {
-    if (dataset) {
-      const thing = SolidFns.getThing(dataset, mockUrl);
+    if (solidDataset) {
+      const thing = SolidFns.getThing(solidDataset, mockUrl);
       setExampleThing(thing);
     }
-  }, [dataset]);
+  }, [solidDataset]);
 
   React.useEffect(() => {
     if (exampleThing) {
@@ -119,12 +119,12 @@ function ExampleComponentWithDatasetUrl(): React.ReactElement {
 describe("Testing DatasetContext", () => {
   it("matches snapshot with Dataset provided", async () => {
     (useDataset as jest.Mock).mockReturnValue({
-      dataset: undefined,
+      solidDataset: undefined,
       error: undefined,
     });
 
     const { baseElement, getByText } = render(
-      <DatasetProvider dataset={mockDataSetWithResourceInfo}>
+      <DatasetProvider solidDataset={mockDatasetWithResourceInfo}>
         <ExampleComponentWithDataset />
       </DatasetProvider>
     );
@@ -136,7 +136,7 @@ describe("Testing DatasetContext", () => {
 
   it("matches snapshot when fetching fails", async () => {
     (useDataset as jest.Mock).mockReturnValue({
-      dataset: undefined,
+      solidDataset: undefined,
       error: "Error",
     });
 
@@ -151,7 +151,7 @@ describe("Testing DatasetContext", () => {
 
   it("matches snapshot when fetching", async () => {
     (useDataset as jest.Mock).mockReturnValue({
-      dataset: undefined,
+      solidDataset: undefined,
       error: undefined,
     });
     documentBody = render(
@@ -171,7 +171,7 @@ describe("Testing DatasetContext", () => {
 describe("Functional testing", () => {
   it("Should call useDataset", async () => {
     (useDataset as jest.Mock).mockReturnValue({
-      dataset: mockDataSetWithResourceInfo,
+      solidDataset: mockDatasetWithResourceInfo,
       error: undefined,
     });
 
@@ -184,7 +184,7 @@ describe("Functional testing", () => {
   });
   it("When useDataset return an error, should call onError if passed", async () => {
     (useDataset as jest.Mock).mockReturnValue({
-      dataset: undefined,
+      solidDataset: undefined,
       error: "Error",
     });
     const onError = jest.fn();

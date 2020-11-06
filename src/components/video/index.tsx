@@ -20,28 +20,29 @@
  */
 
 import React, { ReactElement, useEffect, useState, useContext } from "react";
-import { Thing, Url, UrlString, getUrl } from "@inrupt/solid-client";
-import { retrieveFile, overwriteFile } from "../../helpers";
+
+import {
+  retrieveFile,
+  overwriteFile,
+  CommonProperties,
+  useProperty,
+} from "../../helpers";
+
 import { SessionContext } from "../../context/sessionContext";
-import ThingContext from "../../context/thingContext";
 
 export type Props = {
-  thing?: Thing;
-  property: Url | UrlString;
-  edit?: boolean;
-  autosave?: boolean;
   maxSize?: number;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
-  onSave?: () => void;
-  onError?: (error: Error) => void;
   errorComponent?: React.ComponentType<{ error: Error }>;
-} & React.VideoHTMLAttributes<HTMLVideoElement>;
+} & CommonProperties &
+  React.VideoHTMLAttributes<HTMLVideoElement>;
 
 /**
  * Fetches and displays a video, from a src found at a given property of a given Thing. Can also be used to upload a new/replacement video file.
  */
 export function Video({
-  property,
+  property: propProperty,
+  properties: propProperties,
   thing: propThing,
   edit,
   autosave,
@@ -52,70 +53,57 @@ export function Video({
   errorComponent: ErrorComponent,
   ...videoOptions
 }: Props): ReactElement {
-  const [error, setError] = useState<null | Error>(null);
-
   const { fetch } = useContext(SessionContext);
 
-  const thingContext = useContext(ThingContext);
-  const { thing: contextThing } = thingContext;
+  const values = useProperty({
+    thing: propThing,
+    property: propProperty,
+    properties: propProperties,
+    type: "url",
+  });
 
-  const thing = propThing || contextThing;
+  const { value } = values;
+  let { error: thingError } = values;
 
-  if (!thing && !error) {
-    const thingNotFound = new Error(
-      "Thing not found as property or in context"
-    );
-
-    if (!ErrorComponent && !onError) {
-      throw thingNotFound;
-    } else if (onError) {
-      onError(thingNotFound);
-    }
-
-    setError(thingNotFound);
+  if (!edit && !value) {
+    thingError = new Error("URL not found for given property");
   }
 
-  const src = thing ? getUrl(thing, property) : null;
+  const [error, setError] = useState<Error | undefined>(thingError);
 
-  if (!src && !error) {
-    const urlNotFound = new Error("URL not found for given property");
-
-    if (!ErrorComponent && !onError) {
-      throw urlNotFound;
-    } else if (onError) {
-      onError(urlNotFound);
+  useEffect(() => {
+    if (error) {
+      if (onError) {
+        onError(error);
+      }
     }
-
-    setError(urlNotFound);
-  }
+  }, [error, onError, ErrorComponent]);
 
   const [videoObjectUrl, setVideoObjectUrl] = useState("");
 
   useEffect(() => {
-    if (src) {
-      retrieveFile(src, fetch)
+    if (value) {
+      retrieveFile(value as string, fetch)
         .then(setVideoObjectUrl)
         .catch((retrieveError) => {
+          setError(retrieveError);
+
           if (onError) {
             onError(retrieveError);
-            setError(retrieveError);
-          } else if (ErrorComponent) {
+          }
+
+          if (ErrorComponent) {
             setVideoObjectUrl("");
-            setError(retrieveError);
-          } else {
-            setVideoObjectUrl(() => {
-              throw retrieveError;
-            });
           }
         });
     }
-  }, [src, onError, setError, fetch, ErrorComponent]);
+  }, [value, onError, setError, fetch, ErrorComponent]);
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
-    if (autosave && fileList && fileList.length > 0 && src) {
+    if (autosave && fileList && fileList.length > 0 && value) {
       const newObjectUrl = await overwriteFile(
-        src,
+        value as string,
         fileList[0],
         input,
         fetch,
@@ -131,13 +119,17 @@ export function Video({
 
   let videoComponent = null;
 
-  if (src) {
-    videoComponent = (
-      /* eslint-disable-next-line jsx-a11y/media-has-caption, react/jsx-props-no-spreading */
-      <video src={videoObjectUrl || src} {...videoOptions} controls />
-    );
-  } else if (error && ErrorComponent) {
+  if (error && ErrorComponent) {
     videoComponent = <ErrorComponent error={error} />;
+  } else if (value) {
+    videoComponent = (
+      /* eslint jsx-a11y/media-has-caption: 0, react/jsx-props-no-spreading: 0 */
+      <video
+        src={videoObjectUrl || (value as string)}
+        controls
+        {...videoOptions}
+      />
+    );
   }
 
   return (

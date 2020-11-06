@@ -23,6 +23,7 @@ import {
   overwriteFile as solidOverwriteFile,
   getFile,
   Thing,
+  SolidDataset,
   UrlString,
   Url,
   getBoolean,
@@ -40,6 +41,22 @@ import {
   getStringWithLocaleAll,
   getUrlAll,
 } from "@inrupt/solid-client";
+
+import { useContext } from "react";
+
+import ThingContext from "../context/thingContext";
+import DatasetContext from "../context/datasetContext";
+
+export type CommonProperties = {
+  thing?: Thing;
+  solidDataset?: SolidDataset;
+  property?: Url | UrlString;
+  properties?: Url[] | UrlString[];
+  edit?: boolean;
+  autosave?: boolean;
+  onSave?: (savedDataset?: SolidDataset, savedThing?: Thing) => void;
+  onError?: (error: Error) => void;
+};
 
 export const overwriteFile = async (
   src: string,
@@ -94,48 +111,57 @@ export function getValueByType(
   thing: Thing,
   property: UrlString | Url
 ): ReturnType<typeof getBoolean>;
+
 export function getValueByType(
   type: "datetime",
   thing: Thing,
   property: UrlString | Url
 ): ReturnType<typeof getDatetime>;
+
 export function getValueByType(
   type: "decimal",
   thing: Thing,
   property: UrlString | Url
 ): ReturnType<typeof getDecimal>;
+
 export function getValueByType(
   type: "integer",
   thing: Thing,
   property: UrlString | Url
 ): ReturnType<typeof getInteger>;
+
 export function getValueByType(
   type: "string",
   thing: Thing,
   property: UrlString | Url
 ): ReturnType<typeof getStringNoLocale>;
+
 export function getValueByType(
   type: "string",
   thing: Thing,
   property: UrlString | Url,
   locale: string
 ): ReturnType<typeof getStringWithLocale>;
+
 export function getValueByType(
   type: "string",
   thing: Thing,
   property: UrlString | Url
 ): ReturnType<typeof getStringNoLocale>;
+
 export function getValueByType(
   type: "url",
   thing: Thing,
   property: UrlString | Url
 ): ReturnType<typeof getUrl>;
+
 export function getValueByType(
   type: DataType,
   thing: Thing,
   property: UrlString | Url,
   locale?: string
 ): string | boolean | number | Date | null;
+
 export function getValueByType(
   type: DataType,
   thing: Thing,
@@ -166,48 +192,57 @@ export function getValueByTypeAll(
   thing: Thing,
   property: UrlString | Url
 ): ReturnType<typeof getBooleanAll>;
+
 export function getValueByTypeAll(
   type: "datetime",
   thing: Thing,
   property: UrlString | Url
 ): ReturnType<typeof getDatetimeAll>;
+
 export function getValueByTypeAll(
   type: "decimal",
   thing: Thing,
   property: UrlString | Url
 ): ReturnType<typeof getDecimalAll>;
+
 export function getValueByTypeAll(
   type: "integer",
   thing: Thing,
   property: UrlString | Url
 ): ReturnType<typeof getIntegerAll>;
+
 export function getValueByTypeAll(
   type: "string",
   thing: Thing,
   property: UrlString | Url
 ): ReturnType<typeof getStringNoLocaleAll>;
+
 export function getValueByTypeAll(
   type: "string",
   thing: Thing,
   property: UrlString | Url,
   locale: string
 ): ReturnType<typeof getStringWithLocaleAll>;
+
 export function getValueByTypeAll(
   type: "string",
   thing: Thing,
   property: UrlString | Url
 ): ReturnType<typeof getStringNoLocaleAll>;
+
 export function getValueByTypeAll(
   type: "url",
   thing: Thing,
   property: UrlString | Url
 ): ReturnType<typeof getUrlAll>;
+
 export function getValueByTypeAll(
   type: DataType,
   thing: Thing,
   property: UrlString | Url,
   locale?: string
 ): Array<string | boolean | number | Date | null>;
+
 export function getValueByTypeAll(
   type: DataType,
   thing: Thing,
@@ -233,9 +268,89 @@ export function getValueByTypeAll(
   }
 }
 
-export default {
-  overwriteFile,
-  retrieveFile,
-  getValueByType,
-  getValueByTypeAll,
+export function getPropertyForThing(
+  propertySelector: typeof getValueByType | typeof getValueByTypeAll,
+  type: DataType,
+  thing: Thing,
+  properties: Array<Url | UrlString>,
+  locale?: string
+): Url | UrlString | undefined {
+  return (
+    properties.find((property: Url | UrlString) => {
+      return propertySelector(type, thing, property, locale);
+    }) || properties[0]
+  );
+}
+
+export type UseProperty = {
+  dataset?: SolidDataset;
+  thing?: Thing;
+  error?: Error;
+  property: Url | UrlString;
+  value: string | boolean | number | Date | null;
+  setDataset: (dataset: SolidDataset) => void;
+  setThing: (thing: Thing) => void;
 };
+
+export type UsePropertyProps = {
+  thing?: Thing;
+  dataset?: SolidDataset;
+  property?: Url | UrlString;
+  properties?: Url[] | UrlString[];
+  type: DataType;
+  locale?: string;
+};
+
+export function useProperty(props: UsePropertyProps): UseProperty {
+  const {
+    dataset: propDataset,
+    thing: propThing,
+    properties: propProperties,
+    property: propProperty,
+    type,
+    locale,
+  } = props;
+
+  const { solidDataset: contextDataset, setDataset = () => {} } = useContext(
+    DatasetContext
+  );
+
+  const dataset = propDataset || contextDataset;
+
+  const { thing: contextThing, setThing = () => {} } = useContext(ThingContext);
+
+  const thing = propThing || contextThing || undefined;
+  let error;
+
+  if (!thing) {
+    error = new Error("Thing not found as property or in context");
+  }
+
+  const property =
+    thing && propProperties
+      ? getPropertyForThing(
+          getValueByType,
+          type,
+          thing,
+          propProperties,
+          locale
+        ) || propProperties[0]
+      : propProperty;
+
+  if (!property) {
+    throw new Error("No property provided");
+  }
+
+  const value =
+    thing && property ? getValueByType(type, thing, property, locale) : null;
+
+  return {
+    dataset,
+    thing,
+    property,
+    error,
+    value,
+    setDataset,
+    setThing,
+  };
+}

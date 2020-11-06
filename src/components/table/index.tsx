@@ -125,6 +125,7 @@ export function Table({
     useGlobalFilter,
     useSortBy
   );
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -154,7 +155,7 @@ export function Table({
           const rowThing = things[row.index].thing;
           return (
             <tr {...row.getRowProps(getRowProps(row, rowThing, rowDataset))}>
-              <CombinedDataProvider dataset={rowDataset} thing={rowThing}>
+              <CombinedDataProvider solidDataset={rowDataset} thing={rowThing}>
                 {row.cells.map((cell) => {
                   return (
                     <td {...cell.getCellProps()}>{cell.render("Cell")}</td>

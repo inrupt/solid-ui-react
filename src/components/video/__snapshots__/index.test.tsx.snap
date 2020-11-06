@@ -1,6 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Video component Video functional tests When getUrl returns null, should throw an error 1`] = `"URL not found for given property"`;
+exports[`Video component Video functional tests When getUrl returns null, with an errorComponent, should render the error 1`] = `
+<DocumentFragment>
+  <span>
+    Error: URL not found for given property
+  </span>
+</DocumentFragment>
+`;
 
 exports[`Video component Video snapshots matches snapshot with additional props for video and input 1`] = `
 <DocumentFragment>

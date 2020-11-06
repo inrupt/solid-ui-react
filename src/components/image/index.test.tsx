@@ -21,7 +21,6 @@
 
 import React from "react";
 import { render, waitFor, fireEvent } from "@testing-library/react";
-import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
 import { Image } from ".";
 
@@ -99,35 +98,21 @@ describe("Image component", () => {
       expect(SolidFns.getUrl).toHaveBeenCalledWith(mockThing, mockProperty);
     });
 
-    it("When getUrl returns null, with no errorComponent, should throw an error", () => {
+    it("When getUrl returns null, with an errorComponent, should render the error", () => {
       jest.spyOn(console, "error").mockImplementation(() => {});
 
       (SolidFns.getUrl as jest.Mock).mockReturnValueOnce(null);
-      expect(() =>
-        render(
-          <Image thing={mockThing} property={mockProperty} alt={mockAlt} />
-        )
-      ).toThrowErrorMatchingSnapshot();
-      expect(SolidFns.getUrl).toHaveBeenCalled();
-
-      // eslint-disable-next-line no-console
-      (console.error as jest.Mock).mockRestore();
-    });
-
-    it("Should throw error if initial fetch fails, with noErrorComponent, if onError is not passed", async () => {
-      jest.spyOn(console, "error").mockImplementation(() => {});
-      (SolidFns.getFile as jest.Mock).mockRejectedValueOnce("Error in fetch");
-
-      const { getByText } = render(
-        <ErrorBoundary fallbackRender={({ error }) => <div>{error}</div>}>
-          <Image thing={mockThing} property={mockProperty} alt={mockAlt} />
-        </ErrorBoundary>
+      const { asFragment } = render(
+        <Image
+          thing={mockThing}
+          property={mockProperty}
+          alt={mockAlt}
+          errorComponent={({ error }) => <span>{error.toString()}</span>}
+        />
       );
 
-      await waitFor(() => expect(getByText("Error in fetch")).toBeDefined());
-
-      // eslint-disable-next-line no-console
-      (console.error as jest.Mock).mockRestore();
+      expect(SolidFns.getUrl).toHaveBeenCalled();
+      expect(asFragment()).toMatchSnapshot();
     });
 
     it("Should call onError if initial fetch fails, if it is passed", async () => {

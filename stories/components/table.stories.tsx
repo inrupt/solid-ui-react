@@ -268,13 +268,16 @@ export function NestedDataExample(): ReactElement {
 
   const NestedDataExampleContent = () => {
     const datasetContext = useContext(DatasetContext);
-    const { dataset } = datasetContext;
-    if (!dataset) {
+    const { solidDataset } = datasetContext;
+    if (!solidDataset) {
       return null;
     }
-    const personThing = SolidFns.getThing(dataset, `${host}/example.ttl#me`);
+    const personThing = SolidFns.getThing(
+      solidDataset,
+      `${host}/example.ttl#me`
+    );
     const alterEgoThing = SolidFns.getThing(
-      dataset,
+      solidDataset,
       `${host}/example.ttl#alterEgo`
     );
     if (!personThing || !alterEgoThing) {
@@ -284,11 +287,11 @@ export function NestedDataExample(): ReactElement {
       <Table
         things={[
           {
-            dataset,
+            dataset: solidDataset,
             thing: personThing,
           },
           {
-            dataset,
+            dataset: solidDataset,
             thing: alterEgoThing,
           },
         ]}
@@ -303,7 +306,7 @@ export function NestedDataExample(): ReactElement {
           body={({ value }) => (
             <PhoneNumberDisplay
               numberThingIris={value}
-              dataset={dataset}
+              dataset={solidDataset}
               numberType={homeProperty}
             />
           )}
@@ -316,7 +319,7 @@ export function NestedDataExample(): ReactElement {
           body={({ value }) => (
             <PhoneNumberDisplay
               numberThingIris={value}
-              dataset={dataset}
+              dataset={solidDataset}
               numberType={workProperty}
             />
           )}

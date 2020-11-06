@@ -80,3 +80,34 @@ WithoutChildren.parameters = {
 WithoutChildren.args = {
   property: "http://xmlns.com/foaf/0.1/homepage",
 };
+
+export function Editable({ property }: { property: string }): ReactElement {
+  const exampleUrl = "http://test.url";
+  const exampleThing = SolidFns.addUrl(
+    SolidFns.createThing(),
+    property,
+    exampleUrl
+  );
+
+  const exampleDataset = SolidFns.setThing(
+    SolidFns.createSolidDataset(),
+    exampleThing
+  );
+
+  return (
+    <Link
+      thing={exampleThing}
+      property={property}
+      solidDataset={exampleDataset}
+      edit
+    />
+  );
+}
+
+Editable.parameters = {
+  actions: { disable: true },
+};
+
+Editable.args = {
+  property: "http://xmlns.com/foaf/0.1/homepage",
+};

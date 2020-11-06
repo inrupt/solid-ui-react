@@ -79,7 +79,7 @@ describe("useThing() hook", () => {
     );
 
     expect(mockGetThing).toHaveBeenCalledTimes(0);
-    await waitFor(() => expect(result.current.thing).toBeUndefined());
+    await waitFor(() => expect(result.current.thing).toBeNull());
   });
 
   it("should return any error returned by useDataset", async () => {

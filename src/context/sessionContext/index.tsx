@@ -26,16 +26,14 @@ import React, {
   SetStateAction,
   Dispatch,
   useEffect,
-  useRef,
   ReactNode,
 } from "react";
-
-import qs from "qs";
 
 import {
   Session,
   getClientAuthenticationWithDependencies,
 } from "@inrupt/solid-client-authn-browser";
+
 import { ILoginInputOptions } from "@inrupt/solid-client-authn-core";
 
 export interface ISessionContext {

@@ -30,12 +30,12 @@ import { Thing, UrlString, getThing } from "@inrupt/solid-client";
 import DatasetContext from "../datasetContext";
 
 export interface IThingContext {
-  thing: Thing | undefined;
+  thing?: Thing | null;
   setThing: (thing: Thing) => void;
 }
 
 const ThingContext = createContext<IThingContext>({
-  thing: undefined,
+  thing: null,
   setThing: () => {},
 });
 
@@ -43,7 +43,7 @@ export default ThingContext;
 
 export interface IThingProvider {
   children: React.ReactNode;
-  thing?: Thing;
+  thing?: Thing | null;
   thingUrl?: UrlString | string;
 }
 
@@ -62,24 +62,24 @@ export const ThingProvider = ({
   thing: propThing,
   thingUrl,
 }: RequireThingOrThingUrl): ReactElement => {
-  const { dataset } = useContext(DatasetContext);
+  const { solidDataset } = useContext(DatasetContext);
   let thing = propThing;
 
-  if (dataset && thingUrl) {
-    thing = getThing(dataset, thingUrl) || undefined;
+  if (solidDataset && thingUrl) {
+    thing = getThing(solidDataset, thingUrl);
   }
 
   // Allow child components to update the thing
-  const [stateThing, setThing] = useState<Thing | undefined>(thing);
+  const [stateThing, setThing] = useState<Thing | null>(thing || null);
 
   // Reset the thing if the dataset changes.
   useEffect(() => {
-    if (dataset && thingUrl) {
-      setThing(getThing(dataset, thingUrl) || undefined);
+    if (solidDataset && thingUrl) {
+      setThing(getThing(solidDataset, thingUrl));
     } else if (propThing) {
       setThing(propThing);
     }
-  }, [dataset, thingUrl, propThing]);
+  }, [solidDataset, thingUrl, propThing]);
 
   return (
     <ThingContext.Provider value={{ thing: stateThing, setThing }}>

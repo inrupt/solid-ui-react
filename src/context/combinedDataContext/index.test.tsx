@@ -37,15 +37,15 @@ const mockThing = SolidFns.addStringNoLocale(
   mockNick
 );
 
-// const mockDataSet = SolidFns.setThing(SolidFns.createSolidDataset(), mockThing);
-const mockDataSetWithResourceInfo = SolidFns.setThing(
+// const mockDataset = SolidFns.setThing(SolidFns.createSolidDataset(), mockThing);
+const mockDatasetWithResourceInfo = SolidFns.setThing(
   SolidFns.createSolidDataset() as any,
   mockThing
 );
 
 // TODO: refactor this once ticket SDK-1157 has been done
-mockDataSetWithResourceInfo.internal_resourceInfo = {};
-mockDataSetWithResourceInfo.internal_resourceInfo.fetchedFrom =
+mockDatasetWithResourceInfo.internal_resourceInfo = {};
+mockDatasetWithResourceInfo.internal_resourceInfo.fetchedFrom =
   "https://some-interesting-value.com";
 
 function ExampleComponentWithDataset(): React.ReactElement {
@@ -75,7 +75,10 @@ function ExampleComponentWithDataset(): React.ReactElement {
 describe("CombinedProvider", () => {
   it("matches snapshot with dataset and thing provided", () => {
     documentBody = render(
-      <CombinedProvider dataset={mockDataSetWithResourceInfo} thing={mockThing}>
+      <CombinedProvider
+        solidDataset={mockDatasetWithResourceInfo}
+        thing={mockThing}
+      >
         <ExampleComponentWithDataset />
       </CombinedProvider>
     );

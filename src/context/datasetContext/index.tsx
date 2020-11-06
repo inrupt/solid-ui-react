@@ -29,12 +29,12 @@ import {
 import useDataset from "../../hooks/useDataset";
 
 export interface IDatasetContext {
-  dataset: SolidDataset | (SolidDataset & WithResourceInfo) | undefined;
-  setDataset: (dataset: SolidDataset) => void;
+  solidDataset: SolidDataset | (SolidDataset & WithResourceInfo) | undefined;
+  setDataset: (solidDataset: SolidDataset) => void;
 }
 
 const DatasetContext = createContext<IDatasetContext>({
-  dataset: undefined,
+  solidDataset: undefined,
   setDataset: () => {},
 });
 
@@ -44,7 +44,7 @@ export interface IDatasetProvider {
   children: React.ReactNode;
   loading?: React.ReactNode;
   onError?(error: Error): void | null;
-  dataset?: SolidDataset | (SolidDataset & WithResourceInfo);
+  solidDataset?: SolidDataset | (SolidDataset & WithResourceInfo);
   datasetUrl?: UrlString | string;
 }
 
@@ -52,7 +52,7 @@ export type RequireProperty<T, Prop extends keyof T> = T &
   { [key in Prop]-?: T[key] };
 
 export type RequireDatasetOrDatasetUrl =
-  | RequireProperty<IDatasetProvider, "dataset">
+  | RequireProperty<IDatasetProvider, "solidDataset">
   | RequireProperty<IDatasetProvider, "datasetUrl">;
 
 /**
@@ -61,7 +61,7 @@ export type RequireDatasetOrDatasetUrl =
 export const DatasetProvider = ({
   children,
   onError,
-  dataset: propDataset,
+  solidDataset: propDataset,
   datasetUrl,
   loading,
 }: RequireDatasetOrDatasetUrl): ReactElement => {
@@ -84,7 +84,7 @@ export const DatasetProvider = ({
   }, [datasetToUse]);
 
   return (
-    <DatasetContext.Provider value={{ dataset: stateDataset, setDataset }}>
+    <DatasetContext.Provider value={{ solidDataset: stateDataset, setDataset }}>
       {stateDataset ? children : loading || <span>Fetching data...</span>}
     </DatasetContext.Provider>
   );

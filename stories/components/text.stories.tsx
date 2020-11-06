@@ -43,7 +43,7 @@ export default {
     thing: {
       description: `The [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to retrieve the text from. Uses a Thing from context if not supplied.`,
     },
-    dataSet: {
+    dataset: {
       description: `The [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) to retrieve the text from. Uses a Dataset from context if not supplied.`,
     },
     property: {
@@ -103,14 +103,14 @@ export function BasicExample({
     exampleNick
   );
 
-  const exampleDataSet = SolidFns.setThing(
+  const exampleDataset = SolidFns.setThing(
     SolidFns.createSolidDataset(),
     exampleThing
   );
 
   return (
     <Text
-      dataSet={exampleDataSet}
+      solidDataset={exampleDataset}
       thing={exampleThing}
       property={property}
       autosave={autosave}
@@ -145,14 +145,14 @@ export function WithLocalData({
     exampleNick
   );
 
-  const exampleDataSet = SolidFns.setThing(
+  const exampleDataset = SolidFns.setThing(
     SolidFns.createSolidDataset(),
     exampleThing
   );
 
   return (
     <Text
-      dataSet={exampleDataSet}
+      solidDataset={exampleDataset}
       thing={exampleThing}
       property={examplePredicate}
       edit={edit}

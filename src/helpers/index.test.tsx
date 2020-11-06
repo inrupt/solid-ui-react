@@ -20,7 +20,12 @@
  */
 
 import * as SolidFns from "@inrupt/solid-client";
-import { getValueByTypeAll, DataType } from ".";
+import {
+  getValueByTypeAll,
+  DataType,
+  getPropertyForThing,
+  getValueByType,
+} from "./index";
 
 describe("getValueByTypeAll", () => {
   it.each([
@@ -56,4 +61,71 @@ describe("getValueByTypeAll", () => {
       expect(mockGetter).toHaveBeenCalledTimes(1);
     }
   );
+});
+
+describe("getPropertyForThing", () => {
+  it("selects the first property with a value", () => {
+    const propertySelector = getValueByType;
+    const type = "string";
+    const mockThing = SolidFns.mockThingFrom("http://mock.thing");
+    const properties = [
+      "https://example.com/mock-prop-1",
+      "https://example.com/mock-prop-2",
+      "https://example.com/mock-prop-3",
+    ];
+
+    const thingWithString = SolidFns.setStringNoLocale(
+      mockThing,
+      properties[1],
+      "test"
+    );
+
+    expect(
+      getPropertyForThing(propertySelector, type, thingWithString, properties)
+    ).toEqual(properties[1]);
+  });
+
+  it("selects the first property if there are no matches", () => {
+    const propertySelector = getValueByType;
+    const type = "string";
+    const mockThing = SolidFns.mockThingFrom("http://mock.thing");
+    const properties = [
+      "https://example.com/mock-prop-1",
+      "https://example.com/mock-prop-2",
+      "https://example.com/mock-prop-3",
+    ];
+
+    expect(
+      getPropertyForThing(propertySelector, type, mockThing, properties)
+    ).toEqual(properties[0]);
+  });
+
+  it("selects with locale if passed", () => {
+    const propertySelector = getValueByType;
+    const type = "string";
+    const locale = "en";
+    const mockThing = SolidFns.mockThingFrom("http://mock.thing");
+    const properties = [
+      "https://example.com/mock-prop-1",
+      "https://example.com/mock-prop-2",
+      "https://example.com/mock-prop-3",
+    ];
+
+    const thingWithString = SolidFns.setStringWithLocale(
+      mockThing,
+      properties[1],
+      "test",
+      locale
+    );
+
+    expect(
+      getPropertyForThing(
+        propertySelector,
+        type,
+        thingWithString,
+        properties,
+        locale
+      )
+    ).toEqual(properties[1]);
+  });
 });

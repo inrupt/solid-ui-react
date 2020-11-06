@@ -33,11 +33,11 @@ const mockThingUrl = "https://some-interesting-value.com#thing";
 const mockPredicate = "http://xmlns.com/foaf/0.1/nick";
 const mockNick = "test nick value";
 
-let mockDataSetWithResourceInfo = SolidFns.mockSolidDatasetFrom(mockUrl);
+let mockDatasetWithResourceInfo = SolidFns.mockSolidDatasetFrom(mockUrl);
 let mockThing = SolidFns.mockThingFrom(mockThingUrl);
 mockThing = SolidFns.addStringNoLocale(mockThing, mockPredicate, mockNick);
-mockDataSetWithResourceInfo = SolidFns.setThing(
-  mockDataSetWithResourceInfo,
+mockDatasetWithResourceInfo = SolidFns.setThing(
+  mockDatasetWithResourceInfo,
   mockThing
 );
 
@@ -118,7 +118,7 @@ describe("Testing ThingContext matches snapshot", () => {
     jest.spyOn(SolidFns, "getThing").mockImplementation(() => mockThing);
 
     documentBody = render(
-      <DatasetProvider dataset={mockDataSetWithResourceInfo}>
+      <DatasetProvider solidDataset={mockDatasetWithResourceInfo}>
         <ThingProvider thingUrl="https://some-interesting-value.com">
           <ExampleComponentWithThingUrl />
         </ThingProvider>

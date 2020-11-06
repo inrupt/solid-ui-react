@@ -1,3 +1,18 @@
+## 2.0.0 ( November 6, 2020 )
+
+### BREAKING
+
+- `dataset` property replaced by `solidDataset` in components so that the property would not
+  conflict with intrisic HTML element attributes.
+- Components such as `text` and `value` no longer throw errors if something goes wrong during
+  reading or saving, and instead always call `onError` if provided.
+
+### Added
+
+- All components which previously took a `property` prop now can optionally accept a
+  `properties` prop instead, which will be an ordered list of properties to attempt to read and
+  write from. If none of the properties have values, the first will be used if editing data.
+
 ## 1.7.0 ( November 6, 2020 )
 
 ### Changed

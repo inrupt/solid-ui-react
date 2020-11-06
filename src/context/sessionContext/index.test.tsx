@@ -100,6 +100,32 @@ describe("Testing SessionContext", () => {
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
   });
+
+  it("calls onError if handleIncomingRedirect fails", async () => {
+    const session = {
+      info: {
+        isLoggedIn: true,
+        webId: "https://fakeurl.com/me",
+      },
+      handleIncomingRedirect: jest.fn().mockRejectedValue(null),
+      on: jest.fn(),
+      fetch: jest.fn(),
+      login: jest.fn(),
+      logout: jest.fn(),
+    } as any;
+
+    const onError = jest.fn();
+
+    render(
+      <SessionProvider session={session} sessionId="key" onError={onError}>
+        <ChildComponent />
+      </SessionProvider>
+    );
+
+    await waitFor(() => {
+      expect(onError).toHaveBeenCalled();
+    });
+  });
 });
 
 describe("SessionContext functionality", () => {

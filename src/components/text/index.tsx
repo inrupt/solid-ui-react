@@ -22,11 +22,8 @@
 import React, { ReactElement, useState, useEffect, useContext } from "react";
 import {
   Thing,
-  SolidDataset,
   Url,
   UrlString,
-  getStringWithLocale,
-  getStringNoLocale,
   setStringWithLocale,
   setStringNoLocale,
   setThing,
@@ -34,30 +31,23 @@ import {
   getSourceUrl,
   hasResourceInfo,
 } from "@inrupt/solid-client";
-import DatasetContext from "../../context/datasetContext";
-import ThingContext from "../../context/thingContext";
 import { SessionContext } from "../../context/sessionContext";
+import { CommonProperties, useProperty } from "../../helpers";
 
 export type Props = {
-  dataSet?: SolidDataset;
-  property: Url | UrlString;
-  thing?: Thing;
   saveDatasetTo?: Url | UrlString;
-  autosave?: boolean;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
-  edit?: boolean;
   locale?: string;
-  onSave?(savedDataset?: SolidDataset, savedThing?: Thing): void | null;
-  onError?(error: Error): void | null;
-};
+} & CommonProperties;
 
 /**
  * Retrieves and displays a string from a given [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset)/[Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing)/property. Can also be used to set/update and persist a string value.
  */
 export function Text({
   thing: propThing,
-  dataSet: propDataset,
-  property,
+  solidDataset: propDataset,
+  property: propProperty,
+  properties: propProperties,
   saveDatasetTo,
   locale,
   onSave,
@@ -69,29 +59,26 @@ export function Text({
 }: Props & React.HTMLAttributes<HTMLSpanElement>): ReactElement {
   const { fetch } = useContext(SessionContext);
 
-  const datasetContext = useContext(DatasetContext);
-  const { dataset: contextDataset, setDataset } = datasetContext;
-
-  const thingContext = useContext(ThingContext);
-  const { thing: contextThing } = thingContext;
-
-  const [text, setText] = useState<string | null>("");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setErrorState] = useState<string | null>();
-  const [initialValue, setInitialValue] = useState<string | null>("");
-
-  const dataset = propDataset || contextDataset;
-  const thing = propThing || contextThing;
+  const { error, value, thing, property, dataset, setDataset } = useProperty({
+    dataset: propDataset,
+    thing: propThing,
+    property: propProperty,
+    properties: propProperties,
+    type: "string",
+    locale,
+  });
 
   useEffect(() => {
-    if (thing) {
-      if (locale) {
-        setText(getStringWithLocale(thing, property, locale));
-      } else {
-        setText(getStringNoLocale(thing, property));
-      }
+    if (error && onError) {
+      onError(error);
     }
-  }, [thing, property, locale]);
+  }, [error, onError]);
+
+  const [text, setText] = useState<string | null>(value as string);
+  const [, setErrorState] = useState<string | null>();
+  const [initialValue, setInitialValue] = useState<string | null>(
+    value as string
+  );
 
   /* Save text value in the pod */
   const saveHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -118,9 +105,7 @@ export function Text({
             { fetch }
           );
 
-          if (contextDataset) {
-            setDataset(savedDataset);
-          }
+          setDataset(savedDataset);
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
             getSourceUrl(dataset),
@@ -128,9 +113,7 @@ export function Text({
             { fetch }
           );
 
-          if (contextDataset) {
-            setDataset(savedDataset);
-          }
+          setDataset(savedDataset);
         } else {
           setErrorState(() => {
             throw new Error(
@@ -138,16 +121,13 @@ export function Text({
             );
           });
         }
+
         if (onSave) {
           onSave(savedDataset, updatedResource);
         }
-      } catch (error) {
+      } catch (saveError) {
         if (onError) {
-          onError(error);
-        } else {
-          setErrorState(() => {
-            throw error;
-          });
+          onError(saveError);
         }
       }
     }

@@ -21,8 +21,6 @@
 
 import React, { ReactElement, useState, useEffect, useContext } from "react";
 import {
-  Thing,
-  SolidDataset,
   Url,
   UrlString,
   setStringWithLocale,
@@ -37,32 +35,26 @@ import {
   setInteger,
   setUrl,
 } from "@inrupt/solid-client";
-import DatasetContext from "../../context/datasetContext";
-import ThingContext from "../../context/thingContext";
 import { SessionContext } from "../../context/sessionContext";
-import { DataType, getValueByType } from "../../helpers";
+
+import { DataType, CommonProperties, useProperty } from "../../helpers";
 
 export type Props = {
-  dataSet?: SolidDataset;
-  property: Url | UrlString;
-  thing?: Thing;
   dataType: DataType;
   saveDatasetTo?: Url | UrlString;
-  autosave?: boolean;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
-  edit?: boolean;
   locale?: string;
-  onSave?(savedDataset?: SolidDataset, savedThing?: Thing): void | null;
-  onError?(error: Error): void | null;
-} & React.HTMLAttributes<HTMLSpanElement>;
+} & CommonProperties &
+  React.HTMLAttributes<HTMLSpanElement>;
 
 /**
  * Retrieves and displays a value of one of a range of types from a given [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset)/[Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing)/property. Can also be used to set/update and persist a value.
  */
 export function Value({
   thing: propThing,
-  dataSet: propDataset,
-  property,
+  solidDataset: propDataset,
+  property: propProperty,
+  properties: propProperties,
   dataType,
   saveDatasetTo,
   locale,
@@ -74,51 +66,55 @@ export function Value({
   ...other
 }: Props): ReactElement {
   const { fetch } = useContext(SessionContext);
-  const [value, setValue] = useState<string | number | boolean | null>("");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setErrorState] = useState<string | null>();
-  const [initialValue, setInitialValue] = useState<string | number | null>("");
 
-  const datasetContext = useContext(DatasetContext);
-  const { dataset: contextDataset, setDataset } = datasetContext;
-
-  const thingContext = useContext(ThingContext);
-  const { thing: contextThing } = thingContext;
-
-  const dataset = propDataset || contextDataset;
-  const thing = propThing || contextThing;
+  const {
+    value: thingValue,
+    thing,
+    property,
+    dataset,
+    setDataset,
+    error,
+  } = useProperty({
+    dataset: propDataset,
+    thing: propThing,
+    property: propProperty,
+    properties: propProperties,
+    type: dataType,
+    locale,
+  });
 
   useEffect(() => {
-    if (thing) {
-      const valueFromThing = getValueByType(dataType, thing, property, locale);
-      switch (dataType) {
-        case "boolean":
-          setValue((valueFromThing as boolean | null) ?? false);
-          break;
-        case "datetime": {
-          const datetimeString = valueFromThing
-            ? (valueFromThing as Date)
-                .toISOString()
-                .substring(0, (valueFromThing as Date).toISOString().length - 5)
-            : null;
-          setValue(datetimeString);
-          break;
-        }
-        default:
-          setValue(valueFromThing as string | number);
-      }
+    if (error && onError) {
+      onError(error);
     }
-  }, [thing, property, locale, dataType]);
+  }, [error, onError]);
+
+  let formattedValue = thingValue;
+
+  if (dataType === "boolean") {
+    formattedValue = (thingValue as boolean | null) ?? false;
+  } else if (dataType === "datetime") {
+    formattedValue = thingValue
+      ? (thingValue as Date)
+          .toISOString()
+          .substring(0, (thingValue as Date).toISOString().length - 5)
+      : null;
+  }
+
+  const [value, setValue] = useState<string | number | boolean | null>(
+    formattedValue as string | number | boolean | null
+  );
 
   /* Save Value value in the pod */
   const saveHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (
-      initialValue !== value &&
+      formattedValue !== value &&
       thing &&
       dataset &&
       e.target.reportValidity()
     ) {
       let updatedResource = thing;
+
       switch (dataType) {
         case "boolean":
           updatedResource = setBoolean(thing, property, value as boolean);
@@ -173,9 +169,7 @@ export function Value({
             { fetch }
           );
 
-          if (contextDataset) {
-            setDataset(savedDataset);
-          }
+          setDataset(savedDataset);
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
             getSourceUrl(dataset),
@@ -183,26 +177,19 @@ export function Value({
             { fetch }
           );
 
-          if (contextDataset) {
-            setDataset(savedDataset);
-          }
-        } else {
-          setErrorState(() => {
-            throw new Error(
-              "Please provide saveDatasetTo location for new data"
-            );
-          });
+          setDataset(savedDataset);
+        } else if (onError) {
+          onError(
+            new Error("Please provide saveDatasetTo location for new data")
+          );
         }
-        if (onSave) {
+
+        if (!error && onSave) {
           onSave(savedDataset, updatedResource);
         }
-      } catch (error) {
+      } catch (saveError) {
         if (onError) {
-          onError(error);
-        } else {
-          setErrorState(() => {
-            throw error;
-          });
+          onError(saveError);
         }
       }
     }
@@ -255,7 +242,6 @@ export function Value({
           step={inputStep}
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...inputProps}
-          onFocus={(e) => setInitialValue(e.target.value)}
           onChange={(e) => {
             if (dataType === "boolean") {
               setValue(e.target.checked);

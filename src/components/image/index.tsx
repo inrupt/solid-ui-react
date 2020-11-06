@@ -20,29 +20,30 @@
  */
 
 import React, { ReactElement, useState, useEffect, useContext } from "react";
-import { Thing, Url, UrlString, getUrl } from "@inrupt/solid-client";
-import { overwriteFile, retrieveFile } from "../../helpers";
+
+import {
+  overwriteFile,
+  retrieveFile,
+  CommonProperties,
+  useProperty,
+} from "../../helpers";
+
 import { SessionContext } from "../../context/sessionContext";
-import ThingContext from "../../context/thingContext";
 
 export type Props = {
-  thing?: Thing;
-  property: Url | UrlString;
-  edit?: boolean;
-  autosave?: boolean;
   maxSize?: number;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
-  onSave?: () => void;
-  onError?: (error: Error) => void;
   errorComponent?: React.ComponentType<{ error: Error }>;
-} & React.ImgHTMLAttributes<HTMLImageElement>;
+} & CommonProperties &
+  React.ImgHTMLAttributes<HTMLImageElement>;
 
 /**
  * Fetches and displays an image, from a src found at a given property of a given [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing). Can also be used to upload a new/replacement image file.
  */
 export function Image({
-  property,
   thing: propThing,
+  property: propProperty,
+  properties: propProperties,
   edit,
   autosave,
   onSave,
@@ -53,69 +54,57 @@ export function Image({
   errorComponent: ErrorComponent,
   ...imgOptions
 }: Props): ReactElement {
-  const [error, setError] = useState<null | Error>(null);
   const { fetch } = useContext(SessionContext);
 
-  const thingContext = useContext(ThingContext);
-  const { thing: contextThing } = thingContext;
+  const values = useProperty({
+    thing: propThing,
+    property: propProperty,
+    properties: propProperties,
+    type: "url",
+  });
 
-  const thing = propThing || contextThing;
+  const { value } = values;
+  let { error: thingError } = values;
 
-  if (!thing && !error) {
-    const thingNotFound = new Error(
-      "Thing not found as property or in context"
-    );
-
-    if (!ErrorComponent && !onError) {
-      throw thingNotFound;
-    } else if (onError) {
-      onError(thingNotFound);
-    }
-
-    setError(thingNotFound);
+  if (!edit && !value) {
+    thingError = new Error("No value found for property.");
   }
 
-  const src = thing ? getUrl(thing, property) : null;
-
-  if (!src && !error) {
-    const urlNotFound = new Error("URL not found for given property");
-
-    if (!ErrorComponent && !onError) {
-      throw urlNotFound;
-    } else if (onError) {
-      onError(urlNotFound);
-    }
-
-    setError(urlNotFound);
-  }
-
-  const [imgObjectUrl, setImgObjectUrl] = useState("");
+  const [error, setError] = useState<Error | undefined>(thingError);
 
   useEffect(() => {
-    if (src) {
-      retrieveFile(src, fetch)
+    if (error) {
+      if (onError) {
+        onError(error);
+      }
+    }
+  }, [error, onError, ErrorComponent]);
+
+  const [imgObjectUrl, setImgObjectUrl] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (value) {
+      retrieveFile(value as string, fetch)
         .then(setImgObjectUrl)
         .catch((retrieveError) => {
+          setError(retrieveError);
+
           if (onError) {
             onError(retrieveError);
-            setError(retrieveError);
-          } else if (ErrorComponent) {
+          }
+
+          if (ErrorComponent) {
             setImgObjectUrl("");
-            setError(retrieveError);
-          } else {
-            setImgObjectUrl(() => {
-              throw retrieveError;
-            });
           }
         });
     }
-  }, [src, onError, setError, fetch, ErrorComponent]);
+  }, [value, onError, setError, fetch, ErrorComponent]);
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
-    if (autosave && fileList && fileList.length > 0 && src) {
+    if (autosave && fileList && fileList.length > 0 && value) {
       const newObjectUrl = await overwriteFile(
-        src,
+        value as string,
         fileList[0],
         input,
         fetch,
@@ -132,11 +121,11 @@ export function Image({
 
   let imageComponent = null;
 
-  if (src) {
+  if (error && ErrorComponent) {
+    imageComponent = <ErrorComponent error={error} />;
+  } else if (value) {
     /* eslint-disable-next-line react/jsx-props-no-spreading */
     imageComponent = <img src={imgObjectUrl} alt={alt ?? ""} {...imgOptions} />;
-  } else if (error && ErrorComponent) {
-    imageComponent = <ErrorComponent error={error} />;
   }
 
   return (
