@@ -1,3 +1,9 @@
+## 1.7.0 ( November 6, 2020 )
+
+### Changed
+
+- Upgraded dependencies, especially solid-client-* to v1.0
+
 ## 1.6.1 ( November 3, 2020 )
 
 ### Changed
