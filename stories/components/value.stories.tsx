@@ -68,7 +68,7 @@ export default {
     thing: {
       description: `The [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to retrieve the value from. Uses a Thing from context if not supplied.`,
     },
-    dataSet: {
+    dataset: {
       description: `The [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) to retrieve the value from. Uses a Dataset from context if not supplied.`,
     },
     property: {
@@ -354,7 +354,7 @@ export function WithUnsavedData(
     exampleNick
   );
 
-  const exampleDataSet = SolidFns.setThing(
+  const exampleDataset = SolidFns.setThing(
     SolidFns.createSolidDataset(),
     exampleThing
   );
@@ -362,7 +362,7 @@ export function WithUnsavedData(
   return (
     <Value
       dataType="string"
-      dataSet={exampleDataSet}
+      solidDataset={exampleDataset}
       thing={exampleThing}
       property={property}
       edit={edit}

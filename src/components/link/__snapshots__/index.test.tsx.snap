@@ -12,3 +12,14 @@ exports[`Link component Link snapshot 1`] = `
 `;
 
 exports[`Link component When getUrl returns null, should throw an error 1`] = `"URL not found for given property"`;
+
+exports[`Link component renders in edit mode 1`] = `
+<DocumentFragment>
+  <a
+    href="http://test.url"
+    rel="nofollow"
+  >
+    http://test.url
+  </a>
+</DocumentFragment>
+`;

@@ -71,13 +71,13 @@ export function WithLocalData(): ReactElement {
     property,
     name
   );
-  const dataSet = SolidFns.setThing(
+  const dataset = SolidFns.setThing(
     SolidFns.createSolidDataset(),
     exampleThing
   );
 
   return (
-    <CombinedDataProvider dataset={dataSet} thing={exampleThing}>
+    <CombinedDataProvider solidDataset={dataset} thing={exampleThing}>
       <ExampleComponent propertyUrl={property} />
     </CombinedDataProvider>
   );

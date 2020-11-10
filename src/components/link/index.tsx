@@ -20,25 +20,37 @@
  */
 
 import React, { ReactElement } from "react";
-import { Thing, Url, UrlString, getUrl } from "@inrupt/solid-client";
 
-export type Props = {
-  thing: Thing;
-  property: Url | UrlString;
-} & React.AnchorHTMLAttributes<HTMLAnchorElement>;
+import { CommonProperties, useProperty } from "../../helpers";
+import { Value } from "../value";
+
+export type Props = CommonProperties &
+  React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
 /**
  * Retrieves a URL from given [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing)/property, and renders as an anchor tag with the given href.
  */
 export function Link({
   children,
-  property,
-  thing,
+  property: propProperty,
+  properties: propProperties,
+  thing: propThing,
+  solidDataset,
+  autosave,
   rel,
   target,
+  edit,
+  onSave,
+  onError,
   ...linkOptions
 }: Props): ReactElement {
-  const href = getUrl(thing, property);
+  const { value: href, thing, property, dataset } = useProperty({
+    dataset: solidDataset,
+    thing: propThing,
+    property: propProperty,
+    properties: propProperties,
+    type: "url",
+  });
 
   const adjustedRel =
     rel || (target === "_blank" ? "noopener noreferrer" : "nofollow");
@@ -47,9 +59,24 @@ export function Link({
     throw new Error("URL not found for given property");
   }
 
+  if (edit) {
+    return (
+      <Value
+        dataType="url"
+        solidDataset={dataset}
+        thing={thing}
+        property={property as string}
+        autosave={autosave}
+        onSave={onSave}
+        onError={onError}
+        edit
+      />
+    );
+  }
+
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <a href={href} rel={adjustedRel} target={target} {...linkOptions}>
+    <a href={href as string} rel={adjustedRel} target={target} {...linkOptions}>
       {children ?? href}
     </a>
   );

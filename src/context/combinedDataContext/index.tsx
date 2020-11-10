@@ -42,7 +42,7 @@ export type ThingOrThingUrl = {
 };
 
 export interface Dataset extends Props {
-  dataset: SolidDataset | (SolidDataset & WithResourceInfo);
+  solidDataset: SolidDataset | (SolidDataset & WithResourceInfo);
 }
 
 export interface DatasetUrl extends Props {
@@ -70,11 +70,19 @@ function CombinedDataProvider(
  */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function CombinedDataProvider(props: any): ReactElement {
-  const { children, dataset, datasetUrl, thing, thingUrl, onError } = props;
+  const {
+    children,
+    solidDataset,
+    datasetUrl,
+    thing,
+    thingUrl,
+    onError,
+  } = props;
+
   return (
     <DatasetProvider
       onError={onError}
-      dataset={dataset}
+      solidDataset={solidDataset}
       datasetUrl={datasetUrl}
     >
       <ThingProvider thing={thing} thingUrl={thingUrl}>

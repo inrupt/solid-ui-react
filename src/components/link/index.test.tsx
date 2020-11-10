@@ -108,4 +108,20 @@ describe("Link component", () => {
     );
     expect(getByText(mockUrl).getAttribute("rel")).toBe("test");
   });
+
+  it("renders in edit mode", () => {
+    const mockDataset = SolidFns.setThing(
+      SolidFns.createSolidDataset(),
+      mockThing
+    );
+
+    const { asFragment } = render(
+      <Link
+        thing={mockThing}
+        property={mockPredicate}
+        solidDataset={mockDataset}
+      />
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
 });

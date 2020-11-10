@@ -35,7 +35,7 @@ export default function useDataset(
   error: any;
 } {
   const { fetch } = useContext(SessionContext);
-  const { dataset: datasetFromContext } = useContext(DatasetContext);
+  const { solidDataset: datasetFromContext } = useContext(DatasetContext);
   const { data, error } = useSWR(
     datasetIri ? [datasetIri, options, fetch] : null,
     () => {

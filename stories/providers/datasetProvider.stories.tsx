@@ -61,13 +61,13 @@ export function WithLocalDataset(): ReactElement {
     property,
     name
   );
-  const dataSet = SolidFns.setThing(
+  const dataset = SolidFns.setThing(
     SolidFns.createSolidDataset(),
     exampleThing
   );
 
   return (
-    <DatasetProvider dataset={dataSet}>
+    <DatasetProvider solidDataset={dataset}>
       <ExampleComponentWithDataset />
     </DatasetProvider>
   );
@@ -118,14 +118,14 @@ function ExampleComponentWithDatasetUrl(
   const [property, setProperty] = useState<string>("fetching in progress");
 
   const datasetContext = useContext(DatasetContext);
-  const { dataset } = datasetContext;
+  const { solidDataset } = datasetContext;
 
   useEffect(() => {
-    if (dataset) {
-      const thing = SolidFns.getThing(dataset, thingUrl);
+    if (solidDataset) {
+      const thing = SolidFns.getThing(solidDataset, thingUrl);
       setExampleThing(thing || undefined);
     }
-  }, [dataset, thingUrl]);
+  }, [solidDataset, thingUrl]);
 
   useEffect(() => {
     if (exampleThing) {
@@ -151,14 +151,14 @@ function ExampleComponentWithDataset(): ReactElement {
   const [property, setProperty] = useState<string>("fetching in progress");
 
   const datasetContext = useContext(DatasetContext);
-  const { dataset } = datasetContext;
+  const { solidDataset } = datasetContext;
 
   useEffect(() => {
-    if (dataset) {
-      const things = SolidFns.getThingAll(dataset);
+    if (solidDataset) {
+      const things = SolidFns.getThingAll(solidDataset);
       setExampleThing(things[0]);
     }
-  }, [dataset]);
+  }, [solidDataset]);
 
   useEffect(() => {
     if (exampleThing) {

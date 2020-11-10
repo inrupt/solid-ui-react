@@ -37,15 +37,15 @@ const mockThing = SolidFns.addStringNoLocale(
   mockNick
 );
 
-const mockDataSet = SolidFns.setThing(SolidFns.createSolidDataset(), mockThing);
-const mockDataSetWithResourceInfo = SolidFns.setThing(
+const mockDataset = SolidFns.setThing(SolidFns.createSolidDataset(), mockThing);
+const mockDatasetWithResourceInfo = SolidFns.setThing(
   SolidFns.createSolidDataset() as any,
   mockThing
 );
 
 // TODO: refactor this once ticket SDK-1157 has been done
-mockDataSetWithResourceInfo.internal_resourceInfo = {};
-mockDataSetWithResourceInfo.internal_resourceInfo.fetchedFrom =
+mockDatasetWithResourceInfo.internal_resourceInfo = {};
+mockDatasetWithResourceInfo.internal_resourceInfo.fetchedFrom =
   "https://some-interesting-value.com";
 
 const inputOptions = {
@@ -53,16 +53,16 @@ const inputOptions = {
   type: "url",
 };
 
-const savedDataSet = SolidFns.createSolidDataset() as any;
+const savedDataset = SolidFns.createSolidDataset() as any;
 jest
   .spyOn(SolidFns, "saveSolidDatasetAt")
-  .mockImplementation(() => savedDataSet);
+  .mockImplementation(() => savedDataset);
 
 describe("<Text /> component snapshot test", () => {
   it("matches snapshot", () => {
     const documentBody = render(
       <Text
-        dataSet={mockDataSetWithResourceInfo}
+        solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
       />
@@ -73,7 +73,7 @@ describe("<Text /> component snapshot test", () => {
 
   it("matches snapshot with data from context", () => {
     const documentBody = render(
-      <DatasetProvider dataset={mockDataSetWithResourceInfo}>
+      <DatasetProvider solidDataset={mockDatasetWithResourceInfo}>
         <ThingProvider thing={mockThing}>
           <Text property={mockPredicate} edit autosave />
         </ThingProvider>
@@ -88,7 +88,7 @@ describe("<Text /> component snapshot test", () => {
       <Text
         edit
         inputProps={inputOptions}
-        dataSet={mockDataSetWithResourceInfo}
+        solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
       />
@@ -105,7 +105,7 @@ describe("<Text /> component functional testing", () => {
       .mockImplementation(() => mockNick);
     const { getByText } = render(
       <Text
-        dataSet={mockDataSetWithResourceInfo}
+        solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
       />
@@ -120,7 +120,7 @@ describe("<Text /> component functional testing", () => {
       .mockImplementation(() => mockNick);
     const { getByText } = render(
       <Text
-        dataSet={mockDataSetWithResourceInfo}
+        solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
         locale="en"
@@ -135,10 +135,10 @@ describe("<Text /> component functional testing", () => {
     jest
       .spyOn(SolidFns, "setStringNoLocale")
       .mockImplementation(() => mockThing);
-    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
+    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
     const { getByDisplayValue } = render(
       <Text
-        dataSet={mockDataSetWithResourceInfo}
+        solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
         edit
@@ -156,10 +156,10 @@ describe("<Text /> component functional testing", () => {
     jest
       .spyOn(SolidFns, "setStringWithLocale")
       .mockImplementation(() => mockThing);
-    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
+    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
     const { getByDisplayValue } = render(
       <Text
-        dataSet={mockDataSetWithResourceInfo}
+        solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
         locale="en"
@@ -180,7 +180,7 @@ describe("<Text /> component functional testing", () => {
       .mockImplementation(() => mockThing);
     const { getByDisplayValue } = render(
       <Text
-        dataSet={mockDataSetWithResourceInfo}
+        solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
         locale="en"
@@ -195,10 +195,10 @@ describe("<Text /> component functional testing", () => {
   });
 
   it("Should not call saveSolidDatasetAt onBlur if autosave is false", async () => {
-    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
+    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
     const { getByDisplayValue } = render(
       <Text
-        dataSet={mockDataSetWithResourceInfo}
+        solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
         locale="en"
@@ -213,10 +213,10 @@ describe("<Text /> component functional testing", () => {
   it("Should call onSave if it is passed", async () => {
     const onSave = jest.fn();
     const onError = jest.fn();
-    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
+    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
     const { getByDisplayValue } = render(
       <Text
-        dataSet={mockDataSetWithResourceInfo}
+        solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
         onSave={onSave}
@@ -235,10 +235,10 @@ describe("<Text /> component functional testing", () => {
   it("Should call onSave for fetched dataset with custom location if it is passed", async () => {
     const onSave = jest.fn();
     const onError = jest.fn();
-    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataSet);
+    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
     const { getByDisplayValue } = render(
       <Text
-        dataSet={mockDataSetWithResourceInfo}
+        solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
         saveDatasetTo="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
@@ -260,7 +260,7 @@ describe("<Text /> component functional testing", () => {
     const onError = jest.fn();
     const { getByDisplayValue } = render(
       <Text
-        dataSet={mockDataSet}
+        solidDataset={mockDataset}
         thing={mockThing}
         property={mockPredicate}
         saveDatasetTo="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
@@ -281,7 +281,7 @@ describe("<Text /> component functional testing", () => {
     const onError = jest.fn();
     const { getByDisplayValue } = render(
       <Text
-        dataSet={mockDataSetWithResourceInfo}
+        solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
         saveDatasetTo="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
@@ -297,32 +297,6 @@ describe("<Text /> component functional testing", () => {
     await waitFor(() => expect(onError).toHaveBeenCalled());
   });
 
-  it("Should throw error if saving data fails and on OnError is passed", async () => {
-    jest.spyOn(console, "error").mockImplementation(() => {});
-    (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(
-      "Saving data failed"
-    );
-    const { getByText, getByDisplayValue } = render(
-      <ErrorBoundary fallbackRender={({ error }) => <div>{error}</div>}>
-        <Text
-          dataSet={mockDataSetWithResourceInfo}
-          thing={mockThing}
-          property={mockPredicate}
-          edit
-          autosave
-        />
-      </ErrorBoundary>
-    );
-
-    const input = getByDisplayValue(mockNick);
-    input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(getByText("Saving data failed")).toBeDefined());
-    // eslint-disable-next-line no-console
-    (console.error as jest.Mock).mockRestore();
-  });
-
   it("Should throw error if SaveDatasetTo is missing for new data", async () => {
     jest.spyOn(console, "error").mockImplementation(() => {});
     const { getByText, getByDisplayValue } = render(
@@ -330,7 +304,7 @@ describe("<Text /> component functional testing", () => {
         fallbackRender={({ error }) => <div>{JSON.stringify(error)}</div>}
       >
         <Text
-          dataSet={mockDataSet}
+          solidDataset={mockDataset}
           thing={mockThing}
           property={mockPredicate}
           edit

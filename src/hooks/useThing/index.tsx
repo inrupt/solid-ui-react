@@ -30,17 +30,17 @@ export default function useThing(
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   options?: any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): { thing: Thing | undefined; error: any } {
+): { thing?: Thing | null; error: any } {
   const { dataset, error } = useDataset(datasetIri, options);
   const { thing: thingFromContext } = useContext(ThingContext);
   if (!thingIri) {
-    return { thing: thingFromContext, error };
+    return { thing: thingFromContext || undefined, error };
   }
 
   if (!dataset) {
-    return { thing: undefined, error };
+    return { thing: null, error };
   }
 
-  const thing = getThing(dataset, thingIri) || undefined;
+  const thing = getThing(dataset, thingIri);
   return { thing, error };
 }

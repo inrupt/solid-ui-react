@@ -36,8 +36,11 @@ export default {
       control: { type: null },
     },
     property: {
-      type: { required: true },
       description: `The property of the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to retrieve the src URL from.`,
+      control: { type: null },
+    },
+    properties: {
+      description: `An array of ordered properties that will be used to attempt to read the src from (see \`property\`). If there is no value at the first property, the second is attempted, etc, and used for both reading and writing.`,
       control: { type: null },
     },
     edit: {
@@ -79,6 +82,19 @@ export function BasicExample(): ReactElement {
 }
 
 BasicExample.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
+};
+
+export function PropertyArrayExample(): ReactElement {
+  const property = "http://schema.org/contentUrl";
+  const notFoundProperty = "http://schema.org/iri-not-on-the-thing";
+  const thing = addUrl(createThing(), property, `${host}/example.jpg`);
+
+  return <Image thing={thing} properties={[notFoundProperty, property]} />;
+}
+
+PropertyArrayExample.parameters = {
   actions: { disable: true },
   controls: { disable: true },
 };

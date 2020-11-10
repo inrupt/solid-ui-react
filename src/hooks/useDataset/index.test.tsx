@@ -48,7 +48,7 @@ describe("useDataset() hook", () => {
     >
       <DatasetContext.Provider
         value={{
-          dataset: mockContextDataset,
+          solidDataset: mockContextDataset,
           setDataset: () => {},
         }}
       >

@@ -91,7 +91,7 @@ export function WithThingUrl(props: IWithThingUrl): ReactElement {
 
   if (litDataset) {
     return (
-      <DatasetProvider dataset={litDataset}>
+      <DatasetProvider solidDataset={litDataset}>
         <ThingProvider thingUrl={thingUrl}>
           <ExampleComponentWithThingUrl property={property} />
         </ThingProvider>

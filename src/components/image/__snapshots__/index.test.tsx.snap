@@ -1,6 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Image component Image functional tests When getUrl returns null, with no errorComponent, should throw an error 1`] = `"URL not found for given property"`;
+exports[`Image component Image functional tests When getUrl returns null, with an errorComponent, should render the error 1`] = `
+<DocumentFragment>
+  <span>
+    Error: No value found for property.
+  </span>
+</DocumentFragment>
+`;
 
 exports[`Image component Image snapshots matches snapshot with additional props for img and input 1`] = `
 <DocumentFragment>
@@ -29,7 +35,7 @@ exports[`Image component Image snapshots matches snapshot with standard props 1`
 exports[`Image component Image snapshots renders an error message if an errorComponent is provided 1`] = `
 <DocumentFragment>
   <span>
-    Error: URL not found for given property
+    Error: No value found for property.
   </span>
 </DocumentFragment>
 `;
