@@ -5,7 +5,7 @@ The goal of this library is to provide highly flexible, simple components that y
 
 In this library, you will find:
 
-- **Authentication components**, which can help you log in and log out of an identiy provider
+- **Authentication components**, which can help you log in and log out of an identity provider
 - **Data components**, which can help you view and edit individual properties or view a sortable and filterable table of many things
 - **Context providers and hooks** to help simplify development when using functional programming
 
