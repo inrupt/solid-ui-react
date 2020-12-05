@@ -90,7 +90,7 @@
     "@inrupt/solid-client": "^1.0.0",
     "@inrupt/solid-client-authn-browser": "^1.0.0",
     "core-js": "^3.6.5",
-    "react-table": "^7.6.1",
+    "react-table": "^7.6.2",
     "swr": "^0.3.8"
   }
 }
