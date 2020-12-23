@@ -1,6 +1,13 @@
 name: CD
 
-on: push
+on:
+  push:
+    branches:
+    - '**'
+    tags-ignore:
+    # Only create preview releases for branches
+    # (the `release` workflow creates actual releases for version tags):
+    - '**'
 
 env:
   CI: true
@@ -36,8 +43,10 @@ jobs:
   publish-npm:
     runs-on: ubuntu-20.04
     needs: [prepare-deployment]
+    outputs:
+      version-nr: ${{ steps.determine-npm-version.outputs.version-nr }}
     steps:
-    - uses: actions/checkout@v2.1.0
+    - uses: actions/checkout@v2.3.4
     - name: Mark GitHub Deployment as in progress
       id: start-deployment
       uses: octokit/request-action@v2.x
@@ -46,33 +55,41 @@ jobs:
         repository: ${{ github.repository }}
         deployment: ${{ needs.prepare-deployment.outputs.deployment-id }}
         environment: review
-        description: "Publishing to npm tag `${{ needs.prepare-deployment.outputs.tag-slug }}`…"
+        description: "Publishing to npm tag [${{ needs.prepare-deployment.outputs.tag-slug }}]…"
         log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         state: in_progress
         mediaType: '{"previews": ["flash", "ant-man"]}'
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-    - name: Prepare for publication to npm
-      uses: actions/setup-node@v1
+    - uses: actions/setup-node@v2.1.4
       with:
         node-version: '12.x'
         registry-url: 'https://registry.npmjs.org'
     - name: Prepare prerelease version
+      id: determine-npm-version
       run: |
         git config user.name $GITHUB_ACTOR
         git config user.email gh-actions-${GITHUB_ACTOR}@github.com
+        # Unfortunately re-running a job does not change its run ID nor run number.
+        # To prevent re-releasing the same version when re-running the CD job,
+        # we incorporate a timestamp in the prerelease version:
+        TIMESTAMP=$(date --utc +%s)
         # Make sure the prerelease is tagged with the branch name, and that they are sorted by build:
-        npm version prerelease --preid=$TAG_SLUG-$GITHUB_RUN_ID-$GITHUB_RUN_NUMBER
+        VERSION_NR=$(npm version prerelease --preid=$TAG_SLUG-$GITHUB_RUN_ID-$GITHUB_RUN_NUMBER-$TIMESTAMP)
+        echo "::set-output name=version-nr::$VERSION_NR"
       env:
         TAG_SLUG: ${{ needs.prepare-deployment.outputs.tag-slug }}
     - run: npm ci
-    - run: npm run build
     - name: Publish an npm tag for this branch
       run: |
-        npm publish --access public --tag "$TAG_SLUG"
-        echo "Package published. To install, run:"
-        echo ""
-        echo "    npm install @inrupt/solid-ui-react@$TAG_SLUG"
+        # Unfortunately GitHub Actions does not currently let us do something like
+        #     if: secrets.NPM_TOKEN != ''
+        # so simply skip the command if the env var is not set:
+        if [ -z $NODE_AUTH_TOKEN ]; then echo "No npm token defined; package not published."; fi
+        if [ -n $NODE_AUTH_TOKEN ]; then npm publish --access public --tag "$TAG_SLUG"; fi
+        if [ -n $NODE_AUTH_TOKEN ]; then echo "Package published. To install, run:"; fi
+        if [ -n $NODE_AUTH_TOKEN ]; then echo ""; fi
+        if [ -n $NODE_AUTH_TOKEN ]; then echo "    npm install @inrupt/solid-ui-react@$TAG_SLUG"; fi
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         TAG_SLUG: ${{ needs.prepare-deployment.outputs.tag-slug }}
@@ -104,3 +121,8 @@ jobs:
         state: failure
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+    - name: Waiting for npm CDNs to update...
+      run: |
+        echo "Giving npm some time to make the newly-published package available…"
+        sleep 5m
+        echo "Done — hopefully that was enough time for the follow-up jobs to install the just-published package, to verify that everything looks OK."

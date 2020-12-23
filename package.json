@@ -89,6 +89,7 @@
   "dependencies": {
     "@inrupt/solid-client": "^1.2.0",
     "@inrupt/solid-client-authn-browser": "^1.2.5",
+    "ajv": "^7.0.2",
     "core-js": "^3.8.1",
     "react-table": "^7.6.2",
     "swr": "^0.3.11"
