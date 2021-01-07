@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDir": ".",
     "types": ["jest"],
     "baseUrl": ".",
     "outDir": "./dist/",
@@ -31,6 +31,7 @@
   ],
   "include": [
     "src/**/*.ts",
-    "src/**/*.tsx"
+    "src/**/*.tsx",
+    "stories/**/*.tsx"
   ]
 }
