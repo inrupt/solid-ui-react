@@ -17,7 +17,11 @@
     "lint": "eslint src stories",
     "test": "jest",
     "storybook": "start-storybook -s ./public -p 3000 --https --ssl-cert ./certificates/localhost.crt --ssl-key ./certificates/localhost.key",
-    "build-storybook": "build-storybook -c .storybook -o docs"
+    "build-storybook": "build-storybook -c .storybook -o docs",
+
+    "postinstall": "husky install",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable"
   },
   "peerDependencies": {
     "react": ">16.13.0"
@@ -57,8 +61,10 @@
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.1.2",
     "fork-ts-checker-webpack-plugin": "^5.2.1",
+    "husky": "^4.3.7",
     "jest": "^26.6.3",
     "license-checker": "^25.0.1",
+    "pinst": "^2.1.1",
     "prettier": "^2.2.1",
     "react": "^17.0.1",
     "react-docgen-typescript-loader": "^3.7.2",
