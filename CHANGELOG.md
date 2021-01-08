@@ -1,3 +1,6 @@
+## Unreleased
+- The types accepted by `DatasetContext`have been extended to include `(SolidDataset & WithAcp)`
+
 ## 2.0.0 ( November 6, 2020 )
 
 ### BREAKING

@@ -27,9 +27,10 @@ import {
 } from "@inrupt/solid-client";
 
 import useDataset from "../../hooks/useDataset";
+import { WithAcp } from "@inrupt/solid-client/dist/acp/acp";
 
 export interface IDatasetContext {
-  solidDataset: SolidDataset | (SolidDataset & WithResourceInfo) | undefined;
+  solidDataset: SolidDataset | (SolidDataset & WithResourceInfo) | (SolidDataset & WithAcp) | undefined;
   setDataset: (solidDataset: SolidDataset) => void;
 }
 
@@ -44,7 +45,7 @@ export interface IDatasetProvider {
   children: React.ReactNode;
   loading?: React.ReactNode;
   onError?(error: Error): void | null;
-  solidDataset?: SolidDataset | (SolidDataset & WithResourceInfo);
+  solidDataset?: SolidDataset | (SolidDataset & WithResourceInfo) | (SolidDataset & WithAcp);
   datasetUrl?: UrlString | string;
 }
 
@@ -75,7 +76,7 @@ export const DatasetProvider = ({
 
   // Provide a setDataset function so that child components can update.
   const [stateDataset, setDataset] = useState<
-    SolidDataset | (SolidDataset & WithResourceInfo) | undefined
+    SolidDataset | (SolidDataset & WithResourceInfo) | (SolidDataset & WithAcp)| undefined
   >(datasetToUse);
 
   // If the dataset is asynchronously loaded, make sure to set the new state value.
