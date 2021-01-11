@@ -15,6 +15,7 @@ module.exports = {
 
   coveragePathIgnorePatterns: [
     "/node_modules/",
+    "<rootDir>/dist",
   ],
 
   coverageThreshold: {

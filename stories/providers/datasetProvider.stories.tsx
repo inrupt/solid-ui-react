@@ -52,58 +52,6 @@ export default {
   },
 };
 
-export function WithLocalDataset(): ReactElement {
-  const property = "http://xmlns.com/foaf/0.1/name";
-  const name = "example value";
-
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
-    property,
-    name
-  );
-  const dataset = SolidFns.setThing(
-    SolidFns.createSolidDataset(),
-    exampleThing
-  );
-
-  return (
-    <DatasetProvider solidDataset={dataset}>
-      <ExampleComponentWithDataset />
-    </DatasetProvider>
-  );
-}
-
-WithLocalDataset.parameters = {
-  actions: { disable: true },
-  controls: { disable: true },
-};
-
-interface IWithDatasetUrl {
-  datasetUrl: string;
-  thingUrl: string;
-  property: string;
-}
-
-export function WithDatasetUrl(props: IWithDatasetUrl): ReactElement {
-  const { datasetUrl, thingUrl, property } = props;
-
-  return (
-    <DatasetProvider datasetUrl={datasetUrl}>
-      <ExampleComponentWithDatasetUrl thingUrl={thingUrl} property={property} />
-    </DatasetProvider>
-  );
-}
-
-WithDatasetUrl.parameters = {
-  actions: { disable: true },
-};
-
-WithDatasetUrl.args = {
-  datasetUrl: `${host}/example.ttl`,
-  thingUrl: `${host}/example.ttl#me`,
-  property: "http://www.w3.org/2006/vcard/ns#role",
-};
-
 interface IExampleComponentWithDatasetUrl {
   thingUrl: string;
   property: string;
@@ -178,3 +126,55 @@ function ExampleComponentWithDataset(): ReactElement {
     </div>
   );
 }
+
+export function WithLocalDataset(): ReactElement {
+  const property = "http://xmlns.com/foaf/0.1/name";
+  const name = "example value";
+
+  const exampleThing = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    property,
+    name
+  );
+  const dataset = SolidFns.setThing(
+    SolidFns.createSolidDataset(),
+    exampleThing
+  );
+
+  return (
+    <DatasetProvider solidDataset={dataset}>
+      <ExampleComponentWithDataset />
+    </DatasetProvider>
+  );
+}
+
+WithLocalDataset.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
+};
+
+interface IWithDatasetUrl {
+  datasetUrl: string;
+  thingUrl: string;
+  property: string;
+}
+
+export function WithDatasetUrl(props: IWithDatasetUrl): ReactElement {
+  const { datasetUrl, thingUrl, property } = props;
+
+  return (
+    <DatasetProvider datasetUrl={datasetUrl}>
+      <ExampleComponentWithDatasetUrl thingUrl={thingUrl} property={property} />
+    </DatasetProvider>
+  );
+}
+
+WithDatasetUrl.parameters = {
+  actions: { disable: true },
+};
+
+WithDatasetUrl.args = {
+  datasetUrl: `${host}/example.ttl`,
+  thingUrl: `${host}/example.ttl#me`,
+  property: "http://www.w3.org/2006/vcard/ns#role",
+};

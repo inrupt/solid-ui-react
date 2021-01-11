@@ -1,8 +1,11 @@
 {
   "compilerOptions": {
+    "rootDir": ".",
+    // https://github.com/microsoft/TypeScript/wiki/Performance#controlling-types-inclusion
+    "types": ["jest"],
     "baseUrl": ".",
     "outDir": "./dist/",
-    "target": "es2015",
+    "target": "es2017",
     "lib": [
       "dom",
       "dom.iterable",
@@ -13,7 +16,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
-    "module": "es6",
+    "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "jsx": "react",
@@ -22,13 +25,14 @@
     "declarationMap": true
   },
   "exclude": [
-    "node_modules",
+    "**/node_modules",
     "dist",
     "**/__mocks__/**",
     "**/__snapshots__/**"
   ],
   "include": [
-    "**/*.ts",
-    "**/*.tsx"
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "stories/**/*.tsx"
   ]
 }

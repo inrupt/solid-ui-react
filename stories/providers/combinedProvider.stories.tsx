@@ -62,58 +62,6 @@ export default {
   },
 };
 
-export function WithLocalData(): ReactElement {
-  const property = "http://xmlns.com/foaf/0.1/name";
-  const name = "example value";
-
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
-    property,
-    name
-  );
-  const dataset = SolidFns.setThing(
-    SolidFns.createSolidDataset(),
-    exampleThing
-  );
-
-  return (
-    <CombinedDataProvider solidDataset={dataset} thing={exampleThing}>
-      <ExampleComponent propertyUrl={property} />
-    </CombinedDataProvider>
-  );
-}
-
-WithLocalData.parameters = {
-  actions: { disable: true },
-  controls: { disable: true },
-};
-
-export function WithDataUrls({
-  datasetUrl,
-  thingUrl,
-  propertyUrl,
-}: {
-  datasetUrl: string;
-  thingUrl: string;
-  propertyUrl: string;
-}): ReactElement {
-  return (
-    <CombinedDataProvider datasetUrl={datasetUrl} thingUrl={thingUrl}>
-      <ExampleComponentFetchedData propertyUrl={propertyUrl} />
-    </CombinedDataProvider>
-  );
-}
-
-WithDataUrls.parameters = {
-  actions: { disable: true },
-};
-
-WithDataUrls.args = {
-  datasetUrl: `${host}/example.ttl`,
-  thingUrl: `${host}/example.ttl#me`,
-  propertyUrl: "http://xmlns.com/foaf/0.1/name",
-};
-
 function ExampleComponent({
   propertyUrl,
 }: {
@@ -166,3 +114,55 @@ function ExampleComponentFetchedData({
     </div>
   );
 }
+
+export function WithLocalData(): ReactElement {
+  const property = "http://xmlns.com/foaf/0.1/name";
+  const name = "example value";
+
+  const exampleThing = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    property,
+    name
+  );
+  const dataset = SolidFns.setThing(
+    SolidFns.createSolidDataset(),
+    exampleThing
+  );
+
+  return (
+    <CombinedDataProvider solidDataset={dataset} thing={exampleThing}>
+      <ExampleComponent propertyUrl={property} />
+    </CombinedDataProvider>
+  );
+}
+
+WithLocalData.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
+};
+
+export function WithDataUrls({
+  datasetUrl,
+  thingUrl,
+  propertyUrl,
+}: {
+  datasetUrl: string;
+  thingUrl: string;
+  propertyUrl: string;
+}): ReactElement {
+  return (
+    <CombinedDataProvider datasetUrl={datasetUrl} thingUrl={thingUrl}>
+      <ExampleComponentFetchedData propertyUrl={propertyUrl} />
+    </CombinedDataProvider>
+  );
+}
+
+WithDataUrls.parameters = {
+  actions: { disable: true },
+};
+
+WithDataUrls.args = {
+  datasetUrl: `${host}/example.ttl`,
+  thingUrl: `${host}/example.ttl#me`,
+  propertyUrl: "http://xmlns.com/foaf/0.1/name",
+};

@@ -85,14 +85,8 @@ export function BasicExample(): ReactElement {
   return (
     <Table
       things={[
-        {
-          dataset,
-          thing: thing1,
-        },
-        {
-          dataset,
-          thing: thing2,
-        },
+        { dataset, thing: thing1 },
+        { dataset, thing: thing2 },
       ]}
       style={{ border: "1px solid black" }}
     >
