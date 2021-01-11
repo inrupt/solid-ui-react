@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "rootDir": ".",
+    // https://github.com/microsoft/TypeScript/wiki/Performance#controlling-types-inclusion
     "types": ["jest"],
     "baseUrl": ".",
     "outDir": "./dist/",
