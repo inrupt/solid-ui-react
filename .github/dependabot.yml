@@ -12,10 +12,9 @@ updates:
       # (see https://prettier.io/docs/en/install.html)
       # so to avoid regular and unpredictable breakage:
       - dependency-name: "prettier"
-  # Enable version updates for the website tooling
-  - package-ecosystem: "npm"
+  - package-ecosystem: "github-actions"
     # Look for `package.json` and `lock` files in the `root` directory
-    directory: "/website"
+    directory: "/"
     # Check the npm registry for updates every day (weekdays)
     schedule:
       interval: "daily"
