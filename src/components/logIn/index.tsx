@@ -49,7 +49,7 @@ export const LoginButton: React.FC<Props> = (propsLogin: Props) => {
     ...authOptions,
   };
 
-  const { session, setSessionRequestInProgress } = useContext(SessionContext);
+  const { login, setSessionRequestInProgress } = useContext(SessionContext);
 
   async function loginHandler() {
     setSessionRequestInProgress(true);
@@ -57,7 +57,7 @@ export const LoginButton: React.FC<Props> = (propsLogin: Props) => {
     try {
       // Workaround for a solid-client-authn bug.
       // Typescript is mad about something.
-      await session.login(options as any);
+      await login(options as any);
       setSessionRequestInProgress(false);
     } catch (error) {
       setSessionRequestInProgress(false);
