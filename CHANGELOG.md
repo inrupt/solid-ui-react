@@ -1,3 +1,14 @@
+## 2.1.0
+
+### Changed
+
+- If no `onError` is passed to a SessionContext, an error will be thrown
+- `login` from `useSession` will now throw errors if an error occurs
+- Only `Enter` keyboard events will trigger login and logout on the default
+  LoginButton and LogoutButton
+- Packages have been upgraded - notably, `@inrupt/solid-client-authn-browser` which allows
+  refreshing without losing the current session
+
 ## 2.0.0 ( November 6, 2020 )
 
 ### BREAKING
