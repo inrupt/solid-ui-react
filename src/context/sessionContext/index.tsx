@@ -121,6 +121,8 @@ export const SessionProvider = ({
       .catch((error) => {
         if (onError) {
           onError(error);
+        } else {
+          throw error;
         }
       })
       .finally(() => {
@@ -141,7 +143,12 @@ export const SessionProvider = ({
       setSessionRequestInProgress(false);
     } catch (error) {
       setSessionRequestInProgress(false);
-      if (onError) onError(error);
+
+      if (onError) {
+        onError(error);
+      } else {
+        throw error;
+      }
     }
   };
 
@@ -149,7 +156,11 @@ export const SessionProvider = ({
     try {
       await session.logout();
     } catch (error) {
-      if (onError) onError(error);
+      if (onError) {
+        onError(error);
+      } else {
+        throw error;
+      }
     }
   };
 
