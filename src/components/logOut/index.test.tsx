@@ -70,7 +70,7 @@ describe("<LogoutButton /> component visual testing", () => {
 });
 
 describe("<LogOutButton /> component functional testing", () => {
-  it("fires the onClick function and calls OnLogout", async () => {
+  it("fires the onClick function and calls onLogout", async () => {
     const session = {
       info: { isLoggedIn: false },
       logout: jest.fn().mockResolvedValue(null),
@@ -89,7 +89,44 @@ describe("<LogOutButton /> component functional testing", () => {
     await waitFor(() => expect(onLogout).toHaveBeenCalledTimes(1));
   });
 
-  it("fires on click and doesn't pass on logout", async () => {
+  it("fires the onKeyPress function if enter is pressed", async () => {
+    const session = {
+      info: { isLoggedIn: false },
+      logout: jest.fn().mockResolvedValue(null),
+      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
+      on: jest.fn(),
+    } as any;
+
+    const { getByText } = render(
+      <SessionProvider session={session} sessionId="key">
+        <LogoutButton onLogout={onLogout} onError={onError} />
+      </SessionProvider>
+    );
+
+    fireEvent.keyDown(getByText("Log Out"), { key: "Enter", code: "Enter" });
+    expect(session.logout).toHaveBeenCalled();
+    await waitFor(() => expect(onLogout).toHaveBeenCalledTimes(1));
+  });
+
+  it("does not fire the onKeyPress function if a non-enter button is pressed", async () => {
+    const session = {
+      info: { isLoggedIn: false },
+      logout: jest.fn().mockResolvedValue(null),
+      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
+      on: jest.fn(),
+    } as any;
+
+    const { getByText } = render(
+      <SessionProvider session={session} sessionId="key">
+        <LogoutButton onLogout={onLogout} onError={onError} />
+      </SessionProvider>
+    );
+
+    fireEvent.keyDown(getByText("Log Out"), { key: "A", code: "A" });
+    expect(session.logout).not.toHaveBeenCalled();
+  });
+
+  it("fires on click and doesn't pass onLogout", async () => {
     const session = {
       info: { isLoggedIn: false },
       logout: jest.fn().mockResolvedValue(null),

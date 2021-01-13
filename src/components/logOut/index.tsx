@@ -34,7 +34,8 @@ export interface Props {
 export const LogoutButton: React.FC<Props> = (propsLogout: Props) => {
   const { session } = useContext(SessionContext);
   const { children, onLogout, onError } = propsLogout;
-  async function LogoutHandler() {
+
+  async function logoutHandler() {
     try {
       await session.logout();
       if (onLogout) onLogout();
@@ -42,17 +43,24 @@ export const LogoutButton: React.FC<Props> = (propsLogout: Props) => {
       if (onError) onError(error);
     }
   }
+
+  function keyDownHandler(
+    e: React.KeyboardEvent<HTMLDivElement | HTMLButtonElement>
+  ): Promise<void> {
+    return e.key === "Enter" ? logoutHandler() : Promise.resolve();
+  }
+
   return children ? (
     <div
       role="button"
       tabIndex={0}
-      onClick={LogoutHandler}
-      onKeyDown={LogoutHandler}
+      onClick={logoutHandler}
+      onKeyDown={keyDownHandler}
     >
       {children}
     </div>
   ) : (
-    <button type="button" onClick={LogoutHandler} onKeyDown={LogoutHandler}>
+    <button type="button" onClick={logoutHandler} onKeyDown={keyDownHandler}>
       Log Out
     </button>
   );

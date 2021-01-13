@@ -26,7 +26,6 @@ import { LoginButton } from "./index";
 import { SessionProvider } from "../../context/sessionContext";
 
 const onError = jest.fn().mockResolvedValue(null);
-const setSessionRequestInProgress = jest.fn().mockResolvedValue(null);
 
 describe("<LoginButton /> component snapshot test", () => {
   it("matches snapshot", () => {
@@ -79,7 +78,7 @@ describe("<LoginButton /> component visual testing", () => {
 });
 
 describe("<LoginButton /> component functional testing", () => {
-  it("fires the onClick function", async () => {
+  it("fires the onClick function when clicked", async () => {
     const session = {
       info: { isLoggedIn: false },
       login: jest.fn().mockResolvedValue(null),
@@ -102,6 +101,57 @@ describe("<LoginButton /> component functional testing", () => {
 
     fireEvent.click(getByText("Log In"));
     expect(session.login).toHaveBeenCalledWith({ oidcIssuer, redirectUrl });
+  });
+
+  it("fires the onKeyPress function if enter is pressed", async () => {
+    const session = {
+      info: { isLoggedIn: false },
+      login: jest.fn().mockResolvedValue(null),
+      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
+      on: jest.fn(),
+    } as any;
+
+    const oidcIssuer = "https://test.url";
+    const redirectUrl = "https://local.url/redirect";
+
+    const { getByText } = render(
+      <SessionProvider session={session} sessionId="key">
+        <LoginButton
+          oidcIssuer={oidcIssuer}
+          redirectUrl={redirectUrl}
+          onError={onError}
+        />
+      </SessionProvider>
+    );
+
+    fireEvent.keyDown(getByText("Log In"), { key: "Enter", code: "Enter" });
+
+    expect(session.login).toHaveBeenCalledWith({ oidcIssuer, redirectUrl });
+  });
+
+  it("does not fire the onKeyPress function if a non-enter button is pressed", async () => {
+    const session = {
+      info: { isLoggedIn: false },
+      login: jest.fn().mockResolvedValue(null),
+      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
+      on: jest.fn(),
+    } as any;
+
+    const oidcIssuer = "https://test.url";
+    const redirectUrl = "https://local.url/redirect";
+
+    const { getByText } = render(
+      <SessionProvider session={session} sessionId="key">
+        <LoginButton
+          oidcIssuer={oidcIssuer}
+          redirectUrl={redirectUrl}
+          onError={onError}
+        />
+      </SessionProvider>
+    );
+
+    fireEvent.keyDown(getByText("Log In"), { key: "A", code: "A" });
+    expect(session.login).not.toHaveBeenCalled();
   });
 
   it("fires the onClick function and calls OnError", async () => {

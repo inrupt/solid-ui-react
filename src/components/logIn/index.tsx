@@ -51,7 +51,7 @@ export const LoginButton: React.FC<Props> = (propsLogin: Props) => {
 
   const { session, setSessionRequestInProgress } = useContext(SessionContext);
 
-  async function LoginHandler() {
+  async function loginHandler() {
     setSessionRequestInProgress(true);
 
     try {
@@ -65,17 +65,23 @@ export const LoginButton: React.FC<Props> = (propsLogin: Props) => {
     }
   }
 
+  function keyDownHandler(
+    e: React.KeyboardEvent<HTMLDivElement | HTMLButtonElement>
+  ): Promise<void> {
+    return e.key === "Enter" ? loginHandler() : Promise.resolve();
+  }
+
   return children ? (
     <div
       role="button"
       tabIndex={0}
-      onClick={LoginHandler}
-      onKeyDown={LoginHandler}
+      onClick={loginHandler}
+      onKeyDown={keyDownHandler}
     >
       {children}
     </div>
   ) : (
-    <button type="button" onClick={LoginHandler} onKeyDown={LoginHandler}>
+    <button type="button" onClick={loginHandler} onKeyDown={keyDownHandler}>
       Log In
     </button>
   );
