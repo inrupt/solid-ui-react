@@ -53,10 +53,7 @@ export const SessionContext = createContext<ISessionContext>({
   login,
   logout,
   fetch,
-  // Check if window is defined to work around a SCA 1.4 issue where `window` is referenced when
-  // getDefaultSession is called.
-  // TODO: actual node.js rendering support.
-  session: typeof window === "undefined" ? new Session() : getDefaultSession(),
+  session: getDefaultSession(),
   sessionRequestInProgress: true,
 });
 
@@ -78,12 +75,7 @@ export const SessionProvider = ({
   onError,
   sessionRequestInProgress: defaultSessionRequestInProgress,
 }: ISessionProvider): ReactElement => {
-  // Check if window is defined to work around a SCA 1.4 issue where `window` is referenced when
-  // getDefaultSession is called.
-  // TODO: actual node.js rendering support.
-  const [session, setSession] = useState<Session>(
-    typeof window === "undefined" ? new Session() : getDefaultSession()
-  );
+  const [session, setSession] = useState<Session>(getDefaultSession());
 
   const defaultInProgress =
     typeof defaultSessionRequestInProgress === "undefined"
