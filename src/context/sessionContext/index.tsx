@@ -40,11 +40,6 @@ import {
 
 import { ILoginInputOptions } from "@inrupt/solid-client-authn-core";
 
-// Check if window is defined to work around an issue where auth-browser reads from window when
-// calling getDefaultSession. This allows one to render a SessionContext in a node context.
-const defaultSession =
-  typeof window === "undefined" ? new Session() : getDefaultSession();
-
 export interface ISessionContext {
   login: (options: ILoginInputOptions) => Promise<void>;
   logout: () => Promise<void>;
@@ -58,7 +53,10 @@ export const SessionContext = createContext<ISessionContext>({
   login,
   logout,
   fetch,
-  session: defaultSession,
+  // Check if window is defined to work around a SCA 1.4 issue where `window` is referenced when
+  // getDefaultSession is called.
+  // TODO: actual node.js rendering support.
+  session: typeof window === "undefined" ? new Session() : getDefaultSession(),
   sessionRequestInProgress: true,
 });
 
@@ -80,7 +78,12 @@ export const SessionProvider = ({
   onError,
   sessionRequestInProgress: defaultSessionRequestInProgress,
 }: ISessionProvider): ReactElement => {
-  const [session, setSession] = useState<Session>(defaultSession);
+  // Check if window is defined to work around a SCA 1.4 issue where `window` is referenced when
+  // getDefaultSession is called.
+  // TODO: actual node.js rendering support.
+  const [session, setSession] = useState<Session>(
+    typeof window === "undefined" ? new Session() : getDefaultSession()
+  );
 
   const defaultInProgress =
     typeof defaultSessionRequestInProgress === "undefined"
