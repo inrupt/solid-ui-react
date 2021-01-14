@@ -30,8 +30,12 @@ import React, {
 } from "react";
 
 import {
+  fetch,
+  login,
+  logout,
+  handleIncomingRedirect,
   Session,
-  getClientAuthenticationWithDependencies,
+  getDefaultSession,
 } from "@inrupt/solid-client-authn-browser";
 
 import { ILoginInputOptions } from "@inrupt/solid-client-authn-core";
@@ -45,29 +49,12 @@ export interface ISessionContext {
   fetch: typeof window.fetch;
 }
 
-/* eslint @typescript-eslint/explicit-module-boundary-types: 0 */
-export const unauthenticatedFetch = (url: any, options: any): any => {
-  return window.fetch.call(window, url, options);
-};
-
-export const buildSession = (sessionId?: string): Session =>
-  new Session(
-    {
-      clientAuthentication: getClientAuthenticationWithDependencies({}),
-    },
-    sessionId
-  );
-
-const defaultSession = buildSession("");
-const defaultLogin = defaultSession.login;
-const defaultLogout = defaultSession.logout;
-
 export const SessionContext = createContext<ISessionContext>({
-  session: defaultSession,
+  login,
+  logout,
+  fetch,
+  session: getDefaultSession(),
   sessionRequestInProgress: true,
-  fetch: unauthenticatedFetch,
-  login: defaultLogin,
-  logout: defaultLogout,
 });
 
 /* eslint react/require-default-props: 0 */
@@ -85,13 +72,10 @@ export interface ISessionProvider {
 export const SessionProvider = ({
   sessionId,
   children,
-  session: propsSession,
   onError,
   sessionRequestInProgress: defaultSessionRequestInProgress,
 }: ISessionProvider): ReactElement => {
-  const [session, setSession] = useState<Session>(
-    propsSession || buildSession(sessionId)
-  );
+  const [session, setSession] = useState<Session>(getDefaultSession());
 
   const defaultInProgress =
     typeof defaultSessionRequestInProgress === "undefined"
@@ -103,11 +87,6 @@ export const SessionProvider = ({
     defaultInProgress
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const fetch = session.info.isLoggedIn
-    ? session.fetch.bind(session)
-    : unauthenticatedFetch;
-
   let currentLocation;
 
   if (typeof window !== "undefined") {
@@ -115,12 +94,12 @@ export const SessionProvider = ({
   }
 
   useEffect(() => {
-    // console.log("handling");
-    session
-      .handleIncomingRedirect(window.location.href)
-      .catch((error) => {
+    handleIncomingRedirect(window.location.href)
+      .catch((error: Error) => {
         if (onError) {
           onError(error);
+        } else {
+          throw error;
         }
       })
       .finally(() => {
@@ -128,37 +107,46 @@ export const SessionProvider = ({
         setSessionRequestInProgress(false);
       });
 
-    session.on("logout", () => {
-      setSession(buildSession(sessionId));
+    getDefaultSession().on("logout", () => {
+      // TODO force a refresh
+      setSession(getDefaultSession());
     });
   }, [session, sessionId, onError, currentLocation]);
 
-  const login = async (options: ILoginInputOptions) => {
+  const contextLogin = async (options: ILoginInputOptions) => {
     setSessionRequestInProgress(true);
 
     try {
-      await session.login(options);
-      setSessionRequestInProgress(false);
+      await login(options);
     } catch (error) {
+      if (onError) {
+        onError(error);
+      } else {
+        throw error;
+      }
+    } finally {
       setSessionRequestInProgress(false);
-      if (onError) onError(error);
     }
   };
 
-  const logout = async () => {
+  const contextLogout = async () => {
     try {
-      await session.logout();
+      await logout();
     } catch (error) {
-      if (onError) onError(error);
+      if (onError) {
+        onError(error);
+      } else {
+        throw error;
+      }
     }
   };
 
   return (
     <SessionContext.Provider
       value={{
-        login,
-        logout,
         session,
+        login: contextLogin,
+        logout: contextLogout,
         sessionRequestInProgress,
         setSessionRequestInProgress,
         fetch,

@@ -16,7 +16,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
-    "module": "commonjs",
+    "module": "es6",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "jsx": "react",

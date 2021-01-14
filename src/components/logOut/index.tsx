@@ -32,27 +32,35 @@ export interface Props {
  * Renders a button which triggers logout on click. Should be used within a `SessionProvider`.
  */
 export const LogoutButton: React.FC<Props> = (propsLogout: Props) => {
-  const { session } = useContext(SessionContext);
+  const { logout } = useContext(SessionContext);
   const { children, onLogout, onError } = propsLogout;
-  async function LogoutHandler() {
+
+  async function logoutHandler() {
     try {
-      await session.logout();
+      await logout();
       if (onLogout) onLogout();
     } catch (error) {
       if (onError) onError(error);
     }
   }
+
+  function keyDownHandler(
+    e: React.KeyboardEvent<HTMLDivElement | HTMLButtonElement>
+  ): Promise<void> {
+    return e.key === "Enter" ? logoutHandler() : Promise.resolve();
+  }
+
   return children ? (
     <div
       role="button"
       tabIndex={0}
-      onClick={LogoutHandler}
-      onKeyDown={LogoutHandler}
+      onClick={logoutHandler}
+      onKeyDown={keyDownHandler}
     >
       {children}
     </div>
   ) : (
-    <button type="button" onClick={LogoutHandler} onKeyDown={LogoutHandler}>
+    <button type="button" onClick={logoutHandler} onKeyDown={keyDownHandler}>
       Log Out
     </button>
   );

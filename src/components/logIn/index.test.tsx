@@ -21,24 +21,33 @@
 
 import * as React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
+import {
+  login,
+  getDefaultSession,
+  handleIncomingRedirect,
+} from "@inrupt/solid-client-authn-browser";
 
 import { LoginButton } from "./index";
 import { SessionProvider } from "../../context/sessionContext";
 
+jest.mock("@inrupt/solid-client-authn-browser");
+
 const onError = jest.fn().mockResolvedValue(null);
-const setSessionRequestInProgress = jest.fn().mockResolvedValue(null);
+
+const session = {
+  info: { isLoggedIn: false },
+  on: jest.fn(),
+} as any;
+
+beforeEach(() => {
+  (getDefaultSession as jest.Mock).mockReturnValue(session);
+  (handleIncomingRedirect as jest.Mock).mockResolvedValueOnce(null);
+});
 
 describe("<LoginButton /> component snapshot test", () => {
   it("matches snapshot", () => {
-    const session = {
-      info: { isLoggedIn: false },
-      login: jest.fn().mockResolvedValue(null),
-      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
-      on: jest.fn(),
-    } as any;
-
     const documentBody = render(
-      <SessionProvider session={session} sessionId="key">
+      <SessionProvider sessionId="key">
         <LoginButton
           oidcIssuer="https://test.url"
           redirectUrl="https://test.url/redirect"
@@ -55,15 +64,8 @@ describe("<LoginButton /> component snapshot test", () => {
 
 describe("<LoginButton /> component visual testing", () => {
   it("Renders child element", () => {
-    const session = {
-      info: { isLoggedIn: false },
-      login: jest.fn().mockResolvedValue(null),
-      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
-      on: jest.fn(),
-    } as any;
-
     const { getByText } = render(
-      <SessionProvider session={session} sessionId="key">
+      <SessionProvider sessionId="key">
         <LoginButton
           oidcIssuer="https://test.url"
           redirectUrl="https://test.url/redirect"
@@ -79,19 +81,12 @@ describe("<LoginButton /> component visual testing", () => {
 });
 
 describe("<LoginButton /> component functional testing", () => {
-  it("fires the onClick function", async () => {
-    const session = {
-      info: { isLoggedIn: false },
-      login: jest.fn().mockResolvedValue(null),
-      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
-      on: jest.fn(),
-    } as any;
-
+  it("fires the onClick function when clicked", async () => {
     const oidcIssuer = "https://test.url";
     const redirectUrl = "https://local.url/redirect";
 
     const { getByText } = render(
-      <SessionProvider session={session} sessionId="key">
+      <SessionProvider sessionId="key">
         <LoginButton
           oidcIssuer={oidcIssuer}
           redirectUrl={redirectUrl}
@@ -101,19 +96,61 @@ describe("<LoginButton /> component functional testing", () => {
     );
 
     fireEvent.click(getByText("Log In"));
-    expect(session.login).toHaveBeenCalledWith({ oidcIssuer, redirectUrl });
+    await waitFor(() =>
+      expect(login).toHaveBeenCalledWith({
+        oidcIssuer,
+        redirectUrl,
+      })
+    );
+  });
+
+  it("fires the onKeyPress function if enter is pressed", async () => {
+    const oidcIssuer = "https://test.url";
+    const redirectUrl = "https://local.url/redirect";
+
+    const { getByText } = render(
+      <SessionProvider sessionId="key">
+        <LoginButton
+          oidcIssuer={oidcIssuer}
+          redirectUrl={redirectUrl}
+          onError={onError}
+        />
+      </SessionProvider>
+    );
+
+    fireEvent.keyDown(getByText("Log In"), { key: "Enter", code: "Enter" });
+
+    await waitFor(() =>
+      expect(login).toHaveBeenCalledWith({
+        oidcIssuer,
+        redirectUrl,
+      })
+    );
+  });
+
+  it("does not fire the onKeyPress function if a non-enter button is pressed", async () => {
+    const oidcIssuer = "https://test.url";
+    const redirectUrl = "https://local.url/redirect";
+
+    const { getByText } = render(
+      <SessionProvider sessionId="key">
+        <LoginButton
+          oidcIssuer={oidcIssuer}
+          redirectUrl={redirectUrl}
+          onError={onError}
+        />
+      </SessionProvider>
+    );
+
+    fireEvent.keyDown(getByText("Log In"), { key: "A", code: "A" });
+    expect(login).not.toHaveBeenCalled();
   });
 
   it("fires the onClick function and calls OnError", async () => {
-    const session = {
-      info: { isLoggedIn: false },
-      login: jest.fn().mockRejectedValue(null),
-      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
-      on: jest.fn(),
-    } as any;
+    (login as jest.Mock).mockRejectedValue(null);
 
     const { getByText } = render(
-      <SessionProvider session={session} sessionId="key">
+      <SessionProvider sessionId="key">
         <LoginButton
           oidcIssuer="https://test.url"
           redirectUrl="https://test.url/redirect"
@@ -122,19 +159,15 @@ describe("<LoginButton /> component functional testing", () => {
       </SessionProvider>
     );
     fireEvent.click(getByText("Log In"));
+
     await waitFor(() => expect(onError).toHaveBeenCalledTimes(1));
   });
 
   it("fires the onClick function and doesn't call OnError if it wasn't provided", async () => {
-    const session = {
-      info: { isLoggedIn: false },
-      login: jest.fn().mockRejectedValue(null),
-      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
-      on: jest.fn(),
-    } as any;
+    (login as jest.Mock).mockRejectedValue(null);
 
     const { getByText } = render(
-      <SessionProvider session={session} sessionId="key">
+      <SessionProvider sessionId="key">
         <LoginButton
           oidcIssuer="https://test.url"
           redirectUrl="https://test.url/redirect"

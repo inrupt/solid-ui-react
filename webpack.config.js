@@ -17,6 +17,9 @@ module.exports = {
   resolve: {
     extensions: [ ".tsx", ".ts", ".js" ],
   },
+  optimization: {
+    minimize: false,
+  },
   output: {
     filename: "index.js",
     path: path.resolve(__dirname, "dist"),
@@ -29,6 +32,7 @@ module.exports = {
   externals: [
     "@inrupt/solid-client",
     "@inrupt/solid-client-authn-browser",
+    "@inrupt/solid-client-authn-node",
     "@material-ui/core",
     "core-js",
     "react",

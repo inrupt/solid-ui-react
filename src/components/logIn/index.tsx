@@ -49,15 +49,15 @@ export const LoginButton: React.FC<Props> = (propsLogin: Props) => {
     ...authOptions,
   };
 
-  const { session, setSessionRequestInProgress } = useContext(SessionContext);
+  const { login, setSessionRequestInProgress } = useContext(SessionContext);
 
-  async function LoginHandler() {
+  async function loginHandler() {
     setSessionRequestInProgress(true);
 
     try {
       // Workaround for a solid-client-authn bug.
       // Typescript is mad about something.
-      await session.login(options as any);
+      await login(options as any);
       setSessionRequestInProgress(false);
     } catch (error) {
       setSessionRequestInProgress(false);
@@ -65,17 +65,23 @@ export const LoginButton: React.FC<Props> = (propsLogin: Props) => {
     }
   }
 
+  function keyDownHandler(
+    e: React.KeyboardEvent<HTMLDivElement | HTMLButtonElement>
+  ): Promise<void> {
+    return e.key === "Enter" ? loginHandler() : Promise.resolve();
+  }
+
   return children ? (
     <div
       role="button"
       tabIndex={0}
-      onClick={LoginHandler}
-      onKeyDown={LoginHandler}
+      onClick={loginHandler}
+      onKeyDown={keyDownHandler}
     >
       {children}
     </div>
   ) : (
-    <button type="button" onClick={LoginHandler} onKeyDown={LoginHandler}>
+    <button type="button" onClick={loginHandler} onKeyDown={keyDownHandler}>
       Log In
     </button>
   );
