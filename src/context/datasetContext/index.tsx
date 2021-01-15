@@ -27,24 +27,28 @@ import {
 } from "@inrupt/solid-client";
 
 import useDataset from "../../hooks/useDataset";
+import { WithAcp } from "@inrupt/solid-client/dist/acp/acp";
 
-export interface IDatasetContext {
-  solidDataset: SolidDataset | (SolidDataset & WithResourceInfo) | undefined;
-  setDataset: (solidDataset: SolidDataset) => void;
+export interface IDatasetContext<Dataset extends SolidDataset> {
+  solidDataset: Dataset | (Dataset & WithResourceInfo) | undefined;
+  setDataset: (solidDataset: Dataset) => void;
 }
 
-const DatasetContext = createContext<IDatasetContext>({
+const DatasetContext = createContext<IDatasetContext<SolidDataset | SolidDataset & WithAcp>>({
   solidDataset: undefined,
   setDataset: () => {},
 });
 
 export default DatasetContext;
 
-export interface IDatasetProvider {
+export type DatasetOptions = SolidDataset | (SolidDataset & WithResourceInfo) |
+    (SolidDataset & WithAcp) | (SolidDataset & WithAcp & WithResourceInfo) 
+
+export interface IDatasetProvider<Dataset extends SolidDataset> {
   children: React.ReactNode;
   loading?: React.ReactNode;
   onError?(error: Error): void | null;
-  solidDataset?: SolidDataset | (SolidDataset & WithResourceInfo);
+  solidDataset?: Dataset | (Dataset & WithResourceInfo);
   datasetUrl?: UrlString | string;
 }
 
@@ -52,8 +56,8 @@ export type RequireProperty<T, Prop extends keyof T> = T &
   { [key in Prop]-?: T[key] };
 
 export type RequireDatasetOrDatasetUrl =
-  | RequireProperty<IDatasetProvider, "solidDataset">
-  | RequireProperty<IDatasetProvider, "datasetUrl">;
+  | RequireProperty<IDatasetProvider<SolidDataset | SolidDataset & WithAcp>, "solidDataset">
+  | RequireProperty<IDatasetProvider<SolidDataset | SolidDataset & WithAcp>, "datasetUrl">;
 
 /**
  * Used to provide a [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) to child components through context, as used by various provided components and the useDataset hook.
@@ -74,9 +78,7 @@ export const DatasetProvider = ({
   const datasetToUse = propDataset ?? dataset;
 
   // Provide a setDataset function so that child components can update.
-  const [stateDataset, setDataset] = useState<
-    SolidDataset | (SolidDataset & WithResourceInfo) | undefined
-  >(datasetToUse);
+  const [stateDataset, setDataset] = useState<DatasetOptions|undefined>(datasetToUse);
 
   // If the dataset is asynchronously loaded, make sure to set the new state value.
   useEffect(() => {

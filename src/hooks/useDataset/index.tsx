@@ -23,14 +23,14 @@ import { useContext } from "react";
 import useSWR from "swr";
 import { getSolidDataset, SolidDataset } from "@inrupt/solid-client";
 import { SessionContext } from "../../context/sessionContext";
-import DatasetContext from "../../context/datasetContext";
+import DatasetContext, { DatasetOptions } from "../../context/datasetContext";
 
 export default function useDataset(
   datasetIri?: string | null | undefined,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   options?: any
 ): {
-  dataset: SolidDataset | undefined;
+  dataset: DatasetOptions | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: any;
 } {
