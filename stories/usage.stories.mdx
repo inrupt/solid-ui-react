@@ -18,13 +18,13 @@ Once you have created a react application, allowing users to register or log in
 is simple. You will want to install the SDK:
 
 ```
-npm i -S @inrupt/solid-react-ui
+npm i -S @inrupt/solid-ui-react
 ```
 
 And then import two components:
 
 ```
-import { SessionProvider, LoginButton } from "@inrupt/solid-react-ui";
+import { SessionProvider, LoginButton } from "@inrupt/solid-ui-react";
 ```
 
 You can then wrap your application in the SessionProvider that you imported.
@@ -52,7 +52,7 @@ another pair of components: a `CombinedDataProvider`, which will handle fetching
 a dataset for you, and a `Text` component to display that data.
 
 ```
-import { useSession, CombinedDataProvider, Text } from "@inrupt/solid-react-ui";
+import { useSession, CombinedDataProvider, Text } from "@inrupt/solid-ui-react";
 ```
 
 In your component tree, still within the context of the `SessionProvider`, first
