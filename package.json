@@ -38,7 +38,7 @@
     "@storybook/preset-typescript": "^3.0.0",
     "@storybook/react": "^6.1.14",
     "@testing-library/react": "^11.2.3",
-    "@testing-library/react-hooks": "^3.7.0",
+    "@testing-library/react-hooks": "^5.0.3",
     "@types/jest": "^26.0.20",
     "@types/react": "^17.0.0",
     "@types/react-table": "^7.0.26",
