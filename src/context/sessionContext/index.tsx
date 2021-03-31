@@ -36,6 +36,7 @@ import {
   handleIncomingRedirect,
   Session,
   getDefaultSession,
+  onSessionRestore,
 } from "@inrupt/solid-client-authn-browser";
 
 import { ILoginInputOptions } from "@inrupt/solid-client-authn-core";
@@ -64,6 +65,8 @@ export interface ISessionProvider {
   session?: Session;
   sessionRequestInProgress?: boolean;
   onError?: (error: Error) => void;
+  restorePreviousSession?: boolean;
+  onSessionRestoreCallback?: (url: string) => void;
 }
 
 /**
@@ -74,8 +77,14 @@ export const SessionProvider = ({
   children,
   onError,
   sessionRequestInProgress: defaultSessionRequestInProgress,
+  restorePreviousSession,
+  onSessionRestoreCallback,
 }: ISessionProvider): ReactElement => {
   const [session, setSession] = useState<Session>(getDefaultSession());
+
+  if (onSessionRestoreCallback !== undefined) {
+    onSessionRestore(onSessionRestoreCallback);
+  }
 
   const defaultInProgress =
     typeof defaultSessionRequestInProgress === "undefined"
@@ -94,7 +103,10 @@ export const SessionProvider = ({
   }
 
   useEffect(() => {
-    handleIncomingRedirect(window.location.href)
+    handleIncomingRedirect({
+      url: window.location.href,
+      restorePreviousSession,
+    })
       .catch((error: Error) => {
         if (onError) {
           onError(error);
@@ -111,7 +123,7 @@ export const SessionProvider = ({
       // TODO force a refresh
       setSession(getDefaultSession());
     });
-  }, [session, sessionId, onError, currentLocation]);
+  }, [session, sessionId, onError, currentLocation, restorePreviousSession]);
 
   const contextLogin = async (options: ILoginInputOptions) => {
     setSessionRequestInProgress(true);
