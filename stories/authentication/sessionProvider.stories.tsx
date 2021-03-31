@@ -63,8 +63,17 @@ export default {
 export function ProviderWithHook(): ReactElement {
   const [idp, setIdp] = useState("https://inrupt.net");
 
+  const restoreCallback = (url: string) => {
+    console.log(`Use this function to navigate back to ${url}`);
+  };
+
   return (
-    <SessionProvider sessionId="session-provider-example" onError={console.log}>
+    <SessionProvider
+      sessionId="session-provider-example"
+      onError={console.log}
+      restorePreviousSession
+      onSessionRestoreCallback={restoreCallback}
+    >
       <p>
         <em>{"Note: "}</em>
         to test out the Authentication examples, you will need to click the
