@@ -27,6 +27,7 @@ import {
   logout,
   handleIncomingRedirect,
   getDefaultSession,
+  onSessionRestore,
 } from "@inrupt/solid-client-authn-browser";
 
 import { SessionContext, SessionProvider } from "./index";
@@ -261,5 +262,32 @@ describe("SessionContext functionality", () => {
 
     fireEvent.click(getByText("Logout"));
     await waitFor(() => expect(onError).toHaveBeenCalledTimes(1));
+  });
+
+  it("registers a session restore callback if one is provided", async () => {
+    (handleIncomingRedirect as jest.Mock).mockResolvedValueOnce(null);
+
+    const session = {
+      info: {
+        isLoggedIn: true,
+        webId: "https://fakeurl.com/me",
+      },
+      on: jest.fn(),
+    } as any;
+
+    (getDefaultSession as jest.Mock).mockReturnValue(session);
+
+    const sessionRestoreCallback = jest.fn();
+    render(
+      <SessionProvider sessionId="key" onSessionRestoreCallback={sessionRestoreCallback}>
+        <ChildComponent />
+      </SessionProvider>
+    );
+
+    await waitFor(() => {
+      expect(handleIncomingRedirect).toHaveBeenCalled();
+    });
+
+    expect(onSessionRestore).toHaveBeenCalledWith(sessionRestoreCallback);
   });
 });
