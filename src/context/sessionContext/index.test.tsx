@@ -279,7 +279,10 @@ describe("SessionContext functionality", () => {
 
     const sessionRestoreCallback = jest.fn();
     render(
-      <SessionProvider sessionId="key" onSessionRestoreCallback={sessionRestoreCallback}>
+      <SessionProvider
+        sessionId="key"
+        onSessionRestoreCallback={sessionRestoreCallback}
+      >
         <ChildComponent />
       </SessionProvider>
     );
