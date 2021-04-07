@@ -72,7 +72,7 @@ export function ProviderWithHook(): ReactElement {
       sessionId="session-provider-example"
       onError={console.log}
       restorePreviousSession
-      onSessionRestoreCallback={restoreCallback}
+      onSessionRestore={restoreCallback}
     >
       <p>
         <em>{"Note: "}</em>

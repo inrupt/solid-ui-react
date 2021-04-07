@@ -281,7 +281,7 @@ describe("SessionContext functionality", () => {
     render(
       <SessionProvider
         sessionId="key"
-        onSessionRestoreCallback={sessionRestoreCallback}
+        onSessionRestore={sessionRestoreCallback}
       >
         <ChildComponent />
       </SessionProvider>
