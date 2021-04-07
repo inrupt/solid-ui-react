@@ -36,7 +36,7 @@ import {
   handleIncomingRedirect,
   Session,
   getDefaultSession,
-  onSessionRestore,
+  onSessionRestore as onSessionRestoreClient,
 } from "@inrupt/solid-client-authn-browser";
 
 import { ILoginInputOptions } from "@inrupt/solid-client-authn-core";
@@ -66,7 +66,7 @@ export interface ISessionProvider {
   sessionRequestInProgress?: boolean;
   onError?: (error: Error) => void;
   restorePreviousSession?: boolean;
-  onSessionRestoreCallback?: (url: string) => void;
+  onSessionRestore?: (url: string) => void;
 }
 
 /**
@@ -78,12 +78,12 @@ export const SessionProvider = ({
   onError,
   sessionRequestInProgress: defaultSessionRequestInProgress,
   restorePreviousSession,
-  onSessionRestoreCallback,
+  onSessionRestore,
 }: ISessionProvider): ReactElement => {
   const [session, setSession] = useState<Session>(getDefaultSession());
 
-  if (onSessionRestoreCallback !== undefined) {
-    onSessionRestore(onSessionRestoreCallback);
+  if (onSessionRestore !== undefined) {
+    onSessionRestoreClient(onSessionRestore);
   }
 
   const defaultInProgress =
