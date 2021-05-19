@@ -1,10 +1,10 @@
-## 2.2.0
+## 2.2.0 ( May 19, 2021 )
 
 ### Changed
 
 - Updated all dependencies, including @inrupt/solid-client from 1.3.0 to 1.6.1, and @inrupt/solid-client-authn-browser from 1.5.1 to 1.8.0
 
-## 2.1.0
+## 2.1.0 ( January 14, 2021 )
 
 ### Changed
 
