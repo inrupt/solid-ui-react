@@ -114,9 +114,8 @@ jobs:
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     - name: Mark GitHub Deployment as failed
-      if: github.actor != 'dependabot[bot]'
       uses: octokit/request-action@v2.x
-      if: failure()
+      if: failure() && github.actor != 'dependabot[bot]'
       with:
         route: POST /repos/:repository/deployments/:deployment/statuses
         repository: ${{ github.repository }}
