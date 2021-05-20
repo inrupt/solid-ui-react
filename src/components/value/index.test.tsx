@@ -37,16 +37,14 @@ const mockThing = SolidFns.addStringNoLocale(
   mockNick
 );
 
-const mockDataset = SolidFns.setThing(SolidFns.createSolidDataset(), mockThing);
+const mockDataset = SolidFns.setThing(
+  SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
+  mockThing
+);
 const mockDatasetWithResourceInfo = SolidFns.setThing(
   SolidFns.createSolidDataset() as any,
   mockThing
 );
-
-// TODO: refactor this once ticket SDK-1157 has been done
-mockDatasetWithResourceInfo.internal_resourceInfo = {};
-mockDatasetWithResourceInfo.internal_resourceInfo.fetchedFrom =
-  "https://some-interesting-value.com";
 
 const inputOptions = {
   name: "test-name",
