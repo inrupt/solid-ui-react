@@ -42,7 +42,7 @@ import {
   getUrlAll,
 } from "@inrupt/solid-client";
 
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import ThingContext from "../context/thingContext";
 import DatasetContext from "../context/datasetContext";
@@ -353,4 +353,22 @@ export function useProperty(props: UsePropertyProps): UseProperty {
     setDataset,
     setThing,
   };
+}
+
+export function UseDatetimeBrowserSupport(): boolean | null {
+  const [isDatetimeSupported, setIsDatetimeSupported] = useState<
+    boolean | null
+  >(null);
+
+  useEffect(() => {
+    const test = document.createElement("input");
+    test.type = "datetime-local";
+    if (test.type === "text") {
+      setIsDatetimeSupported(false as boolean);
+    } else {
+      setIsDatetimeSupported(true as boolean);
+    }
+  }, []);
+
+  return isDatetimeSupported;
 }
