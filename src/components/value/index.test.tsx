@@ -125,7 +125,11 @@ describe("<Value /> component snapshot test", () => {
   });
 
   it("matches snapshot with dataType datetime when browser does not support datetime-local", () => {
+<<<<<<< HEAD
     jest.spyOn(helpers, "useDatetimeBrowserSupport").mockReturnValueOnce(false);
+=======
+    jest.spyOn(helpers, "UseDatetimeBrowserSupport").mockReturnValueOnce(false);
+>>>>>>> Fix: handle datetime-local not supported by browser
     const { asFragment } = render(
       <Value
         dataType="datetime"
@@ -235,6 +239,7 @@ describe("<Value /> component functional testing", () => {
     }
   );
 
+<<<<<<< HEAD
   it("when dataType is datetime and datetime-local is unsupported, it calls the setDatetime with the correct value", () => {
     jest.spyOn(helpers, "useDatetimeBrowserSupport").mockReturnValue(false);
     jest.spyOn(SolidFns, "getDatetime").mockImplementationOnce(() => null);
@@ -244,6 +249,19 @@ describe("<Value /> component functional testing", () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
 
     const { getByLabelText } = render(
+=======
+  it("when dataType is datetime and datetime-local is unssuported, it calls the setDatetime with the correct value", () => {
+    jest.spyOn(helpers, "UseDatetimeBrowserSupport").mockReturnValue(false);
+    jest.spyOn(SolidFns, "getDatetime").mockImplementationOnce(() => null);
+
+    const mockSetter = jest
+      .spyOn(SolidFns, "setDatetime")
+      .mockImplementation(() => mockThing);
+
+    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+
+    const { getByTitle } = render(
+>>>>>>> Fix: handle datetime-local not supported by browser
       <Value
         dataType="datetime"
         solidDataset={mockDatasetWithBdayResourceInfo}
@@ -251,6 +269,7 @@ describe("<Value /> component functional testing", () => {
         property={mockBdayPredicate}
         edit
         autosave
+<<<<<<< HEAD
       />
     );
     const dateInput = getByLabelText("Date");
@@ -267,6 +286,16 @@ describe("<Value /> component functional testing", () => {
       [mockThing, mockBdayPredicate, expectedDate],
       [mockThing, mockBdayPredicate, expectedDateAndTime],
     ]);
+=======
+        inputProps={{ title: "test title" }}
+      />
+    );
+    const input = getByTitle("test title");
+    input.focus();
+    fireEvent.change(input, { target: { value: "2020-12-30T12:30" } });
+    input.blur();
+    expect(mockSetter).toHaveBeenCalled();
+>>>>>>> Fix: handle datetime-local not supported by browser
   });
 
   it("Should not call setter on blur if the value of the input hasn't changed", async () => {
