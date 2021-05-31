@@ -4,12 +4,14 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
+The following sections document changes that have been released already:
+
+## 2.3.0 ( May 31, 2021 )
+
 ### Changed
 
 - The `SessionProvider` component now accepts additional variables to enable
 logging back in on refresh. 
-
-The following sections document changes that have been released already:
 
 ## 2.2.0 ( May 19, 2021 )
 
