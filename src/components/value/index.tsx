@@ -41,7 +41,7 @@ import {
   DataType,
   CommonProperties,
   useProperty,
-  UseDatetimeBrowserSupport,
+  useDatetimeBrowserSupport,
 } from "../../helpers";
 
 export type Props = {
@@ -88,7 +88,7 @@ export function Value({
     locale,
   });
 
-  const isDatetimeSupported = UseDatetimeBrowserSupport();
+  const isDatetimeSupported = useDatetimeBrowserSupport();
 
   useEffect(() => {
     if (error && onError) {
@@ -109,13 +109,13 @@ export function Value({
           .substring(0, (thingValue as Date).toISOString().length - 5)
       : null;
   } else if (dataType !== "string") {
-    formattedValue = thingValue?.toString() || "";
+    formattedValue = thingValue?.toString() ?? "";
   }
 
   const [value, setValue] = useState<string>(formattedValue as string);
 
   const [booleanValue, setBooleanValue] = useState<boolean>(
-    initialBooleanValue as boolean
+    initialBooleanValue
   );
 
   useEffect(() => {
@@ -142,12 +142,12 @@ export function Value({
     initialTimeValue = value?.split(/T(.+)/)[1].toString();
   }
 
-  const [time, setTime] = useState<string>(initialTimeValue as string);
-  const [date, setDate] = useState<string>(initialDateValue as string);
+  const [time, setTime] = useState<string>(initialTimeValue);
+  const [date, setDate] = useState<string>(initialDateValue);
 
   useEffect(() => {
     if ((!time && !date) || dataType !== "datetime") return;
-    setValue(`${date || ""}T${time || "00:00"}`);
+    setValue(`${date ?? ""}T${time ?? "00:00"}`);
   }, [time, date, dataType]);
 
   /* Save Value value in the pod */
@@ -163,11 +163,7 @@ export function Value({
 
       switch (dataType) {
         case "boolean":
-          updatedResource = setBoolean(
-            thing,
-            property,
-            booleanValue as boolean
-          );
+          updatedResource = setBoolean(thing, property, booleanValue);
           break;
         case "datetime":
           updatedResource = setDatetime(
@@ -254,7 +250,7 @@ export function Value({
     return <span>fetching data in progress</span>;
   }
 
-  let inputType: string | undefined;
+  let inputType: string;
   let inputStep;
 
   switch (dataType) {
@@ -262,7 +258,9 @@ export function Value({
       inputType = "checkbox";
       break;
     case "datetime":
-      inputType = isDatetimeSupported ? "datetime-local" : "date";
+      inputType = isDatetimeSupported
+        ? "datetime-local"
+        : "datetime-workaround";
       inputStep = "any";
       break;
     case "decimal":
@@ -285,7 +283,7 @@ export function Value({
         // eslint-disable-next-line react/jsx-props-no-spreading
         !edit && dataset && thing && <span {...other}>{`${value}`}</span>
       }
-      {edit && dataset && thing && inputType !== "date" && (
+      {edit && dataset && thing && inputType !== "datetime-workaround" && (
         <input
           type={inputType}
           checked={booleanValue}
@@ -309,10 +307,11 @@ export function Value({
           placeholder={dataType === "datetime" ? "yyyy-mm-ddThh:mm" : undefined}
         />
       )}
-      {edit && dataset && thing && inputType === "date" && (
+      {edit && dataset && thing && inputType === "datetime-workaround" && (
         <>
           <input
-            type={inputType}
+            type="date"
+            aria-label="Date"
             step={inputStep}
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...inputProps}
@@ -321,11 +320,12 @@ export function Value({
             }}
             onBlur={(e) => autosave && saveHandler(e)}
             value={date}
-            pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"
-            placeholder="yyyy-mm-ddThh:mm"
+            pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+            placeholder="yyyy-mm-dd"
           />
           <input
             type="time"
+            aria-label="Time"
             value={time}
             onChange={(e) => setTime(e.target.value)}
             onBlur={(e) => autosave && saveHandler(e)}

@@ -355,7 +355,7 @@ export function useProperty(props: UsePropertyProps): UseProperty {
   };
 }
 
-export function UseDatetimeBrowserSupport(): boolean | null {
+export function useDatetimeBrowserSupport(): boolean | null {
   const [isDatetimeSupported, setIsDatetimeSupported] = useState<
     boolean | null
   >(null);
@@ -363,11 +363,7 @@ export function UseDatetimeBrowserSupport(): boolean | null {
   useEffect(() => {
     const test = document.createElement("input");
     test.type = "datetime-local";
-    if (test.type === "text") {
-      setIsDatetimeSupported(false as boolean);
-    } else {
-      setIsDatetimeSupported(true as boolean);
-    }
+    setIsDatetimeSupported(test.type !== "text");
   }, []);
 
   return isDatetimeSupported;

@@ -61,7 +61,7 @@ const inputOptions = {
 };
 
 const mockDatasetWithBdayResourceInfo = SolidFns.setThing(
-  SolidFns.createSolidDataset() as any,
+  SolidFns.createSolidDataset(),
   mockThingWithBday
 );
 
@@ -125,7 +125,7 @@ describe("<Value /> component snapshot test", () => {
   });
 
   it("matches snapshot with dataType datetime when browser does not support datetime-local", () => {
-    jest.spyOn(helpers, "UseDatetimeBrowserSupport").mockReturnValueOnce(false);
+    jest.spyOn(helpers, "useDatetimeBrowserSupport").mockReturnValueOnce(false);
     const { asFragment } = render(
       <Value
         dataType="datetime"
@@ -235,17 +235,15 @@ describe("<Value /> component functional testing", () => {
     }
   );
 
-  it("when dataType is datetime and datetime-local is unssuported, it calls the setDatetime with the correct value", () => {
-    jest.spyOn(helpers, "UseDatetimeBrowserSupport").mockReturnValue(false);
+  it("when dataType is datetime and datetime-local is unsupported, it calls the setDatetime with the correct value", () => {
+    jest.spyOn(helpers, "useDatetimeBrowserSupport").mockReturnValue(false);
     jest.spyOn(SolidFns, "getDatetime").mockImplementationOnce(() => null);
 
-    const mockSetter = jest
-      .spyOn(SolidFns, "setDatetime")
-      .mockImplementation(() => mockThing);
+    const mockSetter = jest.spyOn(SolidFns, "setDatetime");
 
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
 
-    const { getByTitle } = render(
+    const { getByLabelText } = render(
       <Value
         dataType="datetime"
         solidDataset={mockDatasetWithBdayResourceInfo}
@@ -253,14 +251,22 @@ describe("<Value /> component functional testing", () => {
         property={mockBdayPredicate}
         edit
         autosave
-        inputProps={{ title: "test title" }}
       />
     );
-    const input = getByTitle("test title");
-    input.focus();
-    fireEvent.change(input, { target: { value: "2020-12-30T12:30" } });
-    input.blur();
-    expect(mockSetter).toHaveBeenCalled();
+    const dateInput = getByLabelText("Date");
+    dateInput.focus();
+    fireEvent.change(dateInput, { target: { value: "2020-03-03" } });
+    dateInput.blur();
+    const timeInput = getByLabelText("Time");
+    timeInput.focus();
+    fireEvent.change(timeInput, { target: { value: "05:45" } });
+    timeInput.blur();
+    const expectedDate = new Date(Date.UTC(2020, 2, 3, 0, 0, 0));
+    const expectedDateAndTime = new Date(Date.UTC(2020, 2, 3, 5, 45, 0));
+    expect(mockSetter.mock.calls).toEqual([
+      [mockThing, mockBdayPredicate, expectedDate],
+      [mockThing, mockBdayPredicate, expectedDateAndTime],
+    ]);
   });
 
   it("Should not call setter on blur if the value of the input hasn't changed", async () => {
