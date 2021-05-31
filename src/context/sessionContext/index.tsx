@@ -65,7 +65,9 @@ export interface ISessionProvider {
   session?: Session;
   sessionRequestInProgress?: boolean;
   onError?: (error: Error) => void;
+  /** @since 2.3.0 */
   restorePreviousSession?: boolean;
+  /** @since 2.3.0 */
   onSessionRestore?: (url: string) => void;
 }
 
