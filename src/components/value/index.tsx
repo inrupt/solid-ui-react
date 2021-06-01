@@ -139,7 +139,7 @@ export function Value({
     !isDatetimeSupported &&
     typeof value === "string"
   ) {
-    initialTimeValue = value?.split(/T(.+)/)[1].toString();
+    initialTimeValue = value?.split(/T(.+)/)[1]?.toString();
   }
 
   const [time, setTime] = useState<string>(initialTimeValue);
@@ -329,6 +329,7 @@ export function Value({
             value={time}
             onChange={(e) => setTime(e.target.value)}
             onBlur={(e) => autosave && saveHandler(e)}
+            pattern="[0-9]{2}:[0-9]{2}"
           />
         </>
       )}
