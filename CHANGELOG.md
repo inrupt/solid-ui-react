@@ -6,9 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 The following sections document changes that have been released already:
 
-### Bugs fixed
-
-- The `Value` component now handles the case where `datetime-local` is unsupported by the browser and renders two inputs with type `date` and `time` instead. 
+## 2.3.0 ( May 31, 2021 )
 
 ### Changed
 
