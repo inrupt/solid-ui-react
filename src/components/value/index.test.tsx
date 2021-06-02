@@ -24,17 +24,26 @@ import * as React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
 import { Value } from "./index";
-import { DataType } from "../../helpers";
+import * as helpers from "../../helpers";
 import { DatasetProvider } from "../../context/datasetContext";
 import { ThingProvider } from "../../context/thingContext";
 
 const mockPredicate = `http://xmlns.com/foaf/0.1/nick`;
 const mockNick = "test nick value";
 
+const mockBdayPredicate = "http://www.w3.org/2006/vcard/ns#bday";
+const mockBday = new Date("2021-05-04T06:00:00.000Z");
+
 const mockThing = SolidFns.addStringNoLocale(
   SolidFns.createThing(),
   mockPredicate,
   mockNick
+);
+
+const mockThingWithBday = SolidFns.addDatetime(
+  mockThing,
+  mockBdayPredicate,
+  mockBday
 );
 
 const mockDataset = SolidFns.setThing(
@@ -50,6 +59,11 @@ const inputOptions = {
   name: "test-name",
   type: "url",
 };
+
+const mockDatasetWithBdayResourceInfo = SolidFns.setThing(
+  SolidFns.createSolidDataset(),
+  mockThingWithBday
+);
 
 const savedDataset = SolidFns.createSolidDataset() as any;
 jest
@@ -96,6 +110,33 @@ describe("<Value /> component snapshot test", () => {
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
   });
+
+  it("matches snapshot with dataType datetime when browser supports datetime-local", () => {
+    const { asFragment } = render(
+      <Value
+        dataType="datetime"
+        edit
+        solidDataset={mockDatasetWithBdayResourceInfo}
+        thing={mockThingWithBday}
+        property={mockBdayPredicate}
+      />
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
+
+  it("matches snapshot with dataType datetime when browser does not support datetime-local", () => {
+    jest.spyOn(helpers, "useDatetimeBrowserSupport").mockReturnValueOnce(false);
+    const { asFragment } = render(
+      <Value
+        dataType="datetime"
+        edit
+        solidDataset={mockDatasetWithBdayResourceInfo}
+        thing={mockThingWithBday}
+        property={mockBdayPredicate}
+      />
+    );
+    expect(asFragment()).toMatchSnapshot();
+  });
 });
 
 describe("<Value /> component functional testing", () => {
@@ -116,7 +157,7 @@ describe("<Value /> component functional testing", () => {
 
       const { getByText } = render(
         <Value
-          dataType={dataType as DataType}
+          dataType={dataType as helpers.DataType}
           solidDataset={mockDatasetWithResourceInfo}
           thing={mockThing}
           property={mockPredicate}
@@ -172,7 +213,7 @@ describe("<Value /> component functional testing", () => {
 
       const { getByTitle } = render(
         <Value
-          dataType={dataType as DataType}
+          dataType={dataType as helpers.DataType}
           solidDataset={mockDatasetWithResourceInfo}
           thing={mockThing}
           property={mockPredicate}
@@ -193,6 +234,40 @@ describe("<Value /> component functional testing", () => {
       expect(mockSetter).toHaveBeenCalled();
     }
   );
+
+  it("when dataType is datetime and datetime-local is unsupported, it calls the setDatetime with the correct value", () => {
+    jest.spyOn(helpers, "useDatetimeBrowserSupport").mockReturnValue(false);
+    jest.spyOn(SolidFns, "getDatetime").mockImplementationOnce(() => null);
+
+    const mockSetter = jest.spyOn(SolidFns, "setDatetime");
+
+    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+
+    const { getByLabelText } = render(
+      <Value
+        dataType="datetime"
+        solidDataset={mockDatasetWithBdayResourceInfo}
+        thing={mockThing}
+        property={mockBdayPredicate}
+        edit
+        autosave
+      />
+    );
+    const dateInput = getByLabelText("Date");
+    dateInput.focus();
+    fireEvent.change(dateInput, { target: { value: "2020-03-03" } });
+    dateInput.blur();
+    const timeInput = getByLabelText("Time");
+    timeInput.focus();
+    fireEvent.change(timeInput, { target: { value: "05:45" } });
+    timeInput.blur();
+    const expectedDate = new Date(Date.UTC(2020, 2, 3, 0, 0, 0));
+    const expectedDateAndTime = new Date(Date.UTC(2020, 2, 3, 5, 45, 0));
+    expect(mockSetter.mock.calls).toEqual([
+      [mockThing, mockBdayPredicate, expectedDate],
+      [mockThing, mockBdayPredicate, expectedDateAndTime],
+    ]);
+  });
 
   it("Should not call setter on blur if the value of the input hasn't changed", async () => {
     jest

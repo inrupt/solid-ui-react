@@ -21,6 +21,37 @@ exports[`<Value /> component snapshot test matches snapshot with data from conte
 </body>
 `;
 
+exports[`<Value /> component snapshot test matches snapshot with dataType datetime when browser does not support datetime-local 1`] = `
+<DocumentFragment>
+  <input
+    aria-label="Date"
+    pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+    placeholder="yyyy-mm-dd"
+    step="any"
+    type="date"
+    value="2021-05-04"
+  />
+  <input
+    aria-label="Time"
+    pattern="[0-9]{2}:[0-9]{2}"
+    type="time"
+    value="06:00:00"
+  />
+</DocumentFragment>
+`;
+
+exports[`<Value /> component snapshot test matches snapshot with dataType datetime when browser supports datetime-local 1`] = `
+<DocumentFragment>
+  <input
+    pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"
+    placeholder="yyyy-mm-ddThh:mm"
+    step="any"
+    type="datetime-local"
+    value="2021-05-04T06:00:00"
+  />
+</DocumentFragment>
+`;
+
 exports[`<Value /> component snapshot test matches snapshot with edit true and inputOptions 1`] = `
 <body>
   <div>
