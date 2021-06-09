@@ -98,6 +98,7 @@
   },
   "resolutions": {
     "browserslist": "4.16.5",
+    "glob-parent": "5.1.2",
     "postcss": "8.2.10",
     "trim": "0.0.3"
   }
