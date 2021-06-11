@@ -82,12 +82,15 @@ export const SessionProvider = ({
   restorePreviousSession,
   onSessionRestore,
 }: ISessionProvider): ReactElement => {
+  const [restoreSession, setRestoreSession] = useState(restorePreviousSession);
   const [session, setSession] = useState<Session>(getDefaultSession());
-  let restoreSession = restorePreviousSession;
-  if (onSessionRestore !== undefined) {
-    onSessionRestoreClient(onSessionRestore);
-    restoreSession = true;
-  }
+
+  useEffect(() => {
+    if (onSessionRestore !== undefined) {
+      onSessionRestoreClient(onSessionRestore);
+      setRestoreSession(true);
+    }
+  }, [onSessionRestore]);
 
   const defaultInProgress =
     typeof defaultSessionRequestInProgress === "undefined"
@@ -104,8 +107,13 @@ export const SessionProvider = ({
   if (typeof window !== "undefined") {
     currentLocation = window.location;
   }
-
   useEffect(() => {
+    if (
+      typeof restoreSession === "undefined" &&
+      typeof onSessionRestore !== "undefined"
+    ) {
+      return;
+    }
     handleIncomingRedirect({
       url: window.location.href,
       restorePreviousSession: restoreSession,
@@ -126,7 +134,14 @@ export const SessionProvider = ({
       // TODO force a refresh
       setSession(getDefaultSession());
     });
-  }, [session, sessionId, onError, currentLocation, restoreSession]);
+  }, [
+    session,
+    sessionId,
+    onError,
+    currentLocation,
+    restoreSession,
+    onSessionRestore,
+  ]);
 
   const contextLogin = async (options: ILoginInputOptions) => {
     setSessionRequestInProgress(true);
