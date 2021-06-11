@@ -65,10 +65,11 @@ const mockDatasetWithBdayResourceInfo = SolidFns.setThing(
   mockThingWithBday
 );
 
-const savedDataset = SolidFns.createSolidDataset() as any;
-jest
-  .spyOn(SolidFns, "saveSolidDatasetAt")
-  .mockImplementation(() => savedDataset);
+const savedDataset = SolidFns.setThing(
+  SolidFns.mockSolidDatasetFrom("https://example.pod/resource"),
+  SolidFns.createThing()
+);
+jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
 
 describe("<Value /> component snapshot test", () => {
   it("matches snapshot", () => {

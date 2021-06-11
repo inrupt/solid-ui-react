@@ -50,10 +50,11 @@ const mockDatasetWithResourceInfo = SolidFns.setThing(
   mockThing
 );
 
-const savedDataset = SolidFns.createSolidDataset() as any;
-jest
-  .spyOn(SolidFns, "saveSolidDatasetAt")
-  .mockImplementation(() => savedDataset);
+const savedDataset = SolidFns.setThing(
+  SolidFns.mockSolidDatasetFrom("https://example.pod/resource"),
+  SolidFns.createThing()
+);
+jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
 
 describe("<StringValue /> component functional testing", () => {
   it("calls getStringNoLocale and sets value", () => {
