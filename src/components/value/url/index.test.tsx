@@ -57,7 +57,6 @@ describe("<UrlValue /> component functional testing", () => {
 
     const { getByText } = render(
       <UrlValue
-        dataType="url"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -80,7 +79,6 @@ describe("<UrlValue /> component functional testing", () => {
 
     const { getByTitle } = render(
       <UrlValue
-        dataType="url"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -100,7 +98,6 @@ describe("<UrlValue /> component functional testing", () => {
     jest.spyOn(SolidFns, "setUrl").mockImplementation(() => mockThing);
     const { getByDisplayValue } = render(
       <UrlValue
-        dataType="url"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -117,7 +114,6 @@ describe("<UrlValue /> component functional testing", () => {
   it("Should call saveSolidDatasetAt onBlur if autosave is true", async () => {
     const { getByDisplayValue } = render(
       <UrlValue
-        dataType="url"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -136,7 +132,6 @@ describe("<UrlValue /> component functional testing", () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
     const { getByDisplayValue } = render(
       <UrlValue
-        dataType="url"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -154,7 +149,6 @@ describe("<UrlValue /> component functional testing", () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
     const { getByDisplayValue } = render(
       <UrlValue
-        dataType="url"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -177,7 +171,6 @@ describe("<UrlValue /> component functional testing", () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
     const { getByDisplayValue } = render(
       <UrlValue
-        dataType="url"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -200,7 +193,6 @@ describe("<UrlValue /> component functional testing", () => {
     const onError = jest.fn();
     render(
       <UrlValue
-        dataType="url"
         solidDataset={mockDatasetWithResourceInfo}
         thing={undefined}
         property={mockPredicate}
@@ -216,7 +208,6 @@ describe("<UrlValue /> component functional testing", () => {
     const onError = jest.fn();
     const { getByDisplayValue } = render(
       <UrlValue
-        dataType="url"
         solidDataset={mockDataset}
         thing={mockThing}
         property={mockPredicate}
@@ -238,7 +229,6 @@ describe("<UrlValue /> component functional testing", () => {
     const onError = jest.fn();
     const { getByDisplayValue } = render(
       <UrlValue
-        dataType="url"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -264,7 +254,6 @@ describe("<UrlValue /> component functional testing", () => {
     const onError = jest.fn();
     const { getByDisplayValue } = render(
       <UrlValue
-        dataType="url"
         solidDataset={mockUnfetchedDataset}
         thing={mockThing}
         property={mockPredicate}

@@ -57,7 +57,6 @@ describe("<IntegerValue /> component functional testing", () => {
 
     const { getByText } = render(
       <IntegerValue
-        dataType="integer"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -82,7 +81,6 @@ describe("<IntegerValue /> component functional testing", () => {
 
     const { getByTitle } = render(
       <IntegerValue
-        dataType="integer"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -102,7 +100,6 @@ describe("<IntegerValue /> component functional testing", () => {
     jest.spyOn(SolidFns, "setInteger").mockImplementation(() => mockThing);
     const { getByDisplayValue } = render(
       <IntegerValue
-        dataType="integer"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -119,7 +116,6 @@ describe("<IntegerValue /> component functional testing", () => {
   it("Should call saveSolidDatasetAt onBlur if autosave is true", async () => {
     const { getByDisplayValue } = render(
       <IntegerValue
-        dataType="integer"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -138,7 +134,6 @@ describe("<IntegerValue /> component functional testing", () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
     const { getByDisplayValue } = render(
       <IntegerValue
-        dataType="integer"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -156,7 +151,6 @@ describe("<IntegerValue /> component functional testing", () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
     const { getByDisplayValue } = render(
       <IntegerValue
-        dataType="integer"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -179,7 +173,6 @@ describe("<IntegerValue /> component functional testing", () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
     const { getByDisplayValue } = render(
       <IntegerValue
-        dataType="integer"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -202,7 +195,6 @@ describe("<IntegerValue /> component functional testing", () => {
     const onError = jest.fn();
     render(
       <IntegerValue
-        dataType="integer"
         solidDataset={mockDatasetWithResourceInfo}
         thing={undefined}
         property={mockPredicate}
@@ -218,7 +210,6 @@ describe("<IntegerValue /> component functional testing", () => {
     const onError = jest.fn();
     const { getByDisplayValue } = render(
       <IntegerValue
-        dataType="integer"
         solidDataset={mockDataset}
         thing={mockThing}
         property={mockPredicate}
@@ -240,7 +231,6 @@ describe("<IntegerValue /> component functional testing", () => {
     const onError = jest.fn();
     const { getByDisplayValue } = render(
       <IntegerValue
-        dataType="integer"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -266,7 +256,6 @@ describe("<IntegerValue /> component functional testing", () => {
     const onError = jest.fn();
     const { getByDisplayValue } = render(
       <IntegerValue
-        dataType="integer"
         solidDataset={mockUnfetchedDataset}
         thing={mockThing}
         property={mockPredicate}

@@ -32,15 +32,15 @@ import { SessionContext } from "../../../context/sessionContext";
 import { useProperty, useDatetimeBrowserSupport } from "../../../helpers";
 import { Props } from "..";
 
-const DatetimeValue: React.FC<Props> = (props: Props) => {
+type DatetimeProps = Omit<Props, "locale" | "dataType">;
+
+const DatetimeValue: React.FC<DatetimeProps> = (props: DatetimeProps) => {
   const {
     thing: propThing,
     solidDataset: propDataset,
     property: propProperty,
     properties: propProperties,
     saveDatasetTo,
-    dataType,
-    locale,
     onSave,
     onError,
     edit,
@@ -61,10 +61,9 @@ const DatetimeValue: React.FC<Props> = (props: Props) => {
   } = useProperty({
     dataset: propDataset,
     thing: propThing,
-    type: dataType,
+    type: "datetime",
     property: propProperty,
     properties: propProperties,
-    locale,
   });
 
   const isDatetimeSupported = useDatetimeBrowserSupport();

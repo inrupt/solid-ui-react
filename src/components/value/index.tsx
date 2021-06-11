@@ -41,14 +41,14 @@ export type Props = {
  * Retrieves and displays a value of one of a range of types from a given [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset)/[Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing)/property. Can also be used to set/update and persist a value.
  */
 export function Value(props: Props): ReactElement {
+  const { dataType, ...otherProps } = props as Props;
   const {
     thing: propThing,
     solidDataset: propDataset,
     property: propProperty,
     properties: propProperties,
-    dataType,
     locale,
-  } = props as Props;
+  } = otherProps;
   const { thing, dataset } = useProperty({
     dataset: propDataset,
     thing: propThing,
@@ -63,7 +63,7 @@ export function Value(props: Props): ReactElement {
     return <span>fetching data in progress</span>;
   }
 
-  let Component: React.FC<Props> = StringValue;
+  let Component: React.FC<Omit<Props, "dataType">> = StringValue;
 
   switch (dataType) {
     case "boolean":
@@ -86,7 +86,7 @@ export function Value(props: Props): ReactElement {
   }
 
   // eslint-disable-next-line react/jsx-props-no-spreading
-  return <Component {...props} />;
+  return <Component {...otherProps} />;
 }
 
 Value.defaultProps = {

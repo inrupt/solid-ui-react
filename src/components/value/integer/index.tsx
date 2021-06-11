@@ -32,15 +32,15 @@ import { SessionContext } from "../../../context/sessionContext";
 import { useProperty } from "../../../helpers";
 import { Props } from "..";
 
-const IntegerValue: React.FC<Props> = (props: Props) => {
+type IntegerProps = Omit<Props, "locale" | "dataType">;
+
+const IntegerValue: React.FC<IntegerProps> = (props: IntegerProps) => {
   const {
     thing: propThing,
     solidDataset: propDataset,
     property: propProperty,
     properties: propProperties,
     saveDatasetTo,
-    dataType,
-    locale,
     onSave,
     onError,
     edit,
@@ -61,10 +61,9 @@ const IntegerValue: React.FC<Props> = (props: Props) => {
   } = useProperty({
     dataset: propDataset,
     thing: propThing,
-    type: dataType,
+    type: "integer",
     property: propProperty,
     properties: propProperties,
-    locale,
   });
 
   useEffect(() => {

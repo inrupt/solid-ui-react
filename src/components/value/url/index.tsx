@@ -32,15 +32,15 @@ import { SessionContext } from "../../../context/sessionContext";
 import { useProperty } from "../../../helpers";
 import { Props } from "..";
 
-const UrlValue: React.FC<Props> = (props: Props) => {
+type UrlProps = Omit<Props, "locale" | "dataType">;
+
+const UrlValue: React.FC<UrlProps> = (props: UrlProps) => {
   const {
     thing: propThing,
     solidDataset: propDataset,
     property: propProperty,
     properties: propProperties,
     saveDatasetTo,
-    dataType,
-    locale,
     onSave,
     onError,
     edit,
@@ -61,10 +61,9 @@ const UrlValue: React.FC<Props> = (props: Props) => {
   } = useProperty({
     dataset: propDataset,
     thing: propThing,
-    type: dataType,
+    type: "url",
     property: propProperty,
     properties: propProperties,
-    locale,
   });
 
   useEffect(() => {

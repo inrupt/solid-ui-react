@@ -61,7 +61,6 @@ describe("<DatetimeValue /> component functional testing", () => {
 
     const { getByText } = render(
       <DatetimeValue
-        dataType="datetime"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -85,7 +84,6 @@ describe("<DatetimeValue /> component functional testing", () => {
 
     const { getByTitle } = render(
       <DatetimeValue
-        dataType="datetime"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -104,7 +102,6 @@ describe("<DatetimeValue /> component functional testing", () => {
     jest.spyOn(SolidFns, "setDatetime").mockImplementation(() => mockThing);
     const { getByLabelText } = render(
       <DatetimeValue
-        dataType="datetime"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -121,7 +118,6 @@ describe("<DatetimeValue /> component functional testing", () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
     const { getByLabelText } = render(
       <DatetimeValue
-        dataType="datetime"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -138,7 +134,6 @@ describe("<DatetimeValue /> component functional testing", () => {
   it("Should call saveSolidDatasetAt onBlur if autosave is true", async () => {
     const { getByLabelText } = render(
       <DatetimeValue
-        dataType="datetime"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -159,7 +154,6 @@ describe("<DatetimeValue /> component functional testing", () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
     const { getByLabelText } = render(
       <DatetimeValue
-        dataType="datetime"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -181,7 +175,6 @@ describe("<DatetimeValue /> component functional testing", () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
     const { getByLabelText } = render(
       <DatetimeValue
-        dataType="datetime"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -203,7 +196,6 @@ describe("<DatetimeValue /> component functional testing", () => {
     const onError = jest.fn();
     const { getByLabelText } = render(
       <DatetimeValue
-        dataType="datetime"
         solidDataset={mockDataset}
         thing={mockThing}
         property={mockPredicate}
@@ -224,7 +216,6 @@ describe("<DatetimeValue /> component functional testing", () => {
     const onError = jest.fn();
     render(
       <DatetimeValue
-        dataType="datetime"
         solidDataset={mockDatasetWithResourceInfo}
         thing={undefined}
         property={mockPredicate}
@@ -239,7 +230,6 @@ describe("<DatetimeValue /> component functional testing", () => {
     const onError = jest.fn();
     const { getByLabelText } = render(
       <DatetimeValue
-        dataType="datetime"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
@@ -264,7 +254,6 @@ describe("<DatetimeValue /> component functional testing", () => {
     const onError = jest.fn();
     const { getByLabelText } = render(
       <DatetimeValue
-        dataType="datetime"
         solidDataset={mockUnfetchedDataset}
         thing={mockThing}
         property={mockPredicate}
@@ -290,7 +279,6 @@ describe("<DatetimeValue /> component functional testing", () => {
 
     const { getByLabelText } = render(
       <DatetimeValue
-        dataType="datetime"
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}

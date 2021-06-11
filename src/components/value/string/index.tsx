@@ -32,14 +32,15 @@ import { SessionContext } from "../../../context/sessionContext";
 import { useProperty } from "../../../helpers";
 import { Props } from "..";
 
-const StringValue: React.FC<Props> = (props: Props) => {
+type StringProps = Omit<Props, "dataType">;
+
+const StringValue: React.FC<StringProps> = (props: StringProps) => {
   const {
     thing: propThing,
     solidDataset: propDataset,
     property: propProperty,
     properties: propProperties,
     saveDatasetTo,
-    dataType,
     locale,
     onSave,
     onError,
@@ -61,7 +62,7 @@ const StringValue: React.FC<Props> = (props: Props) => {
   } = useProperty({
     dataset: propDataset,
     thing: propThing,
-    type: dataType,
+    type: "string",
     property: propProperty,
     properties: propProperties,
     locale,
