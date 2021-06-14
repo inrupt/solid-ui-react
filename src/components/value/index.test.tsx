@@ -21,7 +21,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
 import { Value } from "./index";
 import * as helpers from "../../helpers";
@@ -65,10 +65,11 @@ const mockDatasetWithBdayResourceInfo = SolidFns.setThing(
   mockThingWithBday
 );
 
-const savedDataset = SolidFns.createSolidDataset() as any;
-jest
-  .spyOn(SolidFns, "saveSolidDatasetAt")
-  .mockImplementation(() => savedDataset);
+const savedDataset = SolidFns.setThing(
+  SolidFns.mockSolidDatasetFrom("https://example.pod/resource"),
+  SolidFns.createThing()
+);
+jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
 
 describe("<Value /> component snapshot test", () => {
   it("matches snapshot", () => {
@@ -79,6 +80,14 @@ describe("<Value /> component snapshot test", () => {
         thing={mockThing}
         property={mockPredicate}
       />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("matches snapshot while fetching data", () => {
+    const documentBody = render(
+      <Value dataType="string" property={mockPredicate} />
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -123,6 +132,21 @@ describe("<Value /> component snapshot test", () => {
     );
     expect(asFragment()).toMatchSnapshot();
   });
+  it.each([["string"], ["boolean"], ["decimal"], ["integer"], ["url"]])(
+    "matches snapshot with dataType %i",
+    (dataType) => {
+      const { asFragment } = render(
+        <Value
+          dataType={dataType as helpers.DataType}
+          edit
+          solidDataset={mockDataset}
+          thing={mockThing}
+          property={mockPredicate}
+        />
+      );
+      expect(asFragment()).toMatchSnapshot();
+    }
+  );
 
   it("matches snapshot with dataType datetime when browser does not support datetime-local", () => {
     jest.spyOn(helpers, "useDatetimeBrowserSupport").mockReturnValueOnce(false);
@@ -136,288 +160,5 @@ describe("<Value /> component snapshot test", () => {
       />
     );
     expect(asFragment()).toMatchSnapshot();
-  });
-});
-
-describe("<Value /> component functional testing", () => {
-  it.each([
-    ["string", "getStringNoLocale", "mockString", undefined],
-    ["string", "getStringWithLocale", "mockString", "en"],
-    ["boolean", "getBoolean", true, undefined],
-    ["datetime", "getDatetime", new Date(), undefined],
-    ["decimal", "getDecimal", 1.23, undefined],
-    ["integer", "getInteger", 100, undefined],
-    ["url", "getUrl", "http://mock.url", undefined],
-  ])(
-    "when dataType is %s, calls %s and sets value",
-    (dataType, getter, mockValue, locale) => {
-      const mockGetter = jest
-        .spyOn(SolidFns, getter as any)
-        .mockImplementationOnce(() => mockValue);
-
-      const { getByText } = render(
-        <Value
-          dataType={dataType as helpers.DataType}
-          solidDataset={mockDatasetWithResourceInfo}
-          thing={mockThing}
-          property={mockPredicate}
-          locale={locale}
-        />
-      );
-
-      expect(mockGetter).toHaveBeenCalled();
-
-      const expectedDisplayValue =
-        dataType === "datetime"
-          ? (mockValue as Date)
-              .toISOString()
-              .substring(0, (mockValue as Date).toISOString().length - 5)
-          : `${mockValue}`;
-
-      expect(getByText(expectedDisplayValue)).toBeDefined();
-    }
-  );
-
-  it.each([
-    [
-      "string",
-      "getStringNoLocale",
-      "setStringNoLocale",
-      "mockString",
-      undefined,
-    ],
-    [
-      "string",
-      "getStringWithLocale",
-      "setStringWithLocale",
-      "mockString",
-      "en",
-    ],
-    ["boolean", "getBoolean", "setBoolean", true, undefined],
-    ["datetime", "getDatetime", "setDatetime", "2020-12-30T12:30", undefined],
-    ["decimal", "getDecimal", "setDecimal", 1.23, undefined],
-    ["integer", "getInteger", "setInteger", 100, undefined],
-    ["url", "getUrl", "setUrl", "http://mock.url", undefined],
-  ])(
-    "when dataType is %s, should call %s setter on blur",
-    (dataType, getter, setter, newValue, locale = "") => {
-      jest.spyOn(SolidFns, getter as any).mockImplementationOnce(() => null);
-
-      const mockSetter = jest
-        .spyOn(SolidFns, setter as any)
-        .mockImplementation(() => mockThing);
-
-      jest
-        .spyOn(SolidFns, "saveSolidDatasetAt")
-        .mockResolvedValue(savedDataset);
-
-      const { getByTitle } = render(
-        <Value
-          dataType={dataType as helpers.DataType}
-          solidDataset={mockDatasetWithResourceInfo}
-          thing={mockThing}
-          property={mockPredicate}
-          locale={locale}
-          edit
-          autosave
-          inputProps={{ title: "test title" }}
-        />
-      );
-      const input = getByTitle("test title");
-      input.focus();
-      if (dataType === "boolean") {
-        fireEvent.click(input);
-      } else {
-        fireEvent.change(input, { target: { value: newValue } });
-      }
-      input.blur();
-      expect(mockSetter).toHaveBeenCalled();
-    }
-  );
-
-  it("when dataType is datetime and datetime-local is unsupported, it calls the setDatetime with the correct value", () => {
-    jest.spyOn(helpers, "useDatetimeBrowserSupport").mockReturnValue(false);
-    jest.spyOn(SolidFns, "getDatetime").mockImplementationOnce(() => null);
-
-    const mockSetter = jest.spyOn(SolidFns, "setDatetime");
-
-    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
-
-    const { getByLabelText } = render(
-      <Value
-        dataType="datetime"
-        solidDataset={mockDatasetWithBdayResourceInfo}
-        thing={mockThing}
-        property={mockBdayPredicate}
-        edit
-        autosave
-      />
-    );
-    const dateInput = getByLabelText("Date");
-    dateInput.focus();
-    fireEvent.change(dateInput, { target: { value: "2020-03-03" } });
-    dateInput.blur();
-    const timeInput = getByLabelText("Time");
-    timeInput.focus();
-    fireEvent.change(timeInput, { target: { value: "05:45" } });
-    timeInput.blur();
-    const expectedDate = new Date(Date.UTC(2020, 2, 3, 0, 0, 0));
-    const expectedDateAndTime = new Date(Date.UTC(2020, 2, 3, 5, 45, 0));
-    expect(mockSetter.mock.calls).toEqual([
-      [mockThing, mockBdayPredicate, expectedDate],
-      [mockThing, mockBdayPredicate, expectedDateAndTime],
-    ]);
-  });
-
-  it("Should not call setter on blur if the value of the input hasn't changed", async () => {
-    jest
-      .spyOn(SolidFns, "setStringNoLocale")
-      .mockImplementation(() => mockThing);
-    const { getByDisplayValue } = render(
-      <Value
-        dataType="string"
-        solidDataset={mockDatasetWithResourceInfo}
-        thing={mockThing}
-        property={mockPredicate}
-        edit
-        autosave
-      />
-    );
-    const input = getByDisplayValue(mockNick);
-    input.focus();
-    input.blur();
-    expect(SolidFns.setStringNoLocale).toHaveBeenCalledTimes(0);
-  });
-
-  it("Should not call saveSolidDatasetAt onBlur if autosave is false", async () => {
-    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
-    const { getByDisplayValue } = render(
-      <Value
-        dataType="string"
-        solidDataset={mockDatasetWithResourceInfo}
-        thing={mockThing}
-        property={mockPredicate}
-        edit
-      />
-    );
-    getByDisplayValue(mockNick).focus();
-    getByDisplayValue(mockNick).blur();
-    expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalledTimes(0);
-  });
-
-  it("Should call onSave if it is passed", async () => {
-    const onSave = jest.fn();
-    const onError = jest.fn();
-    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
-    const { getByDisplayValue } = render(
-      <Value
-        dataType="string"
-        solidDataset={mockDatasetWithResourceInfo}
-        thing={mockThing}
-        property={mockPredicate}
-        onSave={onSave}
-        onError={onError}
-        edit
-        autosave
-      />
-    );
-    const input = getByDisplayValue(mockNick);
-    input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(onSave).toHaveBeenCalled());
-  });
-
-  it("Should call onSave for fetched dataset with custom location if it is passed", async () => {
-    const onSave = jest.fn();
-    const onError = jest.fn();
-    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
-    const { getByDisplayValue } = render(
-      <Value
-        dataType="string"
-        solidDataset={mockDatasetWithResourceInfo}
-        thing={mockThing}
-        property={mockPredicate}
-        saveDatasetTo="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
-        onSave={onSave}
-        onError={onError}
-        edit
-        autosave
-      />
-    );
-    const input = getByDisplayValue(mockNick);
-    input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(onSave).toHaveBeenCalled());
-  });
-
-  it("Should call onError if saving fails", async () => {
-    (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
-    const onError = jest.fn();
-    const { getByDisplayValue } = render(
-      <Value
-        dataType="string"
-        solidDataset={mockDataset}
-        thing={mockThing}
-        property={mockPredicate}
-        saveDatasetTo="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
-        onError={onError}
-        edit
-        autosave
-      />
-    );
-    const input = getByDisplayValue(mockNick);
-    input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
-  });
-
-  it("Should call onError if saving fetched dataset to custom location fails", async () => {
-    (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
-    const onError = jest.fn();
-    const { getByDisplayValue } = render(
-      <Value
-        dataType="string"
-        solidDataset={mockDatasetWithResourceInfo}
-        thing={mockThing}
-        property={mockPredicate}
-        saveDatasetTo="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
-        onError={onError}
-        edit
-        autosave
-      />
-    );
-    const input = getByDisplayValue(mockNick);
-    input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
-  });
-
-  it("Should call onError if trying to save a non-fetched dataset without saveDatasetTo", async () => {
-    const mockUnfetchedDataset = SolidFns.setThing(
-      SolidFns.createSolidDataset(),
-      mockThing
-    );
-
-    const onError = jest.fn();
-    const { getByDisplayValue } = render(
-      <Value
-        dataType="string"
-        solidDataset={mockUnfetchedDataset}
-        thing={mockThing}
-        property={mockPredicate}
-        onError={onError}
-        edit
-        autosave
-      />
-    );
-    const input = getByDisplayValue(mockNick);
-    input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
   });
 });
