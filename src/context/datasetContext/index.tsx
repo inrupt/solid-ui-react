@@ -42,7 +42,7 @@ export default DatasetContext;
 
 export interface IDatasetProvider {
   children: React.ReactNode;
-  loading?: React.ReactNode;
+  loadingComponent?: React.ReactNode;
   onError?(error: Error): void | null;
   solidDataset?: SolidDataset | (SolidDataset & WithResourceInfo);
   datasetUrl?: UrlString | string;
@@ -63,7 +63,7 @@ export const DatasetProvider = ({
   onError,
   solidDataset: propDataset,
   datasetUrl,
-  loading,
+  loadingComponent,
 }: RequireDatasetOrDatasetUrl): ReactElement => {
   const { dataset, error } = useDataset(datasetUrl);
 
@@ -85,7 +85,9 @@ export const DatasetProvider = ({
 
   return (
     <DatasetContext.Provider value={{ solidDataset: stateDataset, setDataset }}>
-      {stateDataset ? children : loading || <span>Fetching data...</span>}
+      {stateDataset
+        ? children
+        : loadingComponent || <span>Fetching data...</span>}
     </DatasetContext.Provider>
   );
 };

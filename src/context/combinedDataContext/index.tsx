@@ -33,6 +33,7 @@ import { ThingProvider } from "../thingContext";
 
 export type Props = {
   children: React.ReactNode;
+  loadingComponent?: React.ReactNode;
   onError?(error: Error): void | null;
 };
 
@@ -77,6 +78,7 @@ function CombinedDataProvider(props: any): ReactElement {
     thing,
     thingUrl,
     onError,
+    loadingComponent,
   } = props;
 
   return (
@@ -84,6 +86,7 @@ function CombinedDataProvider(props: any): ReactElement {
       onError={onError}
       solidDataset={solidDataset}
       datasetUrl={datasetUrl}
+      loadingComponent={loadingComponent}
     >
       <ThingProvider thing={thing} thingUrl={thingUrl}>
         {children}
