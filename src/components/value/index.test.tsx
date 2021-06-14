@@ -86,8 +86,96 @@ describe("<Value /> component snapshot test", () => {
   });
 
   it("matches snapshot while fetching data", () => {
+    jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+      thing: undefined,
+      error: undefined,
+      value: null,
+      setDataset: jest.fn(),
+      setThing: jest.fn(),
+      property: mockPredicate,
+    });
     const documentBody = render(
       <Value dataType="string" property={mockPredicate} />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("renders loading component if passed while fetching data", () => {
+    jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+      thing: undefined,
+      error: undefined,
+      value: null,
+      setDataset: jest.fn(),
+      setThing: jest.fn(),
+      property: mockPredicate,
+    });
+    const documentBody = render(
+      <Value
+        dataType="string"
+        property={mockPredicate}
+        loadingComponent={() => (
+          <span id="custom-loading-component">loading...</span>
+        )}
+      />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("renders default error message if there is an error", () => {
+    const emptyThing = SolidFns.createThing();
+    const documentBody = render(
+      <Value
+        thing={emptyThing}
+        dataType="string"
+        property="https://example.com/bad-url"
+      />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("renders custom error component if passed and there is an error", () => {
+    const emptyThing = SolidFns.createThing();
+    const documentBody = render(
+      <Value
+        thing={emptyThing}
+        dataType="string"
+        property="https://example.com/bad-url"
+        errorComponent={({ error }) => (
+          <span id="custom-error-component">{error.toString()}</span>
+        )}
+      />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("renders 'false' if dataType is boolean instead of error if property not found", () => {
+    const emptyThing = SolidFns.createThing();
+    const documentBody = render(
+      <DatasetProvider solidDataset={mockDatasetWithResourceInfo}>
+        <ThingProvider thing={mockThing}>
+          <Value
+            thing={emptyThing}
+            dataType="boolean"
+            property="http://xmlns.com/foaf/0.1/name"
+          />
+        </ThingProvider>
+      </DatasetProvider>
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("renders error if dataType is boolean and there is an error fetching the thing", () => {
+    const documentBody = render(
+      <Value
+        thing={undefined}
+        dataType="boolean"
+        property="http://xmlns.com/foaf/0.1/name"
+      />
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();

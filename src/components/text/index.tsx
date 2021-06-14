@@ -38,6 +38,8 @@ export type Props = {
   saveDatasetTo?: Url | UrlString;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   locale?: string;
+  loadingComponent?: React.ComponentType;
+  errorComponent?: React.ComponentType<{ error: Error }>;
 } & CommonProperties;
 
 /**
@@ -55,11 +57,20 @@ export function Text({
   edit,
   autosave,
   inputProps,
+  errorComponent: ErrorComponent,
+  loadingComponent: LoadingComponent,
   ...other
 }: Props & React.HTMLAttributes<HTMLSpanElement>): ReactElement {
   const { fetch } = useContext(SessionContext);
 
-  const { error, value, thing, property, dataset, setDataset } = useProperty({
+  const {
+    error: thingError,
+    value,
+    thing,
+    property,
+    dataset,
+    setDataset,
+  } = useProperty({
     dataset: propDataset,
     thing: propThing,
     property: propProperty,
@@ -67,6 +78,15 @@ export function Text({
     type: "string",
     locale,
   });
+
+  let valueError;
+  if (!edit && !value) {
+    valueError = new Error("No value found for property.");
+  }
+
+  const isFetchingThing = !thing && !thingError;
+
+  const [error] = useState<Error | undefined>(thingError || valueError);
 
   useEffect(() => {
     if (error && onError) {
@@ -133,9 +153,18 @@ export function Text({
     }
   };
 
-  if (!dataset && !thing) {
-    // TODO: provide option for user to pass in loader
+  if (isFetchingThing) {
+    if (LoadingComponent) {
+      return <LoadingComponent />;
+    }
     return <h3>fetching data in progress</h3>;
+  }
+
+  if (error) {
+    if (ErrorComponent) {
+      return <ErrorComponent error={error} />;
+    }
+    return <span>{error.toString()}</span>;
   }
 
   return (

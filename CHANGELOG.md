@@ -4,6 +4,20 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
+- The following components now take an optional `loadingComponent` to be rendered while fetching data:
+  - `Value`
+  - `Text`
+  - `Link`
+  - `Image`
+  - `Video`
+- When these are not passed, the components render a default message instead. 
+
+- The following components now take an optional `errorComponent` to be rendered in case of error:
+  - `Value`
+  - `Text`
+  - `Link`
+- When these are not passed, the components render a default message instead. 
+
 The following sections document changes that have been released already:
 
 ## 2.3.1 ( June 9, 2021 )

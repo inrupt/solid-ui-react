@@ -23,6 +23,7 @@ import React from "react";
 import { render, waitFor, fireEvent } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
 import { Image } from ".";
+import * as helpers from "../../helpers";
 
 const mockAlt = "test img";
 const mockUrl = "http://test.url/image.png";
@@ -37,17 +38,12 @@ const mockObjectUrl = "mock object url";
 const mockFile = SolidFns.mockFileFrom(mockUrl);
 window.URL.createObjectURL = jest.fn(() => mockObjectUrl);
 
-jest.spyOn(SolidFns, "getUrl").mockImplementation(() => mockUrl);
-jest.spyOn(SolidFns, "getFile").mockResolvedValue(mockFile);
-jest.spyOn(SolidFns, "overwriteFile").mockResolvedValue(mockFile);
-
 describe("Image component", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   describe("Image snapshots", () => {
     it("matches snapshot with standard props", async () => {
+      jest.spyOn(SolidFns, "getUrl").mockImplementationOnce(() => mockUrl);
+      jest.spyOn(SolidFns, "getFile").mockResolvedValueOnce(mockFile);
+      jest.spyOn(SolidFns, "overwriteFile").mockResolvedValueOnce(mockFile);
       const { asFragment, getByAltText } = render(
         <Image thing={mockThing} property={mockProperty} />
       );
@@ -58,6 +54,9 @@ describe("Image component", () => {
     });
 
     it("matches snapshot with additional props for img and input", async () => {
+      jest.spyOn(SolidFns, "getUrl").mockImplementationOnce(() => mockUrl);
+      jest.spyOn(SolidFns, "getFile").mockResolvedValueOnce(mockFile);
+      jest.spyOn(SolidFns, "overwriteFile").mockResolvedValueOnce(mockFile);
       const { asFragment, getByAltText } = render(
         <Image
           thing={mockThing}
@@ -75,11 +74,61 @@ describe("Image component", () => {
     });
 
     it("renders an error message if an errorComponent is provided", () => {
+      const emptyThing = SolidFns.createThing();
+      const { asFragment } = render(
+        <Image
+          thing={emptyThing}
+          property="https://example.com/bad-url"
+          errorComponent={({ error }) => (
+            <span id="custom-error-component">{error.toString()}</span>
+          )}
+        />
+      );
+      expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("renders default error message if there is an error and no errorComponent is passed", () => {
+      const emptyThing = SolidFns.createThing();
+
+      const { asFragment } = render(
+        <Image thing={emptyThing} property="https://example.com/bad-url" />
+      );
+
+      expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("renders default loading message if thing is undefined and there is no error", () => {
+      jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+        thing: undefined,
+        error: undefined,
+        value: null,
+        setDataset: jest.fn(),
+        setThing: jest.fn(),
+        property: mockProperty,
+      });
+      const { asFragment } = render(
+        <Image thing={undefined} property="https://example.com/bad-url" />
+      );
+
+      expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("renders loading component if passed and thing is undefined and there is no error", () => {
+      jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+        thing: undefined,
+        error: undefined,
+        value: null,
+        setDataset: jest.fn(),
+        setThing: jest.fn(),
+        property: mockProperty,
+      });
       const { asFragment } = render(
         <Image
           thing={undefined}
+          loadingComponent={() => (
+            <span id="custom-loading-component">loading...</span>
+          )}
           property="https://example.com/bad-url"
-          errorComponent={({ error }) => <span>{error.toString()}</span>}
         />
       );
 
@@ -88,6 +137,12 @@ describe("Image component", () => {
   });
 
   describe("Image functional tests", () => {
+    beforeEach(() => {
+      jest.spyOn(SolidFns, "getUrl").mockImplementation(() => mockUrl);
+      jest.spyOn(SolidFns, "getFile").mockResolvedValue(mockFile);
+      jest.spyOn(SolidFns, "overwriteFile").mockResolvedValue(mockFile);
+    });
+
     it("Should call getUrl using given thing and property", async () => {
       const { getByAltText } = render(
         <Image thing={mockThing} property={mockProperty} alt={mockAlt} />

@@ -10,6 +10,16 @@ exports[`<Text /> component snapshot test matches snapshot 1`] = `
 </body>
 `;
 
+exports[`<Text /> component snapshot test matches snapshot while fetching data 1`] = `
+<body>
+  <div>
+    <h3>
+      fetching data in progress
+    </h3>
+  </div>
+</body>
+`;
+
 exports[`<Text /> component snapshot test matches snapshot with data from context 1`] = `
 <body>
   <div>
@@ -29,6 +39,40 @@ exports[`<Text /> component snapshot test matches snapshot with edit true and in
       type="url"
       value="test nick value"
     />
+  </div>
+</body>
+`;
+
+exports[`<Text /> component snapshot test renders custom error component if passed and there is an error 1`] = `
+<body>
+  <div>
+    <span
+      id="custom-error-component"
+    >
+      Error: No value found for property.
+    </span>
+  </div>
+</body>
+`;
+
+exports[`<Text /> component snapshot test renders default error message if there is an error 1`] = `
+<body>
+  <div>
+    <span>
+      Error: No value found for property.
+    </span>
+  </div>
+</body>
+`;
+
+exports[`<Text /> component snapshot test renders loading component if passed while fetching data 1`] = `
+<body>
+  <div>
+    <span
+      id="custom-loading-component"
+    >
+      loading...
+    </span>
   </div>
 </body>
 `;

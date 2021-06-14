@@ -19,12 +19,15 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 
 import { CommonProperties, useProperty } from "../../helpers";
 import { Value } from "../value";
 
-export type Props = CommonProperties &
+export type Props = {
+  loadingComponent?: React.ComponentType;
+  errorComponent?: React.ComponentType<{ error: Error }>;
+} & CommonProperties &
   React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
 /**
@@ -40,11 +43,19 @@ export function Link({
   rel,
   target,
   edit,
+  loadingComponent: LoadingComponent,
+  errorComponent: ErrorComponent,
   onSave,
   onError,
   ...linkOptions
 }: Props): ReactElement {
-  const { value: href, thing, property, dataset } = useProperty({
+  const {
+    value: href,
+    thing,
+    property,
+    dataset,
+    error: thingError,
+  } = useProperty({
     dataset: solidDataset,
     thing: propThing,
     property: propProperty,
@@ -52,12 +63,30 @@ export function Link({
     type: "url",
   });
 
+  let valueError;
+  if (!edit && !href) {
+    valueError = new Error("URL not found for given property");
+  }
+
+  const isFetchingThing = !thing && !thingError;
+
+  const [error] = useState<Error | undefined>(thingError || valueError);
+
+  if (isFetchingThing) {
+    if (LoadingComponent) {
+      return <LoadingComponent />;
+    }
+    return <span>fetching data in progress</span>;
+  }
+
+  if (error) {
+    if (ErrorComponent) {
+      return <ErrorComponent error={error} />;
+    }
+    return <span>{error.toString()}</span>;
+  }
   const adjustedRel =
     rel || (target === "_blank" ? "noopener noreferrer" : "nofollow");
-
-  if (!href) {
-    throw new Error("URL not found for given property");
-  }
 
   if (edit) {
     return (

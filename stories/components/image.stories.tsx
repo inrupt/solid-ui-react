@@ -71,6 +71,10 @@ export default {
       description: `Component to be rendered in case of error.`,
       control: { type: null },
     },
+    loadingComponent: {
+      description: `Component to be rendered while fetching data.`,
+      control: { type: null },
+    },
   },
 };
 

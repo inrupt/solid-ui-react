@@ -65,6 +65,14 @@ export default {
     inputProps: {
       description: `Additional attributes to be passed to the file input, if \`edit\` is true`,
     },
+    errorComponent: {
+      description: `Component to be rendered in case of error.`,
+      control: { type: null },
+    },
+    loadingComponent: {
+      description: `Component to be rendered while fetching data.`,
+      control: { type: null },
+    },
   },
 };
 
@@ -206,4 +214,27 @@ WithFetchedData.args = {
   property: "http://xmlns.com/foaf/0.1/name",
   datasetUrl: `${host}/example.ttl`,
   thingUrl: `${host}/example.ttl#me`,
+};
+
+export function ErrorComponent(): ReactElement {
+  const exampleName = "Example Name";
+  const exampleProperty = "http://xmlns.com/foaf/0.1/name";
+  const exampleThing = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    exampleProperty,
+    exampleName
+  );
+
+  return (
+    <Text
+      thing={exampleThing}
+      property="https://example.com/bad-url"
+      errorComponent={({ error }) => <span>{error.toString()}</span>}
+    />
+  );
+}
+
+ErrorComponent.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
 };

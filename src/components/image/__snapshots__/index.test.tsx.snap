@@ -34,8 +34,36 @@ exports[`Image component Image snapshots matches snapshot with standard props 1`
 
 exports[`Image component Image snapshots renders an error message if an errorComponent is provided 1`] = `
 <DocumentFragment>
+  <span
+    id="custom-error-component"
+  >
+    Error: No value found for property.
+  </span>
+</DocumentFragment>
+`;
+
+exports[`Image component Image snapshots renders default error message if there is an error and no errorComponent is passed 1`] = `
+<DocumentFragment>
   <span>
     Error: No value found for property.
+  </span>
+</DocumentFragment>
+`;
+
+exports[`Image component Image snapshots renders default loading message if thing is undefined and there is no error 1`] = `
+<DocumentFragment>
+  <span>
+    fetching data in progress
+  </span>
+</DocumentFragment>
+`;
+
+exports[`Image component Image snapshots renders loading component if passed and thing is undefined and there is no error 1`] = `
+<DocumentFragment>
+  <span
+    id="custom-loading-component"
+  >
+    loading...
   </span>
 </DocumentFragment>
 `;

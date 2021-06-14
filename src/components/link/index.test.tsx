@@ -23,6 +23,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
 import { Link } from "./index";
+import * as helpers from "../../helpers";
 
 const mockUrl = "http://test.url";
 const mockPredicate = `http://xmlns.com/foaf/0.1/homepage`;
@@ -32,8 +33,6 @@ const mockThing = SolidFns.addUrl(
   mockUrl
 );
 
-jest.spyOn(SolidFns, "getUrl").mockImplementation(() => mockUrl);
-
 describe("Link component", () => {
   it("Link snapshot", () => {
     const { asFragment } = render(
@@ -41,19 +40,69 @@ describe("Link component", () => {
     );
     expect(asFragment()).toMatchSnapshot();
   });
+
+  it("renders default error message if there is an error", () => {
+    const documentBody = render(
+      <Link thing={mockThing} property="https://example.com/bad-url" />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("renders custom error component if passed and there is an error", () => {
+    const documentBody = render(
+      <Link
+        thing={mockThing}
+        property="https://example.com/bad-url"
+        errorComponent={({ error }) => (
+          <span id="custom-error-component">{error.toString()}</span>
+        )}
+      />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+  it("matches snapshot while fetching data", () => {
+    jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+      thing: undefined,
+      error: undefined,
+      value: null,
+      setDataset: jest.fn(),
+      setThing: jest.fn(),
+      property: mockPredicate,
+    });
+    const documentBody = render(<Link property={mockPredicate} />);
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("renders loading component if passed while fetching data", () => {
+    jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+      thing: undefined,
+      error: undefined,
+      value: null,
+      setDataset: jest.fn(),
+      setThing: jest.fn(),
+      property: mockPredicate,
+    });
+    const documentBody = render(
+      <Link
+        property={mockPredicate}
+        loadingComponent={() => (
+          <span id="custom-loading-component">loading...</span>
+        )}
+      />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
   it("Should call getUrl and use result as href value", () => {
+    jest.spyOn(SolidFns, "getUrl").mockImplementationOnce(() => mockUrl);
     const { getByText } = render(
       <Link thing={mockThing} property={mockPredicate} />
     );
     expect(SolidFns.getUrl).toHaveBeenCalled();
     expect(getByText(mockUrl).getAttribute("href")).toBe(mockUrl);
-  });
-  it("When getUrl returns null, should throw an error", () => {
-    (SolidFns.getUrl as jest.Mock).mockReturnValueOnce(null);
-    expect(() =>
-      render(<Link thing={mockThing} property={mockPredicate} />)
-    ).toThrowErrorMatchingSnapshot();
-    expect(SolidFns.getUrl).toHaveBeenCalled();
   });
   it("When passed no children, should render href as link text", () => {
     const { getByText } = render(

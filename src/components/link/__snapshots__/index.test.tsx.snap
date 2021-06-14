@@ -11,7 +11,37 @@ exports[`Link component Link snapshot 1`] = `
 </DocumentFragment>
 `;
 
-exports[`Link component When getUrl returns null, should throw an error 1`] = `"URL not found for given property"`;
+exports[`Link component matches snapshot while fetching data 1`] = `
+<body>
+  <div>
+    <span>
+      fetching data in progress
+    </span>
+  </div>
+</body>
+`;
+
+exports[`Link component renders custom error component if passed and there is an error 1`] = `
+<body>
+  <div>
+    <span
+      id="custom-error-component"
+    >
+      Error: URL not found for given property
+    </span>
+  </div>
+</body>
+`;
+
+exports[`Link component renders default error message if there is an error 1`] = `
+<body>
+  <div>
+    <span>
+      Error: URL not found for given property
+    </span>
+  </div>
+</body>
+`;
 
 exports[`Link component renders in edit mode 1`] = `
 <DocumentFragment>
@@ -22,4 +52,16 @@ exports[`Link component renders in edit mode 1`] = `
     http://test.url
   </a>
 </DocumentFragment>
+`;
+
+exports[`Link component renders loading component if passed while fetching data 1`] = `
+<body>
+  <div>
+    <span
+      id="custom-loading-component"
+    >
+      loading...
+    </span>
+  </div>
+</body>
 `;

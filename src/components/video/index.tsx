@@ -34,6 +34,7 @@ export type Props = {
   maxSize?: number;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   errorComponent?: React.ComponentType<{ error: Error }>;
+  loadingComponent?: React.ComponentType;
 } & CommonProperties &
   React.VideoHTMLAttributes<HTMLVideoElement>;
 
@@ -51,6 +52,7 @@ export function Video({
   maxSize,
   inputProps,
   errorComponent: ErrorComponent,
+  loadingComponent: LoadingComponent,
   ...videoOptions
 }: Props): ReactElement {
   const { fetch } = useContext(SessionContext);
@@ -62,14 +64,17 @@ export function Video({
     type: "url",
   });
 
-  const { value } = values;
-  let { error: thingError } = values;
-
+  const { value, thing, error: thingError } = values;
+  let valueError;
   if (!edit && !value) {
-    thingError = new Error("URL not found for given property");
+    valueError = new Error("No value found for property.");
   }
 
-  const [error, setError] = useState<Error | undefined>(thingError);
+  const isFetchingThing = !thing && !thingError;
+
+  const [error, setError] = useState<Error | undefined>(
+    thingError || valueError
+  );
 
   useEffect(() => {
     if (error) {
@@ -82,6 +87,9 @@ export function Video({
   const [videoObjectUrl, setVideoObjectUrl] = useState("");
 
   useEffect(() => {
+    if (!thing) {
+      return;
+    }
     if (value) {
       retrieveFile(value as string, fetch)
         .then(setVideoObjectUrl)
@@ -97,7 +105,7 @@ export function Video({
           }
         });
     }
-  }, [value, onError, setError, fetch, ErrorComponent]);
+  }, [value, onError, setError, fetch, thing, ErrorComponent]);
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
@@ -119,8 +127,19 @@ export function Video({
 
   let videoComponent = null;
 
-  if (error && ErrorComponent) {
-    videoComponent = <ErrorComponent error={error} />;
+  if (isFetchingThing) {
+    if (LoadingComponent) {
+      return <LoadingComponent />;
+    }
+    return <span>fetching data in progress</span>;
+  }
+
+  if (error) {
+    videoComponent = ErrorComponent ? (
+      <ErrorComponent error={error} />
+    ) : (
+      <span>{error.toString()}</span>
+    );
   } else if (value) {
     videoComponent = (
       /* eslint jsx-a11y/media-has-caption: 0, react/jsx-props-no-spreading: 0 */

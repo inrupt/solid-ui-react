@@ -121,3 +121,57 @@ exports[`<Value /> component snapshot test matches snapshot with edit true and i
   </div>
 </body>
 `;
+
+exports[`<Value /> component snapshot test renders 'false' if dataType is boolean instead of error if property not found 1`] = `
+<body>
+  <div>
+    <span>
+      false
+    </span>
+  </div>
+</body>
+`;
+
+exports[`<Value /> component snapshot test renders custom error component if passed and there is an error 1`] = `
+<body>
+  <div>
+    <span
+      id="custom-error-component"
+    >
+      Error: No value found for property.
+    </span>
+  </div>
+</body>
+`;
+
+exports[`<Value /> component snapshot test renders default error message if there is an error 1`] = `
+<body>
+  <div>
+    <span>
+      Error: No value found for property.
+    </span>
+  </div>
+</body>
+`;
+
+exports[`<Value /> component snapshot test renders error if dataType is boolean and there is an error fetching the thing 1`] = `
+<body>
+  <div>
+    <span>
+      Error: Thing not found as property or in context
+    </span>
+  </div>
+</body>
+`;
+
+exports[`<Value /> component snapshot test renders loading component if passed while fetching data 1`] = `
+<body>
+  <div>
+    <span
+      id="custom-loading-component"
+    >
+      loading...
+    </span>
+  </div>
+</body>
+`;

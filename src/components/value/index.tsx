@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { Url, UrlString } from "@inrupt/solid-client";
 
 import { DataType, CommonProperties, useProperty } from "../../helpers";
@@ -35,6 +35,8 @@ export type Props = {
   saveDatasetTo?: Url | UrlString;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   locale?: string;
+  loadingComponent?: React.ComponentType;
+  errorComponent?: React.ComponentType<{ error: Error }>;
 } & CommonProperties;
 
 /**
@@ -47,9 +49,12 @@ export function Value(props: Props): ReactElement {
     solidDataset: propDataset,
     property: propProperty,
     properties: propProperties,
+    edit,
+    loadingComponent: LoadingComponent,
+    errorComponent: ErrorComponent,
     locale,
   } = otherProps;
-  const { thing, dataset } = useProperty({
+  const { thing, value, error: thingError } = useProperty({
     dataset: propDataset,
     thing: propThing,
     property: propProperty,
@@ -58,9 +63,27 @@ export function Value(props: Props): ReactElement {
     locale,
   });
 
-  if (!dataset && !thing) {
-    // TODO: provide option for user to pass in loader
+  let valueError;
+  if (!edit && !value && dataType !== "boolean") {
+    valueError = new Error("No value found for property.");
+  }
+
+  const isFetchingThing = !thing && !thingError;
+
+  const [error] = useState<Error | undefined>(thingError || valueError);
+
+  if (isFetchingThing) {
+    if (LoadingComponent) {
+      return <LoadingComponent />;
+    }
     return <span>fetching data in progress</span>;
+  }
+
+  if (error) {
+    if (ErrorComponent) {
+      return <ErrorComponent error={error} />;
+    }
+    return <span>{error.toString()}</span>;
   }
 
   let Component: React.FC<Omit<Props, "dataType">> = StringValue;
