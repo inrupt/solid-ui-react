@@ -18,6 +18,9 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
   - `Link`
 - When these are not passed, the components render a default message instead. 
 
+- `loading` changed to `loadingComponent` in `DatasetProvider` to match the rest of the components
+- `CombinedProvider` now receives this prop and passes it down to the `DatasetProvider`
+
 The following sections document changes that have been released already:
 
 ## 2.3.1 ( June 9, 2021 )
