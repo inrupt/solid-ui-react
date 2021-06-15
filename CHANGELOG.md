@@ -10,16 +10,19 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
   - `Link`
   - `Image`
   - `Video`
-- When these are not passed, the components render a default message instead. 
+- When it is not passed, the components render a default message instead. 
+- If `null`, the default message won't be rendered.
 
 - The following components now take an optional `errorComponent` to be rendered in case of error:
   - `Value`
   - `Text`
   - `Link`
-- When these are not passed, the components render a default message instead. 
+- When it is not passed, the components render a default message instead. 
+- `DatasetProvider` still receives this now as `loadingComponent`.
+- `CombinedProvider` now receives this prop and passes it down to the `DatasetProvider`.
 
-- `loading` changed to `loadingComponent` in `DatasetProvider` to match the rest of the components
-- `CombinedProvider` now receives this prop and passes it down to the `DatasetProvider`
+## Deprecations
+- `loading` in `DatasetProvider` is now deprecated and replaced with `loadingComponent` in to match the rest of the components. `loading` can still be used in `DatasetProvider` but may be removed in a future major release.
 
 The following sections document changes that have been released already:
 

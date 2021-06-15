@@ -35,14 +35,14 @@ export type Props = {
   saveDatasetTo?: Url | UrlString;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   locale?: string;
-  loadingComponent?: React.ComponentType;
+  loadingComponent?: React.ComponentType | null;
   errorComponent?: React.ComponentType<{ error: Error }>;
 } & CommonProperties;
 
 /**
  * Retrieves and displays a value of one of a range of types from a given [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset)/[Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing)/property. Can also be used to set/update and persist a value.
  */
-export function Value(props: Props): ReactElement {
+export function Value(props: Props): ReactElement | null {
   const { dataType, ...otherProps } = props as Props;
   const {
     thing: propThing,
@@ -70,13 +70,16 @@ export function Value(props: Props): ReactElement {
 
   const isFetchingThing = !thing && !thingError;
 
-  const [error] = useState<Error | undefined>(thingError || valueError);
+  const [error] = useState<Error | undefined>(thingError ?? valueError);
 
   if (isFetchingThing) {
-    if (LoadingComponent) {
-      return <LoadingComponent />;
+    let loader: JSX.Element | null = (LoadingComponent && (
+      <LoadingComponent />
+    )) || <span>fetching data in progress</span>;
+    if (LoadingComponent === null) {
+      loader = null;
     }
-    return <span>fetching data in progress</span>;
+    return loader;
   }
 
   if (error) {

@@ -41,7 +41,12 @@ export default {
       control: { type: null },
     },
     loadingComponent: {
-      description: `A loading component to show while fetching the dataset.`,
+      description: `A loading component to show while fetching the dataset. If \`null\` the default loading message won't be displayed`,
+      control: { type: null },
+    },
+    loading: {
+      description: `**Deprecated:** Use \`loadingComponent\`. 
+      \nA loading component to show while fetching the dataset`,
       control: { type: null },
     },
     onError: {

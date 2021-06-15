@@ -2,7 +2,31 @@
 
 exports[`Testing DatasetContext matches snapshot when fetching 1`] = `
 <body>
-  <div />
+  <div>
+    <span>
+      Fetching data...
+    </span>
+  </div>
+</body>
+`;
+
+exports[`Testing DatasetContext matches snapshot when fetching and loading is passed 1`] = `
+<body>
+  <div>
+    <span>
+      loading
+    </span>
+  </div>
+</body>
+`;
+
+exports[`Testing DatasetContext matches snapshot when fetching and loadingComponent is passed 1`] = `
+<body>
+  <div>
+    <span>
+      loading component
+    </span>
+  </div>
 </body>
 `;
 
@@ -13,6 +37,12 @@ exports[`Testing DatasetContext matches snapshot when fetching fails 1`] = `
       Fetching data...
     </span>
   </div>
+</body>
+`;
+
+exports[`Testing DatasetContext matches snapshot when loadingComponent is null 1`] = `
+<body>
+  <div />
 </body>
 `;
 

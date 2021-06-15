@@ -96,6 +96,21 @@ describe("Link component", () => {
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
   });
+  it("does not render default loading message if loadingComponent is null", () => {
+    jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+      thing: undefined,
+      error: undefined,
+      value: null,
+      setDataset: jest.fn(),
+      setThing: jest.fn(),
+      property: mockPredicate,
+    });
+    const documentBody = render(
+      <Link property={mockPredicate} loadingComponent={null} />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
   it("Should call getUrl and use result as href value", () => {
     jest.spyOn(SolidFns, "getUrl").mockImplementationOnce(() => mockUrl);
     const { getByText } = render(

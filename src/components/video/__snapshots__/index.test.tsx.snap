@@ -8,6 +8,8 @@ exports[`Video component Video functional tests When getUrl returns null, with a
 </DocumentFragment>
 `;
 
+exports[`Video component Video snapshots does not render default loading message if loadingComponent is null 1`] = `<DocumentFragment />`;
+
 exports[`Video component Video snapshots matches snapshot with additional props for video and input 1`] = `
 <DocumentFragment>
   <video

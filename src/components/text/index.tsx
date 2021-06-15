@@ -38,7 +38,7 @@ export type Props = {
   saveDatasetTo?: Url | UrlString;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   locale?: string;
-  loadingComponent?: React.ComponentType;
+  loadingComponent?: React.ComponentType | null;
   errorComponent?: React.ComponentType<{ error: Error }>;
 } & CommonProperties;
 
@@ -60,7 +60,7 @@ export function Text({
   errorComponent: ErrorComponent,
   loadingComponent: LoadingComponent,
   ...other
-}: Props & React.HTMLAttributes<HTMLSpanElement>): ReactElement {
+}: Props & React.HTMLAttributes<HTMLSpanElement>): ReactElement | null {
   const { fetch } = useContext(SessionContext);
 
   const {
@@ -86,7 +86,7 @@ export function Text({
 
   const isFetchingThing = !thing && !thingError;
 
-  const [error] = useState<Error | undefined>(thingError || valueError);
+  const [error] = useState<Error | undefined>(thingError ?? valueError);
 
   useEffect(() => {
     if (error && onError) {
@@ -154,10 +154,13 @@ export function Text({
   };
 
   if (isFetchingThing) {
-    if (LoadingComponent) {
-      return <LoadingComponent />;
+    let loader: JSX.Element | null = (LoadingComponent && (
+      <LoadingComponent />
+    )) || <span>fetching data in progress</span>;
+    if (LoadingComponent === null) {
+      loader = null;
     }
-    return <h3>fetching data in progress</h3>;
+    return loader;
   }
 
   if (error) {

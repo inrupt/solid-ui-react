@@ -25,7 +25,7 @@ import { CommonProperties, useProperty } from "../../helpers";
 import { Value } from "../value";
 
 export type Props = {
-  loadingComponent?: React.ComponentType;
+  loadingComponent?: React.ComponentType | null;
   errorComponent?: React.ComponentType<{ error: Error }>;
 } & CommonProperties &
   React.AnchorHTMLAttributes<HTMLAnchorElement>;
@@ -48,7 +48,7 @@ export function Link({
   onSave,
   onError,
   ...linkOptions
-}: Props): ReactElement {
+}: Props): ReactElement | null {
   const {
     value: href,
     thing,
@@ -70,13 +70,16 @@ export function Link({
 
   const isFetchingThing = !thing && !thingError;
 
-  const [error] = useState<Error | undefined>(thingError || valueError);
+  const [error] = useState<Error | undefined>(thingError ?? valueError);
 
   if (isFetchingThing) {
-    if (LoadingComponent) {
-      return <LoadingComponent />;
+    let loader: JSX.Element | null = (LoadingComponent && (
+      <LoadingComponent />
+    )) || <span>fetching data in progress</span>;
+    if (LoadingComponent === null) {
+      loader = null;
     }
-    return <span>fetching data in progress</span>;
+    return loader;
   }
 
   if (error) {

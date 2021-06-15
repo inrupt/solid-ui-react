@@ -72,7 +72,7 @@ export default {
       control: { type: null },
     },
     loadingComponent: {
-      description: `Component to be rendered while fetching data.`,
+      description: `A loading component to show while fetching the dataset. If \`null\` the default loading message won't be displayed`,
       control: { type: null },
     },
   },

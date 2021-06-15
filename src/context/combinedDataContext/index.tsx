@@ -33,7 +33,7 @@ import { ThingProvider } from "../thingContext";
 
 export type Props = {
   children: React.ReactNode;
-  loadingComponent?: React.ReactNode;
+  loadingComponent?: React.ComponentType | null;
   onError?(error: Error): void | null;
 };
 

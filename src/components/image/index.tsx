@@ -34,7 +34,7 @@ export type Props = {
   maxSize?: number;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   errorComponent?: React.ComponentType<{ error: Error }>;
-  loadingComponent?: React.ComponentType;
+  loadingComponent?: React.ComponentType | null;
 } & CommonProperties &
   React.ImgHTMLAttributes<HTMLImageElement>;
 
@@ -55,7 +55,7 @@ export function Image({
   errorComponent: ErrorComponent,
   loadingComponent: LoadingComponent,
   ...imgOptions
-}: Props): ReactElement {
+}: Props): ReactElement | null {
   const { fetch } = useContext(SessionContext);
 
   const values = useProperty({
@@ -73,7 +73,7 @@ export function Image({
   const isFetchingThing = !thing && !thingError;
 
   const [error, setError] = useState<Error | undefined>(
-    thingError || valueError
+    thingError ?? valueError
   );
 
   useEffect(() => {
@@ -129,10 +129,13 @@ export function Image({
   let imageComponent = null;
 
   if (isFetchingThing) {
-    if (LoadingComponent) {
-      return <LoadingComponent />;
+    let loader: JSX.Element | null = (LoadingComponent && (
+      <LoadingComponent />
+    )) || <span>fetching data in progress</span>;
+    if (LoadingComponent === null) {
+      loader = null;
     }
-    return <span>fetching data in progress</span>;
+    return loader;
   }
 
   if (error) {

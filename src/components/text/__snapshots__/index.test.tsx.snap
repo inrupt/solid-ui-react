@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<Text /> component snapshot test does not render defualt loading message if loadingComponent is null 1`] = `
+<body>
+  <div />
+</body>
+`;
+
 exports[`<Text /> component snapshot test matches snapshot 1`] = `
 <body>
   <div>
@@ -13,9 +19,9 @@ exports[`<Text /> component snapshot test matches snapshot 1`] = `
 exports[`<Text /> component snapshot test matches snapshot while fetching data 1`] = `
 <body>
   <div>
-    <h3>
+    <span>
       fetching data in progress
-    </h3>
+    </span>
   </div>
 </body>
 `;

@@ -8,6 +8,8 @@ exports[`Image component Image functional tests When getUrl returns null, with a
 </DocumentFragment>
 `;
 
+exports[`Image component Image snapshots does not render default loading message if loadingComponent is null 1`] = `<DocumentFragment />`;
+
 exports[`Image component Image snapshots matches snapshot with additional props for img and input 1`] = `
 <DocumentFragment>
   <img

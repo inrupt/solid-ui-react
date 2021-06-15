@@ -135,6 +135,26 @@ describe("Video component", () => {
 
       expect(asFragment()).toMatchSnapshot();
     });
+
+    it("does not render default loading message if loadingComponent is null", () => {
+      jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+        thing: undefined,
+        error: undefined,
+        value: null,
+        setDataset: jest.fn(),
+        setThing: jest.fn(),
+        property: mockProperty,
+      });
+      const { asFragment } = render(
+        <Video
+          thing={undefined}
+          property="https://example.com/bad-url"
+          loadingComponent={null}
+        />
+      );
+
+      expect(asFragment()).toMatchSnapshot();
+    });
   });
   describe("Video functional tests", () => {
     beforeEach(() => {

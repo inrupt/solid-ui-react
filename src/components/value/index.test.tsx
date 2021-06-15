@@ -123,6 +123,26 @@ describe("<Value /> component snapshot test", () => {
     expect(baseElement).toMatchSnapshot();
   });
 
+  it("does not render default loading message if loadingComponent is null", () => {
+    jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+      thing: undefined,
+      error: undefined,
+      value: null,
+      setDataset: jest.fn(),
+      setThing: jest.fn(),
+      property: mockPredicate,
+    });
+    const documentBody = render(
+      <Value
+        dataType="string"
+        property={mockPredicate}
+        loadingComponent={null}
+      />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
   it("renders default error message if there is an error", () => {
     const emptyThing = SolidFns.createThing();
     const documentBody = render(
