@@ -128,14 +128,7 @@ export const SessionProvider = ({
       // TODO force a refresh
       setSession(getDefaultSession());
     });
-  }, [
-    session,
-    sessionId,
-    onError,
-    currentLocation,
-    restoreSession,
-    onSessionRestore,
-  ]);
+  }, [session, sessionId, onError, currentLocation, restoreSession]);
 
   const contextLogin = async (options: ILoginInputOptions) => {
     setSessionRequestInProgress(true);
