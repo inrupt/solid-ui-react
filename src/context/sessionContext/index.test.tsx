@@ -293,4 +293,70 @@ describe("SessionContext functionality", () => {
 
     expect(onSessionRestore).toHaveBeenCalledWith(sessionRestoreCallback);
   });
+
+  it("does not register a session restore callback on every render unless it changes", async () => {
+    (handleIncomingRedirect as jest.Mock).mockResolvedValueOnce(null);
+
+    const session = {
+      info: {
+        isLoggedIn: true,
+        webId: "https://fakeurl.com/me",
+      },
+      on: jest.fn(),
+    } as any;
+
+    (getDefaultSession as jest.Mock).mockReturnValue(session);
+
+    const sessionRestoreCallback = jest.fn();
+    const differentSessionRestoreCallback = jest.fn();
+
+    (handleIncomingRedirect as jest.Mock).mockResolvedValueOnce(null);
+
+    const { rerender } = render(
+      <SessionProvider
+        sessionId="key"
+        onSessionRestore={sessionRestoreCallback}
+      >
+        <ChildComponent />
+      </SessionProvider>
+    );
+
+    await waitFor(() => {
+      expect(handleIncomingRedirect).toHaveBeenCalled();
+    });
+
+    (handleIncomingRedirect as jest.Mock).mockResolvedValueOnce(null);
+
+    rerender(
+      <SessionProvider
+        sessionId="key"
+        onSessionRestore={sessionRestoreCallback}
+      >
+        <ChildComponent />
+      </SessionProvider>
+    );
+
+    await waitFor(() => {
+      expect(handleIncomingRedirect).toHaveBeenCalled();
+    });
+
+    rerender(
+      <SessionProvider
+        sessionId="key"
+        onSessionRestore={differentSessionRestoreCallback}
+      >
+        <ChildComponent />
+      </SessionProvider>
+    );
+
+    await waitFor(() => {
+      expect(handleIncomingRedirect).toHaveBeenCalled();
+    });
+
+    expect(onSessionRestore).toHaveBeenCalledTimes(2);
+    expect(onSessionRestore).toHaveBeenCalledWith(sessionRestoreCallback);
+    expect(onSessionRestore).toHaveBeenCalledWith(
+      differentSessionRestoreCallback
+    );
+  });
 });

@@ -82,12 +82,15 @@ export const SessionProvider = ({
   restorePreviousSession,
   onSessionRestore,
 }: ISessionProvider): ReactElement => {
+  const restoreSession =
+    restorePreviousSession || typeof onSessionRestore !== "undefined";
   const [session, setSession] = useState<Session>(getDefaultSession());
-  let restoreSession = restorePreviousSession;
-  if (onSessionRestore !== undefined) {
-    onSessionRestoreClient(onSessionRestore);
-    restoreSession = true;
-  }
+
+  useEffect(() => {
+    if (onSessionRestore !== undefined) {
+      onSessionRestoreClient(onSessionRestore);
+    }
+  }, [onSessionRestore]);
 
   const defaultInProgress =
     typeof defaultSessionRequestInProgress === "undefined"
@@ -104,7 +107,6 @@ export const SessionProvider = ({
   if (typeof window !== "undefined") {
     currentLocation = window.location;
   }
-
   useEffect(() => {
     handleIncomingRedirect({
       url: window.location.href,
