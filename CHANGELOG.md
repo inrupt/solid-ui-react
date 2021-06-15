@@ -22,7 +22,7 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 - `CombinedProvider` now receives this prop and passes it down to the `DatasetProvider`.
 
 ## Deprecations
-- `loading` in `DatasetProvider` is now deprecated and replaced with `loadingComponent` in to match the rest of the components. `loading` can still be used in `DatasetProvider` but may be removed in a future major release.
+- `loading` in `DatasetProvider` is now deprecated and replaced with `loadingComponent` to match the rest of the components. `loading` can still be used in `DatasetProvider` but may be removed in a future major release.
 
 The following sections document changes that have been released already:
 
