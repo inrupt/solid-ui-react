@@ -96,6 +96,14 @@ export default {
     thingUrl: {
       description: `**Not passed to Value**. Used to customise values of the wrapping [ThingProvider](/?path=/docs/providers-thing-provider) in the storybook examples`,
     },
+    errorComponent: {
+      description: `Component to be rendered in case of error.`,
+      control: { type: null },
+    },
+    loadingComponent: {
+      description: `A loading component to show while fetching the dataset. If \`null\` the default loading message won't be displayed`,
+      control: { type: null },
+    },
   },
 };
 
@@ -414,4 +422,28 @@ export function WithFetchedData(
 
 WithFetchedData.args = {
   ...defaultArgs,
+};
+
+export function ErrorComponent(): ReactElement {
+  const exampleName = "Example Name";
+  const exampleProperty = "http://xmlns.com/foaf/0.1/name";
+  const exampleThing = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    exampleProperty,
+    exampleName
+  );
+
+  return (
+    <Value
+      dataType="string"
+      thing={exampleThing}
+      property="https://example.com/bad-url"
+      errorComponent={({ error }) => <span>{error.toString()}</span>}
+    />
+  );
+}
+
+ErrorComponent.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
 };

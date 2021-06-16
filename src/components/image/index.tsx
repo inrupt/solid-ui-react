@@ -34,6 +34,7 @@ export type Props = {
   maxSize?: number;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   errorComponent?: React.ComponentType<{ error: Error }>;
+  loadingComponent?: React.ComponentType | null;
 } & CommonProperties &
   React.ImgHTMLAttributes<HTMLImageElement>;
 
@@ -52,8 +53,9 @@ export function Image({
   alt,
   inputProps,
   errorComponent: ErrorComponent,
+  loadingComponent: LoadingComponent,
   ...imgOptions
-}: Props): ReactElement {
+}: Props): ReactElement | null {
   const { fetch } = useContext(SessionContext);
 
   const values = useProperty({
@@ -63,14 +65,16 @@ export function Image({
     type: "url",
   });
 
-  const { value } = values;
-  let { error: thingError } = values;
-
+  const { value, thing, error: thingError } = values;
+  let valueError;
   if (!edit && !value) {
-    thingError = new Error("No value found for property.");
+    valueError = new Error("No value found for property.");
   }
+  const isFetchingThing = !thing && !thingError;
 
-  const [error, setError] = useState<Error | undefined>(thingError);
+  const [error, setError] = useState<Error | undefined>(
+    thingError ?? valueError
+  );
 
   useEffect(() => {
     if (error) {
@@ -83,6 +87,9 @@ export function Image({
   const [imgObjectUrl, setImgObjectUrl] = useState<string | undefined>();
 
   useEffect(() => {
+    if (!thing) {
+      return;
+    }
     if (value) {
       retrieveFile(value as string, fetch)
         .then(setImgObjectUrl)
@@ -98,7 +105,7 @@ export function Image({
           }
         });
     }
-  }, [value, onError, setError, fetch, ErrorComponent]);
+  }, [value, onError, setError, fetch, thing, ErrorComponent]);
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
@@ -121,8 +128,22 @@ export function Image({
 
   let imageComponent = null;
 
-  if (error && ErrorComponent) {
-    imageComponent = <ErrorComponent error={error} />;
+  if (isFetchingThing) {
+    let loader: JSX.Element | null = (LoadingComponent && (
+      <LoadingComponent />
+    )) || <span>fetching data in progress</span>;
+    if (LoadingComponent === null) {
+      loader = null;
+    }
+    return loader;
+  }
+
+  if (error) {
+    imageComponent = ErrorComponent ? (
+      <ErrorComponent error={error} />
+    ) : (
+      <span>{error.toString()}</span>
+    );
   } else if (value) {
     /* eslint-disable-next-line react/jsx-props-no-spreading */
     imageComponent = <img src={imgObjectUrl} alt={alt ?? ""} {...imgOptions} />;

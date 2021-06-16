@@ -40,8 +40,13 @@ export default {
       description: `A url to fetch the [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) from, if \`Dataset\` is not provided.`,
       control: { type: null },
     },
+    loadingComponent: {
+      description: `A loading component to show while fetching the dataset. If \`null\` the default loading message won't be displayed`,
+      control: { type: null },
+    },
     loading: {
-      description: `A loading component to show while fetching the dataset.`,
+      description: `**Deprecated:** Use \`loadingComponent\`. 
+      \nA loading component to show while fetching the dataset`,
       control: { type: null },
     },
     onError: {

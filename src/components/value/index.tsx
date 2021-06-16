@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { Url, UrlString } from "@inrupt/solid-client";
 
 import { DataType, CommonProperties, useProperty } from "../../helpers";
@@ -35,21 +35,26 @@ export type Props = {
   saveDatasetTo?: Url | UrlString;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   locale?: string;
+  loadingComponent?: React.ComponentType | null;
+  errorComponent?: React.ComponentType<{ error: Error }>;
 } & CommonProperties;
 
 /**
  * Retrieves and displays a value of one of a range of types from a given [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset)/[Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing)/property. Can also be used to set/update and persist a value.
  */
-export function Value(props: Props): ReactElement {
+export function Value(props: Props): ReactElement | null {
   const { dataType, ...otherProps } = props as Props;
   const {
     thing: propThing,
     solidDataset: propDataset,
     property: propProperty,
     properties: propProperties,
+    edit,
+    loadingComponent: LoadingComponent,
+    errorComponent: ErrorComponent,
     locale,
   } = otherProps;
-  const { thing, dataset } = useProperty({
+  const { thing, value, error: thingError } = useProperty({
     dataset: propDataset,
     thing: propThing,
     property: propProperty,
@@ -58,9 +63,30 @@ export function Value(props: Props): ReactElement {
     locale,
   });
 
-  if (!dataset && !thing) {
-    // TODO: provide option for user to pass in loader
-    return <span>fetching data in progress</span>;
+  let valueError;
+  if (!edit && !value && dataType !== "boolean") {
+    valueError = new Error("No value found for property.");
+  }
+
+  const isFetchingThing = !thing && !thingError;
+
+  const [error] = useState<Error | undefined>(thingError ?? valueError);
+
+  if (isFetchingThing) {
+    let loader: JSX.Element | null = (LoadingComponent && (
+      <LoadingComponent />
+    )) || <span>fetching data in progress</span>;
+    if (LoadingComponent === null) {
+      loader = null;
+    }
+    return loader;
+  }
+
+  if (error) {
+    if (ErrorComponent) {
+      return <ErrorComponent error={error} />;
+    }
+    return <span>{error.toString()}</span>;
   }
 
   let Component: React.FC<Omit<Props, "dataType">> = StringValue;

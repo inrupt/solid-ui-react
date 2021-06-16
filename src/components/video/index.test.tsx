@@ -21,9 +21,9 @@
 
 import React from "react";
 import { render, waitFor, fireEvent } from "@testing-library/react";
-import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
 import { Video } from ".";
+import * as helpers from "../../helpers";
 
 const mockTitle = "test video";
 const mockUrl = "http://test.url/video.mp4";
@@ -39,16 +39,12 @@ const mockFile = SolidFns.mockFileFrom(mockUrl);
 
 window.URL.createObjectURL = jest.fn(() => mockObjectUrl);
 
-jest.spyOn(SolidFns, "getUrl").mockImplementation(() => mockUrl);
-jest.spyOn(SolidFns, "getFile").mockResolvedValue(mockFile);
-jest.spyOn(SolidFns, "overwriteFile").mockResolvedValue(mockFile);
-
 describe("Video component", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
   describe("Video snapshots", () => {
     it("matches snapshot with standard props", async () => {
+      jest.spyOn(SolidFns, "getUrl").mockImplementationOnce(() => mockUrl);
+      jest.spyOn(SolidFns, "getFile").mockResolvedValueOnce(mockFile);
+      jest.spyOn(SolidFns, "overwriteFile").mockResolvedValueOnce(mockFile);
       const { asFragment, getByTitle } = render(
         <Video thing={mockThing} property={mockProperty} title={mockTitle} />
       );
@@ -59,6 +55,9 @@ describe("Video component", () => {
     });
 
     it("matches snapshot with additional props for video and input", async () => {
+      jest.spyOn(SolidFns, "getUrl").mockImplementationOnce(() => mockUrl);
+      jest.spyOn(SolidFns, "getFile").mockResolvedValueOnce(mockFile);
+      jest.spyOn(SolidFns, "overwriteFile").mockResolvedValueOnce(mockFile);
       const { asFragment, getByTitle } = render(
         <Video
           thing={mockThing}
@@ -76,11 +75,81 @@ describe("Video component", () => {
     });
 
     it("renders an error message if an errorComponent is provided", () => {
+      const emptyThing = SolidFns.createThing();
+      const { asFragment } = render(
+        <Video
+          thing={emptyThing}
+          property="https://example.com/bad-url"
+          errorComponent={({ error }) => (
+            <span id="custom-error-component">{error.toString()}</span>
+          )}
+        />
+      );
+      expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("renders default error message if there is an error and no errorComponent is passed", () => {
+      const emptyThing = SolidFns.createThing();
+
+      const { asFragment } = render(
+        <Video thing={emptyThing} property="https://example.com/bad-url" />
+      );
+
+      expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("renders default loading message if thing is undefined and there is no error", () => {
+      jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+        thing: undefined,
+        error: undefined,
+        value: null,
+        setDataset: jest.fn(),
+        setThing: jest.fn(),
+        property: mockProperty,
+      });
+      const { asFragment } = render(
+        <Video thing={undefined} property="https://example.com/bad-url" />
+      );
+
+      expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("renders loading component if passed and thing is undefined and there is no error", () => {
+      jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+        thing: undefined,
+        error: undefined,
+        value: null,
+        setDataset: jest.fn(),
+        setThing: jest.fn(),
+        property: mockProperty,
+      });
       const { asFragment } = render(
         <Video
           thing={undefined}
           property="https://example.com/bad-url"
-          errorComponent={({ error }) => <span>{error.toString()}</span>}
+          loadingComponent={() => (
+            <span id="custom-loading-component">loading...</span>
+          )}
+        />
+      );
+
+      expect(asFragment()).toMatchSnapshot();
+    });
+
+    it("does not render default loading message if loadingComponent is null", () => {
+      jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+        thing: undefined,
+        error: undefined,
+        value: null,
+        setDataset: jest.fn(),
+        setThing: jest.fn(),
+        property: mockProperty,
+      });
+      const { asFragment } = render(
+        <Video
+          thing={undefined}
+          property="https://example.com/bad-url"
+          loadingComponent={null}
         />
       );
 
@@ -88,6 +157,12 @@ describe("Video component", () => {
     });
   });
   describe("Video functional tests", () => {
+    beforeEach(() => {
+      jest.spyOn(SolidFns, "getUrl").mockImplementation(() => mockUrl);
+      jest.spyOn(SolidFns, "getFile").mockResolvedValue(mockFile);
+      jest.spyOn(SolidFns, "overwriteFile").mockResolvedValue(mockFile);
+    });
+
     it("Should call getUrl using given thing and property", async () => {
       const { getByTitle } = render(
         <Video thing={mockThing} property={mockProperty} title={mockTitle} />

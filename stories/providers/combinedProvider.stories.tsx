@@ -54,6 +54,10 @@ export default {
       description: `A url to retrieve the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) from, if \`Thing\` is not provided. Uses the Dataset from context.`,
       control: { type: null },
     },
+    loadingComponent: {
+      description: `A loading component to show while fetching the dataset.`,
+      control: { type: null },
+    },
     onError: {
       description: `Function to be called on error.`,
       action: "onError",

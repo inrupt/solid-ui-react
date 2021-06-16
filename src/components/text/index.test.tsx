@@ -24,6 +24,7 @@ import * as React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
+import * as helpers from "../../helpers";
 import { Text } from "./index";
 import { DatasetProvider } from "../../context/datasetContext";
 import { ThingProvider } from "../../context/thingContext";
@@ -89,6 +90,80 @@ describe("<Text /> component snapshot test", () => {
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
+      />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+  it("matches snapshot while fetching data", () => {
+    jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+      thing: undefined,
+      error: undefined,
+      value: null,
+      setDataset: jest.fn(),
+      setThing: jest.fn(),
+      property: mockPredicate,
+    });
+    const documentBody = render(<Text property={mockPredicate} />);
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("renders loading component if passed while fetching data", () => {
+    jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+      thing: undefined,
+      error: undefined,
+      value: null,
+      setDataset: jest.fn(),
+      setThing: jest.fn(),
+      property: mockPredicate,
+    });
+    const documentBody = render(
+      <Text
+        property={mockPredicate}
+        loadingComponent={() => (
+          <span id="custom-loading-component">loading...</span>
+        )}
+      />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("does not render defualt loading message if loadingComponent is null", () => {
+    jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+      thing: undefined,
+      error: undefined,
+      value: null,
+      setDataset: jest.fn(),
+      setThing: jest.fn(),
+      property: mockPredicate,
+    });
+    const documentBody = render(
+      <Text property={mockPredicate} loadingComponent={null} />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("renders default error message if there is an error", () => {
+    const emptyThing = SolidFns.createThing();
+    const documentBody = render(
+      <Text thing={emptyThing} property="https://example.com/bad-url" />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("renders custom error component if passed and there is an error", () => {
+    const emptyThing = SolidFns.createThing();
+    const documentBody = render(
+      <Text
+        thing={emptyThing}
+        property="https://example.com/bad-url"
+        errorComponent={({ error }) => (
+          <span id="custom-error-component">{error.toString()}</span>
+        )}
       />
     );
     const { baseElement } = documentBody;

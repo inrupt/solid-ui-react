@@ -71,6 +71,10 @@ export default {
       description: `Component to be rendered in case of error.`,
       control: { type: null },
     },
+    loadingComponent: {
+      description: `A loading component to show while fetching the dataset. If \`null\` the default loading message won't be displayed`,
+      control: { type: null },
+    },
   },
 };
 
