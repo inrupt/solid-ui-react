@@ -190,7 +190,7 @@ describe("Testing DatasetContext", () => {
     documentBody = render(
       <DatasetProvider
         datasetUrl="https://some-broken-resource.com"
-        loading={() => <span>loading</span>}
+        loading={<span>loading</span>}
       >
         <ExampleComponentWithDataset />
       </DatasetProvider>
