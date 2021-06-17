@@ -45,7 +45,7 @@ export interface IDatasetProvider {
   /**
    * @deprecated `loading` is deprecated. It can still be used but may be removed in a future major release.`loadingComponent` should be used instead.
    */
-  loading?: React.ComponentType;
+  loading?: React.ReactNode;
   loadingComponent?: React.ComponentType | null;
   onError?(error: Error): void | null;
   solidDataset?: SolidDataset | (SolidDataset & WithResourceInfo);
@@ -67,7 +67,7 @@ export const DatasetProvider = ({
   onError,
   solidDataset: propDataset,
   datasetUrl,
-  loading: Loading,
+  loading,
   loadingComponent: LoadingComponent,
 }: RequireDatasetOrDatasetUrl): ReactElement => {
   const { dataset, error } = useDataset(datasetUrl);
@@ -88,8 +88,10 @@ export const DatasetProvider = ({
     setDataset(datasetToUse);
   }, [datasetToUse]);
 
-  let loader: JSX.Element | null = (LoadingComponent && <LoadingComponent />) ||
-    (Loading && <Loading />) || <span>Fetching data...</span>;
+  let loader: JSX.Element | React.ReactNode | null = (LoadingComponent && (
+    <LoadingComponent />
+  )) ||
+    loading || <span>Fetching data...</span>;
 
   if (LoadingComponent === null) {
     loader = null;
