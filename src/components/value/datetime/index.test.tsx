@@ -302,4 +302,34 @@ describe("<DatetimeValue /> component functional testing", () => {
       [mockThing, mockPredicate, expectedDateAndTime],
     ]);
   });
+  it("Should update the dataset in context after saving", async () => {
+    const setDataset = jest.fn();
+    const setThing = jest.fn();
+    jest.spyOn(helpers, "useProperty").mockReturnValue({
+      dataset: mockDatasetWithResourceInfo,
+      setDataset,
+      setThing,
+      error: undefined,
+      value: mockBday,
+      thing: mockThing,
+      property: mockPredicate,
+    });
+    const { getByLabelText } = render(
+      <DatetimeValue
+        solidDataset={mockDatasetWithResourceInfo}
+        thing={mockThing}
+        property={mockPredicate}
+        edit
+        autosave
+      />
+    );
+    const input = getByLabelText("Date and Time");
+    input.focus();
+    fireEvent.change(input, { target: { value: "2007-08-14T11:20:00" } });
+    input.blur();
+    await waitFor(() => {
+      expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
+      expect(setDataset).toHaveBeenCalledWith(savedDataset);
+    });
+  });
 });

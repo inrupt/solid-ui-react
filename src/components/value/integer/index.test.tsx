@@ -23,6 +23,7 @@
 import * as React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
+import * as helpers from "../../../helpers";
 import IntegerValue from "./index";
 
 const mockPredicate = "http://schema.org/copyrightYear";
@@ -191,9 +192,51 @@ describe("<IntegerValue /> component functional testing", () => {
     await waitFor(() => expect(onSave).toHaveBeenCalled());
   });
 
+  it("Should update the dataset in context after saving", async () => {
+    const setDataset = jest.fn();
+    const setThing = jest.fn();
+    jest.spyOn(helpers, "useProperty").mockReturnValue({
+      dataset: mockDatasetWithResourceInfo,
+      setDataset,
+      setThing,
+      error: undefined,
+      value: mockCopyrightYear,
+      thing: mockThing,
+      property: mockPredicate,
+    });
+    const { getByDisplayValue } = render(
+      <IntegerValue
+        solidDataset={mockDatasetWithResourceInfo}
+        thing={mockThing}
+        property={mockPredicate}
+        edit
+        autosave
+      />
+    );
+    const input = getByDisplayValue(mockCopyrightYear);
+    input.focus();
+    fireEvent.change(input, { target: { value: testCopyrightYear } });
+    input.blur();
+    await waitFor(() => {
+      expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
+      expect(setDataset).toHaveBeenCalledWith(savedDataset);
+    });
+  });
+
   it("Should call onError if Thing not found", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
     const onError = jest.fn();
+    const setDataset = jest.fn();
+    const setThing = jest.fn();
+    jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+      dataset: mockDatasetWithResourceInfo,
+      setDataset,
+      setThing,
+      error: new Error("Thing not found"),
+      value: null,
+      thing: undefined,
+      property: mockPredicate,
+    });
     render(
       <IntegerValue
         solidDataset={mockDatasetWithResourceInfo}
