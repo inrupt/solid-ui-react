@@ -143,6 +143,50 @@ describe("<Table /> component functional tests", () => {
     expect(queryByText("🔼")).toBeNull();
   });
 
+  it("uses sortFn for sorting if passed", () => {
+    const thingA = SolidFns.addStringNoLocale(
+      SolidFns.createThing(),
+      namePredicate,
+      "Name A"
+    );
+    const thingB = SolidFns.addStringNoLocale(
+      SolidFns.createThing(),
+      namePredicate,
+      "Another Name"
+    );
+    const datasetWithThingA = SolidFns.setThing(
+      SolidFns.createSolidDataset(),
+      thingA
+    );
+    const datasetToCustomSort = SolidFns.setThing(datasetWithThingA, thingB);
+
+    const sortBySecondWord = (a: string, b: string) => {
+      const valueA = a.split(/\s+/)[1];
+      const valueB = b.split(/\s+/)[1];
+      return valueA.localeCompare(valueB);
+    };
+
+    const { getByText, queryAllByRole } = render(
+      <Table
+        things={[
+          { dataset: datasetToCustomSort, thing: thingB },
+          { dataset: datasetToCustomSort, thing: thingA },
+        ]}
+      >
+        <TableColumn
+          property={namePredicate}
+          sortable
+          sortFn={sortBySecondWord}
+        />
+      </Table>
+    );
+    expect(queryAllByRole("cell")[0].innerHTML).toBe("Another Name");
+    expect(queryAllByRole("cell")[1].innerHTML).toBe("Name A");
+    fireEvent.click(getByText(namePredicate));
+    expect(queryAllByRole("cell")[0].innerHTML).toBe("Name A");
+    expect(queryAllByRole("cell")[1].innerHTML).toBe("Another Name");
+  });
+
   it("updates header when sorting", () => {
     const { getByText, queryByText } = render(
       <Table
