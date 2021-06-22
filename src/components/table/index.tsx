@@ -59,9 +59,10 @@ export function TableColumn(props: TableColumnProps): ReactElement {
 
 export interface TableProps
   extends React.TableHTMLAttributes<HTMLTableElement> {
-  children:
+  children?:
     | ReactElement<TableColumnProps>
     | Array<ReactElement<TableColumnProps>>;
+  noDataComponent?: React.ComponentType | null;
   things: Array<{ dataset: SolidDataset; thing: Thing }>;
   filter?: string;
   ascIndicator?: ReactNode;
@@ -78,13 +79,14 @@ export interface TableProps
  */
 export function Table({
   children,
+  noDataComponent: NoDataComponent,
   things,
   filter,
   ascIndicator,
   descIndicator,
   getRowProps,
   ...tableProps
-}: TableProps): ReactElement {
+}: TableProps): ReactElement | null {
   const { columns, data } = useMemo(() => {
     const columnsArray: Array<Column<Record<string, unknown>>> = [];
     const dataArray: Array<Record<string, unknown>> = things.map(() => ({}));
@@ -149,6 +151,12 @@ export function Table({
     rows,
     prepareRow,
   } = tableInstance;
+  if (!rows.length) {
+    if (NoDataComponent) {
+      return <NoDataComponent />;
+    }
+    return null;
+  }
   return (
     <table {...getTableProps()} {...tableProps}>
       <thead>
