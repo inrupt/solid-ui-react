@@ -52,6 +52,10 @@ export default {
       description: `Function which is passed the [row](https://react-table.tanstack.com/docs/api/useTable#row-properties) object, as well as the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) and [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) for the current row. Returns an object of attributes to be applied to the <tr>`,
       control: { type: null },
     },
+    noDataComponent: {
+      description: `An empty state component to show the table has no rows. If \`null\` the default empty state render is \`null\``,
+      control: { type: null },
+    },
   },
 };
 
@@ -439,22 +443,21 @@ FilterOnFirstColumn.args = {
 FilterOnFirstColumn.parameters = {
   actions: { disable: true },
 };
-
-export function SortingFunctionOnFirstColumn(): ReactElement {
+export function NoDataComponent(): ReactElement {
   const namePredicate = `http://xmlns.com/foaf/0.1/name`;
   const datePredicate = `http://schema.org/datePublished`;
 
   const thing1A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    "Another Name"
+    `example name 1`
   );
   const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
 
   const thing2A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    "Name A"
+    `example name 2`
   );
   const thing2 = SolidFns.addDatetime(
     thing2A,
@@ -466,32 +469,18 @@ export function SortingFunctionOnFirstColumn(): ReactElement {
   const datasetWithThing1 = SolidFns.setThing(emptyDataset, thing1);
   const dataset = SolidFns.setThing(datasetWithThing1, thing2);
 
-  const sortFunction = (a: string, b: string) => {
-    const valueA = a.split(/\s+/)[1];
-    const valueB = b.split(/\s+/)[1];
-    return valueA.localeCompare(valueB);
-  };
-
   return (
     <Table
       things={[
-        {
-          dataset,
-          thing: thing1,
-        },
-        {
-          dataset,
-          thing: thing2,
-        },
+        { dataset, thing: thing1 },
+        { dataset, thing: thing2 },
       ]}
       style={{ border: "1px solid black" }}
-    >
-      <TableColumn property={namePredicate} sortable sortFn={sortFunction} />
-      <TableColumn property={datePredicate} dataType="datetime" />
-    </Table>
+      noDataComponent={() => <span>There is no Data</span>}
+    />
   );
 }
 
-SortingFunctionOnFirstColumn.parameters = {
+NoDataComponent.parameters = {
   actions: { disable: true },
 };
