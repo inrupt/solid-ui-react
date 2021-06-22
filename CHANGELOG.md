@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
+- `TableColumn` now takes an optional `sortFn` sorting function used to sort that column.
+
 - The following components now take an optional `loadingComponent` to be rendered while fetching data:
   - `Value`
   - `Text`
