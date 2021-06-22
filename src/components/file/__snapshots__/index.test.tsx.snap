@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<File /> component snapshot test matches snapshot 1`] = `
+<body>
+  <div>
+    <input
+      data-testid="form-input"
+      type="file"
+    />
+  </div>
+</body>
+`;
+
+exports[`<File /> component snapshot test matches snapshot with input options 1`] = `
+<body>
+  <div>
+    <input
+      data-testid="form-input"
+      name="test-name"
+      type="url"
+    />
+  </div>
+</body>
+`;

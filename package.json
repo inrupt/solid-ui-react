@@ -10,7 +10,7 @@
     "dist/src/**/*"
   ],
   "scripts": {
-    "audit": "npm audit --audit-level=moderate",
+    "audit": "npx npm-force-resolutions@0.0.10 && npm audit --audit-level=moderate",
     "audit-licenses": "license-checker --production --failOn \"AGPL-1.0-only; AGPL-1.0-or-later; AGPL-3.0-only; AGPL-3.0-or-later; Beerware; CC-BY-NC-1.0; CC-BY-NC-2.0; CC-BY-NC-2.5; CC-BY-NC-3.0; CC-BY-NC-4.0; CC-BY-NC-ND-1.0; CC-BY-NC-ND-2.0; CC-BY-NC-ND-2.5; CC-BY-NC-ND-3.0; CC-BY-NC-ND-4.0; CC-BY-NC-SA-1.0; CC-BY-NC-SA-2.0; CC-BY-NC-SA-2.5; CC-BY-NC-SA-3.0; CC-BY-NC-SA-4.0; CPAL-1.0; EUPL-1.0; EUPL-1.1; EUPL-1.1;  GPL-1.0-only; GPL-1.0-or-later; GPL-2.0-only;  GPL-2.0-or-later; GPL-3.0; GPL-3.0-only; GPL-3.0-or-later; SISSL;  SISSL-1.2; WTFPL\"",
     "build": "webpack",
     "ci": "npm run lint && npm run test && npm run audit && npm run audit-licenses && npm run build",
@@ -28,15 +28,15 @@
     "@inrupt/eslint-config-base": "0.0.4",
     "@inrupt/eslint-config-react": "0.0.4",
     "@material-ui/core": "^4.11.3",
-    "@storybook/addon-actions": "^6.2.8",
-    "@storybook/addon-docs": "^6.2.8",
+    "@storybook/addon-actions": "^6.2.9",
+    "@storybook/addon-docs": "^6.2.9",
     "@storybook/addon-essentials": "^6.2.9",
-    "@storybook/addon-knobs": "^6.2.8",
-    "@storybook/addon-links": "^6.2.8",
-    "@storybook/addon-storysource": "^6.2.8",
-    "@storybook/addons": "^6.2.8",
+    "@storybook/addon-knobs": "^6.2.9",
+    "@storybook/addon-links": "^6.2.9",
+    "@storybook/addon-storysource": "^6.2.9",
+    "@storybook/addons": "^6.2.9",
     "@storybook/preset-typescript": "^3.0.0",
-    "@storybook/react": "^6.2.8",
+    "@storybook/react": "^6.2.9",
     "@testing-library/react": "^11.2.6",
     "@testing-library/react-hooks": "^7.0.0",
     "@types/jest": "^26.0.22",
@@ -97,8 +97,8 @@
     "swr": "^0.5.6"
   },
   "resolutions": {
-    "browserslist": "4.16.5",
     "glob-parent": "5.1.2",
+    "browserslist": "4.16.5",
     "postcss": "8.2.10",
     "trim": "0.0.3"
   }
