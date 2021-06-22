@@ -26,6 +26,7 @@ import {
   getSourceUrl,
   hasResourceInfo,
   setDatetime,
+  getSolidDataset,
 } from "@inrupt/solid-client";
 import { SessionContext } from "../../../context/sessionContext";
 
@@ -125,7 +126,8 @@ const DatetimeValue: React.FC<DatetimeProps> = (props: DatetimeProps) => {
             { fetch }
           );
 
-          setDataset(savedDataset);
+          const latestDataset = await getSolidDataset(saveDatasetTo);
+          setDataset(latestDataset);
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
             getSourceUrl(dataset),
@@ -133,7 +135,8 @@ const DatetimeValue: React.FC<DatetimeProps> = (props: DatetimeProps) => {
             { fetch }
           );
 
-          setDataset(savedDataset);
+          const latestDataset = await getSolidDataset(getSourceUrl(dataset));
+          setDataset(latestDataset);
         } else if (onError) {
           onError(
             new Error("Please provide saveDatasetTo location for new data")

@@ -27,6 +27,7 @@ import {
   hasResourceInfo,
   setStringWithLocale,
   setStringNoLocale,
+  getSolidDataset,
 } from "@inrupt/solid-client";
 import { SessionContext } from "../../../context/sessionContext";
 import { useProperty } from "../../../helpers";
@@ -106,7 +107,8 @@ const StringValue: React.FC<StringProps> = (props: StringProps) => {
             { fetch }
           );
 
-          setDataset(savedDataset);
+          const latestDataset = await getSolidDataset(saveDatasetTo);
+          setDataset(latestDataset);
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
             getSourceUrl(dataset),
@@ -114,7 +116,8 @@ const StringValue: React.FC<StringProps> = (props: StringProps) => {
             { fetch }
           );
 
-          setDataset(savedDataset);
+          const latestDataset = await getSolidDataset(getSourceUrl(dataset));
+          setDataset(latestDataset);
         } else if (onError) {
           onError(
             new Error("Please provide saveDatasetTo location for new data")

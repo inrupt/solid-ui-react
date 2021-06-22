@@ -48,6 +48,8 @@ const savedDataset = SolidFns.setThing(
   SolidFns.mockSolidDatasetFrom("https://example.pod/resource"),
   SolidFns.createThing()
 );
+const latestDataset = SolidFns.setThing(savedDataset, SolidFns.createThing());
+
 jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
 const mockValue = true;
 
@@ -154,6 +156,7 @@ describe("<BooleanValue /> component functional testing", () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+    jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
     const { getByDisplayValue } = render(
       <BooleanValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -176,6 +179,7 @@ describe("<BooleanValue /> component functional testing", () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+    jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
     const { getByDisplayValue } = render(
       <BooleanValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -194,7 +198,7 @@ describe("<BooleanValue /> component functional testing", () => {
     input.blur();
     await waitFor(() => expect(onSave).toHaveBeenCalled());
   });
-  it("Should update the dataset in context after saving", async () => {
+  it("Should update context with latest dataset after saving", async () => {
     const setDataset = jest.fn();
     const setThing = jest.fn();
     jest.spyOn(helpers, "useProperty").mockReturnValue({
@@ -207,6 +211,7 @@ describe("<BooleanValue /> component functional testing", () => {
       property: mockPredicate,
     });
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+    jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
     const { getByDisplayValue } = render(
       <BooleanValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -221,7 +226,7 @@ describe("<BooleanValue /> component functional testing", () => {
     fireEvent.click(input);
     input.blur();
     expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
-    await waitFor(() => expect(setDataset).toHaveBeenCalledWith(savedDataset));
+    await waitFor(() => expect(setDataset).toHaveBeenCalledWith(latestDataset));
   });
   it("Should call onError if saving fails", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);

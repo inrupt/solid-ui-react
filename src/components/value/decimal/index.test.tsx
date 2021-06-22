@@ -49,7 +49,10 @@ const savedDataset = SolidFns.setThing(
   SolidFns.mockSolidDatasetFrom("https://example.pod/resource"),
   SolidFns.createThing()
 );
+const latestDataset = SolidFns.setThing(savedDataset, SolidFns.createThing());
+
 jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
 
 describe("<DecimalValue /> component functional testing", () => {
   it("calls getDecimal and sets value", () => {
@@ -191,7 +194,7 @@ describe("<DecimalValue /> component functional testing", () => {
     input.blur();
     await waitFor(() => expect(onSave).toHaveBeenCalled());
   });
-  it("Should update the dataset in context after saving", async () => {
+  it("Should update context with latest dataset after saving", async () => {
     const setDataset = jest.fn();
     const setThing = jest.fn();
     jest.spyOn(helpers, "useProperty").mockReturnValue({
@@ -218,7 +221,7 @@ describe("<DecimalValue /> component functional testing", () => {
     input.blur();
     await waitFor(() => {
       expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
-      expect(setDataset).toHaveBeenCalledWith(savedDataset);
+      expect(setDataset).toHaveBeenCalledWith(latestDataset);
     });
   });
 

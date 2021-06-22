@@ -53,6 +53,8 @@ const inputOptions = {
 };
 
 const savedDataset = SolidFns.createSolidDataset() as any;
+const latestDataset = SolidFns.createSolidDataset() as any;
+
 jest
   .spyOn(SolidFns, "saveSolidDatasetAt")
   .mockImplementation(() => savedDataset);
@@ -287,6 +289,7 @@ describe("<Text /> component functional testing", () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+    jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -309,6 +312,7 @@ describe("<Text /> component functional testing", () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+    jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -394,8 +398,9 @@ describe("<Text /> component functional testing", () => {
     // eslint-disable-next-line no-console
     (console.error as jest.Mock).mockRestore();
   });
-  it("Should update the dataset in context after saving", async () => {
+  it("Should update context with latest dataset after saving", async () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+    jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
     const setDataset = jest.fn();
     const setThing = jest.fn();
     jest.spyOn(helpers, "useProperty").mockReturnValue({
@@ -422,6 +427,6 @@ describe("<Text /> component functional testing", () => {
     fireEvent.change(input, { target: { value: "updated nick value" } });
     input.blur();
     expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
-    await waitFor(() => expect(setDataset).toHaveBeenCalledWith(savedDataset));
+    await waitFor(() => expect(setDataset).toHaveBeenCalledWith(latestDataset));
   });
 });

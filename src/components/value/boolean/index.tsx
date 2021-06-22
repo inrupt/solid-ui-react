@@ -26,6 +26,7 @@ import {
   getSourceUrl,
   hasResourceInfo,
   setBoolean,
+  getSolidDataset,
 } from "@inrupt/solid-client";
 import { SessionContext } from "../../../context/sessionContext";
 
@@ -105,16 +106,16 @@ const BooleanValue: React.FC<BooleanProps> = (props: BooleanProps) => {
             setThing(dataset, updatedResource),
             { fetch }
           );
-
-          setDataset(savedDataset);
+          const latestDataset = await getSolidDataset(saveDatasetTo);
+          setDataset(latestDataset);
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
             getSourceUrl(dataset),
             setThing(dataset, updatedResource),
             { fetch }
           );
-
-          setDataset(savedDataset);
+          const latestDataset = await getSolidDataset(getSourceUrl(dataset));
+          setDataset(latestDataset);
         } else if (onError) {
           onError(
             new Error("Please provide saveDatasetTo location for new data")
