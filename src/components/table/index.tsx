@@ -93,42 +93,44 @@ export function Table({
 
     // loop through each column
     Children.forEach(children, (column, colIndex) => {
-      const {
-        property,
-        header,
-        body,
-        dataType = "string",
-        locale,
-        multiple = false,
-        sortable,
-        sortFn,
-        filterable,
-      } = column.props;
-      // add heading
+      if (column) {
+        const {
+          property,
+          header,
+          body,
+          dataType = "string",
+          locale,
+          multiple = false,
+          sortable,
+          sortFn,
+          filterable,
+        } = column.props;
+        // add heading
 
-      columnsArray.push({
-        Header: header ?? `${property}`,
-        accessor: `col${colIndex}`,
-        disableGlobalFilter: !filterable,
-        disableSortBy: !sortable,
-        Cell: body ?? (({ value }: any) => (value != null ? `${value}` : "")),
-      });
+        columnsArray.push({
+          Header: header ?? `${property}`,
+          accessor: `col${colIndex}`,
+          disableGlobalFilter: !filterable,
+          disableSortBy: !sortable,
+          Cell: body ?? (({ value }: any) => (value != null ? `${value}` : "")),
+        });
 
-      if (sortFn) {
-        const sortFunction = (a: Row, b: Row, columnId: string) => {
-          const valueA = a.values[columnId];
-          const valueB = b.values[columnId];
-          return sortFn(valueA, valueB);
-        };
-        columnsArray[colIndex].sortType = sortFunction;
+        if (sortFn) {
+          const sortFunction = (a: Row, b: Row, columnId: string) => {
+            const valueA = a.values[columnId];
+            const valueB = b.values[columnId];
+            return sortFn(valueA, valueB);
+          };
+          columnsArray[colIndex].sortType = sortFunction;
+        }
+
+        // add each each value to data
+        things.forEach((thing, i) => {
+          dataArray[i][`col${colIndex}`] = multiple
+            ? getValueByTypeAll(dataType, thing.thing, property, locale)
+            : getValueByType(dataType, thing.thing, property, locale);
+        });
       }
-
-      // add each each value to data
-      things.forEach((thing, i) => {
-        dataArray[i][`col${colIndex}`] = multiple
-          ? getValueByTypeAll(dataType, thing.thing, property, locale)
-          : getValueByType(dataType, thing.thing, property, locale);
-      });
     });
 
     return { columns: columnsArray, data: dataArray };
