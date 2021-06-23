@@ -52,7 +52,7 @@ export default {
       description: `Function which is passed the [row](https://react-table.tanstack.com/docs/api/useTable#row-properties) object, as well as the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) and [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) for the current row. Returns an object of attributes to be applied to the <tr>`,
       control: { type: null },
     },
-    noDataComponent: {
+    emptyStateComponent: {
       description: `An empty state component to show the table has no rows. If \`null\` the default empty state render is \`null\``,
       control: { type: null },
     },
@@ -532,7 +532,7 @@ export function NoDataComponent(): ReactElement {
         { dataset, thing: thing2 },
       ]}
       style={{ border: "1px solid black" }}
-      noDataComponent={() => <span>There is no Data</span>}
+      emptyStateComponent={() => <span>There is no Data</span>}
     />
   );
 }

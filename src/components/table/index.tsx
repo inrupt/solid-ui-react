@@ -62,7 +62,7 @@ export interface TableProps
   children?:
     | ReactElement<TableColumnProps>
     | Array<ReactElement<TableColumnProps>>;
-  noDataComponent?: React.ComponentType | null;
+  emptyStateComponent?: React.ComponentType | null;
   things: Array<{ dataset: SolidDataset; thing: Thing }>;
   filter?: string;
   ascIndicator?: ReactNode;
@@ -79,7 +79,7 @@ export interface TableProps
  */
 export function Table({
   children,
-  noDataComponent: NoDataComponent,
+  emptyStateComponent: EmptyStateComponent,
   things,
   filter,
   ascIndicator,
@@ -154,8 +154,8 @@ export function Table({
     prepareRow,
   } = tableInstance;
   if (!rows.length) {
-    if (NoDataComponent) {
-      return <NoDataComponent />;
+    if (EmptyStateComponent) {
+      return <EmptyStateComponent />;
     }
     return null;
   }

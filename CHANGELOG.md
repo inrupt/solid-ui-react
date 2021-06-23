@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
-- `Table` now takes an optional `noDataComponent` to be rendered if no columns are present.
+- `Table` now takes an optional `emptyStateComponent` to be rendered if no columns are present.
 
 - `TableColumn` now takes an optional `sortFn` sorting function used to sort that column.
 
