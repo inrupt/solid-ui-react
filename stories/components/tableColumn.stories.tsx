@@ -22,6 +22,7 @@
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
 import { Table, TableColumn } from "../../src/components/table";
+import { DataType } from "../../src/helpers";
 
 export default {
   title: "Components/TableColumn",
@@ -40,15 +41,12 @@ For further example usage, please refer to the [Table](/?path=/docs/components-t
   argTypes: {
     property: {
       description: `The property of the Things to retrieve the value from and display in the column.`,
-      control: { type: null },
     },
     dataType: {
       description: `The type of value to be retrieved. Uses \`string\` if not set.`,
-      control: { type: null },
     },
     header: {
       description: `A string, or function which returns valid JSX, to render as the column header. Equivalent to the [Header](https://react-table.tanstack.com/docs/api/useTable#column-options) option of [React Table](https://www.npmjs.com/package/react-table).`,
-      control: { type: null },
     },
     body: {
       description: `Function which is passed the [cell props](https://react-table.tanstack.com/docs/api/useTable#cell-properties) and returns valid JSX. Equivalent to the [Cell](https://react-table.tanstack.com/docs/api/useTable#column-options) option of [React Table](https://www.npmjs.com/package/react-table).`,
@@ -60,39 +58,50 @@ For further example usage, please refer to the [Table](/?path=/docs/components-t
     },
     multiple: {
       description: `If true, will attempt to fetch multiple values for the given property`,
-      control: { type: null },
     },
     sortable: {
       description: `If true, column header can be clicked to sort ascending/descending`,
+    },
+    sortFn: {
+      description: `A sorting function used to sort rows on a column`,
       control: { type: null },
     },
     filterable: {
       description: `If true, column will be included in filtering applied by filter term passed to Table`,
-      control: { type: null },
     },
   },
 };
 
-export function BasicExample(): ReactElement {
-  const namePredicate = `http://xmlns.com/foaf/0.1/name`;
-  const datePredicate = `http://schema.org/datePublished`;
+/* eslint react/require-default-props: 0, react/no-unused-prop-types: 0 */
+interface ITableColumn {
+  property: string;
+  dataType?: string;
+  header?: string;
+  multiple?: boolean;
+  sortable?: boolean;
+  filterable?: boolean;
+}
 
-  const thing1A = SolidFns.addStringNoLocale(
+export function BasicExample({
+  property,
+  dataType,
+  header,
+  multiple,
+  sortable,
+  filterable,
+}: ITableColumn): ReactElement {
+  const namePredicate = `http://xmlns.com/foaf/0.1/name`;
+
+  const thing1 = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
     `example name 1`
   );
-  const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
 
-  const thing2A = SolidFns.addStringNoLocale(
+  const thing2 = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
     `example name 2`
-  );
-  const thing2 = SolidFns.addDatetime(
-    thing2A,
-    datePredicate,
-    new Date("1999-01-02")
   );
 
   const emptyDataset = SolidFns.createSolidDataset();
@@ -113,13 +122,27 @@ export function BasicExample(): ReactElement {
       ]}
       style={{ border: "1px solid black" }}
     >
-      <TableColumn property={namePredicate} />
-      <TableColumn property={datePredicate} dataType="datetime" />
+      <TableColumn
+        property={property}
+        dataType={dataType as DataType}
+        header={header}
+        multiple={multiple}
+        sortable={sortable}
+        filterable={filterable}
+      />
     </Table>
   );
 }
 
+BasicExample.args = {
+  property: "http://xmlns.com/foaf/0.1/name",
+  dataType: "string",
+  header: "Name",
+  multiple: false,
+  sortable: false,
+  filterable: false,
+};
+
 BasicExample.parameters = {
   actions: { disable: true },
-  controls: { disable: true },
 };

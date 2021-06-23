@@ -39,7 +39,6 @@ export default {
     },
     filter: {
       description: `String term to filter rows by (only applied to columns marked as \`filterable\`)`,
-      control: { type: null },
     },
     ascIndicator: {
       description: `Element to render in column header when sorted in ascending order`,
@@ -98,7 +97,6 @@ export function BasicExample(): ReactElement {
 
 BasicExample.parameters = {
   actions: { disable: true },
-  controls: { disable: true },
 };
 
 export function MultipleValues(): ReactElement {
@@ -163,7 +161,6 @@ export function MultipleValues(): ReactElement {
 
 MultipleValues.parameters = {
   actions: { disable: true },
-  controls: { disable: true },
 };
 
 export function CustomBodyComponent(): ReactElement {
@@ -225,7 +222,6 @@ export function CustomBodyComponent(): ReactElement {
 
 CustomBodyComponent.parameters = {
   actions: { disable: true },
-  controls: { disable: true },
 };
 
 export function NestedDataExample(): ReactElement {
@@ -331,7 +327,6 @@ export function NestedDataExample(): ReactElement {
 
 NestedDataExample.parameters = {
   actions: { disable: true },
-  controls: { disable: true },
 };
 
 export function SortableColumns(): ReactElement {
@@ -382,7 +377,6 @@ export function SortableColumns(): ReactElement {
 
 SortableColumns.parameters = {
   actions: { disable: true },
-  controls: { disable: true },
 };
 
 interface IFilterOnFirstColumn {
@@ -443,5 +437,61 @@ FilterOnFirstColumn.args = {
 };
 
 FilterOnFirstColumn.parameters = {
+  actions: { disable: true },
+};
+
+export function SortingFunctionOnFirstColumn(): ReactElement {
+  const namePredicate = `http://xmlns.com/foaf/0.1/name`;
+  const datePredicate = `http://schema.org/datePublished`;
+
+  const thing1A = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    namePredicate,
+    "Another Name"
+  );
+  const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
+
+  const thing2A = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    namePredicate,
+    "Name A"
+  );
+  const thing2 = SolidFns.addDatetime(
+    thing2A,
+    datePredicate,
+    new Date("1999-01-02")
+  );
+
+  const emptyDataset = SolidFns.createSolidDataset();
+  const datasetWithThing1 = SolidFns.setThing(emptyDataset, thing1);
+  const dataset = SolidFns.setThing(datasetWithThing1, thing2);
+
+  const sortFunction = (a: string, b: string) => {
+    const valueA = a.split(/\s+/)[1];
+    const valueB = b.split(/\s+/)[1];
+    return valueA.localeCompare(valueB);
+  };
+
+  return (
+    <Table
+      things={[
+        {
+          dataset,
+          thing: thing1,
+        },
+        {
+          dataset,
+          thing: thing2,
+        },
+      ]}
+      style={{ border: "1px solid black" }}
+    >
+      <TableColumn property={namePredicate} sortable sortFn={sortFunction} />
+      <TableColumn property={datePredicate} dataType="datetime" />
+    </Table>
+  );
+}
+
+SortingFunctionOnFirstColumn.parameters = {
   actions: { disable: true },
 };

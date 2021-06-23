@@ -44,6 +44,7 @@ export type TableColumnProps = {
   locale?: string;
   multiple?: boolean;
   sortable?: boolean;
+  sortFn?: (a: any, b: any) => number;
   filterable?: boolean;
   children?: undefined | null | [];
 };
@@ -98,9 +99,11 @@ export function Table({
         locale,
         multiple = false,
         sortable,
+        sortFn,
         filterable,
       } = column.props;
       // add heading
+
       columnsArray.push({
         Header: header ?? `${property}`,
         accessor: `col${colIndex}`,
@@ -108,6 +111,15 @@ export function Table({
         disableSortBy: !sortable,
         Cell: body ?? (({ value }: any) => (value != null ? `${value}` : "")),
       });
+
+      if (sortFn) {
+        const sortFunction = (a: Row, b: Row, columnId: string) => {
+          const valueA = a.values[columnId];
+          const valueB = b.values[columnId];
+          return sortFn(valueA, valueB);
+        };
+        columnsArray[colIndex].sortType = sortFunction;
+      }
 
       // add each each value to data
       things.forEach((thing, i) => {
@@ -121,7 +133,11 @@ export function Table({
   }, [children, things]);
 
   const tableInstance = useTable(
-    { columns, data, initialState: { globalFilter: filter || undefined } },
+    {
+      columns,
+      data,
+      initialState: { globalFilter: filter || undefined },
+    },
     useGlobalFilter,
     useSortBy
   );
