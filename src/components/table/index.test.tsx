@@ -308,4 +308,18 @@ describe("<Table /> component functional tests", () => {
     expect(getByText(/multiple nick 1/)).not.toBeNull();
     expect(queryByText(/multiple nick 2/)).toBeNull();
   });
+
+  it("renders fallback component when passed and there are no columns", () => {
+    const { getByText } = render(
+      <Table
+        things={[
+          { dataset, thing: thing1 },
+          { dataset, thing: thing2 },
+        ]}
+        noDataComponent={() => <span>There is no Data</span>}
+      />
+    );
+
+    expect(getByText(/There is no Data/)).not.toBeNull();
+  });
 });
