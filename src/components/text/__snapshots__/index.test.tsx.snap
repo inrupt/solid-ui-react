@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Text /> component snapshot test does not render defualt loading message if loadingComponent is null 1`] = `
+exports[`<Text /> component snapshot test does not render default loading message if loadingComponent is null 1`] = `
 <body>
   <div />
 </body>

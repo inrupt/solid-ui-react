@@ -29,7 +29,11 @@ import {
 } from "@inrupt/solid-client";
 import { SessionContext } from "../../../context/sessionContext";
 
-import { useProperty, useDatetimeBrowserSupport } from "../../../helpers";
+import {
+  useProperty,
+  useDatetimeBrowserSupport,
+  updateDataset,
+} from "../../../helpers";
 import { Props } from "..";
 
 type DatetimeProps = Omit<Props, "locale" | "dataType">;
@@ -124,16 +128,14 @@ const DatetimeValue: React.FC<DatetimeProps> = (props: DatetimeProps) => {
             setThing(dataset, updatedResource),
             { fetch }
           );
-
-          setDataset(savedDataset);
+          await updateDataset(saveDatasetTo, setDataset);
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
             getSourceUrl(dataset),
             setThing(dataset, updatedResource),
             { fetch }
           );
-
-          setDataset(savedDataset);
+          await updateDataset(getSourceUrl(dataset), setDataset);
         } else if (onError) {
           onError(
             new Error("Please provide saveDatasetTo location for new data")

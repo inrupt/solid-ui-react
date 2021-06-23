@@ -23,6 +23,7 @@
 import * as React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
+import * as helpers from "../../../helpers";
 import DecimalValue from "./index";
 
 const mockPredicate = "http://schema.org/version";
@@ -48,7 +49,10 @@ const savedDataset = SolidFns.setThing(
   SolidFns.mockSolidDatasetFrom("https://example.pod/resource"),
   SolidFns.createThing()
 );
+const latestDataset = SolidFns.setThing(savedDataset, SolidFns.createThing());
+
 jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
 
 describe("<DecimalValue /> component functional testing", () => {
   it("calls getDecimal and sets value", () => {
@@ -190,10 +194,51 @@ describe("<DecimalValue /> component functional testing", () => {
     input.blur();
     await waitFor(() => expect(onSave).toHaveBeenCalled());
   });
+  it("Should update context with latest dataset after saving", async () => {
+    const setDataset = jest.fn();
+    const setThing = jest.fn();
+    jest.spyOn(helpers, "useProperty").mockReturnValue({
+      dataset: mockDatasetWithResourceInfo,
+      setDataset,
+      setThing,
+      error: undefined,
+      value: mockVersion,
+      thing: mockThing,
+      property: mockPredicate,
+    });
+    const { getByDisplayValue } = render(
+      <DecimalValue
+        solidDataset={mockDatasetWithResourceInfo}
+        thing={mockThing}
+        property={mockPredicate}
+        edit
+        autosave
+      />
+    );
+    const input = getByDisplayValue(mockVersion);
+    input.focus();
+    fireEvent.change(input, { target: { value: testVersion } });
+    input.blur();
+    await waitFor(() => {
+      expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
+      expect(setDataset).toHaveBeenCalledWith(latestDataset);
+    });
+  });
 
   it("Should call onError if Thing not found", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
     const onError = jest.fn();
+    const setDataset = jest.fn();
+    const setThing = jest.fn();
+    jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+      dataset: mockDatasetWithResourceInfo,
+      setDataset,
+      setThing,
+      error: new Error("Thing not found"),
+      value: null,
+      thing: undefined,
+      property: mockPredicate,
+    });
     render(
       <DecimalValue
         solidDataset={mockDatasetWithResourceInfo}

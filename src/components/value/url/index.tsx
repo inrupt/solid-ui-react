@@ -29,7 +29,7 @@ import {
 } from "@inrupt/solid-client";
 import { SessionContext } from "../../../context/sessionContext";
 
-import { useProperty } from "../../../helpers";
+import { updateDataset, useProperty } from "../../../helpers";
 import { Props } from "..";
 
 type UrlProps = Omit<Props, "locale" | "dataType">;
@@ -93,16 +93,14 @@ const UrlValue: React.FC<UrlProps> = (props: UrlProps) => {
             setThing(dataset, updatedResource),
             { fetch }
           );
-
-          setDataset(savedDataset);
+          await updateDataset(saveDatasetTo, setDataset);
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
             getSourceUrl(dataset),
             setThing(dataset, updatedResource),
             { fetch }
           );
-
-          setDataset(savedDataset);
+          await updateDataset(getSourceUrl(dataset), setDataset);
         } else if (onError) {
           onError(
             new Error("Please provide saveDatasetTo location for new data")

@@ -53,6 +53,8 @@ const inputOptions = {
 };
 
 const savedDataset = SolidFns.createSolidDataset() as any;
+const latestDataset = SolidFns.createSolidDataset() as any;
+
 jest
   .spyOn(SolidFns, "saveSolidDatasetAt")
   .mockImplementation(() => savedDataset);
@@ -130,7 +132,7 @@ describe("<Text /> component snapshot test", () => {
     expect(baseElement).toMatchSnapshot();
   });
 
-  it("does not render defualt loading message if loadingComponent is null", () => {
+  it("does not render default loading message if loadingComponent is null", () => {
     jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
       thing: undefined,
       error: undefined,
@@ -287,6 +289,7 @@ describe("<Text /> component functional testing", () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+    jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -309,6 +312,7 @@ describe("<Text /> component functional testing", () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+    jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -393,5 +397,36 @@ describe("<Text /> component functional testing", () => {
     await waitFor(() => expect(getByText("{}")).toBeDefined());
     // eslint-disable-next-line no-console
     (console.error as jest.Mock).mockRestore();
+  });
+  it("Should update context with latest dataset after saving", async () => {
+    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+    jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
+    const setDataset = jest.fn();
+    const setThing = jest.fn();
+    jest.spyOn(helpers, "useProperty").mockReturnValue({
+      dataset: mockDataset,
+      setDataset,
+      setThing,
+      error: undefined,
+      value: mockNick,
+      thing: mockThing,
+      property: mockPredicate,
+    });
+    const { getByDisplayValue } = render(
+      <Text
+        solidDataset={mockDatasetWithResourceInfo}
+        thing={mockThing}
+        property={mockPredicate}
+        locale="en"
+        edit
+        autosave
+      />
+    );
+    const input = getByDisplayValue(mockNick);
+    input.focus();
+    fireEvent.change(input, { target: { value: "updated nick value" } });
+    input.blur();
+    expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
+    await waitFor(() => expect(setDataset).toHaveBeenCalledWith(latestDataset));
   });
 });

@@ -23,6 +23,7 @@
 import * as React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
+import * as helpers from "../../../helpers";
 import StringValue from "./index";
 
 const mockPredicate = `http://xmlns.com/foaf/0.1/nick`;
@@ -54,7 +55,10 @@ const savedDataset = SolidFns.setThing(
   SolidFns.mockSolidDatasetFrom("https://example.pod/resource"),
   SolidFns.createThing()
 );
+const latestDataset = SolidFns.setThing(savedDataset, SolidFns.createThing());
+
 jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
 
 describe("<StringValue /> component functional testing", () => {
   it("calls getStringNoLocale and sets value", () => {
@@ -266,9 +270,51 @@ describe("<StringValue /> component functional testing", () => {
     await waitFor(() => expect(onSave).toHaveBeenCalled());
   });
 
+  it("Should update context with latest dataset after saving", async () => {
+    const setDataset = jest.fn();
+    const setThing = jest.fn();
+    jest.spyOn(helpers, "useProperty").mockReturnValue({
+      dataset: mockDatasetWithResourceInfo,
+      setDataset,
+      setThing,
+      error: undefined,
+      value: mockNick,
+      thing: mockThing,
+      property: mockPredicate,
+    });
+    const { getByDisplayValue } = render(
+      <StringValue
+        solidDataset={mockDatasetWithResourceInfo}
+        thing={mockThing}
+        property={mockPredicate}
+        edit
+        autosave
+      />
+    );
+    const input = getByDisplayValue(mockNick);
+    input.focus();
+    fireEvent.change(input, { target: { value: "test value" } });
+    input.blur();
+    await waitFor(() => {
+      expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
+      expect(setDataset).toHaveBeenCalledWith(latestDataset);
+    });
+  });
+
   it("Should call onError if Thing not found", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
     const onError = jest.fn();
+    const setDataset = jest.fn();
+    const setThing = jest.fn();
+    jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+      dataset: mockDatasetWithResourceInfo,
+      setDataset,
+      setThing,
+      error: new Error("Thing not found"),
+      value: null,
+      thing: undefined,
+      property: mockPredicate,
+    });
     render(
       <StringValue
         solidDataset={mockDatasetWithResourceInfo}

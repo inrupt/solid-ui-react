@@ -49,7 +49,10 @@ const savedDataset = SolidFns.setThing(
   SolidFns.mockSolidDatasetFrom("https://example.pod/resource"),
   SolidFns.createThing()
 );
+const latestDataset = SolidFns.setThing(savedDataset, SolidFns.createThing());
+
 jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
 
 describe("<DatetimeValue /> component functional testing", () => {
   beforeEach(() => {
@@ -278,6 +281,8 @@ describe("<DatetimeValue /> component functional testing", () => {
 
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
 
+    jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
+
     const { getByLabelText } = render(
       <DatetimeValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -301,5 +306,35 @@ describe("<DatetimeValue /> component functional testing", () => {
       [mockThing, mockPredicate, expectedDate],
       [mockThing, mockPredicate, expectedDateAndTime],
     ]);
+  });
+  it("Should update context with latest dataset after saving", async () => {
+    const setDataset = jest.fn();
+    const setThing = jest.fn();
+    jest.spyOn(helpers, "useProperty").mockReturnValue({
+      dataset: mockDatasetWithResourceInfo,
+      setDataset,
+      setThing,
+      error: undefined,
+      value: mockBday,
+      thing: mockThing,
+      property: mockPredicate,
+    });
+    const { getByLabelText } = render(
+      <DatetimeValue
+        solidDataset={mockDatasetWithResourceInfo}
+        thing={mockThing}
+        property={mockPredicate}
+        edit
+        autosave
+      />
+    );
+    const input = getByLabelText("Date and Time");
+    input.focus();
+    fireEvent.change(input, { target: { value: "2007-08-14T11:20:00" } });
+    input.blur();
+    await waitFor(() => {
+      expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
+      expect(setDataset).toHaveBeenCalledWith(latestDataset);
+    });
   });
 });
