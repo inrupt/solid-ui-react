@@ -40,6 +40,7 @@ import {
   getStringNoLocaleAll,
   getStringWithLocaleAll,
   getUrlAll,
+  getSolidDataset,
 } from "@inrupt/solid-client";
 
 import { useContext, useEffect, useState } from "react";
@@ -367,4 +368,12 @@ export function useDatetimeBrowserSupport(): boolean | null {
   }, []);
 
   return isDatetimeSupported;
+}
+
+export async function updateDataset(
+  datasetUrl: string | Url,
+  setDataset: (dataset: SolidDataset) => void
+): Promise<void> {
+  const latestDataset = await getSolidDataset(datasetUrl);
+  setDataset(latestDataset);
 }

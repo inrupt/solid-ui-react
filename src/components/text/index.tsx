@@ -30,10 +30,9 @@ import {
   saveSolidDatasetAt,
   getSourceUrl,
   hasResourceInfo,
-  getSolidDataset,
 } from "@inrupt/solid-client";
 import { SessionContext } from "../../context/sessionContext";
-import { CommonProperties, useProperty } from "../../helpers";
+import { CommonProperties, updateDataset, useProperty } from "../../helpers";
 
 export type Props = {
   saveDatasetTo?: Url | UrlString;
@@ -125,16 +124,14 @@ export function Text({
             setThing(dataset, updatedResource),
             { fetch }
           );
-          const latestDataset = await getSolidDataset(saveDatasetTo);
-          setDataset(latestDataset);
+          await updateDataset(saveDatasetTo, setDataset);
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
             getSourceUrl(dataset),
             setThing(dataset, updatedResource),
             { fetch }
           );
-          const latestDataset = await getSolidDataset(getSourceUrl(dataset));
-          setDataset(latestDataset);
+          await updateDataset(getSourceUrl(dataset), setDataset);
         } else {
           setErrorState(() => {
             throw new Error(

@@ -26,11 +26,10 @@ import {
   getSourceUrl,
   hasResourceInfo,
   setInteger,
-  getSolidDataset,
 } from "@inrupt/solid-client";
 import { SessionContext } from "../../../context/sessionContext";
 
-import { useProperty } from "../../../helpers";
+import { updateDataset, useProperty } from "../../../helpers";
 import { Props } from "..";
 
 type IntegerProps = Omit<Props, "locale" | "dataType">;
@@ -98,17 +97,14 @@ const IntegerValue: React.FC<IntegerProps> = (props: IntegerProps) => {
             setThing(dataset, updatedResource),
             { fetch }
           );
-          const latestDataset = await getSolidDataset(saveDatasetTo);
-          setDataset(latestDataset);
+          await updateDataset(saveDatasetTo, setDataset);
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
             getSourceUrl(dataset),
             setThing(dataset, updatedResource),
             { fetch }
           );
-
-          const latestDataset = await getSolidDataset(getSourceUrl(dataset));
-          setDataset(latestDataset);
+          await updateDataset(getSourceUrl(dataset), setDataset);
         } else if (onError) {
           onError(
             new Error("Please provide saveDatasetTo location for new data")
