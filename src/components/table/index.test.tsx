@@ -316,7 +316,7 @@ describe("<Table /> component functional tests", () => {
           { dataset, thing: thing1 },
           { dataset, thing: thing2 },
         ]}
-        noDataComponent={() => <span>There is no Data</span>}
+        emptyStateComponent={() => <span>There is no Data</span>}
       />
     );
 
