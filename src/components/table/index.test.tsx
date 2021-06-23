@@ -309,7 +309,7 @@ describe("<Table /> component functional tests", () => {
     expect(queryByText(/multiple nick 2/)).toBeNull();
   });
 
-  it("renders fallback component when passed and there are no columns", () => {
+  it("renders fallback component when passed and there are no rows", () => {
     const { getByText } = render(
       <Table
         things={[
