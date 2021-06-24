@@ -19,22 +19,33 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export { Image } from "./components/image";
-export { Link } from "./components/link";
-export { LoginButton } from "./components/logIn";
-export { LogoutButton } from "./components/logOut";
-export { Table, TableColumn } from "./components/table";
-export { Text } from "./components/text";
-export { Value } from "./components/value";
-export { Video } from "./components/video";
-export { SessionContext, SessionProvider } from "./context/sessionContext";
-export { default as CombinedDataProvider } from "./context/combinedDataContext";
-export { default as ThingContext, ThingProvider } from "./context/thingContext";
-export {
-  default as DatasetContext,
-  DatasetProvider,
-} from "./context/datasetContext";
-export { default as useSession } from "./hooks/useSession";
-export { default as useDataset } from "./hooks/useDataset";
-export { default as useThing } from "./hooks/useThing";
-export { default as useFile } from "./hooks/useFile";
+import { useContext, useEffect, useState } from "react";
+import { SessionContext } from "../../context/sessionContext";
+import { retrieveFile } from "../../helpers";
+
+export default function useFile(
+  url: string | undefined
+): {
+  error: Error | undefined;
+  inProgress: boolean;
+  data: Blob | undefined;
+} {
+  const [error, setError] = useState<Error | undefined>();
+  const [inProgress, setInProgress] = useState(false);
+  const [data, setData] = useState<Blob | undefined>();
+  const { fetch } = useContext(SessionContext);
+  useEffect(() => {
+    if (!url) return;
+    setInProgress(true);
+    retrieveFile(url, fetch)
+      .then((response) => {
+        setData(response);
+        setInProgress(false);
+      })
+      .catch((retrieveError) => {
+        setError(retrieveError);
+        setInProgress(false);
+      });
+  }, [url, fetch]);
+  return { error, inProgress, data };
+}

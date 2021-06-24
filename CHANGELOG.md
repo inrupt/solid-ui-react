@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
+- `useFile` hook added.
+
 - `Table` now takes an optional `emptyStateComponent` to be rendered if no rows are present.
 
 - `TableColumn` now takes an optional `sortFn` sorting function used to sort that column.

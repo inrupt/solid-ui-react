@@ -21,14 +21,10 @@
 
 import React, { ReactElement, useState, useEffect, useContext } from "react";
 
-import {
-  overwriteFile,
-  retrieveFile,
-  CommonProperties,
-  useProperty,
-} from "../../helpers";
+import { overwriteFile, CommonProperties, useProperty } from "../../helpers";
 
 import { SessionContext } from "../../context/sessionContext";
+import useFile from "../../hooks/useFile";
 
 export type Props = {
   maxSize?: number;
@@ -86,26 +82,23 @@ export function Image({
 
   const [imgObjectUrl, setImgObjectUrl] = useState<string | undefined>();
 
+  const { data, error: imgError, inProgress: fetchingFileInProgress } = useFile(
+    value as string
+  );
+
   useEffect(() => {
-    if (!thing) {
+    if (fetchingFileInProgress) {
       return;
     }
-    if (value) {
-      retrieveFile(value as string, fetch)
-        .then(setImgObjectUrl)
-        .catch((retrieveError) => {
-          setError(retrieveError);
-
-          if (onError) {
-            onError(retrieveError);
-          }
-
-          if (ErrorComponent) {
-            setImgObjectUrl("");
-          }
-        });
+    if (imgError) {
+      setError(imgError);
+      return;
     }
-  }, [value, onError, setError, fetch, thing, ErrorComponent]);
+    const imageObjectUrl = data && URL.createObjectURL(data);
+    if (imageObjectUrl) {
+      setImgObjectUrl(imageObjectUrl);
+    }
+  }, [data, fetchingFileInProgress, imgError]);
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
@@ -128,7 +121,7 @@ export function Image({
 
   let imageComponent = null;
 
-  if (isFetchingThing) {
+  if (isFetchingThing || fetchingFileInProgress) {
     let loader: JSX.Element | null = (LoadingComponent && (
       <LoadingComponent />
     )) || <span>fetching data in progress</span>;
