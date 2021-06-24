@@ -1,0 +1,38 @@
+import { Meta, Source } from "@storybook/addon-docs/blocks";
+
+<Meta title="Hooks/useFile" />
+
+# useFile
+
+A hook to fetch a file at a given URL.
+
+```
+const { data, error, inProgress } = useFile(url)
+```
+
+## Parameters
+
+- `url`: the URL from where the file should be fetched.
+
+## Return Values
+
+- `data`: the file as a Blob, or undefined if the file cannot be fetched.
+- `error`: the error thrown by the request (or undefined)
+- `inProgress`: true if currently fetching the file, false if fetching has not started or is completed.
+
+## Example Usage
+
+This example uses useFile to fetch a pdf file at a given URL.
+
+<Source
+  code={`
+import { useFile } from "@inrupt/solid-ui-react";
+function Pdf() {
+  const pdfUrl = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+  const { data, error, inProgress } = useFile(pdfUrl);
+  if (error) return <div>failed to load</div>;
+  if (inProgress) return <div>loading...</div>;
+  return data;
+}
+`}
+/>

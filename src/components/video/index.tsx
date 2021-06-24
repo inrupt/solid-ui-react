@@ -20,15 +20,9 @@
  */
 
 import React, { ReactElement, useEffect, useState, useContext } from "react";
-
-import {
-  retrieveFile,
-  overwriteFile,
-  CommonProperties,
-  useProperty,
-} from "../../helpers";
-
+import { overwriteFile, CommonProperties, useProperty } from "../../helpers";
 import { SessionContext } from "../../context/sessionContext";
+import useFile from "../../hooks/useFile";
 
 export type Props = {
   maxSize?: number;
@@ -86,26 +80,25 @@ export function Video({
 
   const [videoObjectUrl, setVideoObjectUrl] = useState("");
 
+  const {
+    data,
+    error: videoError,
+    inProgress: fetchingVideoInProgress,
+  } = useFile(value as string);
+
   useEffect(() => {
-    if (!thing) {
+    if (fetchingVideoInProgress) {
       return;
     }
-    if (value) {
-      retrieveFile(value as string, fetch)
-        .then(setVideoObjectUrl)
-        .catch((retrieveError) => {
-          setError(retrieveError);
-
-          if (onError) {
-            onError(retrieveError);
-          }
-
-          if (ErrorComponent) {
-            setVideoObjectUrl("");
-          }
-        });
+    if (videoError) {
+      setError(videoError);
+      return;
     }
-  }, [value, onError, setError, fetch, thing, ErrorComponent]);
+    const videoObjectURL = data && URL.createObjectURL(data);
+    if (videoObjectURL) {
+      setVideoObjectUrl(videoObjectURL);
+    }
+  }, [data, fetchingVideoInProgress, videoError]);
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
@@ -127,7 +120,7 @@ export function Video({
 
   let videoComponent = null;
 
-  if (isFetchingThing) {
+  if (isFetchingThing || fetchingVideoInProgress) {
     let loader: JSX.Element | null = (LoadingComponent && (
       <LoadingComponent />
     )) || <span>fetching data in progress</span>;

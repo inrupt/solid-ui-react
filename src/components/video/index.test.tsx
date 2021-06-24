@@ -192,7 +192,9 @@ describe("Video component", () => {
 
     it("Should call onError if initial fetch fails, if it is passed", async () => {
       const mockOnError = jest.fn();
-      (SolidFns.getFile as jest.Mock).mockRejectedValueOnce(null);
+      (SolidFns.getFile as jest.Mock).mockRejectedValueOnce(
+        new Error("Error fetching file")
+      );
       render(
         <Video
           thing={mockThing}

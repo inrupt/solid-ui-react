@@ -9,7 +9,7 @@ export const parameters = {
         "Components",
         "Providers",
         "Hooks",
-        ["useSession", "useDataset", "useThing"],
+        ["useSession", "useDataset", "useThing", "useFile"],
       ],
     },
   },
