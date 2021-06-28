@@ -122,6 +122,13 @@ export function Table({
             return sortFn(valueA, valueB);
           };
           columnsArray[colIndex].sortType = sortFunction;
+        } else {
+          if (dataType === "string") {
+            columnsArray[colIndex].sortType = dataType;
+          }
+          if (dataType === "integer" || dataType === "decimal") {
+            columnsArray[colIndex].sortType = "number";
+          }
         }
 
         // add each each value to data

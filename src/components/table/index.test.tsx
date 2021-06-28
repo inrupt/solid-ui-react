@@ -143,6 +143,40 @@ describe("<Table /> component functional tests", () => {
     expect(queryByText("🔼")).toBeNull();
   });
 
+  it("ignored capitalization when sorting", () => {
+    const thingA = SolidFns.addStringNoLocale(
+      SolidFns.createThing(),
+      namePredicate,
+      "example"
+    );
+    const thingB = SolidFns.addStringNoLocale(
+      SolidFns.createThing(),
+      namePredicate,
+      "Foo"
+    );
+    const datasetWithThingA = SolidFns.setThing(
+      SolidFns.createSolidDataset(),
+      thingA
+    );
+    const datasetToSort = SolidFns.setThing(datasetWithThingA, thingB);
+
+    const { getByText, queryAllByRole } = render(
+      <Table
+        things={[
+          { dataset: datasetToSort, thing: thingB },
+          { dataset: datasetToSort, thing: thingA },
+        ]}
+      >
+        <TableColumn property={namePredicate} sortable />
+      </Table>
+    );
+    expect(queryAllByRole("cell")[0].innerHTML).toBe("Foo");
+    expect(queryAllByRole("cell")[1].innerHTML).toBe("example");
+    fireEvent.click(getByText(namePredicate));
+    expect(queryAllByRole("cell")[0].innerHTML).toBe("example");
+    expect(queryAllByRole("cell")[1].innerHTML).toBe("Foo");
+  });
+
   it("uses sortFn for sorting if passed", () => {
     const thingA = SolidFns.addStringNoLocale(
       SolidFns.createThing(),
