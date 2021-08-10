@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+- Fix missing code snippets in storybook
+
 ## 2.4.0 ( July 23, 2021 )
 
 - `useFile` hook added.
