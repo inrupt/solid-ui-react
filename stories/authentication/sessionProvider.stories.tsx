@@ -57,6 +57,14 @@ export default {
       action: "onError",
       control: { type: null },
     },
+    restorePreviousSession: {
+      description: `Enables the session restore on page reload.`,
+      control: { type: null },
+    },
+    onSessionRestore: {
+      description: `Function to be called on session restore. It is invoked with the URL of the refreshed page as its parameter`,
+      control: { type: null },
+    },
   },
 };
 

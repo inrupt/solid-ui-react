@@ -6,12 +6,22 @@ module.exports = {
     '../stories/**/*.stories.@(tsx|mdx)',
   ],
   addons: [
-    '@storybook/addon-essentials', {
+    '@storybook/addon-essentials',
+    {
       name: '@storybook/addon-storysource',
       options: {
         sourceLoaderOptions: {
           injectStoryParameters: false,
         },
+      },
+    },
+    /* @storybook/addon-docs is part of @storybook/addon-essentials, but
+     * this is required to fix an issue with code not showing for any
+     * stories without parameters */
+    {
+      name: '@storybook/addon-docs',
+      options: {
+        sourceLoaderOptions: null,
       },
     },
   ],
