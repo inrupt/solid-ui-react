@@ -21,7 +21,7 @@
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
-    "react": ">16.13.0"
+    "react": ">16.13.0 || ^17.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.13.16",
@@ -35,6 +35,8 @@
     "@storybook/addon-links": "^6.4.0-alpha.12",
     "@storybook/addon-storysource": "^6.4.0-alpha.12",
     "@storybook/addons": "^6.4.0-alpha.12",
+    "@storybook/builder-webpack5": "^6.4.0-alpha.12",
+    "@storybook/manager-webpack5": "^6.3.4",
     "@storybook/preset-typescript": "^3.0.0",
     "@storybook/react": "^6.4.0-alpha.12",
     "@testing-library/react": "^11.2.6",
@@ -92,8 +94,6 @@
   "dependencies": {
     "@inrupt/solid-client": "^1.6.1",
     "@inrupt/solid-client-authn-browser": "^1.8.2",
-    "@storybook/builder-webpack5": "^6.4.0-alpha.12",
-    "@storybook/manager-webpack5": "^6.3.4",
     "core-js": "^3.11.0",
     "react-table": "^7.6.3",
     "stream": "0.0.2",
