@@ -4,7 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
+## 2.4.1 ( August 18, 2021 )
+
 - Fix missing code snippets in storybook
+- Fix dependencies to work with React 17
 
 ## 2.4.0 ( July 23, 2021 )
 
