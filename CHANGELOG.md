@@ -4,7 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
-- Change build target from commonjs to umd
+## 2.4.2 ( August 20, 2021 )
+
+- Change build target from commonjs to umd, to fix webpack issues
 
 ## 2.4.1 ( August 18, 2021 )
 
