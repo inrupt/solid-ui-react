@@ -22,7 +22,7 @@ module.exports = {
   },
   output: {
     filename: "index.js",
-    libraryTarget: "commonjs"
+    libraryTarget: "umd"
   },
   plugins: [
     new CleanWebpackPlugin(),
