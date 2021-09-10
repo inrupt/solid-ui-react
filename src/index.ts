@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+export { FileUpload } from "./components/file";
 export { Image } from "./components/image";
 export { Link } from "./components/link";
 export { LoginButton } from "./components/logIn";

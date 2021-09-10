@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
+- Add `FileUpload` component.
+
 ## 2.4.2 ( August 20, 2021 )
 
 - Change build target from commonjs to umd, to fix webpack issues
