@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
+## 2.5.0 ( September 15, 2021 )
+
 - Add `FileUpload` component.
 
 ## 2.4.2 ( August 20, 2021 )
