@@ -26,13 +26,14 @@ import {
   getDefaultSession,
   handleIncomingRedirect,
 } from "@inrupt/solid-client-authn-browser";
+import { it, expect, describe, jest } from "@jest/globals";
 
 import { LoginButton } from "./index";
 import { SessionProvider } from "../../context/sessionContext";
 
 jest.mock("@inrupt/solid-client-authn-browser");
 
-const onError = jest.fn().mockResolvedValue(null);
+const onError = jest.fn(async () => null).mockResolvedValue(null);
 
 const session = {
   info: { isLoggedIn: false },

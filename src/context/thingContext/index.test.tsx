@@ -23,6 +23,7 @@
 import * as React from "react";
 import { RenderResult, render } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
+import { it, expect, describe, jest } from "@jest/globals";
 import ThingContext, { ThingProvider } from "./index";
 import { DatasetProvider } from "../datasetContext";
 

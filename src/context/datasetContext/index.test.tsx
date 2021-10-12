@@ -23,6 +23,7 @@
 import * as React from "react";
 import { RenderResult, render, waitFor } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
+import { it, expect, describe, jest } from "@jest/globals";
 import useDataset from "../../hooks/useDataset";
 import DatasetContext, { DatasetProvider } from "./index";
 
@@ -237,7 +238,7 @@ describe("Functional testing", () => {
       solidDataset: undefined,
       error: "Error",
     });
-    const onError = jest.fn();
+    const onError = jest.fn() as (error: Error) => void | null;
     render(
       <DatasetProvider
         onError={onError}

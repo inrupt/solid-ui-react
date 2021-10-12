@@ -24,6 +24,7 @@ import { renderHook } from "@testing-library/react-hooks";
 import { SWRConfig, cache } from "swr";
 import * as SolidFns from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
+import { it, expect, describe, jest } from "@jest/globals";
 import DatasetContext from "../../context/datasetContext";
 import { SessionContext } from "../../context/sessionContext";
 import useDataset from ".";
@@ -35,7 +36,7 @@ describe("useDataset() hook", () => {
   const mockGetSolidDataset = jest
     .spyOn(SolidFns, "getSolidDataset")
     .mockResolvedValue(mockDataset);
-  const mockFetch = jest.fn();
+  const mockFetch = jest.fn() as typeof global.fetch;
   const wrapper = ({ children }: { children: React.ReactNode }) => (
     <SessionContext.Provider
       value={{

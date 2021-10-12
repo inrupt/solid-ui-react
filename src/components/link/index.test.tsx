@@ -22,6 +22,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
+import { it, expect, describe, jest } from "@jest/globals";
 import { Link } from "./index";
 import * as helpers from "../../helpers";
 

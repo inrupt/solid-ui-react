@@ -22,6 +22,7 @@
 import React from "react";
 import { renderHook } from "@testing-library/react-hooks";
 import * as SolidFns from "@inrupt/solid-client";
+import { it, expect, describe, jest } from "@jest/globals";
 import useDataset from "../useDataset";
 import ThingContext from "../../context/thingContext";
 import useThing from ".";

@@ -24,6 +24,7 @@ import * as React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
 import { FileUpload } from "./index";
+import { it, expect, describe, jest } from "@jest/globals";
 
 const inputOptions = {
   name: "test-name",

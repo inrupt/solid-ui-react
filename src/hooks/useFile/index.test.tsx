@@ -23,6 +23,7 @@ import * as React from "react";
 import { renderHook } from "@testing-library/react-hooks";
 import * as SolidFns from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
+import { it, expect, describe, jest } from "@jest/globals";
 import { SessionContext } from "../../context/sessionContext";
 import useFile from ".";
 
@@ -30,7 +31,7 @@ describe("useFile() hook", () => {
   const mockUrl = "https://mock.url";
   const mockFile = SolidFns.mockFileFrom(mockUrl);
   const mockGetFile = jest.spyOn(SolidFns, "getFile");
-  const mockFetch = jest.fn();
+  const mockFetch = jest.fn() as typeof global.fetch;
   const wrapper = ({ children }: { children: React.ReactNode }) => (
     <SessionContext.Provider
       value={{

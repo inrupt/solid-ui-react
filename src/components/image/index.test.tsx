@@ -22,6 +22,7 @@
 import React from "react";
 import { render, waitFor, fireEvent } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
+import { it, expect, describe, jest } from "@jest/globals";
 import { Image } from ".";
 import * as helpers from "../../helpers";
 

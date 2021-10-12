@@ -24,6 +24,7 @@ import * as React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
+import { it, expect, describe, jest } from "@jest/globals";
 import { Table, TableColumn } from "./index";
 
 const namePredicate = `http://xmlns.com/foaf/0.1/name`;

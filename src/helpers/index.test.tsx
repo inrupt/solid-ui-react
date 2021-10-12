@@ -20,6 +20,7 @@
  */
 
 import * as SolidFns from "@inrupt/solid-client";
+import { it, expect, describe, jest } from "@jest/globals";
 import {
   getValueByTypeAll,
   DataType,
