@@ -40,7 +40,7 @@ export const LogoutButton: React.FC<Props> = (propsLogout: Props) => {
       await logout();
       if (onLogout) onLogout();
     } catch (error) {
-      if (onError) onError(error);
+      if (onError) onError(error as Error);
     }
   }
 

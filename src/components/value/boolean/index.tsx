@@ -124,7 +124,7 @@ const BooleanValue: React.FC<BooleanProps> = (props: BooleanProps) => {
         }
       } catch (saveError) {
         if (onError) {
-          onError(saveError);
+          onError(saveError as Error);
         }
       }
     }

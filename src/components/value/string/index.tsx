@@ -124,7 +124,7 @@ const StringValue: React.FC<StringProps> = (props: StringProps) => {
         }
       } catch (saveError) {
         if (onError) {
-          onError(saveError);
+          onError(saveError as Error);
         }
       }
     }
