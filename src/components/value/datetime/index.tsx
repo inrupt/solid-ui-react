@@ -147,7 +147,7 @@ const DatetimeValue: React.FC<DatetimeProps> = (props: DatetimeProps) => {
         }
       } catch (saveError) {
         if (onError) {
-          onError(saveError);
+          onError(saveError as Error);
         }
       }
     }

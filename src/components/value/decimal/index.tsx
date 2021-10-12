@@ -116,7 +116,7 @@ const DecimalValue: React.FC<DecimalProps> = (props: DecimalProps) => {
         }
       } catch (saveError) {
         if (onError) {
-          onError(saveError);
+          onError(saveError as Error);
         }
       }
     }

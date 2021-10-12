@@ -116,7 +116,7 @@ const IntegerValue: React.FC<IntegerProps> = (props: IntegerProps) => {
         }
       } catch (saveError) {
         if (onError) {
-          onError(saveError);
+          onError(saveError as Error);
         }
       }
     }

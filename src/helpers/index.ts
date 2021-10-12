@@ -85,7 +85,7 @@ export const overwriteFile = async (
     return objectUrl;
   } catch (error) {
     if (onError) {
-      onError(error);
+      onError(error as Error);
     }
     return null;
   }

@@ -68,7 +68,7 @@ export function FileUpload({
       }
     } catch (saveError) {
       if (onError) {
-        onError(saveError);
+        onError(saveError as Error);
       }
     }
   };

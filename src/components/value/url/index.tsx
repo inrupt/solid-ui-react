@@ -112,7 +112,7 @@ const UrlValue: React.FC<UrlProps> = (props: UrlProps) => {
         }
       } catch (saveError) {
         if (onError) {
-          onError(saveError);
+          onError(saveError as Error);
         }
       }
     }

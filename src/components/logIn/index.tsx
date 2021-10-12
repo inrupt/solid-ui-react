@@ -61,7 +61,7 @@ export const LoginButton: React.FC<Props> = (propsLogin: Props) => {
       setSessionRequestInProgress(false);
     } catch (error) {
       setSessionRequestInProgress(false);
-      if (onError) onError(error);
+      if (onError) onError(error as Error);
     }
   }
 
