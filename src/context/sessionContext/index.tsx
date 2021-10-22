@@ -98,9 +98,8 @@ export const SessionProvider = ({
       : defaultSessionRequestInProgress;
 
   // If loggedin is true, we're not making a session request.
-  const [sessionRequestInProgress, setSessionRequestInProgress] = useState(
-    defaultInProgress
-  );
+  const [sessionRequestInProgress, setSessionRequestInProgress] =
+    useState(defaultInProgress);
 
   let currentLocation;
 

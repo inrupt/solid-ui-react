@@ -52,8 +52,9 @@ export interface IDatasetProvider {
   datasetUrl?: UrlString | string;
 }
 
-export type RequireProperty<T, Prop extends keyof T> = T &
-  { [key in Prop]-?: T[key] };
+export type RequireProperty<T, Prop extends keyof T> = T & {
+  [key in Prop]-?: T[key];
+};
 
 export type RequireDatasetOrDatasetUrl =
   | RequireProperty<IDatasetProvider, "solidDataset">

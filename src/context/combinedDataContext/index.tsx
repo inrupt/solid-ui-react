@@ -50,8 +50,9 @@ export interface DatasetUrl extends Props {
   datasetUrl: UrlString | string;
 }
 
-export type RequireProperty<T, Prop extends keyof T> = T &
-  { [key in Prop]-?: T[key] };
+export type RequireProperty<T, Prop extends keyof T> = T & {
+  [key in Prop]-?: T[key];
+};
 
 export type RequireThingOrThingUrl =
   | RequireProperty<ThingOrThingUrl, "thing">

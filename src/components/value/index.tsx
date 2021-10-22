@@ -54,7 +54,11 @@ export function Value(props: Props): ReactElement | null {
     errorComponent: ErrorComponent,
     locale,
   } = otherProps;
-  const { thing, value, error: thingError } = useProperty({
+  const {
+    thing,
+    value,
+    error: thingError,
+  } = useProperty({
     dataset: propDataset,
     thing: propThing,
     property: propProperty,
