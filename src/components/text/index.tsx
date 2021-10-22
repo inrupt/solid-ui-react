@@ -54,11 +54,11 @@ export function Text({
   locale,
   onSave,
   onError,
-  edit,
-  autosave,
   inputProps,
   errorComponent: ErrorComponent,
   loadingComponent: LoadingComponent,
+  edit = false,
+  autosave = false,
   ...other
 }: Props & React.HTMLAttributes<HTMLSpanElement>): ReactElement | null {
   const { fetch } = useContext(SessionContext);
@@ -188,8 +188,3 @@ export function Text({
     </>
   );
 }
-
-Text.defaultProps = {
-  autosave: false,
-  edit: false,
-};

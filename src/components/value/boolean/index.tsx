@@ -79,9 +79,8 @@ const BooleanValue: React.FC<BooleanProps> = (props: BooleanProps) => {
 
   const [value, setValue] = useState<string>(formattedValue);
 
-  const [booleanValue, setBooleanValue] = useState<boolean>(
-    initialBooleanValue
-  );
+  const [booleanValue, setBooleanValue] =
+    useState<boolean>(initialBooleanValue);
 
   useEffect(() => {
     setValue(booleanValue.toString());

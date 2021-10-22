@@ -82,9 +82,11 @@ export function Image({
 
   const [imgObjectUrl, setImgObjectUrl] = useState<string | undefined>();
 
-  const { data, error: imgError, inProgress: fetchingFileInProgress } = useFile(
-    value as string
-  );
+  const {
+    data,
+    error: imgError,
+    inProgress: fetchingFileInProgress,
+  } = useFile(value as string);
 
   useEffect(() => {
     if (fetchingFileInProgress) {

@@ -79,10 +79,8 @@ function ExampleComponentWithDataset(): React.ReactElement {
 }
 
 function ExampleComponentWithDatasetUrl(): React.ReactElement {
-  const [
-    exampleThing,
-    setExampleThing,
-  ] = React.useState<SolidFns.Thing | null>();
+  const [exampleThing, setExampleThing] =
+    React.useState<SolidFns.Thing | null>();
 
   const [property, setProperty] = React.useState<string>();
 

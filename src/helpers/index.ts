@@ -312,9 +312,8 @@ export function useProperty(props: UsePropertyProps): UseProperty {
     locale,
   } = props;
 
-  const { solidDataset: contextDataset, setDataset = () => {} } = useContext(
-    DatasetContext
-  );
+  const { solidDataset: contextDataset, setDataset = () => {} } =
+    useContext(DatasetContext);
 
   const dataset = propDataset || contextDataset;
 

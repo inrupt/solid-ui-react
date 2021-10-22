@@ -23,9 +23,7 @@ import { useContext, useEffect, useState } from "react";
 import { SessionContext } from "../../context/sessionContext";
 import { retrieveFile } from "../../helpers";
 
-export default function useFile(
-  url: string | undefined
-): {
+export default function useFile(url: string | undefined): {
   error: Error | undefined;
   inProgress: boolean;
   data: Blob | undefined;

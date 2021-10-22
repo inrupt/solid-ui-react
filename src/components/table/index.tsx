@@ -153,13 +153,8 @@ export function Table({
     useSortBy
   );
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = tableInstance;
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    tableInstance;
   if (!rows.length) {
     if (EmptyStateComponent) {
       return <EmptyStateComponent />;
