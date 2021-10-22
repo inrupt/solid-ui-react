@@ -114,7 +114,7 @@ export const SessionProvider = ({
     })
       .catch((error: Error) => {
         if (onError) {
-          onError(error);
+          onError(error as Error);
         } else {
           throw error;
         }
@@ -137,7 +137,7 @@ export const SessionProvider = ({
       await login(options);
     } catch (error) {
       if (onError) {
-        onError(error);
+        onError(error as Error);
       } else {
         throw error;
       }
@@ -151,7 +151,7 @@ export const SessionProvider = ({
       await logout();
     } catch (error) {
       if (onError) {
-        onError(error);
+        onError(error as Error);
       } else {
         throw error;
       }
