@@ -2,7 +2,9 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 2.5.1 ( October 25, 2021 )
+
+- Upgrade dependencies, including solid-client and solid-client-authn
 
 ## 2.5.0 ( September 15, 2021 )
 
