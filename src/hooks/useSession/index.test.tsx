@@ -45,6 +45,7 @@ describe("useSession() hook functional testing", () => {
           } as Session,
           login: jest.fn(),
           logout: jest.fn(),
+          profile: undefined,
         }}
       >
         {children}

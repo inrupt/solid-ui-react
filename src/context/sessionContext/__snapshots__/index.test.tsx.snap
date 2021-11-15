@@ -15,10 +15,16 @@ exports[`Testing SessionContext matches snapshot 1`] = `
         Login
       </button>
       <button
+        data-testid="logout"
         type="button"
       >
         Logout
       </button>
+      <p
+        data-testid="profile"
+      >
+        No profile found
+      </p>
     </div>
   </div>
 </body>
@@ -39,10 +45,16 @@ exports[`Testing SessionContext matches snapshot without optional sessionId 1`] 
         Login
       </button>
       <button
+        data-testid="logout"
         type="button"
       >
         Logout
       </button>
+      <p
+        data-testid="profile"
+      >
+        No profile found
+      </p>
     </div>
   </div>
 </body>

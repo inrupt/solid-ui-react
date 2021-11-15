@@ -44,6 +44,7 @@ describe("useDataset() hook", () => {
         session: {} as Session,
         logout: async () => {},
         login: async () => {},
+        profile: undefined,
       }}
     >
       <DatasetContext.Provider
