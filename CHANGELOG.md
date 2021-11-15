@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### New features
+
+- The `SessionContext` now has a `profile` property which contains the user's profiles.
+
 ## 2.5.1 ( October 25, 2021 )
 
 - Upgrade dependencies, including solid-client and solid-client-authn

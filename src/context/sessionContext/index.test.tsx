@@ -33,6 +33,7 @@ import {
 import { SessionContext, SessionProvider } from "./index";
 
 jest.mock("@inrupt/solid-client-authn-browser");
+jest.mock("@inrupt/solid-client");
 
 function ChildComponent(): React.ReactElement {
   const {
@@ -40,6 +41,7 @@ function ChildComponent(): React.ReactElement {
     sessionRequestInProgress,
     login: sessionLogin,
     logout: sessionLogout,
+    profile,
   } = React.useContext(SessionContext);
 
   return (
@@ -53,9 +55,14 @@ function ChildComponent(): React.ReactElement {
       <button type="button" onClick={() => sessionLogin({})}>
         Login
       </button>
-      <button type="button" onClick={sessionLogout}>
+      <button type="button" onClick={sessionLogout} data-testid="logout">
         Logout
       </button>
+      <p data-testid="profile">
+        {profile
+          ? `${profile.altProfileAll.length} alt profiles found`
+          : "No profile found"}
+      </p>
     </div>
   );
 }
@@ -165,6 +172,50 @@ describe("SessionContext functionality", () => {
     await waitFor(() => {
       expect(handleIncomingRedirect).toHaveBeenCalled();
     });
+  });
+
+  it("fetches the user's profile if logging in succeeds", async () => {
+    (handleIncomingRedirect as jest.Mock).mockResolvedValueOnce({
+      webId: "https://some.webid",
+    });
+
+    const mockedClientModule = jest.requireMock("@inrupt/solid-client");
+    const actualClientModule = jest.requireActual("@inrupt/solid-client");
+    mockedClientModule.getProfileAll = jest.fn().mockResolvedValue({
+      webIdProfile:
+        actualClientModule.mockSolidDatasetFrom("https://some.webid"),
+      altProfileAll: [
+        actualClientModule.mockSolidDatasetFrom("https://some.profile"),
+      ],
+    });
+
+    const session = {
+      info: {
+        isLoggedIn: true,
+        webId: "https://fakeurl.com/me",
+      },
+      on: jest.fn(),
+    } as any;
+
+    (getDefaultSession as jest.Mock).mockReturnValue(session);
+
+    const screen = render(
+      <SessionProvider sessionId="key">
+        <ChildComponent />
+      </SessionProvider>
+    );
+    await waitFor(async () => {
+      expect(screen.getByTestId("profile").textContent).toBe(
+        "1 alt profiles found"
+      );
+    });
+    fireEvent.click(screen.getByTestId("logout"));
+    await waitFor(async () => {
+      expect(screen.getByTestId("profile").textContent).toBe(
+        "No profile found"
+      );
+    });
+    expect(mockedClientModule.getProfileAll).toHaveBeenCalled();
   });
 
   it("uses the login and logout functions from session", async () => {

@@ -39,15 +39,21 @@ import {
   onSessionRestore as onSessionRestoreClient,
 } from "@inrupt/solid-client-authn-browser";
 
-import { ILoginInputOptions } from "@inrupt/solid-client-authn-core";
+import {
+  SolidDataset,
+  getProfileAll,
+  ProfileAll,
+  WithServerResourceInfo,
+} from "@inrupt/solid-client";
 
 export interface ISessionContext {
-  login: (options: ILoginInputOptions) => Promise<void>;
-  logout: () => Promise<void>;
+  login: typeof login;
+  logout: typeof logout;
   session: Session;
   sessionRequestInProgress: boolean;
   setSessionRequestInProgress?: Dispatch<SetStateAction<boolean>> | any;
   fetch: typeof window.fetch;
+  profile: ProfileAll<SolidDataset & WithServerResourceInfo> | undefined;
 }
 
 export const SessionContext = createContext<ISessionContext>({
@@ -56,6 +62,7 @@ export const SessionContext = createContext<ISessionContext>({
   fetch,
   session: getDefaultSession(),
   sessionRequestInProgress: true,
+  profile: undefined,
 });
 
 /* eslint react/require-default-props: 0 */
@@ -85,6 +92,8 @@ export const SessionProvider = ({
   const restoreSession =
     restorePreviousSession || typeof onSessionRestore !== "undefined";
   const [session, setSession] = useState<Session>(getDefaultSession());
+  const [profile, setProfile] =
+    useState<ProfileAll<SolidDataset & WithServerResourceInfo>>();
 
   useEffect(() => {
     if (onSessionRestore !== undefined) {
@@ -111,6 +120,20 @@ export const SessionProvider = ({
       url: window.location.href,
       restorePreviousSession: restoreSession,
     })
+      .then((sessionInfo) =>
+        // If handleIncomingRedirect logged the session in, we know what the current
+        // user's WebID is.
+        sessionInfo?.webId !== undefined
+          ? getProfileAll(sessionInfo?.webId, {
+              fetch: session.fetch,
+            })
+          : undefined
+      )
+      .then((foundProfile) => {
+        if (foundProfile !== undefined) {
+          setProfile(foundProfile);
+        }
+      })
       .catch((error: Error) => {
         if (onError) {
           onError(error as Error);
@@ -129,7 +152,7 @@ export const SessionProvider = ({
     });
   }, [session, sessionId, onError, currentLocation, restoreSession]);
 
-  const contextLogin = async (options: ILoginInputOptions) => {
+  const contextLogin = async (options: Parameters<typeof login>[0]) => {
     setSessionRequestInProgress(true);
 
     try {
@@ -148,6 +171,7 @@ export const SessionProvider = ({
   const contextLogout = async () => {
     try {
       await logout();
+      setProfile(undefined);
     } catch (error) {
       if (onError) {
         onError(error as Error);
@@ -166,6 +190,7 @@ export const SessionProvider = ({
         sessionRequestInProgress,
         setSessionRequestInProgress,
         fetch,
+        profile,
       }}
     >
       {children}

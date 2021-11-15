@@ -64,6 +64,7 @@
     "jest": "^26.6.3",
     "license-checker": "^25.0.1",
     "pinst": "^2.1.6",
+    "postcss": "^8.3.11",
     "prettier": "^2.4.1",
     "react": "^17.0.2",
     "react-docgen-typescript-loader": "^3.7.2",
@@ -93,7 +94,7 @@
   },
   "homepage": "https://github.com/inrupt/solid-ui-react#readme",
   "dependencies": {
-    "@inrupt/solid-client": "^1.14.0",
+    "@inrupt/solid-client": "^1.16.1",
     "@inrupt/solid-client-authn-browser": "^1.11.2",
     "core-js": "^3.18.3",
     "react-table": "^7.6.3",
@@ -103,7 +104,6 @@
   "resolutions": {
     "glob-parent": "5.1.2",
     "browserslist": "4.16.5",
-    "postcss": "8.2.10",
     "trim": "0.0.3",
     "immer": "9.0.6",
     "set-value": "4.0.1",
