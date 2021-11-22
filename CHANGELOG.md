@@ -4,6 +4,8 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
+## 2.6.0 ( November 22, 2021 )
+
 ### New features
 
 - The `SessionContext` now has a `profile` property which contains the user's profiles.
