@@ -22,7 +22,8 @@ module.exports = {
   },
   output: {
     filename: "index.js",
-    libraryTarget: "umd"
+    libraryTarget: "umd",
+    globalObject: "this",
   },
   plugins: [
     new CleanWebpackPlugin(),
