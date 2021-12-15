@@ -33,6 +33,9 @@ const mockThing = SolidFns.addUrl(
   mockProperty,
   mockUrl
 );
+const mockThingWithoutPhoto = SolidFns.createThing();
+const datasetIri = "https://example.org/dataset/";
+const mockDataset = SolidFns.mockSolidDatasetFrom(datasetIri);
 
 const mockObjectUrl = "mock object url";
 const mockFile = SolidFns.mockFileFrom(mockUrl);
@@ -258,6 +261,53 @@ describe("Image component", () => {
         )
       );
       expect(SolidFns.overwriteFile).toHaveBeenCalled();
+    });
+    it("Should call saveFileInContainer and update dataset on change if value is not available and saveLocation is passed", async () => {
+      const saveLocation = "https://example.org/container/";
+      jest.spyOn(SolidFns, "getUrl").mockImplementationOnce(() => null);
+      jest
+        .spyOn(SolidFns, "saveSolidDatasetAt")
+        .mockResolvedValueOnce(mockDataset as any);
+      jest
+        .spyOn(SolidFns, "saveFileInContainer")
+        .mockResolvedValueOnce(mockFile);
+      const mockUpdatedObjectUrl = "updated mock object url";
+      const { getByAltText } = render(
+        <Image
+          thing={mockThingWithoutPhoto}
+          property={mockProperty}
+          alt={mockAlt}
+          edit
+          autosave
+          inputProps={{ alt: "test-input" }}
+          saveLocation={saveLocation}
+          solidDataset={mockDataset}
+        />
+      );
+      await waitFor(() => {
+        const input = getByAltText("test-input");
+        expect(input).not.toBeNull();
+      });
+      fireEvent.change(getByAltText("test-input"), {
+        target: {
+          files: [mockFile],
+        },
+      });
+      (window.URL.createObjectURL as jest.Mock).mockReturnValueOnce(
+        mockUpdatedObjectUrl
+      );
+      expect(SolidFns.saveFileInContainer).toHaveBeenCalledWith(
+        saveLocation,
+        mockFile,
+        { fetch: expect.any(Function) }
+      );
+      await waitFor(() => {
+        expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalledWith(
+          datasetIri,
+          expect.anything(),
+          { fetch: expect.any(Function) }
+        );
+      });
     });
 
     test.skip("Should not call overwriteFile on change if file size > maxSize", async () => {
