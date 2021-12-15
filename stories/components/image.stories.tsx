@@ -70,6 +70,14 @@ export default {
       description: `A loading component to show while fetching the dataset. If \`null\` the default loading message won't be displayed`,
       control: { type: null },
     },
+    saveLocation: {
+      description: `A URL for a container where a new image is to be saved in case a value for an image property is not found`,
+      control: { type: null },
+    },
+    solidDataset: {
+      description: `A Solid Dataset where a new image should be added`,
+      control: { type: null },
+    },
   },
 };
 interface IWithBasicData {

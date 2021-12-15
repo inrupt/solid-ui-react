@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
+### New features
+
+- The `Image` component now allows for a new image to be saved even if the property is not found in the dataset, by passing a `solidDataset` where the Thing should be set after updating, and a `saveLocation` where the image file should be stored. 
+
 ## 2.6.0 ( November 22, 2021 )
 
 ### New features

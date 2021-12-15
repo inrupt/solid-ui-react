@@ -20,7 +20,14 @@
  */
 
 import React, { ReactElement, useState, useEffect, useContext } from "react";
-
+import {
+  addUrl,
+  getSourceUrl,
+  saveFileInContainer,
+  saveSolidDatasetAt,
+  setThing,
+  SolidDataset,
+} from "@inrupt/solid-client";
 import { overwriteFile, CommonProperties, useProperty } from "../../helpers";
 
 import { SessionContext } from "../../context/sessionContext";
@@ -28,7 +35,9 @@ import useFile from "../../hooks/useFile";
 
 export type Props = {
   maxSize?: number;
+  saveLocation?: string;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  solidDataset?: SolidDataset;
   errorComponent?: React.ComponentType<{ error: Error }>;
   loadingComponent?: React.ComponentType | null;
 } & CommonProperties &
@@ -50,6 +59,8 @@ export function Image({
   inputProps,
   errorComponent: ErrorComponent,
   loadingComponent: LoadingComponent,
+  saveLocation,
+  solidDataset,
   ...imgOptions
 }: Props): ReactElement | null {
   const { fetch } = useContext(SessionContext);
@@ -81,7 +92,6 @@ export function Image({
   }, [error, onError, ErrorComponent]);
 
   const [imgObjectUrl, setImgObjectUrl] = useState<string | undefined>();
-
   const {
     data,
     error: imgError,
@@ -104,19 +114,40 @@ export function Image({
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
-    if (autosave && fileList && fileList.length > 0 && value) {
-      const newObjectUrl = await overwriteFile(
-        value as string,
-        fileList[0],
-        input,
-        fetch,
-        maxSize,
-        onSave,
-        onError
-      );
+    if (autosave && fileList && fileList.length > 0) {
+      if (value) {
+        const newObjectUrl = await overwriteFile(
+          value as string,
+          fileList[0],
+          input,
+          fetch,
+          maxSize,
+          onSave,
+          onError
+        );
 
-      if (newObjectUrl) {
-        setImgObjectUrl(newObjectUrl);
+        if (newObjectUrl) {
+          setImgObjectUrl(newObjectUrl);
+        }
+      } else if (!value && saveLocation) {
+        const savedFile = await saveFileInContainer(saveLocation, fileList[0], {
+          fetch,
+        });
+        const savedFileUrl = getSourceUrl(savedFile);
+        if (savedFileUrl && propThing && propProperty && solidDataset) {
+          setImgObjectUrl(savedFileUrl);
+          try {
+            const updatedThing = addUrl(propThing, propProperty, savedFileUrl);
+            const updatedDataset = setThing(solidDataset, updatedThing);
+            const datasetSourceUrl = getSourceUrl(solidDataset);
+            if (!datasetSourceUrl) return;
+            await saveSolidDatasetAt(datasetSourceUrl, updatedDataset, {
+              fetch,
+            });
+          } catch (e) {
+            setError(e as Error);
+          }
+        }
       }
     }
   };
