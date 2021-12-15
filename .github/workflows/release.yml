@@ -51,7 +51,7 @@ jobs:
     - name: Prepare for publication to npm
       uses: actions/setup-node@v2.5.0
       with:
-        node-version: '12.x'
+        node-version: '16.x'
         registry-url: 'https://registry.npmjs.org'
     - run: npm ci
     - name: Publish to npm
