@@ -28,7 +28,9 @@ import DatasetContext from "../../context/datasetContext";
 export default function useDataset(
   datasetIri?: string | null | undefined,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-  options?: any
+  options?: any,
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+  swrOptions?: any
 ): {
   dataset: SolidDataset | undefined;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,6 +51,7 @@ export default function useDataset(
     {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
+      ...swrOptions,
     }
   );
 
