@@ -37,7 +37,7 @@ export default function useDataset(
   const { fetch } = useContext(SessionContext);
   const { solidDataset: datasetFromContext } = useContext(DatasetContext);
   const { data, error } = useSWR(
-    datasetIri ? [datasetIri, options, fetch] : null,
+    datasetIri ? [datasetIri, options] : null,
     () => {
       const requestOptions = {
         fetch,
@@ -45,6 +45,10 @@ export default function useDataset(
       };
       // useSWR will only call this fetcher if datasetUri is defined
       return getSolidDataset(datasetIri as string, requestOptions);
+    },
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     }
   );
 
