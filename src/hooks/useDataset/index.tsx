@@ -45,6 +45,9 @@ export default function useDataset(
       };
       // useSWR will only call this fetcher if datasetUri is defined
       return getSolidDataset(datasetIri as string, requestOptions);
+    },
+    {
+      revalidateOnFocus: false,
     }
   );
 
