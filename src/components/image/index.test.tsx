@@ -156,6 +156,33 @@ describe("Image component", () => {
 
       expect(asFragment()).toMatchSnapshot();
     });
+    it("renders a a default delete button if allowDelete is true", () => {
+      const emptyThing = SolidFns.createThing();
+      const { asFragment } = render(
+        <Image
+          thing={emptyThing}
+          allowDelete
+          property="https://example.com/url"
+        />
+      );
+      expect(asFragment()).toMatchSnapshot();
+    });
+    it("renders a a custom delete button if passed and allowDelete is true", () => {
+      const emptyThing = SolidFns.createThing();
+      const { asFragment } = render(
+        <Image
+          thing={emptyThing}
+          allowDelete
+          property="https://example.com/url"
+          deleteComponent={({ onClick }) => (
+            <button type="button" onClick={onClick}>
+              Custom Delete Component
+            </button>
+          )}
+        />
+      );
+      expect(asFragment()).toMatchSnapshot();
+    });
   });
 
   describe("Image functional tests", () => {
@@ -307,6 +334,30 @@ describe("Image component", () => {
           expect.anything(),
           { fetch: expect.any(Function) }
         );
+      });
+    });
+    it("Should call saveSolidDatasetAt when clicking delete button", async () => {
+      jest
+        .spyOn(SolidFns, "saveSolidDatasetAt")
+        .mockResolvedValue(mockDataset as any);
+      const { getByAltText, getByText } = render(
+        <Image
+          thing={mockThing}
+          solidDataset={mockDataset}
+          edit
+          autosave
+          allowDelete
+          property={mockProperty}
+          alt={mockAlt}
+        />
+      );
+      await waitFor(() =>
+        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+      );
+      const deleteButton = getByText("Delete");
+      fireEvent.click(deleteButton);
+      await waitFor(() => {
+        expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
       });
     });
 
