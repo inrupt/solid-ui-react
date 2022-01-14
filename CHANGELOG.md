@@ -8,6 +8,8 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ### New features
 
+- The `Image` component now takes an optional prop `allowDelete`, which renders a default delete button that will remove the value from the dataset. It is also possible to pass a `deleteComponent` to render a custom delete button in place of the default. 
+
 - The `Image` component now allows for a new image to be saved even if the property is not found in the dataset, by passing a `solidDataset` where the Thing should be set after updating, and a `saveLocation` where the image file should be stored. 
 
 ### Bugfixes
