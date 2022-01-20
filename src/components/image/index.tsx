@@ -118,9 +118,16 @@ export function Image({
   }, [data, fetchingFileInProgress, imgError]);
 
   const handleDelete = async () => {
-    if (!propThing || !solidDataset || !propProperty || !value) return;
+    if (
+      !propThing ||
+      !solidDataset ||
+      !propProperty ||
+      typeof value !== "string" ||
+      !autosave
+    )
+      return;
     try {
-      const updatedThing = removeUrl(propThing, propProperty, value as string);
+      const updatedThing = removeUrl(propThing, propProperty, value);
       const updatedDataset = setThing(solidDataset, updatedThing);
       const datasetSourceUrl = getSourceUrl(solidDataset);
       if (!datasetSourceUrl) return;

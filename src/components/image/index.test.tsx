@@ -22,6 +22,11 @@
 import React from "react";
 import { render, waitFor, fireEvent } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
+import type {
+  SolidDataset,
+  WithChangeLog,
+  WithServerResourceInfo,
+} from "@inrupt/solid-client";
 import { Image } from ".";
 import * as helpers from "../../helpers";
 
@@ -294,7 +299,9 @@ describe("Image component", () => {
       jest.spyOn(SolidFns, "getUrl").mockImplementationOnce(() => null);
       jest
         .spyOn(SolidFns, "saveSolidDatasetAt")
-        .mockResolvedValueOnce(mockDataset as any);
+        .mockResolvedValueOnce(
+          mockDataset as SolidDataset & WithServerResourceInfo & WithChangeLog
+        );
       jest
         .spyOn(SolidFns, "saveFileInContainer")
         .mockResolvedValueOnce(mockFile);
@@ -339,7 +346,9 @@ describe("Image component", () => {
     it("Should call saveSolidDatasetAt when clicking delete button", async () => {
       jest
         .spyOn(SolidFns, "saveSolidDatasetAt")
-        .mockResolvedValue(mockDataset as any);
+        .mockResolvedValue(
+          mockDataset as SolidDataset & WithServerResourceInfo & WithChangeLog
+        );
       const { getByAltText, getByText } = render(
         <Image
           thing={mockThing}
