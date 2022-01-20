@@ -1,6 +1,6 @@
 {
   "name": "@inrupt/solid-ui-react",
-  "version": "2.6.1",
+  "version": "2.7.0",
   "description": "Set of UI libraries using @solid/core",
   "main": "dist/index.js",
   "types": "dist/src/index.d.ts",
@@ -100,7 +100,7 @@
     "react-table": "^7.6.3",
     "stream": "0.0.2",
     "swr": "^0.5.7"
-  }, 
+  },
   "resolutions": {
     "postcss": "8.4.5"
   }
