@@ -1,4 +1,8 @@
 # Solid React SDK v2 - solid-ui-react
+
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
+
+
 solid-ui-react is a library of React components made to make development with [Solid](https://solidproject.org/) simple.
 
 The goal of this library is to provide highly flexible, simple components that you can use in any browser-based Solid project and customize to match the UI of your application. It uses the [Inrupt Javascript Client Libraries](https://github.com/inrupt/solid-client-js) for authentication and data manipulation. It is built with typescript and exports its types.
