@@ -34,6 +34,32 @@ exports[`Image component Image snapshots matches snapshot with standard props 1`
 </DocumentFragment>
 `;
 
+exports[`Image component Image snapshots renders a a custom delete button if passed and allowDelete is true 1`] = `
+<DocumentFragment>
+  <span>
+    Error: No value found for property.
+  </span>
+  <button
+    type="button"
+  >
+    Custom Delete Component
+  </button>
+</DocumentFragment>
+`;
+
+exports[`Image component Image snapshots renders a a default delete button if allowDelete is true 1`] = `
+<DocumentFragment>
+  <span>
+    Error: No value found for property.
+  </span>
+  <button
+    type="button"
+  >
+    Delete
+  </button>
+</DocumentFragment>
+`;
+
 exports[`Image component Image snapshots renders an error message if an errorComponent is provided 1`] = `
 <DocumentFragment>
   <span

@@ -23,6 +23,7 @@ import React, { ReactElement, useState, useEffect, useContext } from "react";
 import {
   addUrl,
   getSourceUrl,
+  removeUrl,
   saveFileInContainer,
   saveSolidDatasetAt,
   setThing,
@@ -36,10 +37,12 @@ import useFile from "../../hooks/useFile";
 export type Props = {
   maxSize?: number;
   saveLocation?: string;
+  allowDelete?: boolean;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   solidDataset?: SolidDataset;
   errorComponent?: React.ComponentType<{ error: Error }>;
   loadingComponent?: React.ComponentType | null;
+  deleteComponent?: React.ComponentType<{ onClick: () => void }> | null;
 } & CommonProperties &
   React.ImgHTMLAttributes<HTMLImageElement>;
 
@@ -52,6 +55,7 @@ export function Image({
   properties: propProperties,
   edit,
   autosave,
+  allowDelete,
   onSave,
   onError,
   maxSize,
@@ -59,6 +63,7 @@ export function Image({
   inputProps,
   errorComponent: ErrorComponent,
   loadingComponent: LoadingComponent,
+  deleteComponent: DeleteComponent,
   saveLocation,
   solidDataset,
   ...imgOptions
@@ -111,6 +116,28 @@ export function Image({
       setImgObjectUrl(imageObjectUrl);
     }
   }, [data, fetchingFileInProgress, imgError]);
+
+  const handleDelete = async () => {
+    if (
+      !propThing ||
+      !solidDataset ||
+      !propProperty ||
+      typeof value !== "string" ||
+      !autosave
+    )
+      return;
+    try {
+      const updatedThing = removeUrl(propThing, propProperty, value);
+      const updatedDataset = setThing(solidDataset, updatedThing);
+      const datasetSourceUrl = getSourceUrl(solidDataset);
+      if (!datasetSourceUrl) return;
+      await saveSolidDatasetAt(datasetSourceUrl, updatedDataset, {
+        fetch,
+      });
+    } catch (e) {
+      setError(e as Error);
+    }
+  };
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
@@ -187,6 +214,14 @@ export function Image({
           onChange={(e) => handleChange(e.target)}
         />
       )}
+      {allowDelete &&
+        (DeleteComponent ? (
+          <DeleteComponent onClick={handleDelete} />
+        ) : (
+          <button type="button" onClick={handleDelete}>
+            Delete
+          </button>
+        ))}
     </>
   );
 }

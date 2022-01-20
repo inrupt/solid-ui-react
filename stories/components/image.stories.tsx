@@ -20,7 +20,12 @@
  */
 
 import React, { ReactElement } from "react";
-import { addUrl, createThing } from "@inrupt/solid-client";
+import {
+  addUrl,
+  createSolidDataset,
+  createThing,
+  setThing,
+} from "@inrupt/solid-client";
 import { Image } from "../../src/components/image";
 import CombinedDataProvider from "../../src/context/combinedDataContext";
 import config from "../config";
@@ -84,12 +89,14 @@ interface IWithBasicData {
   property: string;
   properties: Array<string>;
   edit: boolean;
+  allowDelete: boolean;
   maxSize: number;
 }
 export function BasicExample({
   property,
   properties,
   edit,
+  allowDelete,
   maxSize,
 }: IWithBasicData): ReactElement {
   const thing = addUrl(createThing(), property, `${host}/example.jpg`);
@@ -101,6 +108,7 @@ export function BasicExample({
       properties={properties}
       edit={edit}
       maxSize={maxSize}
+      allowDelete={allowDelete}
     />
   );
 }
@@ -108,6 +116,7 @@ export function BasicExample({
 BasicExample.args = {
   property: "http://schema.org/contentUrl",
   edit: false,
+  allowDelete: false,
   maxSize: 100000000,
 };
 
@@ -119,6 +128,7 @@ export function PropertyArrayExample({
   properties,
   edit,
   maxSize,
+  allowDelete,
 }: IWithBasicData): ReactElement {
   const thing = addUrl(createThing(), property, `${host}/example.jpg`);
 
@@ -128,6 +138,7 @@ export function PropertyArrayExample({
       properties={properties}
       edit={edit}
       maxSize={maxSize}
+      allowDelete={allowDelete}
     />
   );
 }
@@ -192,5 +203,32 @@ export function ErrorComponent(): ReactElement {
 }
 
 ErrorComponent.parameters = {
+  actions: { disable: true },
+};
+
+export function DeleteComponent(): ReactElement {
+  const property = "http://schema.org/contentUrl";
+  const thing = addUrl(createThing(), property, `${host}/example.jpg`);
+  const dataset = setThing(createSolidDataset(), thing);
+
+  return (
+    <Image
+      thing={thing}
+      solidDataset={dataset}
+      edit
+      autosave
+      saveLocation={`${host}/`}
+      property={property}
+      allowDelete
+      deleteComponent={({ onClick }) => (
+        <button type="button" onClick={onClick}>
+          Custom Delete Component
+        </button>
+      )}
+    />
+  );
+}
+
+DeleteComponent.parameters = {
   actions: { disable: true },
 };

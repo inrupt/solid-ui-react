@@ -22,6 +22,11 @@
 import React from "react";
 import { render, waitFor, fireEvent } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
+import type {
+  SolidDataset,
+  WithChangeLog,
+  WithServerResourceInfo,
+} from "@inrupt/solid-client";
 import { Image } from ".";
 import * as helpers from "../../helpers";
 
@@ -156,6 +161,33 @@ describe("Image component", () => {
 
       expect(asFragment()).toMatchSnapshot();
     });
+    it("renders a a default delete button if allowDelete is true", () => {
+      const emptyThing = SolidFns.createThing();
+      const { asFragment } = render(
+        <Image
+          thing={emptyThing}
+          allowDelete
+          property="https://example.com/url"
+        />
+      );
+      expect(asFragment()).toMatchSnapshot();
+    });
+    it("renders a a custom delete button if passed and allowDelete is true", () => {
+      const emptyThing = SolidFns.createThing();
+      const { asFragment } = render(
+        <Image
+          thing={emptyThing}
+          allowDelete
+          property="https://example.com/url"
+          deleteComponent={({ onClick }) => (
+            <button type="button" onClick={onClick}>
+              Custom Delete Component
+            </button>
+          )}
+        />
+      );
+      expect(asFragment()).toMatchSnapshot();
+    });
   });
 
   describe("Image functional tests", () => {
@@ -267,7 +299,9 @@ describe("Image component", () => {
       jest.spyOn(SolidFns, "getUrl").mockImplementationOnce(() => null);
       jest
         .spyOn(SolidFns, "saveSolidDatasetAt")
-        .mockResolvedValueOnce(mockDataset as any);
+        .mockResolvedValueOnce(
+          mockDataset as SolidDataset & WithServerResourceInfo & WithChangeLog
+        );
       jest
         .spyOn(SolidFns, "saveFileInContainer")
         .mockResolvedValueOnce(mockFile);
@@ -307,6 +341,32 @@ describe("Image component", () => {
           expect.anything(),
           { fetch: expect.any(Function) }
         );
+      });
+    });
+    it("Should call saveSolidDatasetAt when clicking delete button", async () => {
+      jest
+        .spyOn(SolidFns, "saveSolidDatasetAt")
+        .mockResolvedValue(
+          mockDataset as SolidDataset & WithServerResourceInfo & WithChangeLog
+        );
+      const { getByAltText, getByText } = render(
+        <Image
+          thing={mockThing}
+          solidDataset={mockDataset}
+          edit
+          autosave
+          allowDelete
+          property={mockProperty}
+          alt={mockAlt}
+        />
+      );
+      await waitFor(() =>
+        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+      );
+      const deleteButton = getByText("Delete");
+      fireEvent.click(deleteButton);
+      await waitFor(() => {
+        expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
       });
     });
 
