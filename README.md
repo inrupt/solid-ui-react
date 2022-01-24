@@ -2,6 +2,7 @@
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
 
+This project adheres to the Contributor Covenant [code of conduct](code_of_conduct.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [engineering@inrupt.com](mailto:engineering@inrupt.com).
 
 solid-ui-react is a library of React components made to make development with [Solid](https://solidproject.org/) simple.
 
