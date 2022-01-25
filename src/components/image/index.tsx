@@ -79,7 +79,7 @@ export function Image({
 
   const { value, thing, error: thingError } = values;
   let valueError;
-  if (!edit && !value) {
+  if (!value) {
     valueError = new Error("No value found for property.");
   }
   const isFetchingThing = !thing && !thingError;
