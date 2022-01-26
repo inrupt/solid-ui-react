@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
+### Bugfixes
+
+- When `Image` component is editable, the value error will be set if there is no image available, which means the error component (default or custom) wis displayed correctly. 
+
 ## 2.7.0 ( January 20, 2022 )
 
 ### New features
