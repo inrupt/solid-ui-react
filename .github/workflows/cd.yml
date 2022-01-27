@@ -64,7 +64,7 @@ jobs:
         mediaType: '{"previews": ["flash", "ant-man"]}'
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-    - uses: actions/setup-node@v2.5.0
+    - uses: actions/setup-node@v2.5.1
       with:
         node-version: '16.x'
         registry-url: 'https://registry.npmjs.org'
