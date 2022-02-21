@@ -99,7 +99,7 @@
     "core-js": "^3.18.3",
     "react-table": "^7.6.3",
     "stream": "0.0.2",
-    "swr": "^0.5.7"
+    "swr": "^1.2.2"
   },
   "resolutions": {
     "postcss": "8.4.5"
