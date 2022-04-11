@@ -16,7 +16,7 @@
     "lint": "eslint src stories",
     "test": "jest",
     "test:debug": "node --inspect-brk ./node_modules/.bin/jest -i",
-    "storybook": "start-storybook -s ./public -p 3000 --https --ssl-cert ./certificates/localhost.crt --ssl-key ./certificates/localhost.key",
+    "storybook": "start-storybook -p 3000 --https --ssl-cert ./certificates/localhost.crt --ssl-key ./certificates/localhost.key",
     "build-storybook": "build-storybook -c .storybook -o docs",
     "prepublishOnly": "npm run build"
   },
