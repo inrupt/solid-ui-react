@@ -21,7 +21,9 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+
 import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
 import * as helpers from "../../helpers";
@@ -211,6 +213,8 @@ describe("<Text /> component functional testing", () => {
       .spyOn(SolidFns, "setStringNoLocale")
       .mockImplementation(() => mockThing);
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -222,8 +226,11 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
+
+    await user.type(input, "updated nick value");
+    // blur the input:
+    await user.tab();
+
     expect(SolidFns.setStringNoLocale).toHaveBeenCalled();
   });
 
@@ -232,6 +239,8 @@ describe("<Text /> component functional testing", () => {
       .spyOn(SolidFns, "setStringWithLocale")
       .mockImplementation(() => mockThing);
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -244,8 +253,11 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
+
+    await user.type(input, "updated nick value");
+    // blur the input:
+    await user.tab();
+
     expect(SolidFns.setStringWithLocale).toHaveBeenCalled();
   });
 
@@ -253,6 +265,8 @@ describe("<Text /> component functional testing", () => {
     jest
       .spyOn(SolidFns, "setStringWithLocale")
       .mockImplementation(() => mockThing);
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -265,7 +279,11 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    input.blur();
+
+    await user.type(input, "u{Backspace}");
+    // blur the input:
+    await user.tab();
+
     expect(SolidFns.setStringWithLocale).toHaveBeenCalledTimes(0);
   });
 
@@ -290,6 +308,9 @@ describe("<Text /> component functional testing", () => {
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
     jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
+
+    const user = userEvent.setup();
+
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -303,9 +324,12 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(onSave).toHaveBeenCalled());
+
+    await user.type(input, "updated nick value");
+    // blur the input:
+    await user.tab();
+
+    expect(onSave).toHaveBeenCalled();
   });
 
   it("Should call onSave for fetched dataset with custom location if it is passed", async () => {
@@ -313,6 +337,8 @@ describe("<Text /> component functional testing", () => {
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
     jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -327,14 +353,20 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(onSave).toHaveBeenCalled());
+
+    await user.type(input, "updated nick value");
+
+    // blur the input:
+    await user.tab();
+
+    expect(onSave).toHaveBeenCalled();
   });
 
   it("Should call onError if saving fails", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
     const onError = jest.fn();
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDataset}
@@ -348,14 +380,20 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
+
+    await user.type(input, "updated nick value");
+
+    // blur the input:
+    await user.tab();
+
+    expect(onError).toHaveBeenCalled();
   });
 
   it("Should call onError if saving fetched dataset to custom location fails", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
     const onError = jest.fn();
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -369,13 +407,19 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
+
+    await user.type(input, "updated nick value");
+
+    // blur the input:
+    await user.tab();
+
+    expect(onError).toHaveBeenCalled();
   });
 
   it("Should throw error if SaveDatasetTo is missing for new data", async () => {
     jest.spyOn(console, "error").mockImplementation(() => {});
+
+    const user = userEvent.setup();
     const { getByText, getByDisplayValue } = render(
       <ErrorBoundary
         fallbackRender={({ error }) => <div>{JSON.stringify(error)}</div>}
@@ -392,9 +436,13 @@ describe("<Text /> component functional testing", () => {
 
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(getByText("{}")).toBeDefined());
+
+    await user.type(input, "updated nick value");
+
+    // blur the input:
+    await user.tab();
+
+    expect(getByText("{}")).toBeDefined();
     // eslint-disable-next-line no-console
     (console.error as jest.Mock).mockRestore();
   });
@@ -412,6 +460,8 @@ describe("<Text /> component functional testing", () => {
       thing: mockThing,
       property: mockPredicate,
     });
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -424,9 +474,12 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
+
+    await user.type(input, "updated nick value");
+    // blur the input:
+    await user.tab();
+
     expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
-    await waitFor(() => expect(setDataset).toHaveBeenCalledWith(latestDataset));
+    expect(setDataset).toHaveBeenCalledWith(latestDataset);
   });
 });

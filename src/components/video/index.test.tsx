@@ -20,7 +20,9 @@
  */
 
 import React from "react";
-import { render, waitFor, fireEvent } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+
 import * as SolidFns from "@inrupt/solid-client";
 import { Video } from ".";
 import * as helpers from "../../helpers";
@@ -36,6 +38,9 @@ const mockThing = SolidFns.addUrl(
 
 const mockObjectUrl = "mock object url";
 const mockFile = SolidFns.mockFileFrom(mockUrl);
+const mockFileUpload = new File(["some binary data"], "movie.mp4", {
+  type: "video/mp4",
+});
 
 window.URL.createObjectURL = jest.fn(() => mockObjectUrl);
 
@@ -210,6 +215,7 @@ describe("Video component", () => {
     });
 
     it("Should not call overwriteFile on change if autosave is false", async () => {
+      const user = userEvent.setup();
       const { getByAltText, getByTitle } = render(
         <Video
           thing={mockThing}
@@ -222,16 +228,16 @@ describe("Video component", () => {
       await waitFor(() =>
         expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
       );
-      fireEvent.change(getByAltText("test-input"), {
-        target: {
-          files: [mockFile],
-        },
-      });
+
+      await user.upload(getByAltText("test-input"), mockFileUpload);
+
       expect(SolidFns.overwriteFile).not.toHaveBeenCalled();
     });
 
     it("Should call overwriteFile on change if autosave is true", async () => {
       const mockUpdatedObjectUrl = "updated mock object url";
+
+      const user = userEvent.setup();
       const { getByAltText, getByTitle } = render(
         <Video
           thing={mockThing}
@@ -245,23 +251,22 @@ describe("Video component", () => {
       await waitFor(() =>
         expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
       );
-      fireEvent.change(getByAltText("test-input"), {
-        target: {
-          files: [mockFile],
-        },
-      });
+
+      // Setup the new url:
       (window.URL.createObjectURL as jest.Mock).mockReturnValueOnce(
         mockUpdatedObjectUrl
       );
-      await waitFor(() =>
-        expect(getByTitle(mockTitle).getAttribute("src")).toBe(
-          mockUpdatedObjectUrl
-        )
+
+      await user.upload(getByAltText("test-input"), mockFileUpload);
+
+      expect(getByTitle(mockTitle).getAttribute("src")).toBe(
+        mockUpdatedObjectUrl
       );
       expect(SolidFns.overwriteFile).toHaveBeenCalled();
     });
 
-    test.skip("Should not call overwriteFile on change if file size > maxSize", async () => {
+    it("Should not call overwriteFile on change if file size > maxSize", async () => {
+      const user = userEvent.setup();
       const { getByAltText, getByTitle } = render(
         <Video
           thing={mockThing}
@@ -273,20 +278,21 @@ describe("Video component", () => {
           inputProps={{ alt: "test-input" }}
         />
       );
+
       await waitFor(() =>
         expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
       );
-      fireEvent.change(getByAltText("test-input"), {
-        target: {
-          files: [mockFile],
-        },
-      });
+
+      await user.upload(getByAltText("test-input"), mockFileUpload);
+
       expect(SolidFns.overwriteFile).not.toHaveBeenCalled();
     });
 
     it("Should call onSave after successful overwrite, if it is passed", async () => {
       const mockUpdatedObjectUrl = "updated mock object url";
       const mockOnSave = jest.fn();
+
+      const user = userEvent.setup();
       const { getByAltText, getByTitle } = render(
         <Video
           thing={mockThing}
@@ -301,24 +307,25 @@ describe("Video component", () => {
       await waitFor(() =>
         expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
       );
-      fireEvent.change(getByAltText("test-input"), {
-        target: {
-          files: [mockFile],
-        },
-      });
+
+      // Setup the new url:
       (window.URL.createObjectURL as jest.Mock).mockReturnValueOnce(
         mockUpdatedObjectUrl
       );
-      await waitFor(() =>
-        expect(getByTitle(mockTitle).getAttribute("src")).toBe(
-          mockUpdatedObjectUrl
-        )
+
+      await user.upload(getByAltText("test-input"), mockFileUpload);
+
+      expect(getByTitle(mockTitle).getAttribute("src")).toBe(
+        mockUpdatedObjectUrl
       );
+
       expect(mockOnSave).toHaveBeenCalled();
     });
 
     it("Should not fetch updated video if overwriteFile fails", async () => {
       (SolidFns.overwriteFile as jest.Mock).mockRejectedValueOnce(null);
+
+      const user = userEvent.setup();
       const { getByAltText, getByTitle } = render(
         <Video
           thing={mockThing}
@@ -329,23 +336,22 @@ describe("Video component", () => {
           inputProps={{ alt: "test-input" }}
         />
       );
+
       await waitFor(() =>
         expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
       );
-      fireEvent.change(getByAltText("test-input"), {
-        target: {
-          files: [mockFile],
-        },
-      });
-      await waitFor(() =>
-        expect(SolidFns.overwriteFile).toHaveBeenCalledTimes(1)
-      );
-      await waitFor(() => expect(SolidFns.getFile).toHaveBeenCalledTimes(1));
+
+      await user.upload(getByAltText("test-input"), mockFileUpload);
+
+      expect(SolidFns.overwriteFile).toHaveBeenCalledTimes(1);
+      expect(SolidFns.getFile).toHaveBeenCalledTimes(1);
     });
 
     it("Should call onError if overwriteFile fails, if it is passed", async () => {
       const mockOnError = jest.fn();
       (SolidFns.overwriteFile as jest.Mock).mockRejectedValueOnce(null);
+
+      const user = userEvent.setup();
       const { getByAltText, getByTitle } = render(
         <Video
           thing={mockThing}
@@ -357,15 +363,14 @@ describe("Video component", () => {
           inputProps={{ alt: "test-input" }}
         />
       );
+
       await waitFor(() =>
         expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
       );
-      fireEvent.change(getByAltText("test-input"), {
-        target: {
-          files: [mockFile],
-        },
-      });
-      await waitFor(() => expect(mockOnError).toHaveBeenCalled());
+
+      await user.upload(getByAltText("test-input"), mockFileUpload);
+
+      expect(mockOnError).toHaveBeenCalled();
     });
   });
 });

@@ -30,7 +30,7 @@ import { SessionContext } from "../../context/sessionContext";
 
 export type Props = {
   saveLocation: Url | UrlString;
-  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  inputProps?: Omit<React.InputHTMLAttributes<HTMLInputElement>, "multiple">;
   autosave?: boolean;
   onSave?: (savedFile?: File & WithResourceInfo) => void;
   onError?: (error: Error) => void;
@@ -47,9 +47,12 @@ export function FileUpload({
 
   const handleChange = async (e: React.FormEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
+
+    // This is a typescript bug, as target.files should always be a FileList:
     if (!target.files) {
       return;
     }
+
     if (!autosave) {
       return;
     }

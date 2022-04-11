@@ -21,7 +21,9 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+
 import * as SolidFns from "@inrupt/solid-client";
 import * as helpers from "../../../helpers";
 import DecimalValue from "./index";
@@ -73,7 +75,7 @@ describe("<DecimalValue /> component functional testing", () => {
     expect(getByText(mockVersion)).toBeDefined();
   });
 
-  it("should call setDecimal on blur", () => {
+  it("should call setDecimal on blur", async () => {
     jest
       .spyOn(SolidFns, "setDecimal" as any)
       .mockImplementationOnce(() => null);
@@ -84,6 +86,7 @@ describe("<DecimalValue /> component functional testing", () => {
 
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
 
+    const user = userEvent.setup();
     const { getByTitle } = render(
       <DecimalValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -96,8 +99,11 @@ describe("<DecimalValue /> component functional testing", () => {
     );
     const input = getByTitle("test title");
     input.focus();
-    fireEvent.change(input, { target: { value: testVersion } });
-    input.blur();
+
+    await user.type(input, testVersion.toString());
+    // blur the input:
+    await user.tab();
+
     expect(mockSetter).toHaveBeenCalled();
   });
 
@@ -119,6 +125,7 @@ describe("<DecimalValue /> component functional testing", () => {
   });
 
   it("Should call saveSolidDatasetAt onBlur if autosave is true", async () => {
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <DecimalValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -130,9 +137,12 @@ describe("<DecimalValue /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockVersion);
     input.focus();
-    fireEvent.change(input, { target: { value: testVersion } });
-    input.blur();
-    await waitFor(() => expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled());
+
+    await user.type(input, testVersion.toString());
+    // blur the input:
+    await user.tab();
+
+    expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
   });
 
   it("Should not call saveSolidDatasetAt onBlur if autosave is false", async () => {
@@ -154,6 +164,8 @@ describe("<DecimalValue /> component functional testing", () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <DecimalValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -165,17 +177,23 @@ describe("<DecimalValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByDisplayValue(mockVersion);
     input.focus();
-    fireEvent.change(input, { target: { value: testVersion } });
-    input.blur();
-    await waitFor(() => expect(onSave).toHaveBeenCalled());
+
+    await user.type(input, testVersion.toString());
+    // blur the input:
+    await user.tab();
+
+    expect(onSave).toHaveBeenCalled();
   });
 
   it("Should call onSave for fetched dataset with custom location if it is passed", async () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <DecimalValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -190,9 +208,12 @@ describe("<DecimalValue /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockVersion);
     input.focus();
-    fireEvent.change(input, { target: { value: testVersion } });
-    input.blur();
-    await waitFor(() => expect(onSave).toHaveBeenCalled());
+
+    await user.type(input, testVersion.toString());
+    // blur the input:
+    await user.tab();
+
+    expect(onSave).toHaveBeenCalled();
   });
   it("Should update context with latest dataset after saving", async () => {
     const setDataset = jest.fn();
@@ -206,6 +227,8 @@ describe("<DecimalValue /> component functional testing", () => {
       thing: mockThing,
       property: mockPredicate,
     });
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <DecimalValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -215,14 +238,16 @@ describe("<DecimalValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByDisplayValue(mockVersion);
     input.focus();
-    fireEvent.change(input, { target: { value: testVersion } });
-    input.blur();
-    await waitFor(() => {
-      expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
-      expect(setDataset).toHaveBeenCalledWith(latestDataset);
-    });
+
+    await user.type(input, testVersion.toString());
+    // blur the input:
+    await user.tab();
+
+    expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
+    expect(setDataset).toHaveBeenCalledWith(latestDataset);
   });
 
   it("Should call onError if Thing not found", async () => {
@@ -254,6 +279,8 @@ describe("<DecimalValue /> component functional testing", () => {
   it("Should call onError if saving fails", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
     const onError = jest.fn();
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <DecimalValue
         solidDataset={mockDataset}
@@ -265,16 +292,22 @@ describe("<DecimalValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByDisplayValue(mockVersion);
     input.focus();
-    fireEvent.change(input, { target: { value: testVersion } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
+
+    await user.type(input, testVersion.toString());
+    // blur the input:
+    await user.tab();
+
+    expect(onError).toHaveBeenCalled();
   });
 
   it("Should call onError if saving fetched dataset to custom location fails", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
     const onError = jest.fn();
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <DecimalValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -286,11 +319,15 @@ describe("<DecimalValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByDisplayValue(mockVersion);
     input.focus();
-    fireEvent.change(input, { target: { value: testVersion } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
+
+    await user.type(input, testVersion.toString());
+    // blur the input:
+    await user.tab();
+
+    expect(onError).toHaveBeenCalled();
   });
 
   it("Should call onError if trying to save a non-fetched dataset without saveDatasetTo", async () => {
@@ -300,6 +337,8 @@ describe("<DecimalValue /> component functional testing", () => {
     );
 
     const onError = jest.fn();
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <DecimalValue
         solidDataset={mockUnfetchedDataset}
@@ -312,8 +351,11 @@ describe("<DecimalValue /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockVersion);
     input.focus();
-    fireEvent.change(input, { target: { value: testVersion } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
+
+    await user.type(input, testVersion.toString());
+    // blur the input:
+    await user.tab();
+
+    expect(onError).toHaveBeenCalled();
   });
 });

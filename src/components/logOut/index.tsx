@@ -47,6 +47,8 @@ export const LogoutButton: React.FC<Props> = (propsLogout: Props) => {
   function keyDownHandler(
     e: React.KeyboardEvent<HTMLDivElement | HTMLButtonElement>
   ): Promise<void> {
+    e.preventDefault();
+
     return e.key === "Enter" ? logoutHandler() : Promise.resolve();
   }
 

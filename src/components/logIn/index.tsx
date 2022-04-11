@@ -63,6 +63,8 @@ export const LoginButton: React.FC<Props> = (propsLogin: Props) => {
   function keyDownHandler(
     e: React.KeyboardEvent<HTMLDivElement | HTMLButtonElement>
   ): Promise<void> {
+    e.preventDefault();
+
     return e.key === "Enter" ? loginHandler() : Promise.resolve();
   }
 

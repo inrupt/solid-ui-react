@@ -20,7 +20,8 @@
  */
 
 import * as React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import {
   logout,
@@ -42,6 +43,8 @@ const session = {
 } as any;
 
 beforeEach(() => {
+  jest.resetAllMocks();
+
   (getDefaultSession as jest.Mock).mockReturnValue(session);
   (handleIncomingRedirect as jest.Mock).mockResolvedValueOnce(null);
 });
@@ -75,55 +78,75 @@ describe("<LogoutButton /> component visual testing", () => {
 
 describe("<LogOutButton /> component functional testing", () => {
   it("fires the onClick function and calls onLogout", async () => {
+    const user = userEvent.setup();
+
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <LogoutButton onLogout={onLogout} onError={onError} />
       </SessionProvider>
     );
 
-    fireEvent.click(getByText("Log Out"));
+    await user.click(getByText("Log Out"));
 
-    await waitFor(() => expect(logout).toHaveBeenCalledTimes(1));
-    await waitFor(() => expect(onLogout).toHaveBeenCalledTimes(1));
+    expect(logout).toHaveBeenCalledTimes(1);
+    expect(onLogout).toHaveBeenCalledTimes(1);
   });
 
   it("fires the onKeyPress function if enter is pressed", async () => {
+    const user = userEvent.setup();
+
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <LogoutButton onLogout={onLogout} onError={onError} />
       </SessionProvider>
     );
 
-    fireEvent.keyDown(getByText("Log Out"), { key: "Enter", code: "Enter" });
-    await waitFor(() => expect(logout).toHaveBeenCalledTimes(1));
-    await waitFor(() => expect(onLogout).toHaveBeenCalledTimes(1));
+    // Focus the button
+    getByText("Log Out").focus();
+
+    await user.keyboard("{Enter}");
+
+    expect(logout).toHaveBeenCalledTimes(1);
+    expect(onLogout).toHaveBeenCalledTimes(1);
   });
 
   it("does not fire the onKeyPress function if a non-enter button is pressed", async () => {
+    const user = userEvent.setup();
+
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <LogoutButton onLogout={onLogout} onError={onError} />
       </SessionProvider>
     );
 
-    fireEvent.keyDown(getByText("Log Out"), { key: "A", code: "A" });
+    // First focus the button, then press enter:
+    getByText("Log Out").focus();
+
+    await user.keyboard("A");
+
+    expect(onLogout).not.toHaveBeenCalled();
     expect(logout).not.toHaveBeenCalled();
   });
 
   it("fires on click and doesn't pass onLogout", async () => {
+    const user = userEvent.setup();
+
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <LogoutButton onError={onError} />
       </SessionProvider>
     );
 
-    fireEvent.click(getByText("Log Out"));
-    await waitFor(() => expect(logout).toHaveBeenCalledTimes(1));
-    await waitFor(() => expect(onLogout).toHaveBeenCalledTimes(0));
+    await user.click(getByText("Log Out"));
+
+    expect(logout).toHaveBeenCalledTimes(1);
+    expect(onLogout).toHaveBeenCalledTimes(0);
   });
 
   it("fires the onClick function and calls OnError", async () => {
     (logout as jest.Mock).mockRejectedValue(null);
+
+    const user = userEvent.setup();
 
     const { getByText } = render(
       <SessionProvider sessionId="key">
@@ -131,20 +154,24 @@ describe("<LogOutButton /> component functional testing", () => {
       </SessionProvider>
     );
 
-    fireEvent.click(getByText("Log Out"));
-    await waitFor(() => expect(logout).toHaveBeenCalledTimes(1));
-    await waitFor(() => expect(onError).toHaveBeenCalledTimes(1));
+    await user.click(getByText("Log Out"));
+
+    expect(logout).toHaveBeenCalledTimes(1);
+    expect(onError).toHaveBeenCalledTimes(1);
   });
 
   it("fires the onClick function and doesn't call OnError if it wasn't provided", async () => {
     (logout as jest.Mock).mockRejectedValue(null);
+
+    const user = userEvent.setup();
 
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <LogoutButton onLogout={onLogout} />
       </SessionProvider>
     );
-    fireEvent.click(getByText("Log Out"));
-    await waitFor(() => expect(onError).toHaveBeenCalledTimes(0));
+    await user.click(getByText("Log Out"));
+
+    expect(onError).toHaveBeenCalledTimes(0);
   });
 });

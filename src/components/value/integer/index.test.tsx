@@ -21,7 +21,9 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+
 import * as SolidFns from "@inrupt/solid-client";
 import * as helpers from "../../../helpers";
 import IntegerValue from "./index";
@@ -73,7 +75,7 @@ describe("<IntegerValue /> component functional testing", () => {
     expect(getByText(mockCopyrightYear)).toBeDefined();
   });
 
-  it("should call setInteger on blur", () => {
+  it("should call setInteger on blur", async () => {
     jest
       .spyOn(SolidFns, "setInteger" as any)
       .mockImplementationOnce(() => null);
@@ -84,6 +86,7 @@ describe("<IntegerValue /> component functional testing", () => {
 
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
 
+    const user = userEvent.setup();
     const { getByTitle } = render(
       <IntegerValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -94,10 +97,14 @@ describe("<IntegerValue /> component functional testing", () => {
         inputProps={{ title: "test title" }}
       />
     );
+
     const input = getByTitle("test title");
     input.focus();
-    fireEvent.change(input, { target: { value: testCopyrightYear } });
-    input.blur();
+
+    await user.type(input, testCopyrightYear.toString());
+    // blur the input:
+    await user.tab();
+
     expect(mockSetter).toHaveBeenCalled();
   });
 
@@ -119,6 +126,7 @@ describe("<IntegerValue /> component functional testing", () => {
   });
 
   it("Should call saveSolidDatasetAt onBlur if autosave is true", async () => {
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <IntegerValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -128,11 +136,15 @@ describe("<IntegerValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByDisplayValue(mockCopyrightYear);
     input.focus();
-    fireEvent.change(input, { target: { value: testCopyrightYear } });
-    input.blur();
-    await waitFor(() => expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled());
+
+    await user.type(input, testCopyrightYear.toString());
+    // blur the input:
+    await user.tab();
+
+    expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
   });
 
   it("Should not call saveSolidDatasetAt onBlur if autosave is false", async () => {
@@ -154,6 +166,8 @@ describe("<IntegerValue /> component functional testing", () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <IntegerValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -167,15 +181,20 @@ describe("<IntegerValue /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockCopyrightYear);
     input.focus();
-    fireEvent.change(input, { target: { value: testCopyrightYear } });
-    input.blur();
-    await waitFor(() => expect(onSave).toHaveBeenCalled());
+
+    await user.type(input, testCopyrightYear.toString());
+    // blur the input:
+    await user.tab();
+
+    expect(onSave).toHaveBeenCalled();
   });
 
   it("Should call onSave for fetched dataset with custom location if it is passed", async () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <IntegerValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -190,9 +209,12 @@ describe("<IntegerValue /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockCopyrightYear);
     input.focus();
-    fireEvent.change(input, { target: { value: testCopyrightYear } });
-    input.blur();
-    await waitFor(() => expect(onSave).toHaveBeenCalled());
+
+    await user.type(input, testCopyrightYear.toString());
+    // blur the input:
+    await user.tab();
+
+    expect(onSave).toHaveBeenCalled();
   });
 
   it("Should update context with latest dataset after saving", async () => {
@@ -207,6 +229,8 @@ describe("<IntegerValue /> component functional testing", () => {
       thing: mockThing,
       property: mockPredicate,
     });
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <IntegerValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -216,14 +240,16 @@ describe("<IntegerValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByDisplayValue(mockCopyrightYear);
     input.focus();
-    fireEvent.change(input, { target: { value: testCopyrightYear } });
-    input.blur();
-    await waitFor(() => {
-      expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
-      expect(setDataset).toHaveBeenCalledWith(latestDataset);
-    });
+
+    await user.type(input, testCopyrightYear.toString());
+    // blur the input:
+    await user.tab();
+
+    expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
+    expect(setDataset).toHaveBeenCalledWith(latestDataset);
   });
 
   it("Should call onError if Thing not found", async () => {
@@ -255,6 +281,8 @@ describe("<IntegerValue /> component functional testing", () => {
   it("Should call onError if saving fails", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
     const onError = jest.fn();
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <IntegerValue
         solidDataset={mockDataset}
@@ -266,16 +294,22 @@ describe("<IntegerValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByDisplayValue(mockCopyrightYear);
     input.focus();
-    fireEvent.change(input, { target: { value: testCopyrightYear } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
+
+    await user.type(input, testCopyrightYear.toString());
+    // blur the input:
+    await user.tab();
+
+    expect(onError).toHaveBeenCalled();
   });
 
   it("Should call onError if saving fetched dataset to custom location fails", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
     const onError = jest.fn();
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <IntegerValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -287,11 +321,15 @@ describe("<IntegerValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByDisplayValue(mockCopyrightYear);
     input.focus();
-    fireEvent.change(input, { target: { value: testCopyrightYear } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
+
+    await user.type(input, testCopyrightYear.toString());
+    // blur the input:
+    await user.tab();
+
+    expect(onError).toHaveBeenCalled();
   });
 
   it("Should call onError if trying to save a non-fetched dataset without saveDatasetTo", async () => {
@@ -301,6 +339,8 @@ describe("<IntegerValue /> component functional testing", () => {
     );
 
     const onError = jest.fn();
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <IntegerValue
         solidDataset={mockUnfetchedDataset}
@@ -311,10 +351,14 @@ describe("<IntegerValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByDisplayValue(mockCopyrightYear);
     input.focus();
-    fireEvent.change(input, { target: { value: testCopyrightYear } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
+
+    await user.type(input, testCopyrightYear.toString());
+    // blur the input:
+    await user.tab();
+
+    expect(onError).toHaveBeenCalled();
   });
 });
