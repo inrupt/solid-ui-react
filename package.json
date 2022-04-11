@@ -16,6 +16,7 @@
     "ci": "npm run lint && npm run test && npm run audit && npm run audit-licenses && npm run build",
     "lint": "eslint src stories",
     "test": "jest",
+    "test:debug": "node --inspect-brk ./node_modules/.bin/jest -i",
     "storybook": "start-storybook -s ./public -p 3000 --https --ssl-cert ./certificates/localhost.crt --ssl-key ./certificates/localhost.key",
     "build-storybook": "build-storybook -c .storybook -o docs",
     "prepublishOnly": "npm run build"
