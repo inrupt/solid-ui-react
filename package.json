@@ -22,7 +22,7 @@
     "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
-    "react": ">16.13.0 || ^17.0.2"
+    "react": ">16.13.0 || ^17.0.0 || ^18.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",
