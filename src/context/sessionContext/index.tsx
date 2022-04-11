@@ -69,7 +69,6 @@ export const SessionContext = createContext<ISessionContext>({
 export interface ISessionProvider {
   children: ReactNode;
   sessionId?: string;
-  session?: Session;
   sessionRequestInProgress?: boolean;
   onError?: (error: Error) => void;
   /** @since 2.3.0 */

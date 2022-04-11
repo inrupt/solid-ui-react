@@ -26,7 +26,7 @@ import userEvent from "@testing-library/user-event";
 
 import * as SolidFns from "@inrupt/solid-client";
 import * as helpers from "../../../helpers";
-import StringValue from "./index";
+import StringValue from ".";
 
 const mockPredicate = `http://xmlns.com/foaf/0.1/nick`;
 const mockNick = "test nick value";

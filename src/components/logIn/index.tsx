@@ -34,10 +34,13 @@ export interface Props {
 /**
  * Displays a button which triggers the login flow on click. Should be used inside a `SessionProvider`.
  */
-export const LoginButton: React.FC<Props> = (propsLogin: Props) => {
-  const { oidcIssuer, redirectUrl, children, authOptions, onError } =
-    propsLogin;
-
+export const LoginButton: React.FC<Props> = ({
+  oidcIssuer,
+  redirectUrl,
+  children,
+  authOptions,
+  onError,
+}: Props) => {
   const options = {
     redirectUrl,
     oidcIssuer,

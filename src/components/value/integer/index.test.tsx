@@ -26,7 +26,7 @@ import userEvent from "@testing-library/user-event";
 
 import * as SolidFns from "@inrupt/solid-client";
 import * as helpers from "../../../helpers";
-import IntegerValue from "./index";
+import IntegerValue from ".";
 
 const mockPredicate = "http://schema.org/copyrightYear";
 const mockCopyrightYear = 2021;

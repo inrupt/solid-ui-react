@@ -26,7 +26,7 @@ import userEvent from "@testing-library/user-event";
 
 import * as SolidFns from "@inrupt/solid-client";
 import * as helpers from "../../../helpers";
-import UrlValue from "./index";
+import UrlValue from ".";
 
 const mockPredicate = "http://schema.org/url";
 const mockUrl = "https://example.com";

@@ -21,11 +21,11 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
-import { render, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import * as SolidFns from "@inrupt/solid-client";
-import { FileUpload } from "./index";
+import { FileUpload } from ".";
 
 const inputOptions = {
   name: "test-name",
@@ -88,35 +88,30 @@ describe("<FileUpload /> component functional testing", () => {
   // see: https://github.com/testing-library/user-event/issues/923
   // eslint-disable-next-line jest/no-disabled-tests
   it.skip("Should call onSave if it is passed with a Blob", async () => {
-    jest
-      .spyOn(SolidFns, "saveFileInContainer")
-      .mockResolvedValueOnce(
-        SolidFns.mockFileFrom(
-          "https://danbarclay.inrupt.net/public/f98e1a00-c9e7-11eb-99aa-c3d144c71c98.txt"
-        )
-      );
-    const onSave = jest.fn();
-    const onError = jest.fn();
-
-    // const user = userEvent.setup();
-
-    // const blob = new Blob(["foo"], {
-    //   type: "text/plain",
-    // });
-
-    const { getByTestId } = render(
-      <FileUpload
-        saveLocation="https://fake.url"
-        onSave={onSave}
-        onError={onError}
-        autosave
-      />
-    );
-    const input = getByTestId("form-input");
-    // FIXME: Support blobs:
+    // jest
+    //   .spyOn(SolidFns, "saveFileInContainer")
+    //   .mockResolvedValueOnce(
+    //     SolidFns.mockFileFrom(
+    //       "https://danbarclay.inrupt.net/public/f98e1a00-c9e7-11eb-99aa-c3d144c71c98.txt"
+    //     )
+    //   );
+    // const onSave = jest.fn();
+    // const onError = jest.fn();
+    // // const user = userEvent.setup();
+    // // const blob = new Blob(["foo"], {
+    // //   type: "text/plain",
+    // // });
+    // const { getByTestId } = render(
+    //   <FileUpload
+    //     saveLocation="https://fake.url"
+    //     onSave={onSave}
+    //     onError={onError}
+    //     autosave
+    //   />
+    // );
+    // const input = getByTestId("form-input");
     // await user.upload(input, [blob]);
-
-    expect(onSave).toHaveBeenCalled();
+    // expect(onSave).toHaveBeenCalled();
   });
 
   it("Should call onError if saving file to custom location fails", async () => {

@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { ReactElement } from "react";
 import * as SolidFns from "@inrupt/solid-client";
 import { DataType } from "../../src/helpers";

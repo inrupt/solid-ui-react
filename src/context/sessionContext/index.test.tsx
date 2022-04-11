@@ -31,7 +31,7 @@ import {
   onSessionRestore,
 } from "@inrupt/solid-client-authn-browser";
 
-import { SessionContext, SessionProvider } from "./index";
+import { SessionContext, SessionProvider } from ".";
 
 jest.mock("@inrupt/solid-client-authn-browser");
 jest.mock("@inrupt/solid-client");

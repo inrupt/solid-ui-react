@@ -26,7 +26,7 @@ import userEvent from "@testing-library/user-event";
 
 import * as SolidFns from "@inrupt/solid-client";
 import * as helpers from "../../../helpers";
-import DatetimeValue from "./index";
+import DatetimeValue from ".";
 
 const mockPredicate = "http://www.w3.org/2006/vcard/ns#bday";
 const mockBday = new Date("2021-05-04T06:00:00.000Z");

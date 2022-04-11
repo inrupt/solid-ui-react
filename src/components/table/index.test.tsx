@@ -26,7 +26,7 @@ import userEvent from "@testing-library/user-event";
 
 import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
-import { Table, TableColumn } from "./index";
+import { Table, TableColumn } from ".";
 
 const namePredicate = `http://xmlns.com/foaf/0.1/name`;
 const nickPredicate = `http://xmlns.com/foaf/0.1/nick`;

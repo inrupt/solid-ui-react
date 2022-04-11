@@ -28,7 +28,7 @@ import {
   handleIncomingRedirect,
 } from "@inrupt/solid-client-authn-browser";
 
-import { LoginButton } from "./index";
+import { LoginButton } from ".";
 import { SessionProvider } from "../../context/sessionContext";
 
 jest.mock("@inrupt/solid-client-authn-browser");

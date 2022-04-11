@@ -18,5 +18,10 @@ module.exports = {
         extensions: [".tsx"],
       },
     ],
+    "import/no-unresolved": "off",
+    "no-shadow": "warn",
+    "react/require-default-props": "warn",
+    "react/default-props-match-prop-types": "warn",
+    noImplicitAny: "off",
   },
 };

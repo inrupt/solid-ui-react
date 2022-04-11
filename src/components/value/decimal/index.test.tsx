@@ -26,7 +26,7 @@ import userEvent from "@testing-library/user-event";
 
 import * as SolidFns from "@inrupt/solid-client";
 import * as helpers from "../../../helpers";
-import DecimalValue from "./index";
+import DecimalValue from ".";
 
 const mockPredicate = "http://schema.org/version";
 const mockVersion = 1.1;

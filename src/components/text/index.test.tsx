@@ -27,7 +27,7 @@ import userEvent from "@testing-library/user-event";
 import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
 import * as helpers from "../../helpers";
-import { Text } from "./index";
+import { Text } from ".";
 import { DatasetProvider } from "../../context/datasetContext";
 import { ThingProvider } from "../../context/thingContext";
 

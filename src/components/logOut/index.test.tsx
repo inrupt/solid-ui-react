@@ -30,7 +30,7 @@ import {
 } from "@inrupt/solid-client-authn-browser";
 
 import { SessionProvider } from "../../context/sessionContext";
-import { LogoutButton } from "./index";
+import { LogoutButton } from ".";
 
 jest.mock("@inrupt/solid-client-authn-browser");
 
