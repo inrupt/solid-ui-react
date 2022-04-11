@@ -28,7 +28,7 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run test
-      - run: npm run audit
+      - run: npm run audit --production
       - run: npm run audit-licenses
       - run: npm run build
       - name: Archive code coverage results
