@@ -25,7 +25,7 @@ import {
   DataType,
   getPropertyForThing,
   getValueByType,
-} from "./index";
+} from ".";
 
 describe("getValueByTypeAll", () => {
   it.each([

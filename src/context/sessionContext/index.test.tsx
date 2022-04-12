@@ -20,7 +20,8 @@
  */
 
 import * as React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import {
   login,
@@ -30,7 +31,7 @@ import {
   onSessionRestore,
 } from "@inrupt/solid-client-authn-browser";
 
-import { SessionContext, SessionProvider } from "./index";
+import { SessionContext, SessionProvider } from ".";
 
 jest.mock("@inrupt/solid-client-authn-browser");
 jest.mock("@inrupt/solid-client");
@@ -199,6 +200,7 @@ describe("SessionContext functionality", () => {
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
+    const user = userEvent.setup();
     const screen = render(
       <SessionProvider sessionId="key">
         <ChildComponent />
@@ -209,12 +211,9 @@ describe("SessionContext functionality", () => {
         "1 alt profiles found"
       );
     });
-    fireEvent.click(screen.getByTestId("logout"));
-    await waitFor(async () => {
-      expect(screen.getByTestId("profile").textContent).toBe(
-        "No profile found"
-      );
-    });
+    await user.click(screen.getByTestId("logout"));
+
+    expect(screen.getByTestId("profile").textContent).toBe("No profile found");
     expect(mockedClientModule.getProfileAll).toHaveBeenCalled();
   });
 
@@ -231,6 +230,7 @@ describe("SessionContext functionality", () => {
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
+    const user = userEvent.setup();
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <ChildComponent />
@@ -244,17 +244,13 @@ describe("SessionContext functionality", () => {
     expect(login).not.toHaveBeenCalled();
     expect(logout).not.toHaveBeenCalled();
 
-    fireEvent.click(getByText("Login"));
+    await user.click(getByText("Login"));
 
-    await waitFor(() => {
-      expect(login).toHaveBeenCalledTimes(1);
-    });
+    expect(login).toHaveBeenCalledTimes(1);
 
-    fireEvent.click(getByText("Logout"));
+    await user.click(getByText("Logout"));
 
-    await waitFor(() => {
-      expect(logout).toHaveBeenCalledTimes(1);
-    });
+    expect(logout).toHaveBeenCalledTimes(1);
   });
 
   it("calls onError if there is an error logging in", async () => {
@@ -272,6 +268,7 @@ describe("SessionContext functionality", () => {
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
+    const user = userEvent.setup();
     const { getByText } = render(
       <SessionProvider sessionId="key" onError={onError}>
         <ChildComponent />
@@ -282,8 +279,9 @@ describe("SessionContext functionality", () => {
       expect(handleIncomingRedirect).toHaveBeenCalled();
     });
 
-    fireEvent.click(getByText("Login"));
-    await waitFor(() => expect(onError).toHaveBeenCalledTimes(1));
+    await user.click(getByText("Login"));
+
+    expect(onError).toHaveBeenCalledTimes(1);
   });
 
   it("calls onError if there is an error logging out", async () => {
@@ -301,6 +299,7 @@ describe("SessionContext functionality", () => {
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
+    const user = userEvent.setup();
     const { getByText } = render(
       <SessionProvider sessionId="key" onError={onError}>
         <ChildComponent />
@@ -311,8 +310,9 @@ describe("SessionContext functionality", () => {
       expect(handleIncomingRedirect).toHaveBeenCalled();
     });
 
-    fireEvent.click(getByText("Logout"));
-    await waitFor(() => expect(onError).toHaveBeenCalledTimes(1));
+    await user.click(getByText("Logout"));
+
+    expect(onError).toHaveBeenCalledTimes(1);
   });
 
   it("registers a session restore callback if one is provided", async () => {

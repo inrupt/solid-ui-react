@@ -1,5 +1,4 @@
-/* eslint-disable license-header/header */
-
+/* eslint-disable header/header */
 /**
  * This file is needed to provide correct types when using plugins such as sorting, filtering etc.
  * Taken from https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-table#example-type-file

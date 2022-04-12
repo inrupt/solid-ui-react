@@ -21,7 +21,7 @@
 
 import * as React from "react";
 import { renderHook } from "@testing-library/react-hooks";
-import { SWRConfig, cache } from "swr";
+import { SWRConfig } from "swr";
 import * as SolidFns from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import DatasetContext from "../../context/datasetContext";
@@ -35,32 +35,35 @@ describe("useDataset() hook", () => {
   const mockGetSolidDataset = jest
     .spyOn(SolidFns, "getSolidDataset")
     .mockResolvedValue(mockDataset);
+
   const mockFetch = jest.fn();
+
   const wrapper = ({ children }: { children: React.ReactNode }) => (
-    <SessionContext.Provider
-      value={{
-        fetch: mockFetch,
-        sessionRequestInProgress: true,
-        session: {} as Session,
-        logout: async () => {},
-        login: async () => {},
-        profile: undefined,
-      }}
-    >
-      <DatasetContext.Provider
+    <SWRConfig value={{ provider: () => new Map() }}>
+      <SessionContext.Provider
         value={{
-          solidDataset: mockContextDataset,
-          setDataset: () => {},
+          fetch: mockFetch,
+          sessionRequestInProgress: true,
+          session: {} as Session,
+          logout: async () => {},
+          login: async () => {},
+          profile: undefined,
         }}
       >
-        <SWRConfig value={{ dedupingInterval: 0 }}>{children}</SWRConfig>
-      </DatasetContext.Provider>
-    </SessionContext.Provider>
+        <DatasetContext.Provider
+          value={{
+            solidDataset: mockContextDataset,
+            setDataset: () => {},
+          }}
+        >
+          {children}
+        </DatasetContext.Provider>
+      </SessionContext.Provider>
+    </SWRConfig>
   );
 
   afterEach(() => {
     jest.clearAllMocks();
-    cache.clear();
   });
 
   it("should call getSolidDataset with given Iri", async () => {

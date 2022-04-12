@@ -33,9 +33,10 @@ All development should follow the [Inrupt Coding Guidelines](https://github.com/
 1. Clone the repository
 2. From the directory you cloned to, run `npm install` to install dependencies
 3. Run `npm run storybook` to run a live-reloading Storybook server
-4. Run `npm run lint` and `npm run test` (or `npm run ci` to run everything) after making changes
+4. Run `npm run lint` and `npm run test` after making changes
 
 # Solid JavaScript Client - solid-client
+
 [@inrupt/solid-client](https://github.com/inrupt/solid-client-js) is a JavaScript library for accessing data and managing permissions on data stored in Solid Pods. It provides an abstraction layer on top of both Solid and Resource Description Framework (RDF) principles and is compatible with the RDF/JS specification. You can use solid-client in Node.js using CommonJS modules and in the browser with a bundler like Webpack, Rollup, or Parcel.
 
 [@inrupt/solid-client](https://github.com/inrupt/solid-client-js) is part of a family open source JavaScript libraries designed to support developers building Solid applications.

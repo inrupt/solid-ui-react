@@ -124,8 +124,10 @@ export function Image({
       !propProperty ||
       typeof value !== "string" ||
       !autosave
-    )
+    ) {
       return;
+    }
+
     try {
       const updatedThing = removeUrl(propThing, propProperty, value);
       const updatedDataset = setThing(solidDataset, updatedThing);

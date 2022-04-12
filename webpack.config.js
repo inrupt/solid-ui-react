@@ -24,6 +24,7 @@ module.exports = {
     filename: "index.js",
     libraryTarget: "umd",
     globalObject: "this",
+    path: path.resolve("./dist/")
   },
   plugins: [
     new CleanWebpackPlugin(),

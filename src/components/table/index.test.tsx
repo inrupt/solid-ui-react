@@ -21,10 +21,12 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+
 import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
-import { Table, TableColumn } from "./index";
+import { Table, TableColumn } from ".";
 
 const namePredicate = `http://xmlns.com/foaf/0.1/name`;
 const nickPredicate = `http://xmlns.com/foaf/0.1/nick`;
@@ -127,7 +129,8 @@ describe("<Table /> component functional tests", () => {
     expect(queryByText(namePredicate)).toBeNull();
   });
 
-  it("does not sort columns without sortable prop", () => {
+  it("does not sort columns without sortable prop", async () => {
+    const user = userEvent.setup();
     const { getByText, queryByText } = render(
       <Table
         things={[
@@ -138,12 +141,14 @@ describe("<Table /> component functional tests", () => {
         <TableColumn property={namePredicate} />
       </Table>
     );
-    fireEvent.click(getByText(namePredicate));
+
+    await user.click(getByText(namePredicate));
+
     expect(queryByText("🔽")).toBeNull();
     expect(queryByText("🔼")).toBeNull();
   });
 
-  it("ignored capitalization when sorting", () => {
+  it("ignored capitalization when sorting", async () => {
     const thingA = SolidFns.addStringNoLocale(
       SolidFns.createThing(),
       namePredicate,
@@ -160,6 +165,7 @@ describe("<Table /> component functional tests", () => {
     );
     const datasetToSort = SolidFns.setThing(datasetWithThingA, thingB);
 
+    const user = userEvent.setup();
     const { getByText, queryAllByRole } = render(
       <Table
         things={[
@@ -172,12 +178,14 @@ describe("<Table /> component functional tests", () => {
     );
     expect(queryAllByRole("cell")[0].innerHTML).toBe("Foo");
     expect(queryAllByRole("cell")[1].innerHTML).toBe("example");
-    fireEvent.click(getByText(namePredicate));
+
+    await user.click(getByText(namePredicate));
+
     expect(queryAllByRole("cell")[0].innerHTML).toBe("example");
     expect(queryAllByRole("cell")[1].innerHTML).toBe("Foo");
   });
 
-  it("uses sortFn for sorting if passed", () => {
+  it("uses sortFn for sorting if passed", async () => {
     const thingA = SolidFns.addStringNoLocale(
       SolidFns.createThing(),
       namePredicate,
@@ -200,6 +208,7 @@ describe("<Table /> component functional tests", () => {
       return valueA.localeCompare(valueB);
     };
 
+    const user = userEvent.setup();
     const { getByText, queryAllByRole } = render(
       <Table
         things={[
@@ -216,12 +225,15 @@ describe("<Table /> component functional tests", () => {
     );
     expect(queryAllByRole("cell")[0].innerHTML).toBe("Another Name");
     expect(queryAllByRole("cell")[1].innerHTML).toBe("Name A");
-    fireEvent.click(getByText(namePredicate));
+
+    await user.click(getByText(namePredicate));
+
     expect(queryAllByRole("cell")[0].innerHTML).toBe("Name A");
     expect(queryAllByRole("cell")[1].innerHTML).toBe("Another Name");
   });
 
-  it("updates header when sorting", () => {
+  it("updates header when sorting", async () => {
+    const user = userEvent.setup();
     const { getByText, queryByText } = render(
       <Table
         things={[
@@ -236,11 +248,13 @@ describe("<Table /> component functional tests", () => {
     expect(queryByText("🔽")).toBeNull();
     expect(queryByText("🔼")).toBeNull();
 
-    fireEvent.click(getByText("Name"));
+    await user.click(getByText("Name"));
+
     expect(queryByText("🔽")).toBeNull();
     expect(getByText("🔼")).not.toBeNull();
 
-    fireEvent.click(getByText("Name"));
+    await user.click(getByText("Name"));
+
     expect(queryByText("🔼")).toBeNull();
     expect(getByText("🔽")).not.toBeNull();
   });

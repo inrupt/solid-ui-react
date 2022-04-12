@@ -24,7 +24,7 @@ import * as React from "react";
 import { RenderResult, render } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
 import ThingContext from "../thingContext";
-import CombinedProvider from "./index";
+import CombinedProvider from ".";
 
 let documentBody: RenderResult;
 

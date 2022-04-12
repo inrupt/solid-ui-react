@@ -21,10 +21,12 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+
 import * as SolidFns from "@inrupt/solid-client";
 import * as helpers from "../../../helpers";
-import UrlValue from "./index";
+import UrlValue from ".";
 
 const mockPredicate = "http://schema.org/url";
 const mockUrl = "https://example.com";
@@ -73,7 +75,7 @@ describe("<UrlValue /> component functional testing", () => {
     expect(getByText(mockUrl)).toBeDefined();
   });
 
-  it("should call setUrl on blur", () => {
+  it("should call setUrl on blur", async () => {
     jest.spyOn(SolidFns, "setUrl" as any).mockImplementationOnce(() => null);
 
     const mockSetter = jest
@@ -82,6 +84,7 @@ describe("<UrlValue /> component functional testing", () => {
 
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
 
+    const user = userEvent.setup();
     const { getByTitle } = render(
       <UrlValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -92,10 +95,14 @@ describe("<UrlValue /> component functional testing", () => {
         inputProps={{ title: "test title" }}
       />
     );
+
     const input = getByTitle("test title");
     input.focus();
-    fireEvent.change(input, { target: { value: testUrl } });
-    input.blur();
+
+    await user.type(input, testUrl);
+    // blur the input:
+    await user.tab();
+
     expect(mockSetter).toHaveBeenCalled();
   });
 
@@ -117,6 +124,7 @@ describe("<UrlValue /> component functional testing", () => {
   });
 
   it("Should call saveSolidDatasetAt onBlur if autosave is true", async () => {
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <UrlValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -126,11 +134,15 @@ describe("<UrlValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByDisplayValue(mockUrl);
     input.focus();
-    fireEvent.change(input, { target: { value: testUrl } });
-    input.blur();
-    await waitFor(() => expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled());
+
+    await user.type(input, testUrl);
+    // blur the input:
+    await user.tab();
+
+    expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
   });
 
   it("Should not call saveSolidDatasetAt onBlur if autosave is false", async () => {
@@ -152,6 +164,8 @@ describe("<UrlValue /> component functional testing", () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <UrlValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -163,17 +177,23 @@ describe("<UrlValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByDisplayValue(mockUrl);
     input.focus();
-    fireEvent.change(input, { target: { value: testUrl } });
-    input.blur();
-    await waitFor(() => expect(onSave).toHaveBeenCalled());
+
+    await user.type(input, testUrl);
+    // blur the input:
+    await user.tab();
+
+    expect(onSave).toHaveBeenCalled();
   });
 
   it("Should call onSave for fetched dataset with custom location if it is passed", async () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <UrlValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -186,11 +206,15 @@ describe("<UrlValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByDisplayValue(mockUrl);
     input.focus();
-    fireEvent.change(input, { target: { value: testUrl } });
-    input.blur();
-    await waitFor(() => expect(onSave).toHaveBeenCalled());
+
+    await user.type(input, testUrl);
+    // blur the input:
+    await user.tab();
+
+    expect(onSave).toHaveBeenCalled();
   });
   it("Should update context with latest dataset after saving", async () => {
     const setDataset = jest.fn();
@@ -204,6 +228,8 @@ describe("<UrlValue /> component functional testing", () => {
       thing: mockThing,
       property: mockPredicate,
     });
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <UrlValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -213,14 +239,16 @@ describe("<UrlValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByDisplayValue(mockUrl);
     input.focus();
-    fireEvent.change(input, { target: { value: testUrl } });
-    input.blur();
-    await waitFor(() => {
-      expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
-      expect(setDataset).toHaveBeenCalledWith(latestDataset);
-    });
+
+    await user.type(input, testUrl);
+    // blur the input:
+    await user.tab();
+
+    expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
+    expect(setDataset).toHaveBeenCalledWith(latestDataset);
   });
 
   it("Should call onError if Thing not found", async () => {
@@ -252,6 +280,8 @@ describe("<UrlValue /> component functional testing", () => {
   it("Should call onError if saving fails", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
     const onError = jest.fn();
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <UrlValue
         solidDataset={mockDataset}
@@ -263,16 +293,22 @@ describe("<UrlValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByDisplayValue(mockUrl);
     input.focus();
-    fireEvent.change(input, { target: { value: testUrl } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
+
+    await user.type(input, testUrl);
+    // blur the input:
+    await user.tab();
+
+    expect(onError).toHaveBeenCalled();
   });
 
   it("Should call onError if saving fetched dataset to custom location fails", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
     const onError = jest.fn();
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <UrlValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -284,11 +320,15 @@ describe("<UrlValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByDisplayValue(mockUrl);
     input.focus();
-    fireEvent.change(input, { target: { value: testUrl } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
+
+    await user.type(input, testUrl);
+    // blur the input:
+    await user.tab();
+
+    expect(onError).toHaveBeenCalled();
   });
 
   it("Should call onError if trying to save a non-fetched dataset without saveDatasetTo", async () => {
@@ -298,6 +338,8 @@ describe("<UrlValue /> component functional testing", () => {
     );
 
     const onError = jest.fn();
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <UrlValue
         solidDataset={mockUnfetchedDataset}
@@ -308,10 +350,14 @@ describe("<UrlValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByDisplayValue(mockUrl);
     input.focus();
-    fireEvent.change(input, { target: { value: testUrl } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
+
+    await user.type(input, testUrl);
+    // blur the input:
+    await user.tab();
+
+    expect(onError).toHaveBeenCalled();
   });
 });

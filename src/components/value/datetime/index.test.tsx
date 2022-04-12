@@ -21,10 +21,12 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+
 import * as SolidFns from "@inrupt/solid-client";
 import * as helpers from "../../../helpers";
-import DatetimeValue from "./index";
+import DatetimeValue from ".";
 
 const mockPredicate = "http://www.w3.org/2006/vcard/ns#bday";
 const mockBday = new Date("2021-05-04T06:00:00.000Z");
@@ -75,7 +77,8 @@ describe("<DatetimeValue /> component functional testing", () => {
 
     expect(getByText("2021-05-04T06:00:00")).toBeDefined();
   });
-  it("should call setDatetime on blur", () => {
+
+  it("should call setDatetime on blur", async () => {
     jest
       .spyOn(SolidFns, "setDatetime" as any)
       .mockImplementationOnce(() => null);
@@ -86,6 +89,7 @@ describe("<DatetimeValue /> component functional testing", () => {
 
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
 
+    const user = userEvent.setup();
     const { getByTitle } = render(
       <DatetimeValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -96,10 +100,14 @@ describe("<DatetimeValue /> component functional testing", () => {
         inputProps={{ title: "test title" }}
       />
     );
+
     const input = getByTitle("test title");
     input.focus();
-    fireEvent.change(input, { target: { value: testBday } });
-    input.blur();
+
+    await user.type(input, testBday.toISOString());
+    // blur the input:
+    await user.tab();
+
     expect(mockSetter).toHaveBeenCalled();
   });
   it("Should not call setter on blur if the value of the input hasn't changed", async () => {
@@ -120,6 +128,8 @@ describe("<DatetimeValue /> component functional testing", () => {
   });
   it("Should not call saveSolidDatasetAt onBlur if autosave is false", async () => {
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+
+    const user = userEvent.setup();
     const { getByLabelText } = render(
       <DatetimeValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -128,14 +138,19 @@ describe("<DatetimeValue /> component functional testing", () => {
         edit
       />
     );
+
     const input = getByLabelText("Date and Time");
     input.focus();
-    fireEvent.change(input, { target: { value: testBday } });
-    input.blur();
+
+    await user.type(input, testBday.toISOString());
+    // blur the input:
+    await user.tab();
+
     expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalledTimes(0);
   });
 
   it("Should call saveSolidDatasetAt onBlur if autosave is true", async () => {
+    const user = userEvent.setup();
     const { getByLabelText } = render(
       <DatetimeValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -145,17 +160,23 @@ describe("<DatetimeValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByLabelText("Date and Time");
     input.focus();
-    fireEvent.change(input, { target: { value: testBday } });
-    input.blur();
-    await waitFor(() => expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled());
+
+    await user.type(input, testBday.toISOString());
+    // blur the input:
+    await user.tab();
+
+    expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
   });
 
   it("Should call onSave if it is passed", async () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+
+    const user = userEvent.setup();
     const { getByLabelText } = render(
       <DatetimeValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -167,16 +188,22 @@ describe("<DatetimeValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByLabelText("Date and Time");
     input.focus();
-    fireEvent.change(input, { target: { value: testBday } });
-    input.blur();
-    await waitFor(() => expect(onSave).toHaveBeenCalled());
+
+    await user.type(input, testBday.toISOString());
+    // blur the input:
+    await user.tab();
+
+    expect(onSave).toHaveBeenCalled();
   });
   it("Should call onSave for fetched dataset with custom location if it is passed", async () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+
+    const user = userEvent.setup();
     const { getByLabelText } = render(
       <DatetimeValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -189,15 +216,21 @@ describe("<DatetimeValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByLabelText("Date and Time");
     input.focus();
-    fireEvent.change(input, { target: { value: testBday } });
-    input.blur();
-    await waitFor(() => expect(onSave).toHaveBeenCalled());
+
+    await user.type(input, testBday.toISOString());
+    // blur the input:
+    await user.tab();
+
+    expect(onSave).toHaveBeenCalled();
   });
   it("Should call onError if saving fails", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
     const onError = jest.fn();
+
+    const user = userEvent.setup();
     const { getByLabelText } = render(
       <DatetimeValue
         solidDataset={mockDataset}
@@ -211,9 +244,12 @@ describe("<DatetimeValue /> component functional testing", () => {
     );
     const input = getByLabelText("Date and Time");
     input.focus();
-    fireEvent.change(input, { target: { value: testBday } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
+
+    await user.type(input, testBday.toISOString());
+    // blur the input:
+    await user.tab();
+
+    expect(onError).toHaveBeenCalled();
   });
   it("Should call onError if Thing not found", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
@@ -232,6 +268,8 @@ describe("<DatetimeValue /> component functional testing", () => {
   it("Should call onError if saving fetched dataset to custom location fails", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
     const onError = jest.fn();
+
+    const user = userEvent.setup();
     const { getByLabelText } = render(
       <DatetimeValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -243,11 +281,15 @@ describe("<DatetimeValue /> component functional testing", () => {
         autosave
       />
     );
+
     const input = getByLabelText("Date and Time");
     input.focus();
-    fireEvent.change(input, { target: { value: testBday } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
+
+    await user.type(input, testBday.toISOString());
+    // blur the input:
+    await user.tab();
+
+    expect(onError).toHaveBeenCalled();
   });
   it("Should call onError if trying to save a non-fetched dataset without saveDatasetTo", async () => {
     const mockUnfetchedDataset = SolidFns.setThing(
@@ -256,6 +298,8 @@ describe("<DatetimeValue /> component functional testing", () => {
     );
 
     const onError = jest.fn();
+
+    const user = userEvent.setup();
     const { getByLabelText } = render(
       <DatetimeValue
         solidDataset={mockUnfetchedDataset}
@@ -268,21 +312,25 @@ describe("<DatetimeValue /> component functional testing", () => {
     );
     const input = getByLabelText("Date and Time");
     input.focus();
-    fireEvent.change(input, { target: { value: testBday } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
-  });
-  it("when datetime-local is unsupported, it calls setDatetime with the correct value", () => {
-    jest.spyOn(helpers, "useDatetimeBrowserSupport").mockReturnValue(false);
 
+    await user.type(input, testBday.toISOString());
+    // blur the input:
+    await user.tab();
+
+    expect(onError).toHaveBeenCalled();
+  });
+  it("when datetime-local is unsupported, it calls setDatetime with the correct value", async () => {
+    const expectedDate = new Date(Date.UTC(2020, 2, 3, 0, 0, 0));
+    const expectedDateAndTime = new Date(Date.UTC(2020, 2, 3, 5, 45, 0));
+
+    jest.spyOn(helpers, "useDatetimeBrowserSupport").mockReturnValue(false);
     jest.spyOn(SolidFns, "getDatetime").mockImplementationOnce(() => null);
+    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+    jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
 
     const mockSetter = jest.spyOn(SolidFns, "setDatetime");
 
-    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
-
-    jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
-
+    const user = userEvent.setup();
     const { getByLabelText } = render(
       <DatetimeValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -292,16 +340,21 @@ describe("<DatetimeValue /> component functional testing", () => {
         autosave
       />
     );
+
     const dateInput = getByLabelText("Date");
     dateInput.focus();
-    fireEvent.change(dateInput, { target: { value: "2020-03-03" } });
+
+    await user.type(dateInput, "2020-03-03");
+
     dateInput.blur();
+
     const timeInput = getByLabelText("Time");
     timeInput.focus();
-    fireEvent.change(timeInput, { target: { value: "05:45" } });
+
+    await user.type(timeInput, "05:45");
+
     timeInput.blur();
-    const expectedDate = new Date(Date.UTC(2020, 2, 3, 0, 0, 0));
-    const expectedDateAndTime = new Date(Date.UTC(2020, 2, 3, 5, 45, 0));
+
     expect(mockSetter.mock.calls).toEqual([
       [mockThing, mockPredicate, expectedDate],
       [mockThing, mockPredicate, expectedDateAndTime],
@@ -319,6 +372,8 @@ describe("<DatetimeValue /> component functional testing", () => {
       thing: mockThing,
       property: mockPredicate,
     });
+
+    const user = userEvent.setup();
     const { getByLabelText } = render(
       <DatetimeValue
         solidDataset={mockDatasetWithResourceInfo}
@@ -330,11 +385,12 @@ describe("<DatetimeValue /> component functional testing", () => {
     );
     const input = getByLabelText("Date and Time");
     input.focus();
-    fireEvent.change(input, { target: { value: "2007-08-14T11:20:00" } });
-    input.blur();
-    await waitFor(() => {
-      expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
-      expect(setDataset).toHaveBeenCalledWith(latestDataset);
-    });
+
+    await user.type(input, "2007-08-14T11:20:00");
+    // blur the input:
+    await user.tab();
+
+    expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
+    expect(setDataset).toHaveBeenCalledWith(latestDataset);
   });
 });

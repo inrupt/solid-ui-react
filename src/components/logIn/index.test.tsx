@@ -20,14 +20,15 @@
  */
 
 import * as React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import {
   login,
   getDefaultSession,
   handleIncomingRedirect,
 } from "@inrupt/solid-client-authn-browser";
 
-import { LoginButton } from "./index";
+import { LoginButton } from ".";
 import { SessionProvider } from "../../context/sessionContext";
 
 jest.mock("@inrupt/solid-client-authn-browser");
@@ -40,6 +41,8 @@ const session = {
 } as any;
 
 beforeEach(() => {
+  jest.resetAllMocks();
+
   (getDefaultSession as jest.Mock).mockReturnValue(session);
   (handleIncomingRedirect as jest.Mock).mockResolvedValueOnce(null);
 });
@@ -85,6 +88,8 @@ describe("<LoginButton /> component functional testing", () => {
     const oidcIssuer = "https://test.url";
     const redirectUrl = "https://local.url/redirect";
 
+    const user = userEvent.setup();
+
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <LoginButton
@@ -95,19 +100,20 @@ describe("<LoginButton /> component functional testing", () => {
       </SessionProvider>
     );
 
-    fireEvent.click(getByText("Log In"));
-    await waitFor(() =>
-      expect(login).toHaveBeenCalledWith({
-        oidcIssuer,
-        redirectUrl,
-      })
-    );
+    await user.click(getByText("Log In"));
+
+    expect(login).toHaveBeenCalledWith({
+      oidcIssuer,
+      redirectUrl,
+    });
   });
 
   it("fires the onKeyPress function if enter is pressed", async () => {
     const oidcIssuer = "https://test.url";
     const redirectUrl = "https://local.url/redirect";
 
+    const user = userEvent.setup();
+
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <LoginButton
@@ -118,20 +124,22 @@ describe("<LoginButton /> component functional testing", () => {
       </SessionProvider>
     );
 
-    fireEvent.keyDown(getByText("Log In"), { key: "Enter", code: "Enter" });
+    getByText("Log In").focus();
 
-    await waitFor(() =>
-      expect(login).toHaveBeenCalledWith({
-        oidcIssuer,
-        redirectUrl,
-      })
-    );
+    await user.keyboard("{Enter}");
+
+    expect(login).toHaveBeenCalledWith({
+      oidcIssuer,
+      redirectUrl,
+    });
   });
 
   it("does not fire the onKeyPress function if a non-enter button is pressed", async () => {
     const oidcIssuer = "https://test.url";
     const redirectUrl = "https://local.url/redirect";
 
+    const user = userEvent.setup();
+
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <LoginButton
@@ -142,12 +150,17 @@ describe("<LoginButton /> component functional testing", () => {
       </SessionProvider>
     );
 
-    fireEvent.keyDown(getByText("Log In"), { key: "A", code: "A" });
+    getByText("Log In").focus();
+
+    await user.keyboard("A");
+
     expect(login).not.toHaveBeenCalled();
   });
 
   it("fires the onClick function and calls OnError", async () => {
     (login as jest.Mock).mockRejectedValue(null);
+
+    const user = userEvent.setup();
 
     const { getByText } = render(
       <SessionProvider sessionId="key">
@@ -158,13 +171,16 @@ describe("<LoginButton /> component functional testing", () => {
         />
       </SessionProvider>
     );
-    fireEvent.click(getByText("Log In"));
 
-    await waitFor(() => expect(onError).toHaveBeenCalledTimes(1));
+    await user.click(getByText("Log In"));
+
+    expect(onError).toHaveBeenCalledTimes(1);
   });
 
   it("fires the onClick function and doesn't call OnError if it wasn't provided", async () => {
     (login as jest.Mock).mockRejectedValue(null);
+
+    const user = userEvent.setup();
 
     const { getByText } = render(
       <SessionProvider sessionId="key">
@@ -174,7 +190,9 @@ describe("<LoginButton /> component functional testing", () => {
         />
       </SessionProvider>
     );
-    fireEvent.click(getByText("Log In"));
-    await waitFor(() => expect(onError).toHaveBeenCalledTimes(0));
+
+    await user.click(getByText("Log In"));
+
+    expect(onError).toHaveBeenCalledTimes(0);
   });
 });

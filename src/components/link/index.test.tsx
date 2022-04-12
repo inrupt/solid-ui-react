@@ -22,7 +22,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
-import { Link } from "./index";
+import { Link } from ".";
 import * as helpers from "../../helpers";
 
 const mockUrl = "http://test.url";
