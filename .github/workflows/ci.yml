@@ -32,12 +32,12 @@ jobs:
       - run: npm run audit-licenses
       - run: npm run build
       - name: Archive code coverage results
-        uses: actions/upload-artifact@v2.3.0
+        uses: actions/upload-artifact@v3.0.0
         with:
           name: code-coverage-report
           path: coverage
       - name: Archive production artifacts
-        uses: actions/upload-artifact@v2.3.0
+        uses: actions/upload-artifact@v3.0.0
         with:
           name: dist
           path: dist
