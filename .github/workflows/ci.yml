@@ -13,7 +13,7 @@ jobs:
         os: [ubuntu-20.04, windows-2019]
         node-version: [16.x, 14.x, 12.x]
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3.0.0
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2.5.0
         with:
