@@ -20,20 +20,29 @@
  */
 
 import React, { ReactElement, useState, useEffect, useContext } from "react";
-
 import {
-  overwriteFile,
-  retrieveFile,
-  CommonProperties,
-  useProperty,
-} from "../../helpers";
+  addUrl,
+  getSourceUrl,
+  removeUrl,
+  saveFileInContainer,
+  saveSolidDatasetAt,
+  setThing,
+  SolidDataset,
+} from "@inrupt/solid-client";
+import { overwriteFile, CommonProperties, useProperty } from "../../helpers";
 
 import { SessionContext } from "../../context/sessionContext";
+import useFile from "../../hooks/useFile";
 
 export type Props = {
   maxSize?: number;
+  saveLocation?: string;
+  allowDelete?: boolean;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  solidDataset?: SolidDataset;
   errorComponent?: React.ComponentType<{ error: Error }>;
+  loadingComponent?: React.ComponentType | null;
+  deleteComponent?: React.ComponentType<{ onClick: () => void }> | null;
 } & CommonProperties &
   React.ImgHTMLAttributes<HTMLImageElement>;
 
@@ -46,14 +55,19 @@ export function Image({
   properties: propProperties,
   edit,
   autosave,
+  allowDelete,
   onSave,
   onError,
   maxSize,
   alt,
   inputProps,
   errorComponent: ErrorComponent,
+  loadingComponent: LoadingComponent,
+  deleteComponent: DeleteComponent,
+  saveLocation,
+  solidDataset,
   ...imgOptions
-}: Props): ReactElement {
+}: Props): ReactElement | null {
   const { fetch } = useContext(SessionContext);
 
   const values = useProperty({
@@ -63,14 +77,16 @@ export function Image({
     type: "url",
   });
 
-  const { value } = values;
-  let { error: thingError } = values;
-
-  if (!edit && !value) {
-    thingError = new Error("No value found for property.");
+  const { value, thing, error: thingError } = values;
+  let valueError;
+  if (!value) {
+    valueError = new Error("No value found for property.");
   }
+  const isFetchingThing = !thing && !thingError;
 
-  const [error, setError] = useState<Error | undefined>(thingError);
+  const [error, setError] = useState<Error | undefined>(
+    thingError ?? valueError
+  );
 
   useEffect(() => {
     if (error) {
@@ -81,48 +97,108 @@ export function Image({
   }, [error, onError, ErrorComponent]);
 
   const [imgObjectUrl, setImgObjectUrl] = useState<string | undefined>();
+  const {
+    data,
+    error: imgError,
+    inProgress: fetchingFileInProgress,
+  } = useFile(value as string);
 
   useEffect(() => {
-    if (value) {
-      retrieveFile(value as string, fetch)
-        .then(setImgObjectUrl)
-        .catch((retrieveError) => {
-          setError(retrieveError);
-
-          if (onError) {
-            onError(retrieveError);
-          }
-
-          if (ErrorComponent) {
-            setImgObjectUrl("");
-          }
-        });
+    if (fetchingFileInProgress) {
+      return;
     }
-  }, [value, onError, setError, fetch, ErrorComponent]);
+    if (imgError) {
+      setError(imgError);
+      return;
+    }
+    const imageObjectUrl = data && URL.createObjectURL(data);
+    if (imageObjectUrl) {
+      setImgObjectUrl(imageObjectUrl);
+    }
+  }, [data, fetchingFileInProgress, imgError]);
+
+  const handleDelete = async () => {
+    if (
+      !propThing ||
+      !solidDataset ||
+      !propProperty ||
+      typeof value !== "string" ||
+      !autosave
+    ) {
+      return;
+    }
+
+    try {
+      const updatedThing = removeUrl(propThing, propProperty, value);
+      const updatedDataset = setThing(solidDataset, updatedThing);
+      const datasetSourceUrl = getSourceUrl(solidDataset);
+      if (!datasetSourceUrl) return;
+      await saveSolidDatasetAt(datasetSourceUrl, updatedDataset, {
+        fetch,
+      });
+    } catch (e) {
+      setError(e as Error);
+    }
+  };
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
-    if (autosave && fileList && fileList.length > 0 && value) {
-      const newObjectUrl = await overwriteFile(
-        value as string,
-        fileList[0],
-        input,
-        fetch,
-        maxSize,
-        onSave,
-        onError
-      );
+    if (autosave && fileList && fileList.length > 0) {
+      if (value) {
+        const newObjectUrl = await overwriteFile(
+          value as string,
+          fileList[0],
+          input,
+          fetch,
+          maxSize,
+          onSave,
+          onError
+        );
 
-      if (newObjectUrl) {
-        setImgObjectUrl(newObjectUrl);
+        if (newObjectUrl) {
+          setImgObjectUrl(newObjectUrl);
+        }
+      } else if (!value && saveLocation) {
+        const savedFile = await saveFileInContainer(saveLocation, fileList[0], {
+          fetch,
+        });
+        const savedFileUrl = getSourceUrl(savedFile);
+        if (savedFileUrl && propThing && propProperty && solidDataset) {
+          setImgObjectUrl(savedFileUrl);
+          try {
+            const updatedThing = addUrl(propThing, propProperty, savedFileUrl);
+            const updatedDataset = setThing(solidDataset, updatedThing);
+            const datasetSourceUrl = getSourceUrl(solidDataset);
+            if (!datasetSourceUrl) return;
+            await saveSolidDatasetAt(datasetSourceUrl, updatedDataset, {
+              fetch,
+            });
+          } catch (e) {
+            setError(e as Error);
+          }
+        }
       }
     }
   };
 
   let imageComponent = null;
 
-  if (error && ErrorComponent) {
-    imageComponent = <ErrorComponent error={error} />;
+  if (isFetchingThing || fetchingFileInProgress) {
+    let loader: JSX.Element | null = (LoadingComponent && (
+      <LoadingComponent />
+    )) || <span>fetching data in progress</span>;
+    if (LoadingComponent === null) {
+      loader = null;
+    }
+    return loader;
+  }
+
+  if (error) {
+    imageComponent = ErrorComponent ? (
+      <ErrorComponent error={error} />
+    ) : (
+      <span>{error.toString()}</span>
+    );
   } else if (value) {
     /* eslint-disable-next-line react/jsx-props-no-spreading */
     imageComponent = <img src={imgObjectUrl} alt={alt ?? ""} {...imgOptions} />;
@@ -140,6 +216,14 @@ export function Image({
           onChange={(e) => handleChange(e.target)}
         />
       )}
+      {allowDelete &&
+        (DeleteComponent ? (
+          <DeleteComponent onClick={handleDelete} />
+        ) : (
+          <button type="button" onClick={handleDelete}>
+            Delete
+          </button>
+        ))}
     </>
   );
 }

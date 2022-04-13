@@ -33,6 +33,7 @@ import { ThingProvider } from "../thingContext";
 
 export type Props = {
   children: React.ReactNode;
+  loadingComponent?: React.ComponentType | null;
   onError?(error: Error): void | null;
 };
 
@@ -49,8 +50,9 @@ export interface DatasetUrl extends Props {
   datasetUrl: UrlString | string;
 }
 
-export type RequireProperty<T, Prop extends keyof T> = T &
-  { [key in Prop]-?: T[key] };
+export type RequireProperty<T, Prop extends keyof T> = T & {
+  [key in Prop]-?: T[key];
+};
 
 export type RequireThingOrThingUrl =
   | RequireProperty<ThingOrThingUrl, "thing">
@@ -77,6 +79,7 @@ function CombinedDataProvider(props: any): ReactElement {
     thing,
     thingUrl,
     onError,
+    loadingComponent,
   } = props;
 
   return (
@@ -84,6 +87,7 @@ function CombinedDataProvider(props: any): ReactElement {
       onError={onError}
       solidDataset={solidDataset}
       datasetUrl={datasetUrl}
+      loadingComponent={loadingComponent}
     >
       <ThingProvider thing={thing} thingUrl={thingUrl}>
         {children}

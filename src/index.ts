@@ -19,6 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+export { FileUpload } from "./components/file";
 export { Image } from "./components/image";
 export { Link } from "./components/link";
 export { LoginButton } from "./components/logIn";
@@ -37,3 +38,4 @@ export {
 export { default as useSession } from "./hooks/useSession";
 export { default as useDataset } from "./hooks/useDataset";
 export { default as useThing } from "./hooks/useThing";
+export { default as useFile } from "./hooks/useFile";

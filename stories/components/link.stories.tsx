@@ -34,6 +34,14 @@ export default {
     thing: {
       description: `The [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to retrieve the link URL from.`,
     },
+    errorComponent: {
+      description: `Component to be rendered in case of error.`,
+      control: { type: null },
+    },
+    loadingComponent: {
+      description: `A loading component to show while fetching the dataset. If \`null\` the default loading message won't be displayed`,
+      control: { type: null },
+    },
   },
 };
 
@@ -110,4 +118,26 @@ Editable.parameters = {
 
 Editable.args = {
   property: "http://xmlns.com/foaf/0.1/homepage",
+};
+
+export function ErrorComponent(): ReactElement {
+  const exampleUrl = "http://test.url";
+  const property = "http://xmlns.com/foaf/0.1/homepage";
+  const exampleThing = SolidFns.addUrl(
+    SolidFns.createThing(),
+    property,
+    exampleUrl
+  );
+  return (
+    <Link
+      thing={exampleThing}
+      property="https://example.com/bad-url"
+      errorComponent={({ error }) => <span>{error.toString()}</span>}
+    />
+  );
+}
+
+ErrorComponent.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
 };

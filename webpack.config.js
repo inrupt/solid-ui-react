@@ -17,11 +17,14 @@ module.exports = {
   resolve: {
     extensions: [ ".tsx", ".ts", ".js" ],
   },
+  optimization: {
+    minimize: false,
+  },
   output: {
     filename: "index.js",
-    path: path.resolve(__dirname, "dist"),
-    library: "",
-    libraryTarget: "commonjs"
+    libraryTarget: "umd",
+    globalObject: "this",
+    path: path.resolve("./dist/")
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -29,10 +32,11 @@ module.exports = {
   externals: [
     "@inrupt/solid-client",
     "@inrupt/solid-client-authn-browser",
+    "@inrupt/solid-client-authn-node",
     "@material-ui/core",
     "core-js",
     "react",
     "react-table",
     "swr",
-  ],
+  ]
 };

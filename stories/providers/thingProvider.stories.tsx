@@ -49,64 +49,6 @@ export default {
   },
 };
 
-export function WithLocalThing(): ReactElement {
-  const property = "http://xmlns.com/foaf/0.1/name";
-  const name = "example value";
-
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
-    property,
-    name
-  );
-
-  return (
-    <ThingProvider thing={exampleThing}>
-      <ExampleComponentWithThing />
-    </ThingProvider>
-  );
-}
-
-interface IWithThingUrl {
-  datasetUrl: string;
-  thingUrl: string;
-  property: string;
-}
-
-export function WithThingUrl(props: IWithThingUrl): ReactElement {
-  const { datasetUrl, thingUrl, property } = props;
-  const [litDataset, setSolidDataset] = useState<
-    SolidFns.SolidDataset & SolidFns.WithResourceInfo
-  >();
-
-  const setDataset = async (url: string) => {
-    await SolidFns.getSolidDataset(url).then((result) => {
-      setSolidDataset(result);
-    });
-  };
-
-  useEffect(() => {
-    // eslint-disable-next-line no-void
-    void setDataset(datasetUrl);
-  }, [datasetUrl]);
-
-  if (litDataset) {
-    return (
-      <DatasetProvider solidDataset={litDataset}>
-        <ThingProvider thingUrl={thingUrl}>
-          <ExampleComponentWithThingUrl property={property} />
-        </ThingProvider>
-      </DatasetProvider>
-    );
-  }
-  return <span>no dataset</span>;
-}
-
-WithThingUrl.args = {
-  datasetUrl: `${host}/example.ttl`,
-  thingUrl: `${host}/example.ttl#me`,
-  property: "http://www.w3.org/2006/vcard/ns#note",
-};
-
 interface IExampleComponentWithThingUrl {
   property?: string;
 }
@@ -168,3 +110,61 @@ function ExampleComponentWithThing(): ReactElement {
     </div>
   );
 }
+
+export function WithLocalThing(): ReactElement {
+  const property = "http://xmlns.com/foaf/0.1/name";
+  const name = "example value";
+
+  const exampleThing = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    property,
+    name
+  );
+
+  return (
+    <ThingProvider thing={exampleThing}>
+      <ExampleComponentWithThing />
+    </ThingProvider>
+  );
+}
+
+interface IWithThingUrl {
+  datasetUrl: string;
+  thingUrl: string;
+  property: string;
+}
+
+export function WithThingUrl(props: IWithThingUrl): ReactElement {
+  const { datasetUrl, thingUrl, property } = props;
+  const [litDataset, setSolidDataset] = useState<
+    SolidFns.SolidDataset & SolidFns.WithResourceInfo
+  >();
+
+  const setDataset = async (url: string) => {
+    await SolidFns.getSolidDataset(url).then((result) => {
+      setSolidDataset(result);
+    });
+  };
+
+  useEffect(() => {
+    // eslint-disable-next-line no-void
+    void setDataset(datasetUrl);
+  }, [datasetUrl]);
+
+  if (litDataset) {
+    return (
+      <DatasetProvider solidDataset={litDataset}>
+        <ThingProvider thingUrl={thingUrl}>
+          <ExampleComponentWithThingUrl property={property} />
+        </ThingProvider>
+      </DatasetProvider>
+    );
+  }
+  return <span>no dataset</span>;
+}
+
+WithThingUrl.args = {
+  datasetUrl: `${host}/example.ttl`,
+  thingUrl: `${host}/example.ttl#me`,
+  property: "http://www.w3.org/2006/vcard/ns#note",
+};

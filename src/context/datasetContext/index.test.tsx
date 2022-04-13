@@ -24,7 +24,7 @@ import * as React from "react";
 import { RenderResult, render, waitFor } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
 import useDataset from "../../hooks/useDataset";
-import DatasetContext, { DatasetProvider } from "./index";
+import DatasetContext, { DatasetProvider } from ".";
 
 jest.mock("../../hooks/useDataset");
 
@@ -79,10 +79,8 @@ function ExampleComponentWithDataset(): React.ReactElement {
 }
 
 function ExampleComponentWithDatasetUrl(): React.ReactElement {
-  const [
-    exampleThing,
-    setExampleThing,
-  ] = React.useState<SolidFns.Thing | null>();
+  const [exampleThing, setExampleThing] =
+    React.useState<SolidFns.Thing | null>();
 
   const [property, setProperty] = React.useState<string>();
 
@@ -155,9 +153,59 @@ describe("Testing DatasetContext", () => {
       error: undefined,
     });
     documentBody = render(
+      <DatasetProvider datasetUrl="https://some-broken-resource.com">
+        <ExampleComponentWithDataset />
+      </DatasetProvider>
+    );
+
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("matches snapshot when fetching and loadingComponent is passed", async () => {
+    (useDataset as jest.Mock).mockReturnValue({
+      solidDataset: undefined,
+      error: undefined,
+    });
+    documentBody = render(
       <DatasetProvider
         datasetUrl="https://some-broken-resource.com"
-        loading={() => "loading"}
+        loadingComponent={() => <span>loading component</span>}
+      >
+        <ExampleComponentWithDataset />
+      </DatasetProvider>
+    );
+
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("matches snapshot when fetching and loading is passed", async () => {
+    (useDataset as jest.Mock).mockReturnValue({
+      solidDataset: undefined,
+      error: undefined,
+    });
+    documentBody = render(
+      <DatasetProvider
+        datasetUrl="https://some-broken-resource.com"
+        loading={<span>loading</span>}
+      >
+        <ExampleComponentWithDataset />
+      </DatasetProvider>
+    );
+
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+  it("matches snapshot when loadingComponent is null", async () => {
+    (useDataset as jest.Mock).mockReturnValue({
+      solidDataset: undefined,
+      error: undefined,
+    });
+    documentBody = render(
+      <DatasetProvider
+        datasetUrl="https://some-broken-resource.com"
+        loadingComponent={null}
       >
         <ExampleComponentWithDataset />
       </DatasetProvider>

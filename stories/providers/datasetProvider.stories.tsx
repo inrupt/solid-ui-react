@@ -40,8 +40,13 @@ export default {
       description: `A url to fetch the [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) from, if \`Dataset\` is not provided.`,
       control: { type: null },
     },
+    loadingComponent: {
+      description: `A loading component to show while fetching the dataset. If \`null\` the default loading message won't be displayed`,
+      control: { type: null },
+    },
     loading: {
-      description: `A loading component to show while fetching the dataset.`,
+      description: `**Deprecated:** Use \`loadingComponent\`. 
+      \nA loading component to show while fetching the dataset`,
       control: { type: null },
     },
     onError: {
@@ -50,58 +55,6 @@ export default {
       control: { type: null },
     },
   },
-};
-
-export function WithLocalDataset(): ReactElement {
-  const property = "http://xmlns.com/foaf/0.1/name";
-  const name = "example value";
-
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
-    property,
-    name
-  );
-  const dataset = SolidFns.setThing(
-    SolidFns.createSolidDataset(),
-    exampleThing
-  );
-
-  return (
-    <DatasetProvider solidDataset={dataset}>
-      <ExampleComponentWithDataset />
-    </DatasetProvider>
-  );
-}
-
-WithLocalDataset.parameters = {
-  actions: { disable: true },
-  controls: { disable: true },
-};
-
-interface IWithDatasetUrl {
-  datasetUrl: string;
-  thingUrl: string;
-  property: string;
-}
-
-export function WithDatasetUrl(props: IWithDatasetUrl): ReactElement {
-  const { datasetUrl, thingUrl, property } = props;
-
-  return (
-    <DatasetProvider datasetUrl={datasetUrl}>
-      <ExampleComponentWithDatasetUrl thingUrl={thingUrl} property={property} />
-    </DatasetProvider>
-  );
-}
-
-WithDatasetUrl.parameters = {
-  actions: { disable: true },
-};
-
-WithDatasetUrl.args = {
-  datasetUrl: `${host}/example.ttl`,
-  thingUrl: `${host}/example.ttl#me`,
-  property: "http://www.w3.org/2006/vcard/ns#role",
 };
 
 interface IExampleComponentWithDatasetUrl {
@@ -178,3 +131,55 @@ function ExampleComponentWithDataset(): ReactElement {
     </div>
   );
 }
+
+export function WithLocalDataset(): ReactElement {
+  const property = "http://xmlns.com/foaf/0.1/name";
+  const name = "example value";
+
+  const exampleThing = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    property,
+    name
+  );
+  const dataset = SolidFns.setThing(
+    SolidFns.createSolidDataset(),
+    exampleThing
+  );
+
+  return (
+    <DatasetProvider solidDataset={dataset}>
+      <ExampleComponentWithDataset />
+    </DatasetProvider>
+  );
+}
+
+WithLocalDataset.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
+};
+
+interface IWithDatasetUrl {
+  datasetUrl: string;
+  thingUrl: string;
+  property: string;
+}
+
+export function WithDatasetUrl(props: IWithDatasetUrl): ReactElement {
+  const { datasetUrl, thingUrl, property } = props;
+
+  return (
+    <DatasetProvider datasetUrl={datasetUrl}>
+      <ExampleComponentWithDatasetUrl thingUrl={thingUrl} property={property} />
+    </DatasetProvider>
+  );
+}
+
+WithDatasetUrl.parameters = {
+  actions: { disable: true },
+};
+
+WithDatasetUrl.args = {
+  datasetUrl: `${host}/example.ttl`,
+  thingUrl: `${host}/example.ttl#me`,
+  property: "http://www.w3.org/2006/vcard/ns#role",
+};

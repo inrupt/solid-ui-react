@@ -20,7 +20,12 @@
  */
 
 import React, { ReactElement } from "react";
-import { addUrl, createThing } from "@inrupt/solid-client";
+import {
+  addUrl,
+  createSolidDataset,
+  createThing,
+  setThing,
+} from "@inrupt/solid-client";
 import { Image } from "../../src/components/image";
 import CombinedDataProvider from "../../src/context/combinedDataContext";
 import config from "../config";
@@ -37,23 +42,18 @@ export default {
     },
     property: {
       description: `The property of the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to retrieve the src URL from.`,
-      control: { type: null },
     },
     properties: {
       description: `An array of ordered properties that will be used to attempt to read the src from (see \`property\`). If there is no value at the first property, the second is attempted, etc, and used for both reading and writing.`,
-      control: { type: null },
     },
     edit: {
       description: `If true, renders an input to allow a new image file to be selected.`,
-      control: { type: null },
     },
     autosave: {
       description: `If true, uploads and persists a new image once selected.`,
-      control: { type: null },
     },
     maxSize: {
       description: `The maximum permitted file size, in kB`,
-      control: { type: null },
     },
     inputProps: {
       description: `Additional attributes to be passed to the file input, if \`edit\` is true`,
@@ -71,34 +71,91 @@ export default {
       description: `Component to be rendered in case of error.`,
       control: { type: null },
     },
+    loadingComponent: {
+      description: `A loading component to show while fetching the dataset. If \`null\` the default loading message won't be displayed`,
+      control: { type: null },
+    },
+    saveLocation: {
+      description: `A URL for a container where a new image is to be saved in case a value for an image property is not found`,
+      control: { type: null },
+    },
+    solidDataset: {
+      description: `A Solid Dataset where a new image should be added`,
+      control: { type: null },
+    },
   },
 };
-
-export function BasicExample(): ReactElement {
-  const property = "http://schema.org/contentUrl";
+interface IWithBasicData {
+  property: string;
+  properties: Array<string>;
+  edit: boolean;
+  allowDelete: boolean;
+  maxSize: number;
+}
+export function BasicExample({
+  property,
+  properties,
+  edit,
+  allowDelete,
+  maxSize,
+}: IWithBasicData): ReactElement {
   const thing = addUrl(createThing(), property, `${host}/example.jpg`);
 
-  return <Image thing={thing} property={property} />;
+  return (
+    <Image
+      thing={thing}
+      property={property}
+      properties={properties}
+      edit={edit}
+      maxSize={maxSize}
+      allowDelete={allowDelete}
+    />
+  );
 }
+
+BasicExample.args = {
+  property: "http://schema.org/contentUrl",
+  edit: false,
+  allowDelete: false,
+  maxSize: 100000000,
+};
 
 BasicExample.parameters = {
   actions: { disable: true },
-  controls: { disable: true },
 };
-
-export function PropertyArrayExample(): ReactElement {
-  const property = "http://schema.org/contentUrl";
-  const notFoundProperty = "http://schema.org/iri-not-on-the-thing";
+export function PropertyArrayExample({
+  property,
+  properties,
+  edit,
+  maxSize,
+  allowDelete,
+}: IWithBasicData): ReactElement {
   const thing = addUrl(createThing(), property, `${host}/example.jpg`);
 
-  return <Image thing={thing} properties={[notFoundProperty, property]} />;
+  return (
+    <Image
+      thing={thing}
+      properties={properties}
+      edit={edit}
+      maxSize={maxSize}
+      allowDelete={allowDelete}
+    />
+  );
 }
+
+PropertyArrayExample.args = {
+  property: "http://schema.org/contentUrl",
+  properties: [
+    "http://schema.org/iri-not-on-the-thing",
+    "http://schema.org/contentUrl",
+  ],
+  edit: false,
+  maxSize: 100000000,
+};
 
 PropertyArrayExample.parameters = {
   actions: { disable: true },
-  controls: { disable: true },
 };
-
 interface IWithDatasetProvider {
   datasetUrl: string;
   thingUrl: string;
@@ -130,7 +187,6 @@ WithDatasetProvider.args = {
 
 WithDatasetProvider.parameters = {
   actions: { disable: true },
-  controls: { disable: true },
 };
 
 export function ErrorComponent(): ReactElement {
@@ -148,5 +204,31 @@ export function ErrorComponent(): ReactElement {
 
 ErrorComponent.parameters = {
   actions: { disable: true },
-  controls: { disable: true },
+};
+
+export function DeleteComponent(): ReactElement {
+  const property = "http://schema.org/contentUrl";
+  const thing = addUrl(createThing(), property, `${host}/example.jpg`);
+  const dataset = setThing(createSolidDataset(), thing);
+
+  return (
+    <Image
+      thing={thing}
+      solidDataset={dataset}
+      edit
+      autosave
+      saveLocation={`${host}/`}
+      property={property}
+      allowDelete
+      deleteComponent={({ onClick }) => (
+        <button type="button" onClick={onClick}>
+          Custom Delete Component
+        </button>
+      )}
+    />
+  );
+}
+
+DeleteComponent.parameters = {
+  actions: { disable: true },
 };

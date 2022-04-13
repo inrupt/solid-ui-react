@@ -34,19 +34,15 @@ export default {
     property: {
       type: { required: true },
       description: `The property of the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) to retrieve the src URL from.`,
-      control: { type: null },
     },
     edit: {
       description: `If true, renders an input to allow a new video file to be selected.`,
-      control: { type: null },
     },
     autosave: {
       description: `If true, uploads and persists a new video once selected.`,
-      control: { type: null },
     },
     maxSize: {
       description: `The maximum permitted file size, in kB`,
-      control: { type: null },
     },
     inputProps: {
       description: `Additional attributes to be passed to the file input, if \`edit\` is true`,
@@ -64,10 +60,22 @@ export default {
       description: `Component to be rendered in case of error.`,
       control: { type: null },
     },
+    loadingComponent: {
+      description: `A loading component to show while fetching the dataset. If \`null\` the default loading message won't be displayed`,
+      control: { type: null },
+    },
   },
 };
 
-export function EditFalse(): ReactElement {
+export function EditFalse({
+  edit,
+  autosave,
+  maxSize,
+}: {
+  edit: boolean;
+  autosave: boolean;
+  maxSize: number;
+}): ReactElement {
   const exampleUrl =
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
   const exampleProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
@@ -76,8 +84,23 @@ export function EditFalse(): ReactElement {
     exampleProperty,
     exampleUrl
   );
-  return <Video thing={exampleThing} property={exampleProperty} />;
+  return (
+    <Video
+      thing={exampleThing}
+      property={exampleProperty}
+      edit={edit}
+      autosave={autosave}
+      maxSize={maxSize}
+    />
+  );
 }
+
+EditFalse.args = {
+  edit: false,
+  autosave: false,
+  maxSize: 100,
+  property: "http://www.w3.org/2006/vcard/ns#hasPhoto",
+};
 
 EditFalse.parameters = {
   actions: { disable: true },
@@ -116,6 +139,7 @@ EditTrue.args = {
   edit: true,
   autosave: true,
   maxSize: 100,
+  property: "http://www.w3.org/2006/vcard/ns#hasPhoto",
 };
 
 EditTrue.parameters = {

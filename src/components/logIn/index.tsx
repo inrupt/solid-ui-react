@@ -34,48 +34,54 @@ export interface Props {
 /**
  * Displays a button which triggers the login flow on click. Should be used inside a `SessionProvider`.
  */
-export const LoginButton: React.FC<Props> = (propsLogin: Props) => {
-  const {
-    oidcIssuer,
-    redirectUrl,
-    children,
-    authOptions,
-    onError,
-  } = propsLogin;
-
+export const LoginButton: React.FC<Props> = ({
+  oidcIssuer,
+  redirectUrl,
+  children,
+  authOptions,
+  onError,
+}: Props) => {
   const options = {
     redirectUrl,
     oidcIssuer,
     ...authOptions,
   };
 
-  const { session, setSessionRequestInProgress } = useContext(SessionContext);
+  const { login, setSessionRequestInProgress } = useContext(SessionContext);
 
-  async function LoginHandler() {
+  async function loginHandler() {
     setSessionRequestInProgress(true);
 
     try {
       // Workaround for a solid-client-authn bug.
       // Typescript is mad about something.
-      await session.login(options as any);
+      await login(options as any);
       setSessionRequestInProgress(false);
     } catch (error) {
       setSessionRequestInProgress(false);
-      if (onError) onError(error);
+      if (onError) onError(error as Error);
     }
+  }
+
+  function keyDownHandler(
+    e: React.KeyboardEvent<HTMLDivElement | HTMLButtonElement>
+  ): Promise<void> {
+    e.preventDefault();
+
+    return e.key === "Enter" ? loginHandler() : Promise.resolve();
   }
 
   return children ? (
     <div
       role="button"
       tabIndex={0}
-      onClick={LoginHandler}
-      onKeyDown={LoginHandler}
+      onClick={loginHandler}
+      onKeyDown={keyDownHandler}
     >
       {children}
     </div>
   ) : (
-    <button type="button" onClick={LoginHandler} onKeyDown={LoginHandler}>
+    <button type="button" onClick={loginHandler} onKeyDown={keyDownHandler}>
       Log In
     </button>
   );

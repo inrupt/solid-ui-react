@@ -40,9 +40,10 @@ import {
   getStringNoLocaleAll,
   getStringWithLocaleAll,
   getUrlAll,
+  getSolidDataset,
 } from "@inrupt/solid-client";
 
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import ThingContext from "../context/thingContext";
 import DatasetContext from "../context/datasetContext";
@@ -84,7 +85,7 @@ export const overwriteFile = async (
     return objectUrl;
   } catch (error) {
     if (onError) {
-      onError(error);
+      onError(error as Error);
     }
     return null;
   }
@@ -93,9 +94,9 @@ export const overwriteFile = async (
 export const retrieveFile = async (
   src: string,
   fetch: typeof window.fetch
-): Promise<string> => {
+): Promise<Blob> => {
   const imageBlob = await getFile(src, { fetch });
-  return URL.createObjectURL(imageBlob);
+  return imageBlob;
 };
 
 export type DataType =
@@ -311,9 +312,8 @@ export function useProperty(props: UsePropertyProps): UseProperty {
     locale,
   } = props;
 
-  const { solidDataset: contextDataset, setDataset = () => {} } = useContext(
-    DatasetContext
-  );
+  const { solidDataset: contextDataset, setDataset = () => {} } =
+    useContext(DatasetContext);
 
   const dataset = propDataset || contextDataset;
 
@@ -353,4 +353,26 @@ export function useProperty(props: UsePropertyProps): UseProperty {
     setDataset,
     setThing,
   };
+}
+
+export function useDatetimeBrowserSupport(): boolean | null {
+  const [isDatetimeSupported, setIsDatetimeSupported] = useState<
+    boolean | null
+  >(null);
+
+  useEffect(() => {
+    const test = document.createElement("input");
+    test.type = "datetime-local";
+    setIsDatetimeSupported(test.type !== "text");
+  }, []);
+
+  return isDatetimeSupported;
+}
+
+export async function updateDataset(
+  datasetUrl: string | Url,
+  setDataset: (dataset: SolidDataset) => void
+): Promise<void> {
+  const latestDataset = await getSolidDataset(datasetUrl);
+  setDataset(latestDataset);
 }

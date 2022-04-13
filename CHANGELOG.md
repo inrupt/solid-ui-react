@@ -1,5 +1,113 @@
+# Changelog
+
+This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+
 ## Unreleased
+
+### Bugfixes
+
+- When `Image` component is editable, the value error will be set if there is no image available, which means the error component (default or custom) wis displayed correctly. 
 - The types accepted by `DatasetContext`have been extended to include `(SolidDataset & WithAcp)`
+
+## 2.7.0 ( January 20, 2022 )
+
+### New features
+
+- The `Image` component now takes an optional prop `allowDelete`, which renders a default delete button that will remove the value from the dataset. It is also possible to pass a `deleteComponent` to render a custom delete button in place of the default. 
+
+## 2.6.1
+
+### New features
+
+- The `Image` component now allows for a new image to be saved even if the property is not found in the dataset, by passing a `solidDataset` where the Thing should be set after updating, and a `saveLocation` where the image file should be stored. 
+
+### Bugfixes
+
+- The webpack export now works properly for some otherwise-broken webpack-using projects.
+
+## 2.6.0 ( November 22, 2021 )
+
+### New features
+
+- The `SessionContext` now has a `profile` property which contains the user's profiles.
+
+## 2.5.1 ( October 25, 2021 )
+
+- Upgrade dependencies, including solid-client and solid-client-authn
+
+## 2.5.0 ( September 15, 2021 )
+
+- Add `FileUpload` component.
+
+## 2.4.2 ( August 20, 2021 )
+
+- Change build target from commonjs to umd, to fix webpack issues
+
+## 2.4.1 ( August 18, 2021 )
+
+- Fix missing code snippets in storybook
+- Fix dependencies to work with React 17
+
+## 2.4.0 ( July 23, 2021 )
+
+- `useFile` hook added.
+
+- `Table` now takes an optional `emptyStateComponent` to be rendered if no rows are present.
+
+- `TableColumn` now takes an optional `sortFn` sorting function used to sort that column.
+
+- The following components now take an optional `loadingComponent` to be rendered while fetching data:
+  - `Value`
+  - `Text`
+  - `Link`
+  - `Image`
+  - `Video`
+- When it is not passed, the components render a default message instead. 
+- If `null`, the default message won't be rendered.
+
+- The following components now take an optional `errorComponent` to be rendered in case of error:
+  - `Value`
+  - `Text`
+  - `Link`
+- When it is not passed, the components render a default message instead. 
+- `DatasetProvider` still receives this now as `loadingComponent`.
+- `CombinedProvider` now receives this prop and passes it down to the `DatasetProvider`.
+
+## Deprecations
+- `loading` in `DatasetProvider` is now deprecated and replaced with `loadingComponent` to match the rest of the components. `loading` can still be used in `DatasetProvider` but may be removed in a future major release.
+
+The following sections document changes that have been released already:
+
+## 2.3.1 ( June 9, 2021 )
+
+### Bugs fixed
+
+- The `Value` component now handles the case where `datetime-local` is unsupported by the browser and renders two inputs with type `date` and `time` instead. 
+- Updated @inrupt/solid-client-authn-browser, which was causing an issue where `SessionContext`'s `sessionRequestInProgress` property would not be set to `false` properly in some cases.
+
+## 2.3.0 ( May 31, 2021 )
+
+### Changed
+
+- The `SessionProvider` component now accepts additional variables to enable
+logging back in on refresh. 
+
+## 2.2.0 ( May 19, 2021 )
+
+### Changed
+
+- Updated all dependencies, including @inrupt/solid-client from 1.3.0 to 1.6.1, and @inrupt/solid-client-authn-browser from 1.5.1 to 1.8.0
+
+## 2.1.0 ( January 14, 2021 )
+
+### Changed
+
+- If no `onError` is passed to a SessionContext, an error will be thrown
+- `login` from `useSession` will now throw errors if an error occurs
+- Only `Enter` keyboard events will trigger login and logout on the default
+  LoginButton and LogoutButton
+- Packages have been upgraded - notably, `@inrupt/solid-client-authn-browser` which allows
+  refreshing without losing the current session
 
 ## 2.0.0 ( November 6, 2020 )
 

@@ -24,7 +24,7 @@ import * as React from "react";
 import { RenderResult, render } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
 import ThingContext from "../thingContext";
-import CombinedProvider from "./index";
+import CombinedProvider from ".";
 
 let documentBody: RenderResult;
 
@@ -39,14 +39,9 @@ const mockThing = SolidFns.addStringNoLocale(
 
 // const mockDataset = SolidFns.setThing(SolidFns.createSolidDataset(), mockThing);
 const mockDatasetWithResourceInfo = SolidFns.setThing(
-  SolidFns.createSolidDataset() as any,
+  SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
   mockThing
 );
-
-// TODO: refactor this once ticket SDK-1157 has been done
-mockDatasetWithResourceInfo.internal_resourceInfo = {};
-mockDatasetWithResourceInfo.internal_resourceInfo.fetchedFrom =
-  "https://some-interesting-value.com";
 
 function ExampleComponentWithDataset(): React.ReactElement {
   const [property, setProperty] = React.useState<string>(

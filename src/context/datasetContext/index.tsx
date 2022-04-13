@@ -43,14 +43,19 @@ export default DatasetContext;
 
 export interface IDatasetProvider {
   children: React.ReactNode;
+  /**
+   * @deprecated `loading` is deprecated. It can still be used but may be removed in a future major release.`loadingComponent` should be used instead.
+   */
   loading?: React.ReactNode;
+  loadingComponent?: React.ComponentType | null;
   onError?(error: Error): void | null;
   solidDataset?: SolidDataset | (SolidDataset & WithResourceInfo) | (SolidDataset & WithAcp);
   datasetUrl?: UrlString | string;
 }
 
-export type RequireProperty<T, Prop extends keyof T> = T &
-  { [key in Prop]-?: T[key] };
+export type RequireProperty<T, Prop extends keyof T> = T & {
+  [key in Prop]-?: T[key];
+};
 
 export type RequireDatasetOrDatasetUrl =
   | RequireProperty<IDatasetProvider, "solidDataset">
@@ -65,6 +70,7 @@ export const DatasetProvider = ({
   solidDataset: propDataset,
   datasetUrl,
   loading,
+  loadingComponent: LoadingComponent,
 }: RequireDatasetOrDatasetUrl): ReactElement => {
   const { dataset, error } = useDataset(datasetUrl);
 
@@ -84,9 +90,18 @@ export const DatasetProvider = ({
     setDataset(datasetToUse);
   }, [datasetToUse]);
 
+  let loader: JSX.Element | React.ReactNode | null = (LoadingComponent && (
+    <LoadingComponent />
+  )) ||
+    loading || <span>Fetching data...</span>;
+
+  if (LoadingComponent === null) {
+    loader = null;
+  }
+
   return (
     <DatasetContext.Provider value={{ solidDataset: stateDataset, setDataset }}>
-      {stateDataset ? children : loading || <span>Fetching data...</span>}
+      {stateDataset ? children : loader}
     </DatasetContext.Provider>
   );
 };

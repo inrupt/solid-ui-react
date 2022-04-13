@@ -54,64 +54,16 @@ export default {
       description: `A url to retrieve the [Thing](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-Thing) from, if \`Thing\` is not provided. Uses the Dataset from context.`,
       control: { type: null },
     },
+    loadingComponent: {
+      description: `A loading component to show while fetching the dataset.`,
+      control: { type: null },
+    },
     onError: {
       description: `Function to be called on error.`,
       action: "onError",
       control: { type: null },
     },
   },
-};
-
-export function WithLocalData(): ReactElement {
-  const property = "http://xmlns.com/foaf/0.1/name";
-  const name = "example value";
-
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
-    property,
-    name
-  );
-  const dataset = SolidFns.setThing(
-    SolidFns.createSolidDataset(),
-    exampleThing
-  );
-
-  return (
-    <CombinedDataProvider solidDataset={dataset} thing={exampleThing}>
-      <ExampleComponent propertyUrl={property} />
-    </CombinedDataProvider>
-  );
-}
-
-WithLocalData.parameters = {
-  actions: { disable: true },
-  controls: { disable: true },
-};
-
-export function WithDataUrls({
-  datasetUrl,
-  thingUrl,
-  propertyUrl,
-}: {
-  datasetUrl: string;
-  thingUrl: string;
-  propertyUrl: string;
-}): ReactElement {
-  return (
-    <CombinedDataProvider datasetUrl={datasetUrl} thingUrl={thingUrl}>
-      <ExampleComponentFetchedData propertyUrl={propertyUrl} />
-    </CombinedDataProvider>
-  );
-}
-
-WithDataUrls.parameters = {
-  actions: { disable: true },
-};
-
-WithDataUrls.args = {
-  datasetUrl: `${host}/example.ttl`,
-  thingUrl: `${host}/example.ttl#me`,
-  propertyUrl: "http://xmlns.com/foaf/0.1/name",
 };
 
 function ExampleComponent({
@@ -166,3 +118,55 @@ function ExampleComponentFetchedData({
     </div>
   );
 }
+
+export function WithLocalData(): ReactElement {
+  const property = "http://xmlns.com/foaf/0.1/name";
+  const name = "example value";
+
+  const exampleThing = SolidFns.addStringNoLocale(
+    SolidFns.createThing(),
+    property,
+    name
+  );
+  const dataset = SolidFns.setThing(
+    SolidFns.createSolidDataset(),
+    exampleThing
+  );
+
+  return (
+    <CombinedDataProvider solidDataset={dataset} thing={exampleThing}>
+      <ExampleComponent propertyUrl={property} />
+    </CombinedDataProvider>
+  );
+}
+
+WithLocalData.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
+};
+
+export function WithDataUrls({
+  datasetUrl,
+  thingUrl,
+  propertyUrl,
+}: {
+  datasetUrl: string;
+  thingUrl: string;
+  propertyUrl: string;
+}): ReactElement {
+  return (
+    <CombinedDataProvider datasetUrl={datasetUrl} thingUrl={thingUrl}>
+      <ExampleComponentFetchedData propertyUrl={propertyUrl} />
+    </CombinedDataProvider>
+  );
+}
+
+WithDataUrls.parameters = {
+  actions: { disable: true },
+};
+
+WithDataUrls.args = {
+  datasetUrl: `${host}/example.ttl`,
+  thingUrl: `${host}/example.ttl#me`,
+  propertyUrl: "http://xmlns.com/foaf/0.1/name",
+};

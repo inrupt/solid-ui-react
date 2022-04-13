@@ -32,12 +32,14 @@ import {
   hasResourceInfo,
 } from "@inrupt/solid-client";
 import { SessionContext } from "../../context/sessionContext";
-import { CommonProperties, useProperty } from "../../helpers";
+import { CommonProperties, updateDataset, useProperty } from "../../helpers";
 
 export type Props = {
   saveDatasetTo?: Url | UrlString;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   locale?: string;
+  loadingComponent?: React.ComponentType | null;
+  errorComponent?: React.ComponentType<{ error: Error }>;
 } & CommonProperties;
 
 /**
@@ -52,14 +54,23 @@ export function Text({
   locale,
   onSave,
   onError,
-  edit,
-  autosave,
   inputProps,
+  errorComponent: ErrorComponent,
+  loadingComponent: LoadingComponent,
+  edit = false,
+  autosave = false,
   ...other
-}: Props & React.HTMLAttributes<HTMLSpanElement>): ReactElement {
+}: Props & React.HTMLAttributes<HTMLSpanElement>): ReactElement | null {
   const { fetch } = useContext(SessionContext);
 
-  const { error, value, thing, property, dataset, setDataset } = useProperty({
+  const {
+    error: thingError,
+    value,
+    thing,
+    property,
+    dataset,
+    setDataset,
+  } = useProperty({
     dataset: propDataset,
     thing: propThing,
     property: propProperty,
@@ -67,6 +78,15 @@ export function Text({
     type: "string",
     locale,
   });
+
+  let valueError;
+  if (!edit && !value) {
+    valueError = new Error("No value found for property.");
+  }
+
+  const isFetchingThing = !thing && !thingError;
+
+  const [error] = useState<Error | undefined>(thingError ?? valueError);
 
   useEffect(() => {
     if (error && onError) {
@@ -104,16 +124,14 @@ export function Text({
             setThing(dataset, updatedResource),
             { fetch }
           );
-
-          setDataset(savedDataset);
+          await updateDataset(saveDatasetTo, setDataset);
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
             getSourceUrl(dataset),
             setThing(dataset, updatedResource),
             { fetch }
           );
-
-          setDataset(savedDataset);
+          await updateDataset(getSourceUrl(dataset), setDataset);
         } else {
           setErrorState(() => {
             throw new Error(
@@ -127,15 +145,27 @@ export function Text({
         }
       } catch (saveError) {
         if (onError) {
-          onError(saveError);
+          onError(saveError as Error);
         }
       }
     }
   };
 
-  if (!dataset && !thing) {
-    // TODO: provide option for user to pass in loader
-    return <h3>fetching data in progress</h3>;
+  if (isFetchingThing) {
+    let loader: JSX.Element | null = (LoadingComponent && (
+      <LoadingComponent />
+    )) || <span>fetching data in progress</span>;
+    if (LoadingComponent === null) {
+      loader = null;
+    }
+    return loader;
+  }
+
+  if (error) {
+    if (ErrorComponent) {
+      return <ErrorComponent error={error} />;
+    }
+    return <span>{error.toString()}</span>;
   }
 
   return (
@@ -158,8 +188,3 @@ export function Text({
     </>
   );
 }
-
-Text.defaultProps = {
-  autosave: false,
-  edit: false,
-};

@@ -57,38 +57,15 @@ export default {
       action: "onError",
       control: { type: null },
     },
+    restorePreviousSession: {
+      description: `Enables the session restore on page reload.`,
+      control: { type: null },
+    },
+    onSessionRestore: {
+      description: `Function to be called on session restore. It is invoked with the URL of the refreshed page as its parameter`,
+      control: { type: null },
+    },
   },
-};
-
-export function ProviderWithHook(): ReactElement {
-  const [idp, setIdp] = useState("https://inrupt.net");
-
-  return (
-    <SessionProvider sessionId="session-provider-example" onError={console.log}>
-      <p>
-        <em>{"Note: "}</em>
-        to test out the Authentication examples, you will need to click the
-        pop-out icon on the top right to open this example in a new tab first.
-      </p>
-
-      <input type="url" value={idp} onChange={(e) => setIdp(e.target.value)} />
-
-      <LoginButton
-        oidcIssuer={idp}
-        redirectUrl={window.location.href}
-        onError={console.log}
-      />
-
-      <LogoutButton onError={console.log} />
-
-      <Dashboard />
-    </SessionProvider>
-  );
-}
-
-ProviderWithHook.parameters = {
-  actions: { disable: true },
-  controls: { disable: true },
 };
 
 function Dashboard(): ReactElement {
@@ -118,3 +95,43 @@ function Dashboard(): ReactElement {
     </div>
   );
 }
+
+export function ProviderWithHook(): ReactElement {
+  const [idp, setIdp] = useState("https://inrupt.net");
+
+  const restoreCallback = (url: string) => {
+    console.log(`Use this function to navigate back to ${url}`);
+  };
+
+  return (
+    <SessionProvider
+      sessionId="session-provider-example"
+      onError={console.log}
+      restorePreviousSession
+      onSessionRestore={restoreCallback}
+    >
+      <p>
+        <em>{"Note: "}</em>
+        to test out the Authentication examples, you will need to click the
+        pop-out icon on the top right to open this example in a new tab first.
+      </p>
+
+      <input type="url" value={idp} onChange={(e) => setIdp(e.target.value)} />
+
+      <LoginButton
+        oidcIssuer={idp}
+        redirectUrl={window.location.href}
+        onError={console.log}
+      />
+
+      <LogoutButton onError={console.log} />
+
+      <Dashboard />
+    </SessionProvider>
+  );
+}
+
+ProviderWithHook.parameters = {
+  actions: { disable: true },
+  controls: { disable: true },
+};

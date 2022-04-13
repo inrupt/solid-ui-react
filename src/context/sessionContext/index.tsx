@@ -30,53 +30,51 @@ import React, {
 } from "react";
 
 import {
+  fetch,
+  login,
+  logout,
+  handleIncomingRedirect,
   Session,
-  getClientAuthenticationWithDependencies,
+  getDefaultSession,
+  onSessionRestore as onSessionRestoreClient,
 } from "@inrupt/solid-client-authn-browser";
 
-import { ILoginInputOptions } from "@inrupt/solid-client-authn-core";
+import {
+  SolidDataset,
+  getProfileAll,
+  ProfileAll,
+  WithServerResourceInfo,
+} from "@inrupt/solid-client";
 
 export interface ISessionContext {
-  login: (options: ILoginInputOptions) => Promise<void>;
-  logout: () => Promise<void>;
+  login: typeof login;
+  logout: typeof logout;
   session: Session;
   sessionRequestInProgress: boolean;
   setSessionRequestInProgress?: Dispatch<SetStateAction<boolean>> | any;
   fetch: typeof window.fetch;
+  profile: ProfileAll<SolidDataset & WithServerResourceInfo> | undefined;
 }
 
-/* eslint @typescript-eslint/explicit-module-boundary-types: 0 */
-export const unauthenticatedFetch = (url: any, options: any): any => {
-  return window.fetch.call(window, url, options);
-};
-
-export const buildSession = (sessionId?: string): Session =>
-  new Session(
-    {
-      clientAuthentication: getClientAuthenticationWithDependencies({}),
-    },
-    sessionId
-  );
-
-const defaultSession = buildSession("");
-const defaultLogin = defaultSession.login;
-const defaultLogout = defaultSession.logout;
-
 export const SessionContext = createContext<ISessionContext>({
-  session: defaultSession,
+  login,
+  logout,
+  fetch,
+  session: getDefaultSession(),
   sessionRequestInProgress: true,
-  fetch: unauthenticatedFetch,
-  login: defaultLogin,
-  logout: defaultLogout,
+  profile: undefined,
 });
 
 /* eslint react/require-default-props: 0 */
 export interface ISessionProvider {
   children: ReactNode;
   sessionId?: string;
-  session?: Session;
   sessionRequestInProgress?: boolean;
   onError?: (error: Error) => void;
+  /** @since 2.3.0 */
+  restorePreviousSession?: boolean;
+  /** @since 2.3.0 */
+  onSessionRestore?: (url: string) => void;
 }
 
 /**
@@ -85,13 +83,22 @@ export interface ISessionProvider {
 export const SessionProvider = ({
   sessionId,
   children,
-  session: propsSession,
   onError,
   sessionRequestInProgress: defaultSessionRequestInProgress,
+  restorePreviousSession,
+  onSessionRestore,
 }: ISessionProvider): ReactElement => {
-  const [session, setSession] = useState<Session>(
-    propsSession || buildSession(sessionId)
-  );
+  const restoreSession =
+    restorePreviousSession || typeof onSessionRestore !== "undefined";
+  const [session, setSession] = useState<Session>(getDefaultSession());
+  const [profile, setProfile] =
+    useState<ProfileAll<SolidDataset & WithServerResourceInfo>>();
+
+  useEffect(() => {
+    if (onSessionRestore !== undefined) {
+      onSessionRestoreClient(onSessionRestore);
+    }
+  }, [onSessionRestore]);
 
   const defaultInProgress =
     typeof defaultSessionRequestInProgress === "undefined"
@@ -99,28 +106,38 @@ export const SessionProvider = ({
       : defaultSessionRequestInProgress;
 
   // If loggedin is true, we're not making a session request.
-  const [sessionRequestInProgress, setSessionRequestInProgress] = useState(
-    defaultInProgress
-  );
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const fetch = session.info.isLoggedIn
-    ? session.fetch.bind(session)
-    : unauthenticatedFetch;
+  const [sessionRequestInProgress, setSessionRequestInProgress] =
+    useState(defaultInProgress);
 
   let currentLocation;
 
   if (typeof window !== "undefined") {
     currentLocation = window.location;
   }
-
   useEffect(() => {
-    // console.log("handling");
-    session
-      .handleIncomingRedirect(window.location.href)
-      .catch((error) => {
+    handleIncomingRedirect({
+      url: window.location.href,
+      restorePreviousSession: restoreSession,
+    })
+      .then((sessionInfo) =>
+        // If handleIncomingRedirect logged the session in, we know what the current
+        // user's WebID is.
+        sessionInfo?.webId !== undefined
+          ? getProfileAll(sessionInfo?.webId, {
+              fetch: session.fetch,
+            })
+          : undefined
+      )
+      .then((foundProfile) => {
+        if (foundProfile !== undefined) {
+          setProfile(foundProfile);
+        }
+      })
+      .catch((error: Error) => {
         if (onError) {
-          onError(error);
+          onError(error as Error);
+        } else {
+          throw error;
         }
       })
       .finally(() => {
@@ -128,40 +145,51 @@ export const SessionProvider = ({
         setSessionRequestInProgress(false);
       });
 
-    session.on("logout", () => {
-      setSession(buildSession(sessionId));
+    getDefaultSession().on("logout", () => {
+      // TODO force a refresh
+      setSession(getDefaultSession());
     });
-  }, [session, sessionId, onError, currentLocation]);
+  }, [session, sessionId, onError, currentLocation, restoreSession]);
 
-  const login = async (options: ILoginInputOptions) => {
+  const contextLogin = async (options: Parameters<typeof login>[0]) => {
     setSessionRequestInProgress(true);
 
     try {
-      await session.login(options);
-      setSessionRequestInProgress(false);
+      await login(options);
     } catch (error) {
+      if (onError) {
+        onError(error as Error);
+      } else {
+        throw error;
+      }
+    } finally {
       setSessionRequestInProgress(false);
-      if (onError) onError(error);
     }
   };
 
-  const logout = async () => {
+  const contextLogout = async () => {
     try {
-      await session.logout();
+      await logout();
+      setProfile(undefined);
     } catch (error) {
-      if (onError) onError(error);
+      if (onError) {
+        onError(error as Error);
+      } else {
+        throw error;
+      }
     }
   };
 
   return (
     <SessionContext.Provider
       value={{
-        login,
-        logout,
         session,
+        login: contextLogin,
+        logout: contextLogout,
         sessionRequestInProgress,
         setSessionRequestInProgress,
         fetch,
+        profile,
       }}
     >
       {children}

@@ -1,4 +1,9 @@
 # Solid React SDK v2 - solid-ui-react
+
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
+
+This project adheres to the Contributor Covenant [code of conduct](code_of_conduct.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [engineering@inrupt.com](mailto:engineering@inrupt.com).
+
 solid-ui-react is a library of React components made to make development with [Solid](https://solidproject.org/) simple.
 
 The goal of this library is to provide highly flexible, simple components that you can use in any browser-based Solid project and customize to match the UI of your application. It uses the [Inrupt Javascript Client Libraries](https://github.com/inrupt/solid-client-js) for authentication and data manipulation. It is built with typescript and exports its types.
@@ -28,9 +33,10 @@ All development should follow the [Inrupt Coding Guidelines](https://github.com/
 1. Clone the repository
 2. From the directory you cloned to, run `npm install` to install dependencies
 3. Run `npm run storybook` to run a live-reloading Storybook server
-4. Run `npm run lint` and `npm run test` (or `npm run ci` to run everything) after making changes
+4. Run `npm run lint` and `npm run test` after making changes
 
 # Solid JavaScript Client - solid-client
+
 [@inrupt/solid-client](https://github.com/inrupt/solid-client-js) is a JavaScript library for accessing data and managing permissions on data stored in Solid Pods. It provides an abstraction layer on top of both Solid and Resource Description Framework (RDF) principles and is compatible with the RDF/JS specification. You can use solid-client in Node.js using CommonJS modules and in the browser with a bundler like Webpack, Rollup, or Parcel.
 
 [@inrupt/solid-client](https://github.com/inrupt/solid-client-js) is part of a family open source JavaScript libraries designed to support developers building Solid applications.

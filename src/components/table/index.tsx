@@ -44,6 +44,7 @@ export type TableColumnProps = {
   locale?: string;
   multiple?: boolean;
   sortable?: boolean;
+  sortFn?: (a: any, b: any) => number;
   filterable?: boolean;
   children?: undefined | null | [];
 };
@@ -58,9 +59,10 @@ export function TableColumn(props: TableColumnProps): ReactElement {
 
 export interface TableProps
   extends React.TableHTMLAttributes<HTMLTableElement> {
-  children:
+  children?:
     | ReactElement<TableColumnProps>
     | Array<ReactElement<TableColumnProps>>;
+  emptyStateComponent?: React.ComponentType | null;
   things: Array<{ dataset: SolidDataset; thing: Thing }>;
   filter?: string;
   ascIndicator?: ReactNode;
@@ -77,62 +79,88 @@ export interface TableProps
  */
 export function Table({
   children,
+  emptyStateComponent: EmptyStateComponent,
   things,
   filter,
   ascIndicator,
   descIndicator,
   getRowProps,
   ...tableProps
-}: TableProps): ReactElement {
+}: TableProps): ReactElement | null {
   const { columns, data } = useMemo(() => {
     const columnsArray: Array<Column<Record<string, unknown>>> = [];
     const dataArray: Array<Record<string, unknown>> = things.map(() => ({}));
 
     // loop through each column
     Children.forEach(children, (column, colIndex) => {
-      const {
-        property,
-        header,
-        body,
-        dataType = "string",
-        locale,
-        multiple = false,
-        sortable,
-        filterable,
-      } = column.props;
-      // add heading
-      columnsArray.push({
-        Header: header ?? `${property}`,
-        accessor: `col${colIndex}`,
-        disableGlobalFilter: !filterable,
-        disableSortBy: !sortable,
-        Cell: body ?? (({ value }: any) => (value != null ? `${value}` : "")),
-      });
+      if (column) {
+        const {
+          property,
+          header,
+          body,
+          dataType = "string",
+          locale,
+          multiple = false,
+          sortable,
+          sortFn,
+          filterable,
+        } = column.props;
+        // add heading
 
-      // add each each value to data
-      things.forEach((thing, i) => {
-        dataArray[i][`col${colIndex}`] = multiple
-          ? getValueByTypeAll(dataType, thing.thing, property, locale)
-          : getValueByType(dataType, thing.thing, property, locale);
-      });
+        columnsArray.push({
+          Header: header ?? `${property}`,
+          accessor: `col${colIndex}`,
+          disableGlobalFilter: !filterable,
+          disableSortBy: !sortable,
+          Cell: body ?? (({ value }: any) => (value != null ? `${value}` : "")),
+        });
+
+        if (sortFn) {
+          const sortFunction = (a: Row, b: Row, columnId: string) => {
+            const valueA = a.values[columnId];
+            const valueB = b.values[columnId];
+            return sortFn(valueA, valueB);
+          };
+          columnsArray[colIndex].sortType = sortFunction;
+        } else {
+          if (dataType === "string") {
+            columnsArray[colIndex].sortType = dataType;
+          }
+          if (dataType === "integer" || dataType === "decimal") {
+            columnsArray[colIndex].sortType = "number";
+          }
+        }
+
+        // add each each value to data
+        things.forEach((thing, i) => {
+          dataArray[i][`col${colIndex}`] = multiple
+            ? getValueByTypeAll(dataType, thing.thing, property, locale)
+            : getValueByType(dataType, thing.thing, property, locale);
+        });
+      }
     });
 
     return { columns: columnsArray, data: dataArray };
   }, [children, things]);
 
   const tableInstance = useTable(
-    { columns, data, initialState: { globalFilter: filter || undefined } },
+    {
+      columns,
+      data,
+      initialState: { globalFilter: filter || undefined },
+    },
     useGlobalFilter,
     useSortBy
   );
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = tableInstance;
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    tableInstance;
+  if (!rows.length) {
+    if (EmptyStateComponent) {
+      return <EmptyStateComponent />;
+    }
+    return null;
+  }
   return (
     <table {...getTableProps()} {...tableProps}>
       <thead>

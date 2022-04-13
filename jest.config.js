@@ -4,7 +4,8 @@ module.exports = {
 
   // The test environment that will be used for testing
   preset: 'ts-jest',
-  testEnvironment: 'jsdom',
+  // testEnvironment: 'jsdom',
+  testEnvironment: "<rootDir>/tests/environment/customEnvironment.js",
 
   testPathIgnorePatterns: [
     '/node_modules/',
@@ -15,6 +16,7 @@ module.exports = {
 
   coveragePathIgnorePatterns: [
     "/node_modules/",
+    "<rootDir>/dist",
   ],
 
   coverageThreshold: {

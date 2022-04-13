@@ -23,7 +23,7 @@ import * as React from "react";
 import { renderHook } from "@testing-library/react-hooks";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { SessionContext } from "../../context/sessionContext";
-import useSession from "./index";
+import useSession from ".";
 
 describe("useSession() hook functional testing", () => {
   it("The hook should return values set in the SessionContext", async () => {
@@ -45,6 +45,7 @@ describe("useSession() hook functional testing", () => {
           } as Session,
           login: jest.fn(),
           logout: jest.fn(),
+          profile: undefined,
         }}
       >
         {children}

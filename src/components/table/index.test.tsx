@@ -21,10 +21,12 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+
 import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
-import { Table, TableColumn } from "./index";
+import { Table, TableColumn } from ".";
 
 const namePredicate = `http://xmlns.com/foaf/0.1/name`;
 const nickPredicate = `http://xmlns.com/foaf/0.1/nick`;
@@ -127,7 +129,8 @@ describe("<Table /> component functional tests", () => {
     expect(queryByText(namePredicate)).toBeNull();
   });
 
-  it("does not sort columns without sortable prop", () => {
+  it("does not sort columns without sortable prop", async () => {
+    const user = userEvent.setup();
     const { getByText, queryByText } = render(
       <Table
         things={[
@@ -138,12 +141,99 @@ describe("<Table /> component functional tests", () => {
         <TableColumn property={namePredicate} />
       </Table>
     );
-    fireEvent.click(getByText(namePredicate));
+
+    await user.click(getByText(namePredicate));
+
     expect(queryByText("🔽")).toBeNull();
     expect(queryByText("🔼")).toBeNull();
   });
 
-  it("updates header when sorting", () => {
+  it("ignored capitalization when sorting", async () => {
+    const thingA = SolidFns.addStringNoLocale(
+      SolidFns.createThing(),
+      namePredicate,
+      "example"
+    );
+    const thingB = SolidFns.addStringNoLocale(
+      SolidFns.createThing(),
+      namePredicate,
+      "Foo"
+    );
+    const datasetWithThingA = SolidFns.setThing(
+      SolidFns.createSolidDataset(),
+      thingA
+    );
+    const datasetToSort = SolidFns.setThing(datasetWithThingA, thingB);
+
+    const user = userEvent.setup();
+    const { getByText, queryAllByRole } = render(
+      <Table
+        things={[
+          { dataset: datasetToSort, thing: thingB },
+          { dataset: datasetToSort, thing: thingA },
+        ]}
+      >
+        <TableColumn property={namePredicate} sortable />
+      </Table>
+    );
+    expect(queryAllByRole("cell")[0].innerHTML).toBe("Foo");
+    expect(queryAllByRole("cell")[1].innerHTML).toBe("example");
+
+    await user.click(getByText(namePredicate));
+
+    expect(queryAllByRole("cell")[0].innerHTML).toBe("example");
+    expect(queryAllByRole("cell")[1].innerHTML).toBe("Foo");
+  });
+
+  it("uses sortFn for sorting if passed", async () => {
+    const thingA = SolidFns.addStringNoLocale(
+      SolidFns.createThing(),
+      namePredicate,
+      "Name A"
+    );
+    const thingB = SolidFns.addStringNoLocale(
+      SolidFns.createThing(),
+      namePredicate,
+      "Another Name"
+    );
+    const datasetWithThingA = SolidFns.setThing(
+      SolidFns.createSolidDataset(),
+      thingA
+    );
+    const datasetToCustomSort = SolidFns.setThing(datasetWithThingA, thingB);
+
+    const sortBySecondWord = (a: string, b: string) => {
+      const valueA = a.split(/\s+/)[1];
+      const valueB = b.split(/\s+/)[1];
+      return valueA.localeCompare(valueB);
+    };
+
+    const user = userEvent.setup();
+    const { getByText, queryAllByRole } = render(
+      <Table
+        things={[
+          { dataset: datasetToCustomSort, thing: thingB },
+          { dataset: datasetToCustomSort, thing: thingA },
+        ]}
+      >
+        <TableColumn
+          property={namePredicate}
+          sortable
+          sortFn={sortBySecondWord}
+        />
+      </Table>
+    );
+    expect(queryAllByRole("cell")[0].innerHTML).toBe("Another Name");
+    expect(queryAllByRole("cell")[1].innerHTML).toBe("Name A");
+
+    await user.click(getByText(namePredicate));
+
+    expect(queryAllByRole("cell")[0].innerHTML).toBe("Name A");
+    expect(queryAllByRole("cell")[1].innerHTML).toBe("Another Name");
+  });
+
+  it("updates header when sorting", async () => {
+    const user = userEvent.setup();
     const { getByText, queryByText } = render(
       <Table
         things={[
@@ -158,11 +248,13 @@ describe("<Table /> component functional tests", () => {
     expect(queryByText("🔽")).toBeNull();
     expect(queryByText("🔼")).toBeNull();
 
-    fireEvent.click(getByText("Name"));
+    await user.click(getByText("Name"));
+
     expect(queryByText("🔽")).toBeNull();
     expect(getByText("🔼")).not.toBeNull();
 
-    fireEvent.click(getByText("Name"));
+    await user.click(getByText("Name"));
+
     expect(queryByText("🔼")).toBeNull();
     expect(getByText("🔽")).not.toBeNull();
   });
@@ -263,5 +355,19 @@ describe("<Table /> component functional tests", () => {
     expect(getByText(/multiple name 2/)).not.toBeNull();
     expect(getByText(/multiple nick 1/)).not.toBeNull();
     expect(queryByText(/multiple nick 2/)).toBeNull();
+  });
+
+  it("renders fallback component when passed and there are no rows", () => {
+    const { getByText } = render(
+      <Table
+        things={[
+          { dataset, thing: thing1 },
+          { dataset, thing: thing2 },
+        ]}
+        emptyStateComponent={() => <span>There is no Data</span>}
+      />
+    );
+
+    expect(getByText(/There is no Data/)).not.toBeNull();
   });
 });

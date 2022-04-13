@@ -21,10 +21,13 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+
 import { ErrorBoundary } from "react-error-boundary";
 import * as SolidFns from "@inrupt/solid-client";
-import { Text } from "./index";
+import * as helpers from "../../helpers";
+import { Text } from ".";
 import { DatasetProvider } from "../../context/datasetContext";
 import { ThingProvider } from "../../context/thingContext";
 
@@ -37,16 +40,14 @@ const mockThing = SolidFns.addStringNoLocale(
   mockNick
 );
 
-const mockDataset = SolidFns.setThing(SolidFns.createSolidDataset(), mockThing);
-const mockDatasetWithResourceInfo = SolidFns.setThing(
-  SolidFns.createSolidDataset() as any,
+const mockDataset = SolidFns.setThing(
+  SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
   mockThing
 );
-
-// TODO: refactor this once ticket SDK-1157 has been done
-mockDatasetWithResourceInfo.internal_resourceInfo = {};
-mockDatasetWithResourceInfo.internal_resourceInfo.fetchedFrom =
-  "https://some-interesting-value.com";
+const mockDatasetWithResourceInfo = SolidFns.setThing(
+  SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
+  mockThing
+);
 
 const inputOptions = {
   name: "test-name",
@@ -54,6 +55,8 @@ const inputOptions = {
 };
 
 const savedDataset = SolidFns.createSolidDataset() as any;
+const latestDataset = SolidFns.createSolidDataset() as any;
+
 jest
   .spyOn(SolidFns, "saveSolidDatasetAt")
   .mockImplementation(() => savedDataset);
@@ -91,6 +94,80 @@ describe("<Text /> component snapshot test", () => {
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
+      />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+  it("matches snapshot while fetching data", () => {
+    jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+      thing: undefined,
+      error: undefined,
+      value: null,
+      setDataset: jest.fn(),
+      setThing: jest.fn(),
+      property: mockPredicate,
+    });
+    const documentBody = render(<Text property={mockPredicate} />);
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("renders loading component if passed while fetching data", () => {
+    jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+      thing: undefined,
+      error: undefined,
+      value: null,
+      setDataset: jest.fn(),
+      setThing: jest.fn(),
+      property: mockPredicate,
+    });
+    const documentBody = render(
+      <Text
+        property={mockPredicate}
+        loadingComponent={() => (
+          <span id="custom-loading-component">loading...</span>
+        )}
+      />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("does not render default loading message if loadingComponent is null", () => {
+    jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
+      thing: undefined,
+      error: undefined,
+      value: null,
+      setDataset: jest.fn(),
+      setThing: jest.fn(),
+      property: mockPredicate,
+    });
+    const documentBody = render(
+      <Text property={mockPredicate} loadingComponent={null} />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("renders default error message if there is an error", () => {
+    const emptyThing = SolidFns.createThing();
+    const documentBody = render(
+      <Text thing={emptyThing} property="https://example.com/bad-url" />
+    );
+    const { baseElement } = documentBody;
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it("renders custom error component if passed and there is an error", () => {
+    const emptyThing = SolidFns.createThing();
+    const documentBody = render(
+      <Text
+        thing={emptyThing}
+        property="https://example.com/bad-url"
+        errorComponent={({ error }) => (
+          <span id="custom-error-component">{error.toString()}</span>
+        )}
       />
     );
     const { baseElement } = documentBody;
@@ -136,6 +213,8 @@ describe("<Text /> component functional testing", () => {
       .spyOn(SolidFns, "setStringNoLocale")
       .mockImplementation(() => mockThing);
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -147,8 +226,11 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
+
+    await user.type(input, "updated nick value");
+    // blur the input:
+    await user.tab();
+
     expect(SolidFns.setStringNoLocale).toHaveBeenCalled();
   });
 
@@ -157,6 +239,8 @@ describe("<Text /> component functional testing", () => {
       .spyOn(SolidFns, "setStringWithLocale")
       .mockImplementation(() => mockThing);
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -169,8 +253,11 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
+
+    await user.type(input, "updated nick value");
+    // blur the input:
+    await user.tab();
+
     expect(SolidFns.setStringWithLocale).toHaveBeenCalled();
   });
 
@@ -178,6 +265,8 @@ describe("<Text /> component functional testing", () => {
     jest
       .spyOn(SolidFns, "setStringWithLocale")
       .mockImplementation(() => mockThing);
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -190,7 +279,11 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    input.blur();
+
+    await user.type(input, "u{Backspace}");
+    // blur the input:
+    await user.tab();
+
     expect(SolidFns.setStringWithLocale).toHaveBeenCalledTimes(0);
   });
 
@@ -214,6 +307,10 @@ describe("<Text /> component functional testing", () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+    jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
+
+    const user = userEvent.setup();
+
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -227,15 +324,21 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(onSave).toHaveBeenCalled());
+
+    await user.type(input, "updated nick value");
+    // blur the input:
+    await user.tab();
+
+    expect(onSave).toHaveBeenCalled();
   });
 
   it("Should call onSave for fetched dataset with custom location if it is passed", async () => {
     const onSave = jest.fn();
     const onError = jest.fn();
     jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+    jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -250,14 +353,20 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(onSave).toHaveBeenCalled());
+
+    await user.type(input, "updated nick value");
+
+    // blur the input:
+    await user.tab();
+
+    expect(onSave).toHaveBeenCalled();
   });
 
   it("Should call onError if saving fails", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
     const onError = jest.fn();
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDataset}
@@ -271,14 +380,20 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
+
+    await user.type(input, "updated nick value");
+
+    // blur the input:
+    await user.tab();
+
+    expect(onError).toHaveBeenCalled();
   });
 
   it("Should call onError if saving fetched dataset to custom location fails", async () => {
     (SolidFns.saveSolidDatasetAt as jest.Mock).mockRejectedValueOnce(null);
     const onError = jest.fn();
+
+    const user = userEvent.setup();
     const { getByDisplayValue } = render(
       <Text
         solidDataset={mockDatasetWithResourceInfo}
@@ -292,19 +407,25 @@ describe("<Text /> component functional testing", () => {
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(onError).toHaveBeenCalled());
+
+    await user.type(input, "updated nick value");
+
+    // blur the input:
+    await user.tab();
+
+    expect(onError).toHaveBeenCalled();
   });
 
   it("Should throw error if SaveDatasetTo is missing for new data", async () => {
     jest.spyOn(console, "error").mockImplementation(() => {});
+
+    const user = userEvent.setup();
     const { getByText, getByDisplayValue } = render(
       <ErrorBoundary
         fallbackRender={({ error }) => <div>{JSON.stringify(error)}</div>}
       >
         <Text
-          solidDataset={mockDataset}
+          solidDataset={SolidFns.createSolidDataset()}
           thing={mockThing}
           property={mockPredicate}
           edit
@@ -315,10 +436,50 @@ describe("<Text /> component functional testing", () => {
 
     const input = getByDisplayValue(mockNick);
     input.focus();
-    fireEvent.change(input, { target: { value: "updated nick value" } });
-    input.blur();
-    await waitFor(() => expect(getByText("{}")).toBeDefined());
+
+    await user.type(input, "updated nick value");
+
+    // blur the input:
+    await user.tab();
+
+    expect(getByText("{}")).toBeDefined();
     // eslint-disable-next-line no-console
     (console.error as jest.Mock).mockRestore();
+  });
+  it("Should update context with latest dataset after saving", async () => {
+    jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
+    jest.spyOn(SolidFns, "getSolidDataset").mockResolvedValue(latestDataset);
+    const setDataset = jest.fn();
+    const setThing = jest.fn();
+    jest.spyOn(helpers, "useProperty").mockReturnValue({
+      dataset: mockDataset,
+      setDataset,
+      setThing,
+      error: undefined,
+      value: mockNick,
+      thing: mockThing,
+      property: mockPredicate,
+    });
+
+    const user = userEvent.setup();
+    const { getByDisplayValue } = render(
+      <Text
+        solidDataset={mockDatasetWithResourceInfo}
+        thing={mockThing}
+        property={mockPredicate}
+        locale="en"
+        edit
+        autosave
+      />
+    );
+    const input = getByDisplayValue(mockNick);
+    input.focus();
+
+    await user.type(input, "updated nick value");
+    // blur the input:
+    await user.tab();
+
+    expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalled();
+    expect(setDataset).toHaveBeenCalledWith(latestDataset);
   });
 });

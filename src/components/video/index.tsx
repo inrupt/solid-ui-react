@@ -20,20 +20,15 @@
  */
 
 import React, { ReactElement, useEffect, useState, useContext } from "react";
-
-import {
-  retrieveFile,
-  overwriteFile,
-  CommonProperties,
-  useProperty,
-} from "../../helpers";
-
+import { overwriteFile, CommonProperties, useProperty } from "../../helpers";
 import { SessionContext } from "../../context/sessionContext";
+import useFile from "../../hooks/useFile";
 
 export type Props = {
   maxSize?: number;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   errorComponent?: React.ComponentType<{ error: Error }>;
+  loadingComponent?: React.ComponentType | null;
 } & CommonProperties &
   React.VideoHTMLAttributes<HTMLVideoElement>;
 
@@ -51,8 +46,9 @@ export function Video({
   maxSize,
   inputProps,
   errorComponent: ErrorComponent,
+  loadingComponent: LoadingComponent,
   ...videoOptions
-}: Props): ReactElement {
+}: Props): ReactElement | null {
   const { fetch } = useContext(SessionContext);
 
   const values = useProperty({
@@ -62,14 +58,17 @@ export function Video({
     type: "url",
   });
 
-  const { value } = values;
-  let { error: thingError } = values;
-
+  const { value, thing, error: thingError } = values;
+  let valueError;
   if (!edit && !value) {
-    thingError = new Error("URL not found for given property");
+    valueError = new Error("No value found for property.");
   }
 
-  const [error, setError] = useState<Error | undefined>(thingError);
+  const isFetchingThing = !thing && !thingError;
+
+  const [error, setError] = useState<Error | undefined>(
+    thingError ?? valueError
+  );
 
   useEffect(() => {
     if (error) {
@@ -81,23 +80,25 @@ export function Video({
 
   const [videoObjectUrl, setVideoObjectUrl] = useState("");
 
+  const {
+    data,
+    error: videoError,
+    inProgress: fetchingVideoInProgress,
+  } = useFile(value as string);
+
   useEffect(() => {
-    if (value) {
-      retrieveFile(value as string, fetch)
-        .then(setVideoObjectUrl)
-        .catch((retrieveError) => {
-          setError(retrieveError);
-
-          if (onError) {
-            onError(retrieveError);
-          }
-
-          if (ErrorComponent) {
-            setVideoObjectUrl("");
-          }
-        });
+    if (fetchingVideoInProgress) {
+      return;
     }
-  }, [value, onError, setError, fetch, ErrorComponent]);
+    if (videoError) {
+      setError(videoError);
+      return;
+    }
+    const videoObjectURL = data && URL.createObjectURL(data);
+    if (videoObjectURL) {
+      setVideoObjectUrl(videoObjectURL);
+    }
+  }, [data, fetchingVideoInProgress, videoError]);
 
   const handleChange = async (input: EventTarget & HTMLInputElement) => {
     const fileList = input.files;
@@ -119,8 +120,22 @@ export function Video({
 
   let videoComponent = null;
 
-  if (error && ErrorComponent) {
-    videoComponent = <ErrorComponent error={error} />;
+  if (isFetchingThing || fetchingVideoInProgress) {
+    let loader: JSX.Element | null = (LoadingComponent && (
+      <LoadingComponent />
+    )) || <span>fetching data in progress</span>;
+    if (LoadingComponent === null) {
+      loader = null;
+    }
+    return loader;
+  }
+
+  if (error) {
+    videoComponent = ErrorComponent ? (
+      <ErrorComponent error={error} />
+    ) : (
+      <span>{error.toString()}</span>
+    );
   } else if (value) {
     videoComponent = (
       /* eslint jsx-a11y/media-has-caption: 0, react/jsx-props-no-spreading: 0 */

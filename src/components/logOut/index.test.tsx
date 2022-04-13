@@ -20,25 +20,39 @@
  */
 
 import * as React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+
+import {
+  logout,
+  getDefaultSession,
+  handleIncomingRedirect,
+} from "@inrupt/solid-client-authn-browser";
 
 import { SessionProvider } from "../../context/sessionContext";
-import { LogoutButton } from "./index";
+import { LogoutButton } from ".";
+
+jest.mock("@inrupt/solid-client-authn-browser");
 
 const onLogout = jest.fn();
 const onError = jest.fn();
 
+const session = {
+  info: { isLoggedIn: false },
+  on: jest.fn(),
+} as any;
+
+beforeEach(() => {
+  jest.resetAllMocks();
+
+  (getDefaultSession as jest.Mock).mockReturnValue(session);
+  (handleIncomingRedirect as jest.Mock).mockResolvedValueOnce(null);
+});
+
 describe("<LogoutButton /> component snapshot test", () => {
   it("matches snapshot", () => {
-    const session = {
-      info: { isLoggedIn: false },
-      logout: jest.fn().mockResolvedValue(null),
-      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
-      on: jest.fn(),
-    } as any;
-
     const documentBody = render(
-      <SessionProvider session={session} sessionId="key">
+      <SessionProvider sessionId="key">
         <LogoutButton onLogout={onLogout} onError={onError} />
       </SessionProvider>
     );
@@ -50,15 +64,8 @@ describe("<LogoutButton /> component snapshot test", () => {
 
 describe("<LogoutButton /> component visual testing", () => {
   it("Renders child element", () => {
-    const session = {
-      info: { isLoggedIn: false },
-      logout: jest.fn().mockResolvedValue(null),
-      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
-      on: jest.fn(),
-    } as any;
-
     const { getByText } = render(
-      <SessionProvider session={session} sessionId="key">
+      <SessionProvider sessionId="key">
         <LogoutButton onLogout={onLogout} onError={onError}>
           <div>Custom child element</div>
         </LogoutButton>
@@ -70,79 +77,101 @@ describe("<LogoutButton /> component visual testing", () => {
 });
 
 describe("<LogOutButton /> component functional testing", () => {
-  it("fires the onClick function and calls OnLogout", async () => {
-    const session = {
-      info: { isLoggedIn: false },
-      logout: jest.fn().mockResolvedValue(null),
-      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
-      on: jest.fn(),
-    } as any;
+  it("fires the onClick function and calls onLogout", async () => {
+    const user = userEvent.setup();
 
     const { getByText } = render(
-      <SessionProvider session={session} sessionId="key">
+      <SessionProvider sessionId="key">
         <LogoutButton onLogout={onLogout} onError={onError} />
       </SessionProvider>
     );
 
-    fireEvent.click(getByText("Log Out"));
-    expect(session.logout).toHaveBeenCalled();
-    await waitFor(() => expect(onLogout).toHaveBeenCalledTimes(1));
+    await user.click(getByText("Log Out"));
+
+    expect(logout).toHaveBeenCalledTimes(1);
+    expect(onLogout).toHaveBeenCalledTimes(1);
   });
 
-  it("fires on click and doesn't pass on logout", async () => {
-    const session = {
-      info: { isLoggedIn: false },
-      logout: jest.fn().mockResolvedValue(null),
-      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
-      on: jest.fn(),
-    } as any;
+  it("fires the onKeyPress function if enter is pressed", async () => {
+    const user = userEvent.setup();
 
     const { getByText } = render(
-      <SessionProvider session={session} sessionId="key">
+      <SessionProvider sessionId="key">
+        <LogoutButton onLogout={onLogout} onError={onError} />
+      </SessionProvider>
+    );
+
+    // Focus the button
+    getByText("Log Out").focus();
+
+    await user.keyboard("{Enter}");
+
+    expect(logout).toHaveBeenCalledTimes(1);
+    expect(onLogout).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not fire the onKeyPress function if a non-enter button is pressed", async () => {
+    const user = userEvent.setup();
+
+    const { getByText } = render(
+      <SessionProvider sessionId="key">
+        <LogoutButton onLogout={onLogout} onError={onError} />
+      </SessionProvider>
+    );
+
+    // First focus the button, then press enter:
+    getByText("Log Out").focus();
+
+    await user.keyboard("A");
+
+    expect(onLogout).not.toHaveBeenCalled();
+    expect(logout).not.toHaveBeenCalled();
+  });
+
+  it("fires on click and doesn't pass onLogout", async () => {
+    const user = userEvent.setup();
+
+    const { getByText } = render(
+      <SessionProvider sessionId="key">
         <LogoutButton onError={onError} />
       </SessionProvider>
     );
 
-    fireEvent.click(getByText("Log Out"));
-    expect(session.logout).toHaveBeenCalled();
-    await waitFor(() => expect(onLogout).toHaveBeenCalledTimes(0));
-  });
+    await user.click(getByText("Log Out"));
 
-  it("fires the onClick function and not pass OnError", async () => {
-    const session = {
-      info: { isLoggedIn: false },
-      logout: jest.fn().mockRejectedValue(null),
-      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
-      on: jest.fn(),
-    } as any;
-
-    const { getByText } = render(
-      <SessionProvider session={session} sessionId="key">
-        <LogoutButton onLogout={onLogout} />
-      </SessionProvider>
-    );
-
-    fireEvent.click(getByText("Log Out"));
-    expect(session.logout).toHaveBeenCalled();
-    await waitFor(() => expect(onError).toHaveBeenCalledTimes(0));
+    expect(logout).toHaveBeenCalledTimes(1);
+    expect(onLogout).toHaveBeenCalledTimes(0);
   });
 
   it("fires the onClick function and calls OnError", async () => {
-    const session = {
-      info: { isLoggedIn: false },
-      logout: jest.fn().mockRejectedValue(null),
-      handleIncomingRedirect: jest.fn().mockResolvedValue(null),
-      on: jest.fn(),
-    } as any;
+    (logout as jest.Mock).mockRejectedValue(null);
+
+    const user = userEvent.setup();
 
     const { getByText } = render(
-      <SessionProvider session={session} sessionId="key">
+      <SessionProvider sessionId="key">
         <LogoutButton onLogout={onLogout} onError={onError} />
       </SessionProvider>
     );
 
-    fireEvent.click(getByText("Log Out"));
-    expect(session.logout).toHaveBeenCalled();
-    await waitFor(() => expect(onError).toHaveBeenCalledTimes(1));
+    await user.click(getByText("Log Out"));
+
+    expect(logout).toHaveBeenCalledTimes(1);
+    expect(onError).toHaveBeenCalledTimes(1);
+  });
+
+  it("fires the onClick function and doesn't call OnError if it wasn't provided", async () => {
+    (logout as jest.Mock).mockRejectedValue(null);
+
+    const user = userEvent.setup();
+
+    const { getByText } = render(
+      <SessionProvider sessionId="key">
+        <LogoutButton onLogout={onLogout} />
+      </SessionProvider>
+    );
+    await user.click(getByText("Log Out"));
+
+    expect(onError).toHaveBeenCalledTimes(0);
   });
 });

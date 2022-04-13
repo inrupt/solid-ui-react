@@ -35,13 +35,8 @@ export interface SessionInfo {
 }
 
 export default function useSession(): SessionInfo {
-  const {
-    session,
-    sessionRequestInProgress,
-    fetch,
-    login,
-    logout,
-  } = useContext(SessionContext);
+  const { session, sessionRequestInProgress, fetch, login, logout } =
+    useContext(SessionContext);
 
   return {
     session,

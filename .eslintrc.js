@@ -1,9 +1,27 @@
 module.exports = {
   root: true,
-  plugins: ["license-header"],
-  extends: ["@inrupt/eslint-config-react"],
+  extends: [
+    "@inrupt/eslint-config-react",
+    "@inrupt/eslint-config-lib",
+    "plugin:storybook/recommended",
+  ],
   rules: {
-    "@typescript-eslint/ban-ts-comment": 0,
-    "license-header/header": [1, "./resources/license-header.js"],
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto",
+      },
+    ],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        extensions: [".tsx"],
+      },
+    ],
+    "import/no-unresolved": "off",
+    "no-shadow": "warn",
+    "react/require-default-props": "warn",
+    "react/default-props-match-prop-types": "warn",
+    noImplicitAny: "off",
   },
-}
+};

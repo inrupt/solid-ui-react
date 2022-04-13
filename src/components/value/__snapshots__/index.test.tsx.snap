@@ -1,10 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`<Value /> component snapshot test does not render default loading message if loadingComponent is null 1`] = `
+<body>
+  <div />
+</body>
+`;
+
 exports[`<Value /> component snapshot test matches snapshot 1`] = `
 <body>
   <div>
     <span>
       test nick value
+    </span>
+  </div>
+</body>
+`;
+
+exports[`<Value /> component snapshot test matches snapshot while fetching data 1`] = `
+<body>
+  <div>
+    <span>
+      fetching data in progress
     </span>
   </div>
 </body>
@@ -21,6 +37,85 @@ exports[`<Value /> component snapshot test matches snapshot with data from conte
 </body>
 `;
 
+exports[`<Value /> component snapshot test matches snapshot with dataType NaN 1`] = `
+<DocumentFragment>
+  <input
+    type="text"
+    value="test nick value"
+  />
+</DocumentFragment>
+`;
+
+exports[`<Value /> component snapshot test matches snapshot with dataType NaN 2`] = `
+<DocumentFragment>
+  <input
+    type="checkbox"
+    value="false"
+  />
+</DocumentFragment>
+`;
+
+exports[`<Value /> component snapshot test matches snapshot with dataType NaN 3`] = `
+<DocumentFragment>
+  <input
+    step="any"
+    type="number"
+    value=""
+  />
+</DocumentFragment>
+`;
+
+exports[`<Value /> component snapshot test matches snapshot with dataType NaN 4`] = `
+<DocumentFragment>
+  <input
+    step="any"
+    type="number"
+    value=""
+  />
+</DocumentFragment>
+`;
+
+exports[`<Value /> component snapshot test matches snapshot with dataType NaN 5`] = `
+<DocumentFragment>
+  <input
+    type="url"
+    value=""
+  />
+</DocumentFragment>
+`;
+
+exports[`<Value /> component snapshot test matches snapshot with dataType datetime when browser does not support datetime-local 1`] = `
+<DocumentFragment>
+  <input
+    aria-label="Date"
+    pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}"
+    placeholder="yyyy-mm-dd"
+    step="any"
+    type="date"
+    value="2021-05-04"
+  />
+  <input
+    aria-label="Time"
+    pattern="[0-9]{2}:[0-9]{2}"
+    type="time"
+    value="06:00:00"
+  />
+</DocumentFragment>
+`;
+
+exports[`<Value /> component snapshot test matches snapshot with dataType datetime when browser supports datetime-local 1`] = `
+<DocumentFragment>
+  <input
+    aria-label="Date and Time"
+    pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}"
+    placeholder="yyyy-mm-ddThh:mm"
+    step="any"
+    type="datetime-local"
+    value="2021-05-04T06:00:00"
+  />
+</DocumentFragment>
+`;
+
 exports[`<Value /> component snapshot test matches snapshot with edit true and inputOptions 1`] = `
 <body>
   <div>
@@ -29,6 +124,60 @@ exports[`<Value /> component snapshot test matches snapshot with edit true and i
       type="url"
       value="test nick value"
     />
+  </div>
+</body>
+`;
+
+exports[`<Value /> component snapshot test renders 'false' if dataType is boolean instead of error if property not found 1`] = `
+<body>
+  <div>
+    <span>
+      false
+    </span>
+  </div>
+</body>
+`;
+
+exports[`<Value /> component snapshot test renders custom error component if passed and there is an error 1`] = `
+<body>
+  <div>
+    <span
+      id="custom-error-component"
+    >
+      Error: No value found for property.
+    </span>
+  </div>
+</body>
+`;
+
+exports[`<Value /> component snapshot test renders default error message if there is an error 1`] = `
+<body>
+  <div>
+    <span>
+      Error: No value found for property.
+    </span>
+  </div>
+</body>
+`;
+
+exports[`<Value /> component snapshot test renders error if dataType is boolean and there is an error fetching the thing 1`] = `
+<body>
+  <div>
+    <span>
+      Error: Thing not found as property or in context
+    </span>
+  </div>
+</body>
+`;
+
+exports[`<Value /> component snapshot test renders loading component if passed while fetching data 1`] = `
+<body>
+  <div>
+    <span
+      id="custom-loading-component"
+    >
+      loading...
+    </span>
   </div>
 </body>
 `;
