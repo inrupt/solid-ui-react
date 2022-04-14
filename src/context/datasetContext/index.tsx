@@ -27,7 +27,7 @@ import {
 } from "@inrupt/solid-client";
 
 import useDataset from "../../hooks/useDataset";
-import { WithAcp } from "@inrupt/solid-client/dist/acp/acp";
+import { WithAcp } from "@inrupt/solid-client/acp/acp";
 
 export interface IDatasetContext {
   solidDataset: SolidDataset | (SolidDataset & WithResourceInfo) | (SolidDataset & WithAcp) | undefined;
