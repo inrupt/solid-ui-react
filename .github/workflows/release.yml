@@ -62,7 +62,7 @@ jobs:
           echo ""
           echo "    npm install @inrupt/solid-ui-react"
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.INRUPT_NPM_TOKEN }}
       - name: Mark GitHub Deployment as successful
         uses: octokit/request-action@v2.x
         with:
