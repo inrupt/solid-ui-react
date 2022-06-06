@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 ### Bugfixes
 
 - When `Image` component is editable, the value error will be set if there is no image available, which means the error component (default or custom) wis displayed correctly. 
+- The types accepted by `DatasetContext`have been extended to include `(SolidDataset & WithAcp)`
 
 ## 2.7.0 ( January 20, 2022 )
 
