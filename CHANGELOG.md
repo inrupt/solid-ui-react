@@ -4,21 +4,31 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
+## 2.8.0 ( June 6, 2022)
+
+### Breaking Changes
+
+- Support for Node.js v12.x has been dropped as that version has reached end-of-life.
+
 ### Bugfixes
 
-- When `Image` component is editable, the value error will be set if there is no image available, which means the error component (default or custom) wis displayed correctly. 
+- When `Image` component is editable, the value error will be set if there is no image available, which means the error component (default or custom) wis displayed correctly.
+
+### Other Changes
+
+- This release also significantly upgrades the dependencies used by this package.
 
 ## 2.7.0 ( January 20, 2022 )
 
 ### New features
 
-- The `Image` component now takes an optional prop `allowDelete`, which renders a default delete button that will remove the value from the dataset. It is also possible to pass a `deleteComponent` to render a custom delete button in place of the default. 
+- The `Image` component now takes an optional prop `allowDelete`, which renders a default delete button that will remove the value from the dataset. It is also possible to pass a `deleteComponent` to render a custom delete button in place of the default.
 
 ## 2.6.1
 
 ### New features
 
-- The `Image` component now allows for a new image to be saved even if the property is not found in the dataset, by passing a `solidDataset` where the Thing should be set after updating, and a `saveLocation` where the image file should be stored. 
+- The `Image` component now allows for a new image to be saved even if the property is not found in the dataset, by passing a `solidDataset` where the Thing should be set after updating, and a `saveLocation` where the image file should be stored.
 
 ### Bugfixes
 
@@ -61,18 +71,19 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
   - `Link`
   - `Image`
   - `Video`
-- When it is not passed, the components render a default message instead. 
+- When it is not passed, the components render a default message instead.
 - If `null`, the default message won't be rendered.
 
 - The following components now take an optional `errorComponent` to be rendered in case of error:
   - `Value`
   - `Text`
   - `Link`
-- When it is not passed, the components render a default message instead. 
+- When it is not passed, the components render a default message instead.
 - `DatasetProvider` still receives this now as `loadingComponent`.
 - `CombinedProvider` now receives this prop and passes it down to the `DatasetProvider`.
 
 ## Deprecations
+
 - `loading` in `DatasetProvider` is now deprecated and replaced with `loadingComponent` to match the rest of the components. `loading` can still be used in `DatasetProvider` but may be removed in a future major release.
 
 The following sections document changes that have been released already:
@@ -81,7 +92,7 @@ The following sections document changes that have been released already:
 
 ### Bugs fixed
 
-- The `Value` component now handles the case where `datetime-local` is unsupported by the browser and renders two inputs with type `date` and `time` instead. 
+- The `Value` component now handles the case where `datetime-local` is unsupported by the browser and renders two inputs with type `date` and `time` instead.
 - Updated @inrupt/solid-client-authn-browser, which was causing an issue where `SessionContext`'s `sessionRequestInProgress` property would not be set to `false` properly in some cases.
 
 ## 2.3.0 ( May 31, 2021 )
@@ -89,7 +100,7 @@ The following sections document changes that have been released already:
 ### Changed
 
 - The `SessionProvider` component now accepts additional variables to enable
-logging back in on refresh. 
+  logging back in on refresh.
 
 ## 2.2.0 ( May 19, 2021 )
 
@@ -127,7 +138,7 @@ logging back in on refresh.
 
 ### Changed
 
-- Upgraded dependencies, especially solid-client-* to v1.0
+- Upgraded dependencies, especially solid-client-\* to v1.0
 
 ## 1.6.1 ( November 3, 2020 )
 
