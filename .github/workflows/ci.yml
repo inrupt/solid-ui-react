@@ -49,3 +49,14 @@ jobs:
         with:
           name: code-coverage-report
           path: coverage
+
+      # Sonar analysis needs the full history for features like automatic assignment of bugs. If the following step
+      # is not included the project will show a warning about incomplete information.
+      - run: git fetch --unshallow
+        if: ${{ matrix.node-version == '16.x' && matrix.os == 'ubuntu-latest' }}
+      # Run Sonar analysis on just the latest ubuntu/node runner.
+      - uses: SonarSource/sonarcloud-github-action@v1.6
+        if: ${{ matrix.node-version == '16.x' && matrix.os == 'ubuntu-latest' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
