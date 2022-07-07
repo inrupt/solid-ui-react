@@ -1,16 +1,12 @@
 {
   "compilerOptions": {
-    "rootDir": ".",
+    "rootDir": "src",
     // https://github.com/microsoft/TypeScript/wiki/Performance#controlling-types-inclusion
     "types": ["jest"],
     "baseUrl": ".",
     "outDir": "./dist/",
     "target": "es2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -28,11 +24,8 @@
     "**/node_modules",
     "dist",
     "**/__mocks__/**",
-    "**/__snapshots__/**"
+    "**/__snapshots__/**",
+    "src/**/*.test.tsx"
   ],
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "stories/**/*.tsx"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

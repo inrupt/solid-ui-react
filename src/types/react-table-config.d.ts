@@ -1,4 +1,6 @@
 /* eslint-disable header/header */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * This file is needed to provide correct types when using plugins such as sorting, filtering etc.
  * Taken from https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-table#example-type-file
