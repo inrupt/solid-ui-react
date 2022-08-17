@@ -5,6 +5,9 @@ on: [push]
 env:
   CI: true
 jobs:
+  lint:
+    uses: inrupt/javascript-style-configs/.github/workflows/reusable-lint.yml@v1.1.0
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -42,7 +45,6 @@ jobs:
         with:
           name: dist
           path: dist
-      - run: npm run lint
       - run: npm run test
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3

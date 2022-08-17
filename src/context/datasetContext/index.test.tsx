@@ -1,25 +1,26 @@
-/**
- * Copyright 2020 Inrupt Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+//
+// Copyright 2022 Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { jest, describe, it, expect } from "@jest/globals";
 import * as React from "react";
 import { RenderResult, render, waitFor } from "@testing-library/react";
 import * as SolidFns from "@inrupt/solid-client";
@@ -121,7 +122,7 @@ describe("Testing DatasetContext", () => {
       error: undefined,
     });
 
-    const { baseElement, getByText } = render(
+    const { container, getByText } = render(
       <DatasetProvider solidDataset={mockDatasetWithResourceInfo}>
         <ExampleComponentWithDataset />
       </DatasetProvider>
@@ -129,7 +130,7 @@ describe("Testing DatasetContext", () => {
 
     await waitFor(() => expect(getByText("test nick value")).toBeDefined());
 
-    expect(baseElement).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   it("matches snapshot when fetching fails", async () => {
@@ -143,8 +144,8 @@ describe("Testing DatasetContext", () => {
         <ExampleComponentWithDataset />
       </DatasetProvider>
     );
-    const { baseElement } = documentBody;
-    expect(baseElement).toMatchSnapshot();
+    const { container } = documentBody;
+    expect(container).toMatchSnapshot();
   });
 
   it("matches snapshot when fetching", async () => {
@@ -158,8 +159,8 @@ describe("Testing DatasetContext", () => {
       </DatasetProvider>
     );
 
-    const { baseElement } = documentBody;
-    expect(baseElement).toMatchSnapshot();
+    const { container } = documentBody;
+    expect(container).toMatchSnapshot();
   });
 
   it("matches snapshot when fetching and loadingComponent is passed", async () => {
@@ -176,8 +177,8 @@ describe("Testing DatasetContext", () => {
       </DatasetProvider>
     );
 
-    const { baseElement } = documentBody;
-    expect(baseElement).toMatchSnapshot();
+    const { container } = documentBody;
+    expect(container).toMatchSnapshot();
   });
 
   it("matches snapshot when fetching and loading is passed", async () => {
@@ -194,8 +195,8 @@ describe("Testing DatasetContext", () => {
       </DatasetProvider>
     );
 
-    const { baseElement } = documentBody;
-    expect(baseElement).toMatchSnapshot();
+    const { container } = documentBody;
+    expect(container).toMatchSnapshot();
   });
   it("matches snapshot when loadingComponent is null", async () => {
     (useDataset as jest.Mock).mockReturnValue({
@@ -211,8 +212,8 @@ describe("Testing DatasetContext", () => {
       </DatasetProvider>
     );
 
-    const { baseElement } = documentBody;
-    expect(baseElement).toMatchSnapshot();
+    const { container } = documentBody;
+    expect(container).toMatchSnapshot();
   });
 });
 
@@ -235,7 +236,7 @@ describe("Functional testing", () => {
       solidDataset: undefined,
       error: "Error",
     });
-    const onError = jest.fn();
+    const onError = jest.fn<void | null, [Error]>();
     render(
       <DatasetProvider
         onError={onError}
