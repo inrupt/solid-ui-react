@@ -21,6 +21,8 @@ const { thing, error } = useDataset(datasetIri, options)
 
 - `dataset`: the [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) retrieved from context or request using given [IRI](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-IRI) (undefined if loading/missing)
 - `error`: the error thrown by the request (or undefined)
+- `isValidating`: if there's a request or revalidation loading
+- `mutate(data?, options?)`: function to mutate the cached data ([details](https://swr.vercel.app/docs/mutation))
 
 ## Example Usage
 

@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+- Expose `useSWR` return values in `useDataset` and `useThing`
+
 ## 2.8.1 ( October 10, 2022)
 
 - Upgrade Inrupt SDKs to latest versions

@@ -20,7 +20,7 @@
  */
 
 import * as React from "react";
-import { renderHook } from "@testing-library/react-hooks";
+import { act, renderHook } from "@testing-library/react-hooks";
 import { SWRConfig } from "swr";
 import * as SolidFns from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
@@ -126,5 +126,20 @@ describe("useDataset() hook", () => {
     await waitFor(() =>
       expect(result.current.dataset).toBe(mockContextDataset)
     );
+  });
+
+  it("should refetch dataset when mutate is called", async () => {
+    const { result, waitFor } = renderHook(() => useDataset(mockDatasetIri), {
+      wrapper,
+    });
+
+    expect(mockGetSolidDataset).toHaveBeenCalledTimes(1);
+    expect(mockGetSolidDataset).toHaveBeenCalledWith(mockDatasetIri, {
+      fetch: mockFetch,
+    });
+    await waitFor(() => expect(result.current.dataset).toBe(mockDataset));
+
+    await act(() => result.current.mutate());
+    expect(mockGetSolidDataset).toHaveBeenCalledTimes(2);
   });
 });

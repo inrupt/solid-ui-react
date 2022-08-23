@@ -24,23 +24,26 @@ import { useContext } from "react";
 import ThingContext from "../../context/thingContext";
 import useDataset from "../useDataset";
 
+type UseThingReturnType = ReturnType<typeof useDataset> & {
+  thing?: Thing | null;
+};
+
 export default function useThing(
   datasetIri?: string | null | undefined,
   thingIri?: string | null | undefined,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   options?: any
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): { thing?: Thing | null; error: any } {
-  const { dataset, error } = useDataset(datasetIri, options);
+): UseThingReturnType {
+  const { dataset, ...rest } = useDataset(datasetIri, options);
   const { thing: thingFromContext } = useContext(ThingContext);
   if (!thingIri) {
-    return { thing: thingFromContext || undefined, error };
+    return { dataset, thing: thingFromContext || undefined, ...rest };
   }
 
   if (!dataset) {
-    return { thing: null, error };
+    return { dataset, thing: null, ...rest };
   }
 
   const thing = getThing(dataset, thingIri);
-  return { thing, error };
+  return { dataset, thing, ...rest };
 }
