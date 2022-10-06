@@ -19,7 +19,7 @@ module.exports = {
       },
     ],
     "import/no-unresolved": "off",
-    "no-shadow": "warn",
+    "no-shadow": ["warn", { allow: ["fetch"] }],
     "react/require-default-props": "warn",
     "react/default-props-match-prop-types": "warn",
     noImplicitAny: "off",

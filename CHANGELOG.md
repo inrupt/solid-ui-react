@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
+- Upgrade Inrupt SDKs to latest versions
+- Upgrade typescript to ^4.8.4, this should help with sporadic issues with mismatches in the `fetch` type definitions
+
 ## 2.8.0 ( June 6, 2022)
 
 ### Breaking Changes
