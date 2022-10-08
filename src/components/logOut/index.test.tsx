@@ -20,7 +20,7 @@
  */
 
 import * as React from "react";
-import { render, waitFor } from "@testing-library/react";
+import { render, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import {
@@ -37,40 +37,54 @@ jest.mock("@inrupt/solid-client-authn-browser");
 const onLogout = jest.fn();
 const onError = jest.fn();
 
-const session = {
-  info: { isLoggedIn: false },
-  on: jest.fn(),
-} as any;
-
+const sessionPromise = new Promise((resolve) => resolve(null));
 beforeEach(() => {
   jest.resetAllMocks();
 
-  (getDefaultSession as jest.Mock).mockReturnValue(session);
-  (handleIncomingRedirect as jest.Mock).mockResolvedValueOnce(null);
+  (getDefaultSession as jest.Mock).mockReturnValue({
+    info: { isLoggedIn: false },
+    on: jest.fn(),
+  });
+  (handleIncomingRedirect as jest.Mock).mockReturnValue(sessionPromise);
 });
 
-describe("<LogoutButton /> component snapshot test", () => {
-  it("matches snapshot", () => {
-    const documentBody = render(
-      <SessionProvider sessionId="key">
-        <LogoutButton onLogout={onLogout} onError={onError} />
-      </SessionProvider>
-    );
+/**
+ * Used to render the component and wait for the subsequent SessionProvider
+ * async loading flow to finish. Used to prevent `act` warnings from occurring.
+ */
+const renderLogout = async (
+  props: React.ComponentProps<typeof LogoutButton>
+) => {
+  const wrapper: React.FC = ({ children }) => (
+    <SessionProvider sessionId="key">{children}</SessionProvider>
+  );
 
+  const testingUtils = render(
+    <LogoutButton {...props} />,
+    { wrapper }
+  );
+
+  await act(async () => { await sessionPromise });
+
+  return testingUtils;
+};
+
+describe("<LogoutButton /> component snapshot test", () => {
+  it("matches snapshot", async () => {
+    const documentBody = await renderLogout({ onLogout, onError });
     const { baseElement } = documentBody;
+
     expect(baseElement).toMatchSnapshot();
   });
 });
 
 describe("<LogoutButton /> component visual testing", () => {
-  it("Renders child element", () => {
-    const { getByText } = render(
-      <SessionProvider sessionId="key">
-        <LogoutButton onLogout={onLogout} onError={onError}>
-          <div>Custom child element</div>
-        </LogoutButton>
-      </SessionProvider>
-    );
+  it("Renders child element", async () => {
+    const { getByText } = await renderLogout({
+      onLogout,
+      onError,
+      children: <div>Custom child element</div>,
+    });
 
     expect(getByText("Custom child element")).toBeTruthy();
   });
@@ -79,12 +93,7 @@ describe("<LogoutButton /> component visual testing", () => {
 describe("<LogOutButton /> component functional testing", () => {
   it("fires the onClick function and calls onLogout", async () => {
     const user = userEvent.setup();
-
-    const { getByText } = render(
-      <SessionProvider sessionId="key">
-        <LogoutButton onLogout={onLogout} onError={onError} />
-      </SessionProvider>
-    );
+    const { getByText } = await renderLogout({ onLogout, onError });
 
     await user.click(getByText("Log Out"));
 
@@ -94,16 +103,9 @@ describe("<LogOutButton /> component functional testing", () => {
 
   it("fires the onKeyPress function if enter is pressed", async () => {
     const user = userEvent.setup();
+    const { getByText } = await renderLogout({ onLogout, onError });
 
-    const { getByText } = render(
-      <SessionProvider sessionId="key">
-        <LogoutButton onLogout={onLogout} onError={onError} />
-      </SessionProvider>
-    );
-
-    // Focus the button
     getByText("Log Out").focus();
-
     await user.keyboard("{Enter}");
 
     expect(logout).toHaveBeenCalledTimes(1);
@@ -112,16 +114,9 @@ describe("<LogOutButton /> component functional testing", () => {
 
   it("does not fire the onKeyPress function if a non-enter button is pressed", async () => {
     const user = userEvent.setup();
+    const { getByText } = await renderLogout({ onLogout, onError });
 
-    const { getByText } = render(
-      <SessionProvider sessionId="key">
-        <LogoutButton onLogout={onLogout} onError={onError} />
-      </SessionProvider>
-    );
-
-    // First focus the button, then press enter:
     getByText("Log Out").focus();
-
     await user.keyboard("A");
 
     expect(onLogout).not.toHaveBeenCalled();
@@ -130,12 +125,7 @@ describe("<LogOutButton /> component functional testing", () => {
 
   it("fires on click and doesn't pass onLogout", async () => {
     const user = userEvent.setup();
-
-    const { getByText } = render(
-      <SessionProvider sessionId="key">
-        <LogoutButton onError={onError} />
-      </SessionProvider>
-    );
+    const { getByText } = await renderLogout({ onError });
 
     await user.click(getByText("Log Out"));
 
@@ -145,14 +135,8 @@ describe("<LogOutButton /> component functional testing", () => {
 
   it("fires the onClick function and calls OnError", async () => {
     (logout as jest.Mock).mockRejectedValue(null);
-
     const user = userEvent.setup();
-
-    const { getByText } = render(
-      <SessionProvider sessionId="key">
-        <LogoutButton onLogout={onLogout} onError={onError} />
-      </SessionProvider>
-    );
+    const { getByText } = await renderLogout({ onLogout, onError });
 
     await user.click(getByText("Log Out"));
 
@@ -162,14 +146,9 @@ describe("<LogOutButton /> component functional testing", () => {
 
   it("fires the onClick function and doesn't call OnError if it wasn't provided", async () => {
     (logout as jest.Mock).mockRejectedValue(null);
-
     const user = userEvent.setup();
+    const { getByText } = await renderLogout({ onLogout });
 
-    const { getByText } = render(
-      <SessionProvider sessionId="key">
-        <LogoutButton onLogout={onLogout} />
-      </SessionProvider>
-    );
     await user.click(getByText("Log Out"));
 
     expect(onError).toHaveBeenCalledTimes(0);
