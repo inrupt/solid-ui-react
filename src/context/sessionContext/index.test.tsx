@@ -31,6 +31,8 @@ import {
   onSessionRestore,
 } from "@inrupt/solid-client-authn-browser";
 
+import { getProfileAll } from "@inrupt/solid-client";
+
 import { SessionContext, SessionProvider } from ".";
 
 jest.mock("@inrupt/solid-client-authn-browser");
@@ -215,6 +217,42 @@ describe("SessionContext functionality", () => {
 
     expect(screen.getByTestId("profile").textContent).toBe("No profile found");
     expect(mockedClientModule.getProfileAll).toHaveBeenCalled();
+  });
+
+  it("allows skipping fetching the user's profile if logging in succeeds", async () => {
+    (handleIncomingRedirect as jest.Mock).mockResolvedValueOnce({
+      webId: "https://some.webid",
+    });
+
+    (getProfileAll as jest.Mock).mockResolvedValue({
+      webIdProfile: null,
+      altProfileAll: [],
+    });
+
+    const session = {
+      info: {
+        isLoggedIn: true,
+        webId: "https://fakeurl.com/me",
+      },
+      on: jest.fn(),
+    } as any;
+
+    (getDefaultSession as jest.Mock).mockReturnValue(session);
+
+    const screen = render(
+      <SessionProvider skipLoadingProfile>
+        <ChildComponent />
+      </SessionProvider>
+    );
+    await waitFor(async () => {
+      expect(screen.getByTestId("profile").textContent).toBe(
+        "No profile found"
+      );
+    });
+
+    expect(screen.getByTestId("profile").textContent).toBe("No profile found");
+    expect(getProfileAll).not.toHaveBeenCalled();
+    expect(handleIncomingRedirect).toHaveBeenCalled();
   });
 
   it("uses the login and logout functions from session", async () => {

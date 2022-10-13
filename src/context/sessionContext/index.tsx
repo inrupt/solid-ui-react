@@ -75,6 +75,11 @@ export interface ISessionProvider {
   restorePreviousSession?: boolean;
   /** @since 2.3.0 */
   onSessionRestore?: (url: string) => void;
+  /**
+   * @since unreleased
+   * @experimental
+   * */
+  skipLoadingProfile?: boolean;
 }
 
 /**
@@ -86,6 +91,7 @@ export const SessionProvider = ({
   onError,
   sessionRequestInProgress: defaultSessionRequestInProgress,
   restorePreviousSession,
+  skipLoadingProfile,
   onSessionRestore,
 }: ISessionProvider): ReactElement => {
   const restoreSession =
@@ -119,18 +125,19 @@ export const SessionProvider = ({
       url: window.location.href,
       restorePreviousSession: restoreSession,
     })
-      .then((sessionInfo) =>
+      .then(async (sessionInfo) => {
+        if (skipLoadingProfile === true) {
+          return;
+        }
+
         // If handleIncomingRedirect logged the session in, we know what the current
         // user's WebID is.
-        sessionInfo?.webId !== undefined
-          ? getProfileAll(sessionInfo?.webId, {
-              fetch: session.fetch,
-            })
-          : undefined
-      )
-      .then((foundProfile) => {
-        if (foundProfile !== undefined) {
-          setProfile(foundProfile);
+        if (sessionInfo?.webId !== undefined) {
+          const profiles = await getProfileAll(sessionInfo?.webId, {
+            fetch: session.fetch,
+          });
+
+          setProfile(profiles);
         }
       })
       .catch((error: Error) => {
@@ -149,7 +156,14 @@ export const SessionProvider = ({
       // TODO force a refresh
       setSession(getDefaultSession());
     });
-  }, [session, sessionId, onError, currentLocation, restoreSession]);
+  }, [
+    session,
+    sessionId,
+    onError,
+    currentLocation,
+    restoreSession,
+    skipLoadingProfile,
+  ]);
 
   const contextLogin = async (options: Parameters<typeof login>[0]) => {
     setSessionRequestInProgress(true);

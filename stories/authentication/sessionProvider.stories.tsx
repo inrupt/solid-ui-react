@@ -20,6 +20,8 @@
  */
 
 import React, { ReactElement, useContext, useState } from "react";
+import { ComponentMeta } from "@storybook/react";
+
 import {
   SessionContext,
   SessionProvider,
@@ -65,8 +67,12 @@ export default {
       description: `Function to be called on session restore. It is invoked with the URL of the refreshed page as its parameter`,
       control: { type: null },
     },
+    skipLoadingProfile: {
+      description: `**Experimental:** When set to true, prevents the SessionProvider from automatically loading the WebID / Profiles`,
+      defaultValue: false,
+    },
   },
-};
+} as ComponentMeta<typeof SessionProvider>;
 
 function Dashboard(): ReactElement {
   const { session, sessionRequestInProgress } = useContext(SessionContext);
