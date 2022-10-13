@@ -32,9 +32,7 @@ describe("useDataset() hook", () => {
   const mockDatasetIri = "https://mock.url";
   const mockDataset = SolidFns.mockSolidDatasetFrom(mockDatasetIri);
   const mockContextDataset = SolidFns.mockSolidDatasetFrom(mockDatasetIri);
-  const mockGetSolidDataset = jest
-    .spyOn(SolidFns, "getSolidDataset")
-    .mockResolvedValue(mockDataset);
+  const mockGetSolidDataset = jest.spyOn(SolidFns, "getSolidDataset");
 
   const mockFetch = jest.fn();
 
@@ -62,8 +60,9 @@ describe("useDataset() hook", () => {
     </SWRConfig>
   );
 
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
+    mockGetSolidDataset.mockResolvedValue(mockDataset);
   });
 
   it("should call getSolidDataset with given Iri", async () => {
