@@ -20,23 +20,25 @@
  */
 
 import { useContext } from "react";
-import useSWR from "swr";
+import useSWR , { SWRResponse } from "swr";
 import { getSolidDataset, SolidDataset } from "@inrupt/solid-client";
 import { SessionContext } from "../../context/sessionContext";
 import DatasetContext from "../../context/datasetContext";
+
+type UseDatasetReturnType = Omit<SWRResponse, 'data'> & {
+  dataset?: SolidDataset;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  error: any;
+}
 
 export default function useDataset(
   datasetIri?: string | null | undefined,
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
   options?: any
-): {
-  dataset: SolidDataset | undefined;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  error: any;
-} {
+): UseDatasetReturnType {
   const { fetch } = useContext(SessionContext);
   const { solidDataset: datasetFromContext } = useContext(DatasetContext);
-  const { data, error } = useSWR(
+  const { data, error, ...rest } = useSWR(
     datasetIri ? [datasetIri, options, fetch] : null,
     () => {
       const requestOptions = {
@@ -49,5 +51,5 @@ export default function useDataset(
   );
 
   const dataset = datasetIri ? (data as SolidDataset) : datasetFromContext;
-  return { dataset, error };
+  return { dataset, error, ...rest };
 }
