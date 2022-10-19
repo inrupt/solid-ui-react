@@ -76,7 +76,7 @@ export interface ISessionProvider {
   /** @since 2.3.0 */
   onSessionRestore?: (url: string) => void;
   /**
-   * @since unreleased
+   * @since 2.8.2
    * @experimental
    * */
   skipLoadingProfile?: boolean;

@@ -2,16 +2,17 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 2.8.2 ( October 19th, 2022 )
 
 - Added the ability to prevent the automatic loading of WebID's and Profiles from SessionProvider, this is useful when building provisioning applications where the user has logged in, but doesn't yet have a WebID or Pod or Profile documents.
+- Fixed issue with sourcemaps not being included in our package tarballs
 
-## 2.8.1 ( October 10, 2022)
+## 2.8.1 ( October 10, 2022 )
 
 - Upgrade Inrupt SDKs to latest versions
 - Upgrade typescript to ^4.8.4, this should help with sporadic issues with mismatches in the `fetch` type definitions
 
-## 2.8.0 ( June 6, 2022)
+## 2.8.0 ( June 6, 2022 )
 
 ### Breaking Changes
 
