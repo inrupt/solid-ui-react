@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+- Added the ability to prevent the automatic loading of WebID's and Profiles from SessionProvider, this is useful when building provisioning applications where the user has logged in, but doesn't yet have a WebID or Pod or Profile documents.
+
 ## 2.8.1 ( October 10, 2022)
 
 - Upgrade Inrupt SDKs to latest versions
