@@ -4,7 +4,13 @@ on: [push]
 
 env:
   CI: true
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
+  lint:
+    uses: inrupt/typescript-sdk-tools/.github/workflows/reusable-lint.yml@v1.4.3
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -14,37 +20,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: npm
       - run: npm ci
-      - run: npm run audit --production
-      - run: npm run audit-licenses
       - run: npm run build
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist
-          path: dist
-  test:
-    needs: build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        # Available OS's: https://help.github.com/en/actions/reference/virtual-environments-for-github-hosted-runners
-        os: [ubuntu-latest, windows-latest]
-        node-version: [16.x, 14.x]
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: npm
-      - run: npm ci
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: dist
-          path: dist
-      - run: npm run lint
       - run: npm run test
       - name: Archive code coverage results
+        if: ${{ github.actor != 'dependabot[bot]' }}
         uses: actions/upload-artifact@v3
         with:
           name: code-coverage-report
@@ -52,7 +31,7 @@ jobs:
 
   sonar-scan:
     if: ${{ github.actor != 'dependabot[bot]' }}
-    needs: [test]
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
