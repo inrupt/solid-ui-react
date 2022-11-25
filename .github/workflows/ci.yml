@@ -8,8 +8,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
- lint:
-    uses: inrupt/typescript-sdk-tools/.github/workflows/reusable-lint.yml@v1.4.2
+  lint:
+    uses: inrupt/typescript-sdk-tools/.github/workflows/reusable-lint.yml@v1.4.3
 
   build:
     runs-on: ubuntu-latest
