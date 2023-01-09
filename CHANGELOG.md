@@ -2,7 +2,7 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## 2.8.3 ( December 19th, 2022 )
+## 2.8.3 ( January 9th, 2023 )
 
 - Dependency updates.
 
