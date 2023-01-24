@@ -21,7 +21,7 @@
 
 import React from "react";
 import { renderHook } from "@testing-library/react-hooks";
-import * as SolidFns from "@inrupt/solid-client";
+import SolidFns from "@inrupt/solid-client";
 import useDataset from "../useDataset";
 import ThingContext from "../../context/thingContext";
 import useThing from ".";

@@ -25,7 +25,7 @@ import { render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { ErrorBoundary } from "react-error-boundary";
-import * as SolidFns from "@inrupt/solid-client";
+import SolidFns from "@inrupt/solid-client";
 import { Table, TableColumn } from ".";
 
 const namePredicate = `http://xmlns.com/foaf/0.1/name`;

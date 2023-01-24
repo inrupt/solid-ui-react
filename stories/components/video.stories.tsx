@@ -20,7 +20,7 @@
  */
 
 import React, { ReactElement } from "react";
-import * as SolidFns from "@inrupt/solid-client";
+import SolidFns from "@inrupt/solid-client";
 import { Video } from "../../src/components/video";
 
 export default {
