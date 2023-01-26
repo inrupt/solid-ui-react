@@ -20,7 +20,7 @@
  */
 
 import React, { ReactElement, useContext, useState, useEffect } from "react";
-import * as SolidFns from "@inrupt/solid-client";
+import SolidFns from "@inrupt/solid-client";
 import { DatasetProvider } from "../../src/context/datasetContext";
 import ThingContext, { ThingProvider } from "../../src/context/thingContext";
 import config from "../config";

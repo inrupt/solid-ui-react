@@ -21,7 +21,7 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { ReactElement } from "react";
-import * as SolidFns from "@inrupt/solid-client";
+import SolidFns from "@inrupt/solid-client";
 import { DataType } from "../../src/helpers";
 import { Value } from "../../src/components/value";
 import { DatasetProvider } from "../../src/context/datasetContext";

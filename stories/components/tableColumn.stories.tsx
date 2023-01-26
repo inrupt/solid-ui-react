@@ -20,7 +20,7 @@
  */
 
 import React, { ReactElement } from "react";
-import * as SolidFns from "@inrupt/solid-client";
+import SolidFns from "@inrupt/solid-client";
 import { Table, TableColumn } from "../../src/components/table";
 import { DataType } from "../../src/helpers";
 
