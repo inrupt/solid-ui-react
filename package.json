@@ -106,9 +106,6 @@
   "resolutions": {
     "postcss": "8.4.5"
   },
-  "overrides": {
-    "glob-parent": "5.1.2"
-  },
   "engines": {
     "node": "^14.17.0 || >=16.0.0"
   }
