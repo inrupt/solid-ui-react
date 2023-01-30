@@ -21,7 +21,7 @@
 
 import * as React from "react";
 import { renderHook } from "@testing-library/react-hooks";
-import * as SolidFns from "@inrupt/solid-client";
+import SolidFns from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { SessionContext } from "../../context/sessionContext";
 import useFile from ".";

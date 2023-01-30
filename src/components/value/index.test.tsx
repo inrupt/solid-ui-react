@@ -22,7 +22,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 import { render } from "@testing-library/react";
-import * as SolidFns from "@inrupt/solid-client";
+import SolidFns from "@inrupt/solid-client";
 import { Value } from ".";
 import * as helpers from "../../helpers";
 import { DatasetProvider } from "../../context/datasetContext";
