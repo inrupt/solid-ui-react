@@ -31,16 +31,16 @@
     "@inrupt/eslint-config-lib": "^0.3.0",
     "@inrupt/eslint-config-react": "0.3.0",
     "@material-ui/core": "^4.12.4",
-    "@storybook/addon-actions": "^6.4.21",
-    "@storybook/addon-docs": "^6.4.21",
-    "@storybook/addon-essentials": "^6.4.21",
+    "@storybook/addon-actions": "^6.5.16",
+    "@storybook/addon-docs": "^6.5.16",
+    "@storybook/addon-essentials": "^6.5.16",
     "@storybook/addon-knobs": "^6.4.0",
-    "@storybook/addon-links": "^6.4.21",
-    "@storybook/addon-storysource": "^6.4.21",
-    "@storybook/addons": "^6.4.21",
-    "@storybook/builder-webpack5": "^6.4.21",
-    "@storybook/manager-webpack5": "^6.4.21",
-    "@storybook/react": "^6.4.21",
+    "@storybook/addon-links": "^6.5.16",
+    "@storybook/addon-storysource": "^6.5.16",
+    "@storybook/addons": "^6.5.16",
+    "@storybook/builder-webpack5": "^6.5.16",
+    "@storybook/manager-webpack5": "^6.5.16",
+    "@storybook/react": "^6.5.16",
     "@testing-library/react": "^12.1.4",
     "@testing-library/react-hooks": "^7.0.2",
     "@testing-library/user-event": "^14.1.0",
@@ -107,7 +107,8 @@
     "postcss": "8.4.5"
   },
   "overrides": {
-    "glob-parent": "5.1.2"
+    "glob-parent": "5.1.2",
+    "trim-newlines": "3.0.1"
   },
   "engines": {
     "node": "^14.17.0 || >=16.0.0"
