@@ -22,9 +22,6 @@ module.exports = {
       },
     },
   ],
-    features: {
-    previewMdx2: true,
-  },
   typescript: {
     check: false,
     checkOptions: {},
