@@ -2,10 +2,17 @@ module.exports = {
   core: {
     builder: "webpack5",
   },
+  framework: '@storybook/react',
   staticDirs: ["../public"],
   stories: ["../stories/**/*.stories.@(tsx|mdx)"],
   addons: [
-    "@storybook/addon-essentials",
+    {
+      name: '@storybook/addon-essentials',
+      // https://github.com/storybookjs/storybook/issues/17996#issuecomment-1134810729
+      options: {
+        'actions': false,
+      }
+    },
     {
       name: "@storybook/addon-storysource",
       options: {
