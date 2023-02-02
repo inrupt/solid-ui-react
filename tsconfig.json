@@ -2,7 +2,7 @@
   "compilerOptions": {
     "rootDir": ".",
     // https://github.com/microsoft/TypeScript/wiki/Performance#controlling-types-inclusion
-    "types": ["jest"],
+    "types": ["jest", "node"],
     "baseUrl": ".",
     "outDir": "./dist/",
     "target": "es2017",
@@ -33,6 +33,8 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "stories/**/*.tsx"
+    "stories/**/*.tsx",
+    "jest.config.ts",
+    "jest.setup.ts",
   ]
 }
