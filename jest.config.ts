@@ -24,7 +24,6 @@ export default {
 
   // The test environment that will be used for testing
   testEnvironment: "jsdom",
-  // testEnvironment: "<rootDir>/tests/environment/customEnvironment.ts",
 
   testPathIgnorePatterns: ["/node_modules/", "/__testUtils/"],
 
