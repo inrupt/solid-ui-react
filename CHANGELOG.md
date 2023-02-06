@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## 2.8.3 ( February 6, 2023)
+
+- Dependency updates (notably, upgrading `jest` to v29).
+
 ## 2.8.2 ( October 19th, 2022 )
 
 - Added the ability to prevent the automatic loading of WebID's and Profiles from SessionProvider, this is useful when building provisioning applications where the user has logged in, but doesn't yet have a WebID or Pod or Profile documents.
