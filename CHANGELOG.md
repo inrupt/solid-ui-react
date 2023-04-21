@@ -2,6 +2,10 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+ - Support Node 18 and 20
+
 ## 2.8.3 ( February 6, 2023)
 
 - Dependency updates (notably, upgrading `jest` to v29).
