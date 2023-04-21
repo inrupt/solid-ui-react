@@ -19,7 +19,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { jest, it, describe, expect } from "@jest/globals";
+import { jest, it, describe, expect, beforeEach } from "@jest/globals";
 
 import * as React from "react";
 import { render, waitFor } from "@testing-library/react";
@@ -61,7 +61,6 @@ const mockDatasetFromWithChangelog = (url: string) =>
     // Pretend we have a changelog, even though we don't, as it's irrelevant to these tests.
     SolidClient.WithChangeLog;
 
-
 const mockPredicate = `http://some.vocabulary/isTrue`;
 const mockBoolean = '"true"^^xsd:boolean';
 
@@ -87,13 +86,11 @@ const savedDataset = SolidFns.setThing(
   SolidFns.mockSolidDatasetFrom("https://example.pod/resource"),
   SolidFns.createThing()
 );
-const latestDataset = SolidFns.setThing(savedDataset, SolidFns.createThing());
 
-jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
 const mockValue = true;
 
 describe("<BooleanValue /> component functional testing", () => {
-  afterEach(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
   });
   it("calls getBoolean and sets value", () => {
@@ -171,8 +168,11 @@ describe("<BooleanValue /> component functional testing", () => {
     );
 
     // Be careful to call spyOn after the setup is done.
+    jest.clearAllMocks();
+
     jest.spyOn(SolidFns, "setBoolean");
 
+    expect(SolidFns.setBoolean).not.toHaveBeenCalled();
     const { getByDisplayValue } = render(
       <BooleanValue
         solidDataset={mockedDataset}
