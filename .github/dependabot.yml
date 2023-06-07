@@ -6,7 +6,7 @@ updates:
     directory: "/"
     # Check the npm registry for updates every day (weekdays)
     schedule:
-      interval: "daily"
+      interval: "weekly"
     ignore:
       # Prettier introduces style changes in patch releases,
       # (see https://prettier.io/docs/en/install.html)
@@ -17,4 +17,4 @@ updates:
     directory: "/"
     # Check the npm registry for updates every day (weekdays)
     schedule:
-      interval: "daily"
+      interval: "weekly"
