@@ -3,6 +3,7 @@
   "version": "2.8.3",
   "description": "Set of UI libraries using @solid/core",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/src/index.d.ts",
   "files": [
     "CHANGELOG.md",
