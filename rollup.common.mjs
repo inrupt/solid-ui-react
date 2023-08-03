@@ -19,6 +19,7 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 // FIXME: Remove this file once it is available in https://github.com/inrupt/typescript-sdk-tools/pull/288/files
+//        the rollup-plugin-typescript2 devDependency can also be removed at the same time
 import typescript from "rollup-plugin-typescript2";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
