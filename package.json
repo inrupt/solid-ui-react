@@ -9,6 +9,8 @@
     "CHANGELOG.md",
     "dist/index.js",
     "dist/index.js.map",
+    "dist/index.mjs",
+    "dist/index.mjs.map",
     "dist/src/*",
     "dist/src/**/*"
   ],
