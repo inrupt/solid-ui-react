@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",
+    "@inrupt/base-rollup-config": "^2.1.2",
     "@inrupt/eslint-config-base": "0.3.0",
     "@inrupt/eslint-config-lib": "^0.3.0",
     "@inrupt/eslint-config-react": "0.3.0",

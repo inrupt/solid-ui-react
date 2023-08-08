@@ -19,7 +19,7 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 import { createRequire } from "node:module";
-import createConfig from "./rollup.common.mjs";
+import createConfig from "@inrupt/base-rollup-config";
 const require = createRequire(import.meta.url);
 
 export default createConfig(require("./package.json"));
