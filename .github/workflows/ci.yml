@@ -9,13 +9,13 @@ concurrency:
   cancel-in-progress: true
 jobs:
   lint:
-    uses: inrupt/typescript-sdk-tools/.github/workflows/reusable-lint.yml@v2.1.1
+    uses: inrupt/typescript-sdk-tools/.github/workflows/reusable-lint.yml@v2.1.2
 
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ["20.x", "18.x", "16.x", "14.x"]
+        node-version: ["20.x", "18.x", "16.x"]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
