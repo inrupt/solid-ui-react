@@ -58,7 +58,7 @@ function ChildComponent(): React.ReactElement {
       <button type="button" onClick={() => sessionLogin({})}>
         Login
       </button>
-      <button type="button" onClick={sessionLogout} data-testid="logout">
+      <button type="button" onClick={() => sessionLogout()} data-testid="logout">
         Logout
       </button>
       <p data-testid="profile">
