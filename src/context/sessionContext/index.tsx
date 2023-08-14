@@ -96,7 +96,7 @@ export const SessionProvider = ({
 }: ISessionProvider): ReactElement => {
   const restoreSession =
     restorePreviousSession || typeof onSessionRestore !== "undefined";
-  const [session, setSession] = useState<Session>(getDefaultSession());
+  const [session, setSession] = useState<Session>(getDefaultSession);
   const [profile, setProfile] =
     useState<ProfileAll<SolidDataset & WithServerResourceInfo>>();
 
