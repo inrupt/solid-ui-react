@@ -2,7 +2,7 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 2.9.0 ( August 14, 2023)
 
  - Support Node 18 and 20
  - Support ESM
