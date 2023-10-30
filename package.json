@@ -36,7 +36,7 @@
     "@inrupt/eslint-config-react": "0.3.0",
     "@inrupt/jest-jsdom-polyfills": "^1.6.2",
     "@material-ui/core": "^4.12.4",
-    "@storybook/addon-actions": "^6.5.16",
+    "@storybook/addon-actions": "^7.5.1",
     "@storybook/addon-docs": "^6.5.16",
     "@storybook/addon-essentials": "^6.5.16",
     "@storybook/addon-knobs": "^6.4.0",
