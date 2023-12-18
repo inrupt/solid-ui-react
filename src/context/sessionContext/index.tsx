@@ -36,7 +36,7 @@ import {
   handleIncomingRedirect,
   Session,
   getDefaultSession,
-  EVENTS
+  EVENTS,
 } from "@inrupt/solid-client-authn-browser";
 
 import {
@@ -104,7 +104,7 @@ export const SessionProvider = ({
     if (onSessionRestore !== undefined) {
       session.events.on(EVENTS.SESSION_RESTORED, onSessionRestore);
     }
-  }, [onSessionRestore]);
+  }, [onSessionRestore, session.events]);
 
   const defaultInProgress =
     typeof defaultSessionRequestInProgress === "undefined"
