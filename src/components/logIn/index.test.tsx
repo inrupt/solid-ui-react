@@ -37,7 +37,7 @@ const onError = jest.fn().mockResolvedValue(null);
 
 const session = {
   info: { isLoggedIn: false },
-  on: jest.fn(),
+  events: { on: jest.fn() },
 } as any;
 
 beforeEach(() => {

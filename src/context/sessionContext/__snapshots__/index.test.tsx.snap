@@ -7,7 +7,7 @@ exports[`Testing SessionContext matches snapshot 1`] = `
       <div
         data-testid="session"
       >
-        {"info":{"isLoggedIn":true,"webId":"https://fakeurl.com/me"}}
+        {"info":{"isLoggedIn":true,"webId":"https://fakeurl.com/me"},"events":{}}
       </div>
       <button
         type="button"
@@ -37,7 +37,7 @@ exports[`Testing SessionContext matches snapshot without optional sessionId 1`] 
       <div
         data-testid="session"
       >
-        {"info":{"isLoggedIn":true,"webId":"https://fakeurl.com/me"}}
+        {"info":{"isLoggedIn":true,"webId":"https://fakeurl.com/me"},"events":{}}
       </div>
       <button
         type="button"
