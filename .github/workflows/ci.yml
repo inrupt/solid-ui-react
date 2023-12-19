@@ -27,7 +27,7 @@ jobs:
       - run: npm run test
       - name: Archive code coverage results
         if: ${{ github.actor != 'dependabot[bot]' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: code-coverage-report
           path: coverage
@@ -42,7 +42,7 @@ jobs:
           # Sonar analysis needs the full history for features like automatic assignment of bugs. If the following step
           # is not included the project will show a warning about incomplete information.
           fetch-depth: 0
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: code-coverage-report
           path: coverage/
