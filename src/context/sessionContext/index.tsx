@@ -36,7 +36,7 @@ import {
   handleIncomingRedirect,
   Session,
   getDefaultSession,
-  onSessionRestore as onSessionRestoreClient,
+  EVENTS,
 } from "@inrupt/solid-client-authn-browser";
 
 import {
@@ -102,9 +102,9 @@ export const SessionProvider = ({
 
   useEffect(() => {
     if (onSessionRestore !== undefined) {
-      onSessionRestoreClient(onSessionRestore);
+      session.events.on(EVENTS.SESSION_RESTORED, onSessionRestore);
     }
-  }, [onSessionRestore]);
+  }, [onSessionRestore, session.events]);
 
   const defaultInProgress =
     typeof defaultSessionRequestInProgress === "undefined"
@@ -152,7 +152,7 @@ export const SessionProvider = ({
         setSessionRequestInProgress(false);
       });
 
-    getDefaultSession().on("logout", () => {
+    getDefaultSession().events.on("logout", () => {
       // TODO force a refresh
       setSession(getDefaultSession());
     });

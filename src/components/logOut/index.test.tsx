@@ -39,7 +39,7 @@ const onError = jest.fn();
 
 const session = {
   info: { isLoggedIn: false },
-  on: jest.fn(),
+  events: { on: jest.fn() },
 } as any;
 
 beforeEach(() => {

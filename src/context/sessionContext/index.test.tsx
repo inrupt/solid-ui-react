@@ -28,14 +28,25 @@ import {
   logout,
   handleIncomingRedirect,
   getDefaultSession,
-  onSessionRestore,
+  EVENTS,
 } from "@inrupt/solid-client-authn-browser";
 
 import { getProfileAll } from "@inrupt/solid-client";
 
 import { SessionContext, SessionProvider } from ".";
 
-jest.mock("@inrupt/solid-client-authn-browser");
+jest.mock("@inrupt/solid-client-authn-browser", () => {
+  const authnModule = jest.requireActual("@inrupt/solid-client-authn-browser");
+  return {
+    EVENTS: authnModule.EVENTS,
+    getDefaultSession: jest.fn().mockReturnValue({
+      events: { on: jest.fn() },
+    }),
+    handleIncomingRedirect: jest.fn(),
+    login: jest.fn(),
+    logout: jest.fn(),
+  };
+});
 jest.mock("@inrupt/solid-client");
 
 function ChildComponent(): React.ReactElement {
@@ -83,7 +94,7 @@ describe("Testing SessionContext", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
+      events: { on: jest.fn() },
     } as any;
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
@@ -110,7 +121,7 @@ describe("Testing SessionContext", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
+      events: { on: jest.fn() },
     } as any;
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
@@ -137,7 +148,7 @@ describe("Testing SessionContext", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
+      events: { on: jest.fn() },
     } as any;
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
@@ -165,7 +176,7 @@ describe("SessionContext functionality", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
+      events: { on: jest.fn() },
     } as any;
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
@@ -201,7 +212,7 @@ describe("SessionContext functionality", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
+      events: { on: jest.fn() },
     } as any;
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
@@ -238,7 +249,7 @@ describe("SessionContext functionality", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
+      events: { on: jest.fn() },
     } as any;
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
@@ -267,7 +278,7 @@ describe("SessionContext functionality", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
+      events: { on: jest.fn() },
     } as any;
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
@@ -305,7 +316,7 @@ describe("SessionContext functionality", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
+      events: { on: jest.fn() },
     } as any;
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
@@ -336,7 +347,7 @@ describe("SessionContext functionality", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
+      events: { on: jest.fn() },
     } as any;
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
@@ -365,7 +376,7 @@ describe("SessionContext functionality", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
+      events: { on: jest.fn() },
     } as any;
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
@@ -384,7 +395,10 @@ describe("SessionContext functionality", () => {
       expect(handleIncomingRedirect).toHaveBeenCalled();
     });
 
-    expect(onSessionRestore).toHaveBeenCalledWith(sessionRestoreCallback);
+    expect(session.events.on).toHaveBeenCalledWith(
+      EVENTS.SESSION_RESTORED,
+      sessionRestoreCallback
+    );
   });
 
   it("does not register a session restore callback on every render unless it changes", async () => {
@@ -395,7 +409,7 @@ describe("SessionContext functionality", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
+      events: { on: jest.fn() },
     } as any;
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
@@ -446,9 +460,13 @@ describe("SessionContext functionality", () => {
       expect(handleIncomingRedirect).toHaveBeenCalled();
     });
 
-    expect(onSessionRestore).toHaveBeenCalledTimes(2);
-    expect(onSessionRestore).toHaveBeenCalledWith(sessionRestoreCallback);
-    expect(onSessionRestore).toHaveBeenCalledWith(
+    expect(session.events.on).toHaveBeenCalledTimes(3);
+    expect(session.events.on).toHaveBeenCalledWith(
+      EVENTS.SESSION_RESTORED,
+      sessionRestoreCallback
+    );
+    expect(session.events.on).toHaveBeenCalledWith(
+      EVENTS.SESSION_RESTORED,
       differentSessionRestoreCallback
     );
   });
