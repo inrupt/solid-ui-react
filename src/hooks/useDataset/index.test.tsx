@@ -20,7 +20,7 @@
  */
 
 import * as React from "react";
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook, waitFor } from "@testing-library/react";
 import { SWRConfig } from "swr";
 import SolidFns from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
@@ -67,7 +67,7 @@ describe("useDataset() hook", () => {
   });
 
   it("should call getSolidDataset with given Iri", async () => {
-    const { result, waitFor } = renderHook(() => useDataset(mockDatasetIri), {
+    const { result } = renderHook(() => useDataset(mockDatasetIri), {
       wrapper,
     });
 
@@ -86,7 +86,7 @@ describe("useDataset() hook", () => {
       additionalOption: mockAdditionalOption,
     };
 
-    const { result, waitFor } = renderHook(
+    const { result } = renderHook(
       () => useDataset(mockDatasetIri, mockOptions),
       {
         wrapper,
@@ -104,7 +104,7 @@ describe("useDataset() hook", () => {
   it("should return error if getSolidDataset call fails", async () => {
     mockGetSolidDataset.mockRejectedValue(new Error("async error"));
 
-    const { result, waitFor } = renderHook(() => useDataset(mockDatasetIri), {
+    const { result } = renderHook(() => useDataset(mockDatasetIri), {
       wrapper,
     });
 
@@ -112,20 +112,17 @@ describe("useDataset() hook", () => {
     expect(mockGetSolidDataset).toHaveBeenCalledWith(mockDatasetIri, {
       fetch: mockFetch,
     });
-    await waitFor(() =>
-      expect(result.current.error.message).toBe("async error")
-    );
+    await waitFor(() => expect(result.current.error.message).toBe("async error"));
   });
 
   it("should attempt to return dataset from context if uri is not defined", async () => {
-    const { result, waitFor } = renderHook(() => useDataset(), {
+    const { result } = renderHook(() => useDataset(), {
       wrapper,
     });
 
     expect(mockGetSolidDataset).toHaveBeenCalledTimes(0);
 
-    await waitFor(() =>
-      expect(result.current.dataset).toBe(mockContextDataset)
-    );
+
+    expect(result.current.dataset).toBe(mockContextDataset);
   });
 });

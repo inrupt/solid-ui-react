@@ -59,9 +59,7 @@ exports[`<Table /> component snapshot tests matches snapshot 1`] = `
           </td>
           <td
             role="cell"
-          >
-            
-          </td>
+          />
         </tr>
         <tr
           role="row"
@@ -83,9 +81,7 @@ exports[`<Table /> component snapshot tests matches snapshot 1`] = `
           </td>
           <td
             role="cell"
-          >
-            
-          </td>
+          />
         </tr>
       </tbody>
     </table>

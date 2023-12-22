@@ -20,7 +20,7 @@
  */
 
 import * as React from "react";
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook, waitFor } from "@testing-library/react";
 import SolidFns from "@inrupt/solid-client";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { SessionContext } from "../../context/sessionContext";
@@ -52,7 +52,7 @@ describe("useFile() hook", () => {
 
   it("should call getFile with given url", async () => {
     mockGetFile.mockResolvedValue(mockFile);
-    const { result, waitFor } = renderHook(() => useFile(mockUrl), {
+    const { result } = renderHook(() => useFile(mockUrl), {
       wrapper,
     });
 
@@ -64,7 +64,7 @@ describe("useFile() hook", () => {
   it("if fetching fails it should return error", async () => {
     const mockError = new Error("Error fetching file");
     mockGetFile.mockRejectedValue(mockError);
-    const { result, waitFor } = renderHook(() => useFile(mockUrl), {
+    const { result } = renderHook(() => useFile(mockUrl), {
       wrapper,
     });
 

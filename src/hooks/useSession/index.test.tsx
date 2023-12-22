@@ -20,7 +20,7 @@
  */
 
 import * as React from "react";
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook } from "@testing-library/react";
 import { Session } from "@inrupt/solid-client-authn-browser";
 import { SessionContext } from "../../context/sessionContext";
 import useSession from ".";
