@@ -95,7 +95,7 @@ describe("Testing SessionContext", () => {
         webId: "https://fakeurl.com/me",
       },
       events: { on: jest.fn() },
-    } as any;
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -122,7 +122,7 @@ describe("Testing SessionContext", () => {
         webId: "https://fakeurl.com/me",
       },
       events: { on: jest.fn() },
-    } as any;
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -149,7 +149,7 @@ describe("Testing SessionContext", () => {
         webId: "https://fakeurl.com/me",
       },
       events: { on: jest.fn() },
-    } as any;
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -177,7 +177,7 @@ describe("SessionContext functionality", () => {
         webId: "https://fakeurl.com/me",
       },
       events: { on: jest.fn() },
-    } as any;
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -213,7 +213,7 @@ describe("SessionContext functionality", () => {
         webId: "https://fakeurl.com/me",
       },
       events: { on: jest.fn() },
-    } as any;
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -250,7 +250,7 @@ describe("SessionContext functionality", () => {
         webId: "https://fakeurl.com/me",
       },
       events: { on: jest.fn() },
-    } as any;
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -279,7 +279,7 @@ describe("SessionContext functionality", () => {
         webId: "https://fakeurl.com/me",
       },
       events: { on: jest.fn() },
-    } as any;
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -317,7 +317,7 @@ describe("SessionContext functionality", () => {
         webId: "https://fakeurl.com/me",
       },
       events: { on: jest.fn() },
-    } as any;
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -348,7 +348,7 @@ describe("SessionContext functionality", () => {
         webId: "https://fakeurl.com/me",
       },
       events: { on: jest.fn() },
-    } as any;
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -377,7 +377,7 @@ describe("SessionContext functionality", () => {
         webId: "https://fakeurl.com/me",
       },
       events: { on: jest.fn() },
-    } as any;
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -410,7 +410,7 @@ describe("SessionContext functionality", () => {
         webId: "https://fakeurl.com/me",
       },
       events: { on: jest.fn() },
-    } as any;
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 

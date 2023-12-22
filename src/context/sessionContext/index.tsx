@@ -44,7 +44,7 @@ export interface ISessionContext {
   logout: typeof logout;
   session: Session;
   sessionRequestInProgress: boolean;
-  setSessionRequestInProgress?: Dispatch<SetStateAction<boolean>> | any;
+  setSessionRequestInProgress?: Dispatch<SetStateAction<boolean>>;
   fetch: typeof window.fetch;
   profile: ProfileAll<SolidDataset & WithServerResourceInfo> | undefined;
 }

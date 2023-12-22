@@ -34,7 +34,7 @@ import type { Props } from "..";
 
 type BooleanProps = Omit<Props, "locale" | "dataType">;
 
-const BooleanValue: React.FC<BooleanProps> = (props: BooleanProps) => {
+const BooleanValue = (props: BooleanProps) => {
   const {
     thing: propThing,
     solidDataset: propDataset,

@@ -36,6 +36,8 @@ import type { DataType } from "../../helpers";
 import { getValueByType, getValueByTypeAll } from "../../helpers";
 import CombinedDataProvider from "../../context/combinedDataContext";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export type TableColumnProps = {
   body?: Renderer<CellProps<any>>;
   header?: Renderer<HeaderProps<any>> | string;

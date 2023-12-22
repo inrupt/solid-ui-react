@@ -38,6 +38,8 @@ describe("getValueByTypeAll", () => {
       const mockThing = SolidFns.mockThingFrom("http://mock.thing");
       const mockProperty = "mockProperty";
       const mockGetter = jest
+        // getter doesn't get the narrow type from the values passed to the test.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .spyOn(SolidFns, getter as any)
         .mockImplementationOnce(() => mockValue);
 

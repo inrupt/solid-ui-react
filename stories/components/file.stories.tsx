@@ -59,8 +59,9 @@ const defaultInputOptions = {
 // Not sure why this is complaining.
 /* eslint react/require-default-props: 0, react/no-unused-prop-types: 0 */
 interface IFile {
-  onError: (error: any) => void;
+  onError: (error: unknown) => void;
   onSave: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   inputProps: any;
   autosave: boolean;
 }

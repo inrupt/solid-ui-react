@@ -258,7 +258,7 @@ export function NestedDataExample(): ReactElement {
       }
       return false;
     });
-    return <>{phoneNumber}</>;
+    return <div>{phoneNumber}</div>;
   }
 
   function NestedDataExampleContent() {
