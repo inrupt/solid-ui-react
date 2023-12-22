@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
+### Breaking changes
+
+- Node 16 is no longer supported, this requires Node 18 or higher to be built.
+
 ## 2.9.1 ( December 19, 2023)
 
 - Use non-deprecated events API from solid-client-authn-js
