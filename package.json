@@ -77,7 +77,6 @@
     "react-error-boundary": "^3.1.4",
     "react-test-renderer": "^18.2.0",
     "rollup": "^4.9.1",
-    "rollup-plugin-typescript2": "^0.35.0",
     "storybook": "^7.6.6",
     "ts-jest": "^29.1.1",
     "ts-loader": "^9.5.1",
