@@ -1,29 +1,28 @@
-/**
- * Copyright 2020 Inrupt Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 
-import React, { ReactElement, useState, useEffect, useContext } from "react";
+import type { ReactElement } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import type { Thing, Url, UrlString } from "@inrupt/solid-client";
 import {
-  Thing,
-  Url,
-  UrlString,
   setStringWithLocale,
   setStringNoLocale,
   setThing,
@@ -32,7 +31,8 @@ import {
   hasResourceInfo,
 } from "@inrupt/solid-client";
 import { SessionContext } from "../../context/sessionContext";
-import { CommonProperties, updateDataset, useProperty } from "../../helpers";
+import type { CommonProperties } from "../../helpers";
+import { updateDataset, useProperty } from "../../helpers";
 
 export type Props = {
   saveDatasetTo?: Url | UrlString;
@@ -97,7 +97,7 @@ export function Text({
   const [text, setText] = useState<string | null>(value as string);
   const [, setErrorState] = useState<string | null>();
   const [initialValue, setInitialValue] = useState<string | null>(
-    value as string
+    value as string,
   );
 
   /* Save text value in the pod */
@@ -110,7 +110,7 @@ export function Text({
           thing,
           property,
           newValue,
-          locale
+          locale,
         );
       } else {
         updatedResource = setStringNoLocale(thing, property, newValue);
@@ -122,20 +122,20 @@ export function Text({
           savedDataset = await saveSolidDatasetAt(
             saveDatasetTo,
             setThing(dataset, updatedResource),
-            { fetch }
+            { fetch },
           );
           await updateDataset(saveDatasetTo, setDataset);
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
             getSourceUrl(dataset),
             setThing(dataset, updatedResource),
-            { fetch }
+            { fetch },
           );
           await updateDataset(getSourceUrl(dataset), setDataset);
         } else {
           setErrorState(() => {
             throw new Error(
-              "Please provide saveDatasetTo location for new data"
+              "Please provide saveDatasetTo location for new data",
             );
           });
         }

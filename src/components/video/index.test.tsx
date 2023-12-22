@@ -1,23 +1,23 @@
-/**
- * Copyright 2020 Inrupt Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 
 import React from "react";
 import { render, waitFor } from "@testing-library/react";
@@ -33,7 +33,7 @@ const mockProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
 const mockThing = SolidFns.addUrl(
   SolidFns.createThing(),
   mockProperty,
-  mockUrl
+  mockUrl,
 );
 
 const mockObjectUrl = "mock object url";
@@ -51,10 +51,10 @@ describe("Video component", () => {
       jest.spyOn(SolidFns, "getFile").mockResolvedValueOnce(mockFile);
       jest.spyOn(SolidFns, "overwriteFile").mockResolvedValueOnce(mockFile);
       const { asFragment, getByTitle } = render(
-        <Video thing={mockThing} property={mockProperty} title={mockTitle} />
+        <Video thing={mockThing} property={mockProperty} title={mockTitle} />,
       );
       await waitFor(() =>
-        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl),
       );
       expect(asFragment()).toMatchSnapshot();
     });
@@ -71,10 +71,10 @@ describe("Video component", () => {
           edit
           className="video-class"
           inputProps={{ className: "input-class" }}
-        />
+        />,
       );
       await waitFor(() =>
-        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl),
       );
       expect(asFragment()).toMatchSnapshot();
     });
@@ -88,7 +88,7 @@ describe("Video component", () => {
           errorComponent={({ error }) => (
             <span id="custom-error-component">{error.toString()}</span>
           )}
-        />
+        />,
       );
       expect(asFragment()).toMatchSnapshot();
     });
@@ -97,7 +97,7 @@ describe("Video component", () => {
       const emptyThing = SolidFns.createThing();
 
       const { asFragment } = render(
-        <Video thing={emptyThing} property="https://example.com/bad-url" />
+        <Video thing={emptyThing} property="https://example.com/bad-url" />,
       );
 
       expect(asFragment()).toMatchSnapshot();
@@ -113,7 +113,7 @@ describe("Video component", () => {
         property: mockProperty,
       });
       const { asFragment } = render(
-        <Video thing={undefined} property="https://example.com/bad-url" />
+        <Video thing={undefined} property="https://example.com/bad-url" />,
       );
 
       expect(asFragment()).toMatchSnapshot();
@@ -135,7 +135,7 @@ describe("Video component", () => {
           loadingComponent={() => (
             <span id="custom-loading-component">loading...</span>
           )}
-        />
+        />,
       );
 
       expect(asFragment()).toMatchSnapshot();
@@ -155,7 +155,7 @@ describe("Video component", () => {
           thing={undefined}
           property="https://example.com/bad-url"
           loadingComponent={null}
-        />
+        />,
       );
 
       expect(asFragment()).toMatchSnapshot();
@@ -170,10 +170,10 @@ describe("Video component", () => {
 
     it("Should call getUrl using given thing and property", async () => {
       const { getByTitle } = render(
-        <Video thing={mockThing} property={mockProperty} title={mockTitle} />
+        <Video thing={mockThing} property={mockProperty} title={mockTitle} />,
       );
       await waitFor(() =>
-        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl),
       );
       expect(SolidFns.getUrl).toHaveBeenCalledWith(mockThing, mockProperty);
     });
@@ -188,7 +188,7 @@ describe("Video component", () => {
           thing={mockThing}
           property={mockProperty}
           errorComponent={({ error }) => <span>{error.toString()}</span>}
-        />
+        />,
       );
 
       expect(SolidFns.getUrl).toHaveBeenCalled();
@@ -198,7 +198,7 @@ describe("Video component", () => {
     it("Should call onError if initial fetch fails, if it is passed", async () => {
       const mockOnError = jest.fn();
       (SolidFns.getFile as jest.Mock).mockRejectedValueOnce(
-        new Error("Error fetching file")
+        new Error("Error fetching file"),
       );
       render(
         <Video
@@ -209,7 +209,7 @@ describe("Video component", () => {
           autosave
           onError={mockOnError}
           inputProps={{ alt: "test-input" }}
-        />
+        />,
       );
       await waitFor(() => expect(mockOnError).toHaveBeenCalled());
     });
@@ -223,10 +223,10 @@ describe("Video component", () => {
           title={mockTitle}
           edit
           inputProps={{ alt: "test-input" }}
-        />
+        />,
       );
       await waitFor(() =>
-        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl),
       );
 
       await user.upload(getByAltText("test-input"), mockFileUpload);
@@ -246,21 +246,21 @@ describe("Video component", () => {
           edit
           autosave
           inputProps={{ alt: "test-input" }}
-        />
+        />,
       );
       await waitFor(() =>
-        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl),
       );
 
       // Setup the new url:
       (window.URL.createObjectURL as jest.Mock).mockReturnValueOnce(
-        mockUpdatedObjectUrl
+        mockUpdatedObjectUrl,
       );
 
       await user.upload(getByAltText("test-input"), mockFileUpload);
 
       expect(getByTitle(mockTitle).getAttribute("src")).toBe(
-        mockUpdatedObjectUrl
+        mockUpdatedObjectUrl,
       );
       expect(SolidFns.overwriteFile).toHaveBeenCalled();
     });
@@ -276,11 +276,11 @@ describe("Video component", () => {
           autosave
           maxSize={0}
           inputProps={{ alt: "test-input" }}
-        />
+        />,
       );
 
       await waitFor(() =>
-        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl),
       );
 
       await user.upload(getByAltText("test-input"), mockFileUpload);
@@ -302,21 +302,21 @@ describe("Video component", () => {
           autosave
           onSave={mockOnSave}
           inputProps={{ alt: "test-input" }}
-        />
+        />,
       );
       await waitFor(() =>
-        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl),
       );
 
       // Setup the new url:
       (window.URL.createObjectURL as jest.Mock).mockReturnValueOnce(
-        mockUpdatedObjectUrl
+        mockUpdatedObjectUrl,
       );
 
       await user.upload(getByAltText("test-input"), mockFileUpload);
 
       expect(getByTitle(mockTitle).getAttribute("src")).toBe(
-        mockUpdatedObjectUrl
+        mockUpdatedObjectUrl,
       );
 
       expect(mockOnSave).toHaveBeenCalled();
@@ -334,11 +334,11 @@ describe("Video component", () => {
           edit
           autosave
           inputProps={{ alt: "test-input" }}
-        />
+        />,
       );
 
       await waitFor(() =>
-        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl),
       );
 
       await user.upload(getByAltText("test-input"), mockFileUpload);
@@ -361,11 +361,11 @@ describe("Video component", () => {
           autosave
           onError={mockOnError}
           inputProps={{ alt: "test-input" }}
-        />
+        />,
       );
 
       await waitFor(() =>
-        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByTitle(mockTitle).getAttribute("src")).toBe(mockObjectUrl),
       );
 
       await user.upload(getByAltText("test-input"), mockFileUpload);

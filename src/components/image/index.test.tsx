@@ -1,23 +1,23 @@
-/**
- * Copyright 2020 Inrupt Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 
 import React from "react";
 import { render, waitFor } from "@testing-library/react";
@@ -70,10 +70,10 @@ describe("Image component", () => {
       jest.spyOn(SolidFns, "getFile").mockResolvedValueOnce(mockFile);
       jest.spyOn(SolidFns, "overwriteFile").mockResolvedValueOnce(mockFile);
       const { asFragment, getByAltText } = render(
-        <Image thing={mockThing} property={mockProperty} />
+        <Image thing={mockThing} property={mockProperty} />,
       );
       await waitFor(() =>
-        expect(getByAltText("").getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByAltText("").getAttribute("src")).toBe(mockObjectUrl),
       );
       expect(asFragment()).toMatchSnapshot();
     });
@@ -90,10 +90,10 @@ describe("Image component", () => {
           edit
           className="img-class"
           inputProps={{ className: "input-class" }}
-        />
+        />,
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl),
       );
       expect(asFragment()).toMatchSnapshot();
     });
@@ -107,7 +107,7 @@ describe("Image component", () => {
           errorComponent={({ error }) => (
             <span id="custom-error-component">{error.toString()}</span>
           )}
-        />
+        />,
       );
       expect(asFragment()).toMatchSnapshot();
     });
@@ -116,7 +116,7 @@ describe("Image component", () => {
       const emptyThing = SolidFns.createThing();
 
       const { asFragment } = render(
-        <Image thing={emptyThing} property="https://example.com/bad-url" />
+        <Image thing={emptyThing} property="https://example.com/bad-url" />,
       );
 
       expect(asFragment()).toMatchSnapshot();
@@ -132,7 +132,7 @@ describe("Image component", () => {
         property: mockProperty,
       });
       const { asFragment } = render(
-        <Image thing={undefined} property="https://example.com/bad-url" />
+        <Image thing={undefined} property="https://example.com/bad-url" />,
       );
 
       expect(asFragment()).toMatchSnapshot();
@@ -154,7 +154,7 @@ describe("Image component", () => {
             <span id="custom-loading-component">loading...</span>
           )}
           property="https://example.com/bad-url"
-        />
+        />,
       );
 
       expect(asFragment()).toMatchSnapshot();
@@ -173,7 +173,7 @@ describe("Image component", () => {
           thing={undefined}
           property="https://example.com/bad-url"
           loadingComponent={null}
-        />
+        />,
       );
 
       expect(asFragment()).toMatchSnapshot();
@@ -185,7 +185,7 @@ describe("Image component", () => {
           thing={emptyThing}
           allowDelete
           property="https://example.com/url"
-        />
+        />,
       );
       expect(asFragment()).toMatchSnapshot();
     });
@@ -201,7 +201,7 @@ describe("Image component", () => {
               Custom Delete Component
             </button>
           )}
-        />
+        />,
       );
       expect(asFragment()).toMatchSnapshot();
     });
@@ -216,10 +216,10 @@ describe("Image component", () => {
 
     it("Should call getUrl using given thing and property", async () => {
       const { getByAltText } = render(
-        <Image thing={mockThing} property={mockProperty} alt={mockAlt} />
+        <Image thing={mockThing} property={mockProperty} alt={mockAlt} />,
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl),
       );
       expect(SolidFns.getUrl).toHaveBeenCalledWith(mockThing, mockProperty);
     });
@@ -234,7 +234,7 @@ describe("Image component", () => {
           property={mockProperty}
           alt={mockAlt}
           errorComponent={({ error }) => <span>{error.toString()}</span>}
-        />
+        />,
       );
 
       expect(SolidFns.getUrl).toHaveBeenCalled();
@@ -244,7 +244,7 @@ describe("Image component", () => {
     it("Should call onError if initial fetch fails, if it is passed", async () => {
       const mockOnError = jest.fn();
       (SolidFns.getFile as jest.Mock).mockRejectedValueOnce(
-        new Error("Error fetching file")
+        new Error("Error fetching file"),
       );
       render(
         <Image
@@ -255,7 +255,7 @@ describe("Image component", () => {
           autosave
           onError={mockOnError}
           inputProps={{ alt: "test-input" }}
-        />
+        />,
       );
       await waitFor(() => expect(mockOnError).toHaveBeenCalled());
     });
@@ -270,10 +270,10 @@ describe("Image component", () => {
           alt={mockAlt}
           edit
           inputProps={{ alt: "test-input" }}
-        />
+        />,
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl),
       );
 
       await user.upload(getByAltText("test-input"), mockFileForUpload);
@@ -295,15 +295,15 @@ describe("Image component", () => {
           edit
           autosave
           inputProps={{ alt: "test-input" }}
-        />
+        />,
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl),
       );
 
       // Mock the return value for the new src attribute:
       (window.URL.createObjectURL as jest.Mock).mockReturnValue(
-        mockUpdatedObjectUrl
+        mockUpdatedObjectUrl,
       );
 
       await user.upload(getByAltText("test-input"), mockFileForUpload);
@@ -311,11 +311,11 @@ describe("Image component", () => {
       expect(SolidFns.overwriteFile).toHaveBeenCalledWith(
         mockUrl,
         mockFileForUpload,
-        expect.anything()
+        expect.anything(),
       );
 
       expect(getByAltText(mockAlt).getAttribute("src")).toBe(
-        mockUpdatedObjectUrl
+        mockUpdatedObjectUrl,
       );
     });
 
@@ -327,7 +327,7 @@ describe("Image component", () => {
       jest
         .spyOn(SolidFns, "saveSolidDatasetAt")
         .mockResolvedValueOnce(
-          mockDataset as SolidDataset & WithServerResourceInfo & WithChangeLog
+          mockDataset as SolidDataset & WithServerResourceInfo & WithChangeLog,
         );
       jest
         .spyOn(SolidFns, "saveFileInContainer")
@@ -343,7 +343,7 @@ describe("Image component", () => {
           inputProps={{ alt: "test-input" }}
           saveLocation={saveLocation}
           solidDataset={mockDataset}
-        />
+        />,
       );
       await waitFor(() => {
         const input = getByAltText("test-input");
@@ -352,7 +352,7 @@ describe("Image component", () => {
 
       // Mock the new url for the image:
       (window.URL.createObjectURL as jest.Mock).mockReturnValueOnce(
-        mockUpdatedObjectUrl
+        mockUpdatedObjectUrl,
       );
 
       await user.upload(getByAltText("test-input"), mockFileForUpload);
@@ -360,13 +360,13 @@ describe("Image component", () => {
       expect(SolidFns.saveFileInContainer).toHaveBeenCalledWith(
         saveLocation,
         mockFileForUpload,
-        { fetch: expect.any(Function) }
+        { fetch: expect.any(Function) },
       );
 
       expect(SolidFns.saveSolidDatasetAt).toHaveBeenCalledWith(
         datasetIri,
         expect.anything(),
-        { fetch: expect.any(Function) }
+        { fetch: expect.any(Function) },
       );
     });
 
@@ -376,7 +376,7 @@ describe("Image component", () => {
       jest
         .spyOn(SolidFns, "saveSolidDatasetAt")
         .mockResolvedValue(
-          mockDataset as SolidDataset & WithServerResourceInfo & WithChangeLog
+          mockDataset as SolidDataset & WithServerResourceInfo & WithChangeLog,
         );
 
       const { getByAltText, getByText } = render(
@@ -388,10 +388,10 @@ describe("Image component", () => {
           allowDelete
           property={mockProperty}
           alt={mockAlt}
-        />
+        />,
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl),
       );
 
       await user.click(getByText("Delete"));
@@ -411,10 +411,10 @@ describe("Image component", () => {
           autosave
           maxSize={0}
           inputProps={{ alt: "test-input" }}
-        />
+        />,
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl),
       );
 
       await user.upload(getByAltText("test-input"), mockFileForUpload);
@@ -436,21 +436,21 @@ describe("Image component", () => {
           autosave
           onSave={mockOnSave}
           inputProps={{ alt: "test-input" }}
-        />
+        />,
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl),
       );
 
       // Mock the new src url for the image:
       (window.URL.createObjectURL as jest.Mock).mockReturnValueOnce(
-        mockUpdatedObjectUrl
+        mockUpdatedObjectUrl,
       );
 
       await user.upload(getByAltText("test-input"), mockFileForUpload);
 
       expect(getByAltText(mockAlt).getAttribute("src")).toBe(
-        mockUpdatedObjectUrl
+        mockUpdatedObjectUrl,
       );
 
       expect(mockOnSave).toHaveBeenCalled();
@@ -468,10 +468,10 @@ describe("Image component", () => {
           edit
           autosave
           inputProps={{ alt: "test-input" }}
-        />
+        />,
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl),
       );
       await user.upload(getByAltText("test-input"), mockFileForUpload);
 
@@ -493,10 +493,10 @@ describe("Image component", () => {
           autosave
           onError={mockOnError}
           inputProps={{ alt: "test-input" }}
-        />
+        />,
       );
       await waitFor(() =>
-        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl)
+        expect(getByAltText(mockAlt).getAttribute("src")).toBe(mockObjectUrl),
       );
 
       await user.upload(getByAltText("test-input"), mockFileForUpload);

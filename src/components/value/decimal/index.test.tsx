@@ -1,23 +1,23 @@
-/**
- * Copyright 2020 Inrupt Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
@@ -35,21 +35,21 @@ const testVersion = 1.2;
 const mockThing = SolidFns.addDecimal(
   SolidFns.createThing(),
   mockPredicate,
-  mockVersion
+  mockVersion,
 );
 
 const mockDataset = SolidFns.setThing(
   SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
-  mockThing
+  mockThing,
 );
 const mockDatasetWithResourceInfo = SolidFns.setThing(
   SolidFns.mockContainerFrom("https://some-interesting-value.com/"),
-  mockThing
+  mockThing,
 );
 
 const savedDataset = SolidFns.setThing(
   SolidFns.mockSolidDatasetFrom("https://example.pod/resource"),
-  SolidFns.createThing()
+  SolidFns.createThing(),
 );
 const latestDataset = SolidFns.setThing(savedDataset, SolidFns.createThing());
 
@@ -67,7 +67,7 @@ describe("<DecimalValue /> component functional testing", () => {
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
-      />
+      />,
     );
 
     expect(mockGetter).toHaveBeenCalled();
@@ -95,7 +95,7 @@ describe("<DecimalValue /> component functional testing", () => {
         edit
         autosave
         inputProps={{ title: "test title" }}
-      />
+      />,
     );
     const input = getByTitle("test title");
     input.focus();
@@ -116,7 +116,7 @@ describe("<DecimalValue /> component functional testing", () => {
         property={mockPredicate}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue(mockVersion);
     input.focus();
@@ -133,7 +133,7 @@ describe("<DecimalValue /> component functional testing", () => {
         property={mockPredicate}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue(mockVersion);
     input.focus();
@@ -153,7 +153,7 @@ describe("<DecimalValue /> component functional testing", () => {
         thing={mockThing}
         property={mockPredicate}
         edit
-      />
+      />,
     );
     getByDisplayValue(mockVersion).focus();
     getByDisplayValue(mockVersion).blur();
@@ -175,7 +175,7 @@ describe("<DecimalValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue(mockVersion);
@@ -204,7 +204,7 @@ describe("<DecimalValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue(mockVersion);
     input.focus();
@@ -236,7 +236,7 @@ describe("<DecimalValue /> component functional testing", () => {
         property={mockPredicate}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue(mockVersion);
@@ -271,7 +271,7 @@ describe("<DecimalValue /> component functional testing", () => {
         property={mockPredicate}
         saveDatasetTo="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
         onError={onError}
-      />
+      />,
     );
     await waitFor(() => expect(onError).toHaveBeenCalled());
   });
@@ -290,7 +290,7 @@ describe("<DecimalValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue(mockVersion);
@@ -317,7 +317,7 @@ describe("<DecimalValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue(mockVersion);
@@ -333,7 +333,7 @@ describe("<DecimalValue /> component functional testing", () => {
   it("Should call onError if trying to save a non-fetched dataset without saveDatasetTo", async () => {
     const mockUnfetchedDataset = SolidFns.setThing(
       SolidFns.createSolidDataset(),
-      mockThing
+      mockThing,
     );
 
     const onError = jest.fn();
@@ -347,7 +347,7 @@ describe("<DecimalValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue(mockVersion);
     input.focus();

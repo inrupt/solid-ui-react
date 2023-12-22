@@ -1,31 +1,28 @@
-/**
- * Copyright 2020 Inrupt Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 
+import type { Thing, SolidDataset, UrlString, Url } from "@inrupt/solid-client";
 import {
   overwriteFile as solidOverwriteFile,
   getFile,
-  Thing,
-  SolidDataset,
-  UrlString,
-  Url,
   getBoolean,
   getDatetime,
   getDecimal,
@@ -66,12 +63,12 @@ export const overwriteFile = async (
   fetch: typeof window.fetch,
   maxSize?: number,
   onSave?: () => void,
-  onError?: (error: Error) => void
+  onError?: (error: Error) => void,
 ): Promise<string | null> => {
   try {
     if (maxSize !== undefined && file.size > maxSize * 1024) {
       input.setCustomValidity(
-        `The selected file must not be larger than ${maxSize}kB`
+        `The selected file must not be larger than ${maxSize}kB`,
       );
       input.reportValidity();
       return null;
@@ -93,7 +90,7 @@ export const overwriteFile = async (
 
 export const retrieveFile = async (
   src: string,
-  fetch: typeof window.fetch
+  fetch: typeof window.fetch,
 ): Promise<Blob> => {
   const imageBlob = await getFile(src, { fetch });
   return imageBlob;
@@ -110,64 +107,64 @@ export type DataType =
 export function getValueByType(
   type: "boolean",
   thing: Thing,
-  property: UrlString | Url
+  property: UrlString | Url,
 ): ReturnType<typeof getBoolean>;
 
 export function getValueByType(
   type: "datetime",
   thing: Thing,
-  property: UrlString | Url
+  property: UrlString | Url,
 ): ReturnType<typeof getDatetime>;
 
 export function getValueByType(
   type: "decimal",
   thing: Thing,
-  property: UrlString | Url
+  property: UrlString | Url,
 ): ReturnType<typeof getDecimal>;
 
 export function getValueByType(
   type: "integer",
   thing: Thing,
-  property: UrlString | Url
+  property: UrlString | Url,
 ): ReturnType<typeof getInteger>;
 
 export function getValueByType(
   type: "string",
   thing: Thing,
-  property: UrlString | Url
+  property: UrlString | Url,
 ): ReturnType<typeof getStringNoLocale>;
 
 export function getValueByType(
   type: "string",
   thing: Thing,
   property: UrlString | Url,
-  locale: string
+  locale: string,
 ): ReturnType<typeof getStringWithLocale>;
 
 export function getValueByType(
   type: "string",
   thing: Thing,
-  property: UrlString | Url
+  property: UrlString | Url,
 ): ReturnType<typeof getStringNoLocale>;
 
 export function getValueByType(
   type: "url",
   thing: Thing,
-  property: UrlString | Url
+  property: UrlString | Url,
 ): ReturnType<typeof getUrl>;
 
 export function getValueByType(
   type: DataType,
   thing: Thing,
   property: UrlString | Url,
-  locale?: string
+  locale?: string,
 ): string | boolean | number | Date | null;
 
 export function getValueByType(
   type: DataType,
   thing: Thing,
   property: UrlString | Url,
-  locale?: string
+  locale?: string,
 ): string | boolean | number | Date | null {
   switch (type) {
     case "boolean":
@@ -191,64 +188,64 @@ export function getValueByType(
 export function getValueByTypeAll(
   type: "boolean",
   thing: Thing,
-  property: UrlString | Url
+  property: UrlString | Url,
 ): ReturnType<typeof getBooleanAll>;
 
 export function getValueByTypeAll(
   type: "datetime",
   thing: Thing,
-  property: UrlString | Url
+  property: UrlString | Url,
 ): ReturnType<typeof getDatetimeAll>;
 
 export function getValueByTypeAll(
   type: "decimal",
   thing: Thing,
-  property: UrlString | Url
+  property: UrlString | Url,
 ): ReturnType<typeof getDecimalAll>;
 
 export function getValueByTypeAll(
   type: "integer",
   thing: Thing,
-  property: UrlString | Url
+  property: UrlString | Url,
 ): ReturnType<typeof getIntegerAll>;
 
 export function getValueByTypeAll(
   type: "string",
   thing: Thing,
-  property: UrlString | Url
+  property: UrlString | Url,
 ): ReturnType<typeof getStringNoLocaleAll>;
 
 export function getValueByTypeAll(
   type: "string",
   thing: Thing,
   property: UrlString | Url,
-  locale: string
+  locale: string,
 ): ReturnType<typeof getStringWithLocaleAll>;
 
 export function getValueByTypeAll(
   type: "string",
   thing: Thing,
-  property: UrlString | Url
+  property: UrlString | Url,
 ): ReturnType<typeof getStringNoLocaleAll>;
 
 export function getValueByTypeAll(
   type: "url",
   thing: Thing,
-  property: UrlString | Url
+  property: UrlString | Url,
 ): ReturnType<typeof getUrlAll>;
 
 export function getValueByTypeAll(
   type: DataType,
   thing: Thing,
   property: UrlString | Url,
-  locale?: string
+  locale?: string,
 ): Array<string | boolean | number | Date | null>;
 
 export function getValueByTypeAll(
   type: DataType,
   thing: Thing,
   property: UrlString | Url,
-  locale?: string
+  locale?: string,
 ): Array<string | boolean | number | Date | null> {
   switch (type) {
     case "boolean":
@@ -274,7 +271,7 @@ export function getPropertyForThing(
   type: DataType,
   thing: Thing,
   properties: Array<Url | UrlString>,
-  locale?: string
+  locale?: string,
 ): Url | UrlString | undefined {
   return (
     properties.find((property: Url | UrlString) => {
@@ -333,7 +330,7 @@ export function useProperty(props: UsePropertyProps): UseProperty {
           type,
           thing,
           propProperties,
-          locale
+          locale,
         ) || propProperties[0]
       : propProperty;
 
@@ -371,7 +368,7 @@ export function useDatetimeBrowserSupport(): boolean | null {
 
 export async function updateDataset(
   datasetUrl: string | Url,
-  setDataset: (dataset: SolidDataset) => void
+  setDataset: (dataset: SolidDataset) => void,
 ): Promise<void> {
   const latestDataset = await getSolidDataset(datasetUrl);
   setDataset(latestDataset);

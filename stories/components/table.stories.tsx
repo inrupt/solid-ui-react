@@ -1,25 +1,26 @@
-/**
- * Copyright 2020 Inrupt Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 
-import React, { ReactElement, useContext } from "react";
+import type { ReactElement } from "react";
+import React, { useContext } from "react";
 import SolidFns from "@inrupt/solid-client";
 import DatasetContext, {
   DatasetProvider,
@@ -66,19 +67,19 @@ export function BasicExample(): ReactElement {
   const thing1A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 1`
+    `example name 1`,
   );
   const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
 
   const thing2A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 2`
+    `example name 2`,
   );
   const thing2 = SolidFns.addDatetime(
     thing2A,
     datePredicate,
-    new Date("1999-01-02")
+    new Date("1999-01-02"),
   );
 
   const emptyDataset = SolidFns.createSolidDataset();
@@ -110,33 +111,33 @@ export function MultipleValues(): ReactElement {
   const thing1A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 1`
+    `example name 1`,
   );
   const thing1B = SolidFns.addStringNoLocale(
     thing1A,
     nickPredicate,
-    `Nickname`
+    `Nickname`,
   );
   const thing1C = SolidFns.addStringNoLocale(
     thing1B,
     nickPredicate,
-    `Alt Nickname`
+    `Alt Nickname`,
   );
   const thing1 = SolidFns.addStringNoLocale(
     thing1C,
     nickPredicate,
-    `Final Nickname`
+    `Final Nickname`,
   );
 
   const thing2A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 2`
+    `example name 2`,
   );
   const thing2 = SolidFns.addStringNoLocale(
     thing2A,
     nickPredicate,
-    `example nickname 2`
+    `example nickname 2`,
   );
 
   const emptyDataset = SolidFns.createSolidDataset();
@@ -174,19 +175,19 @@ export function CustomBodyComponent(): ReactElement {
   const thing1A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 1`
+    `example name 1`,
   );
   const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
 
   const thing2A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 2`
+    `example name 2`,
   );
   const thing2 = SolidFns.addDatetime(
     thing2A,
     datePredicate,
-    new Date("1999-01-02")
+    new Date("1999-01-02"),
   );
 
   const emptyDataset = SolidFns.createSolidDataset();
@@ -196,9 +197,9 @@ export function CustomBodyComponent(): ReactElement {
   type bodyProps = {
     value?: string;
   };
-  const CustomBody = ({ value }: bodyProps) => {
+  function CustomBody({ value }: bodyProps) {
     return <span style={{ color: "#7C4DFF" }}>{`${value}`}</span>;
-  };
+  }
 
   return (
     <Table
@@ -236,7 +237,7 @@ export function NestedDataExample(): ReactElement {
   const workProperty = `http://www.w3.org/2006/vcard/ns#Work`;
   const valueProperty = `http://www.w3.org/2006/vcard/ns#value`;
 
-  const PhoneNumberDisplay = ({
+  function PhoneNumberDisplay({
     numberThingIris,
     numberType,
     dataset,
@@ -244,7 +245,7 @@ export function NestedDataExample(): ReactElement {
     numberThingIris: [string];
     numberType: string;
     dataset: SolidFns.SolidDataset;
-  }) => {
+  }) {
     let phoneNumber = "";
     numberThingIris.some((numberThingIri) => {
       const numberThing = SolidFns.getThing(dataset, numberThingIri);
@@ -257,10 +258,10 @@ export function NestedDataExample(): ReactElement {
       }
       return false;
     });
-    return <>{phoneNumber}</>;
-  };
+    return <div>{phoneNumber}</div>;
+  }
 
-  const NestedDataExampleContent = () => {
+  function NestedDataExampleContent() {
     const datasetContext = useContext(DatasetContext);
     const { solidDataset } = datasetContext;
     if (!solidDataset) {
@@ -268,11 +269,11 @@ export function NestedDataExample(): ReactElement {
     }
     const personThing = SolidFns.getThing(
       solidDataset,
-      `${host}/example.ttl#me`
+      `${host}/example.ttl#me`,
     );
     const alterEgoThing = SolidFns.getThing(
       solidDataset,
-      `${host}/example.ttl#alterEgo`
+      `${host}/example.ttl#alterEgo`,
     );
     if (!personThing || !alterEgoThing) {
       return <p>No matching thing</p>;
@@ -320,7 +321,7 @@ export function NestedDataExample(): ReactElement {
         />
       </Table>
     );
-  };
+  }
 
   return (
     <DatasetProvider datasetUrl={`${host}/example.ttl`}>
@@ -340,19 +341,19 @@ export function SortableColumns(): ReactElement {
   const thing1A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 1`
+    `example name 1`,
   );
   const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
 
   const thing2A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 2`
+    `example name 2`,
   );
   const thing2 = SolidFns.addDatetime(
     thing2A,
     datePredicate,
-    new Date("1999-01-02")
+    new Date("1999-01-02"),
   );
 
   const emptyDataset = SolidFns.createSolidDataset();
@@ -396,19 +397,19 @@ export function FilterOnFirstColumn({
   const thing1A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 1`
+    `example name 1`,
   );
   const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
 
   const thing2A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 2`
+    `example name 2`,
   );
   const thing2 = SolidFns.addDatetime(
     thing2A,
     datePredicate,
-    new Date("1999-01-02")
+    new Date("1999-01-02"),
   );
 
   const emptyDataset = SolidFns.createSolidDataset();
@@ -451,19 +452,19 @@ export function SortingFunctionOnFirstColumn(): ReactElement {
   const thing1A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    "Another Name"
+    "Another Name",
   );
   const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
 
   const thing2A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    "Name A"
+    "Name A",
   );
   const thing2 = SolidFns.addDatetime(
     thing2A,
     datePredicate,
-    new Date("1999-01-02")
+    new Date("1999-01-02"),
   );
 
   const emptyDataset = SolidFns.createSolidDataset();
@@ -506,19 +507,19 @@ export function NoDataComponent(): ReactElement {
   const thing1A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 1`
+    `example name 1`,
   );
   const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
 
   const thing2A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 2`
+    `example name 2`,
   );
   const thing2 = SolidFns.addDatetime(
     thing2A,
     datePredicate,
-    new Date("1999-01-02")
+    new Date("1999-01-02"),
   );
 
   const emptyDataset = SolidFns.createSolidDataset();
