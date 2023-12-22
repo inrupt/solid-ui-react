@@ -20,7 +20,8 @@
 //
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { ReactElement } from "react";
+import type { ReactElement } from "react";
+import React from "react";
 import SolidFns from "@inrupt/solid-client";
 import { Text } from "../../src/components/text";
 import { DatasetProvider } from "../../src/context/datasetContext";

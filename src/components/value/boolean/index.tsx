@@ -30,7 +30,7 @@ import {
 import { SessionContext } from "../../../context/sessionContext";
 
 import { updateDataset, useProperty } from "../../../helpers";
-import { Props } from "..";
+import type { Props } from "..";
 
 type BooleanProps = Omit<Props, "locale" | "dataType">;
 

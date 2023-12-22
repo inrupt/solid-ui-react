@@ -19,8 +19,10 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import React, { ReactElement, useEffect, useState, useContext } from "react";
-import { overwriteFile, CommonProperties, useProperty } from "../../helpers";
+import type { ReactElement } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import type { CommonProperties } from "../../helpers";
+import { overwriteFile, useProperty } from "../../helpers";
 import { SessionContext } from "../../context/sessionContext";
 import useFile from "../../hooks/useFile";
 

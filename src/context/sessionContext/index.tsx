@@ -19,32 +19,25 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import React, {
-  createContext,
-  ReactElement,
-  useState,
-  SetStateAction,
-  Dispatch,
-  useEffect,
-  ReactNode,
-} from "react";
+import type { ReactElement, SetStateAction, Dispatch, ReactNode } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
+import type { Session } from "@inrupt/solid-client-authn-browser";
 import {
   fetch,
   login,
   logout,
   handleIncomingRedirect,
-  Session,
   getDefaultSession,
   EVENTS,
 } from "@inrupt/solid-client-authn-browser";
 
-import {
+import type {
   SolidDataset,
-  getProfileAll,
   ProfileAll,
   WithServerResourceInfo,
 } from "@inrupt/solid-client";
+import { getProfileAll } from "@inrupt/solid-client";
 
 export interface ISessionContext {
   login: typeof login;
@@ -85,7 +78,7 @@ export interface ISessionProvider {
 /**
  * Used to provide session data to child components through context, as used by various provided components and the useSession hook.
  */
-export const SessionProvider = ({
+export function SessionProvider({
   sessionId,
   children,
   onError,
@@ -93,7 +86,7 @@ export const SessionProvider = ({
   restorePreviousSession,
   skipLoadingProfile,
   onSessionRestore,
-}: ISessionProvider): ReactElement => {
+}: ISessionProvider): ReactElement {
   const restoreSession =
     restorePreviousSession || typeof onSessionRestore !== "undefined";
   const [session, setSession] = useState<Session>(getDefaultSession);
@@ -209,4 +202,4 @@ export const SessionProvider = ({
       {children}
     </SessionContext.Provider>
   );
-};
+}

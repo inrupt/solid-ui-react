@@ -19,7 +19,8 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import { getThing, Thing } from "@inrupt/solid-client";
+import type { Thing } from "@inrupt/solid-client";
+import { getThing } from "@inrupt/solid-client";
 import { useContext } from "react";
 import ThingContext from "../../context/thingContext";
 import useDataset from "../useDataset";

@@ -19,7 +19,8 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import React, { ReactElement } from "react";
+import type { ReactElement } from "react";
+import React from "react";
 import SolidFns from "@inrupt/solid-client";
 import { Video } from "../../src/components/video";
 

@@ -19,10 +19,11 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import React, { ReactElement } from "react";
+import type { ReactElement } from "react";
+import React from "react";
 import SolidFns from "@inrupt/solid-client";
 import { Table, TableColumn } from "../../src/components/table";
-import { DataType } from "../../src/helpers";
+import type { DataType } from "../../src/helpers";
 
 export default {
   title: "Components/TableColumn",

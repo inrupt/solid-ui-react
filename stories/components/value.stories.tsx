@@ -20,9 +20,10 @@
 //
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { ReactElement } from "react";
+import type { ReactElement } from "react";
+import React from "react";
 import SolidFns from "@inrupt/solid-client";
-import { DataType } from "../../src/helpers";
+import type { DataType } from "../../src/helpers";
 import { Value } from "../../src/components/value";
 import { DatasetProvider } from "../../src/context/datasetContext";
 import { ThingProvider } from "../../src/context/thingContext";

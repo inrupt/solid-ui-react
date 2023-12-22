@@ -21,7 +21,8 @@
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
-import { RenderResult, render } from "@testing-library/react";
+import type { RenderResult } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import SolidFns from "@inrupt/solid-client";
 import ThingContext, { ThingProvider } from ".";
 import { DatasetProvider } from "../datasetContext";

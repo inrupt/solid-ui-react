@@ -260,9 +260,9 @@ describe("<Table /> component functional tests", () => {
   });
 
   it("renders cells using the body prop if provided", () => {
-    const CustomBodyComponent = ({ value }: any) => {
+    function CustomBodyComponent({ value }: any) {
       return <span>{`${value} custom cell`}</span>;
-    };
+    }
 
     const { getAllByText } = render(
       <Table

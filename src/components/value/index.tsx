@@ -19,10 +19,12 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import React, { ReactElement, useState } from "react";
-import { Url, UrlString } from "@inrupt/solid-client";
+import type { ReactElement } from "react";
+import React, { useState } from "react";
+import type { Url, UrlString } from "@inrupt/solid-client";
 
-import { DataType, CommonProperties, useProperty } from "../../helpers";
+import type { DataType, CommonProperties } from "../../helpers";
+import { useProperty } from "../../helpers";
 import DatetimeValue from "./datetime";
 import StringValue from "./string";
 import BooleanValue from "./boolean";

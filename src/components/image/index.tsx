@@ -19,7 +19,9 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import React, { ReactElement, useState, useEffect, useContext } from "react";
+import type { ReactElement } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import type { SolidDataset } from "@inrupt/solid-client";
 import {
   addUrl,
   getSourceUrl,
@@ -27,9 +29,9 @@ import {
   saveFileInContainer,
   saveSolidDatasetAt,
   setThing,
-  SolidDataset,
 } from "@inrupt/solid-client";
-import { overwriteFile, CommonProperties, useProperty } from "../../helpers";
+import type { CommonProperties } from "../../helpers";
+import { overwriteFile, useProperty } from "../../helpers";
 
 import { SessionContext } from "../../context/sessionContext";
 import useFile from "../../hooks/useFile";

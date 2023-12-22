@@ -20,12 +20,8 @@
 //
 
 import SolidFns from "@inrupt/solid-client";
-import {
-  getValueByTypeAll,
-  DataType,
-  getPropertyForThing,
-  getValueByType,
-} from ".";
+import type { DataType } from ".";
+import { getValueByTypeAll, getPropertyForThing, getValueByType } from ".";
 
 describe("getValueByTypeAll", () => {
   it.each([

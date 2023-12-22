@@ -21,7 +21,7 @@
 
 import * as React from "react";
 import { renderHook } from "@testing-library/react";
-import { Session } from "@inrupt/solid-client-authn-browser";
+import type { Session } from "@inrupt/solid-client-authn-browser";
 import { SessionContext } from "../../context/sessionContext";
 import useSession from ".";
 
@@ -53,9 +53,7 @@ describe("useSession() hook functional testing", () => {
     );
 
     const { result } = renderHook(() => useSession(), { wrapper });
-    expect(result.current.session.info.webId).toEqual(
-      "https://solid.community/",
-    );
-    expect(result.current.sessionRequestInProgress).toEqual(true);
+    expect(result.current.session.info.webId).toBe("https://solid.community/");
+    expect(result.current.sessionRequestInProgress).toBe(true);
   });
 });

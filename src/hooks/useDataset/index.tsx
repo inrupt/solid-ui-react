@@ -21,7 +21,8 @@
 
 import { useContext } from "react";
 import useSWR from "swr";
-import { getSolidDataset, SolidDataset } from "@inrupt/solid-client";
+import type { SolidDataset } from "@inrupt/solid-client";
+import { getSolidDataset } from "@inrupt/solid-client";
 import { SessionContext } from "../../context/sessionContext";
 import DatasetContext from "../../context/datasetContext";
 

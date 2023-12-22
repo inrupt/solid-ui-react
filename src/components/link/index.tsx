@@ -19,9 +19,11 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import React, { ReactElement, useState } from "react";
+import type { ReactElement } from "react";
+import React, { useState } from "react";
 
-import { CommonProperties, useProperty } from "../../helpers";
+import type { CommonProperties } from "../../helpers";
+import { useProperty } from "../../helpers";
 import { Value } from "../value";
 
 export type Props = {

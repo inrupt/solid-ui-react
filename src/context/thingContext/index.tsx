@@ -19,14 +19,10 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import React, {
-  createContext,
-  ReactElement,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { Thing, UrlString, getThing } from "@inrupt/solid-client";
+import type { ReactElement } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import type { Thing, UrlString } from "@inrupt/solid-client";
+import { getThing } from "@inrupt/solid-client";
 import DatasetContext from "../datasetContext";
 
 export interface IThingContext {
@@ -58,11 +54,11 @@ export type RequireThingOrThingUrl =
 /**
  * Used to provide a Thing to child components through context, as used by various provided components and the useThing hook.
  */
-export const ThingProvider = ({
+export function ThingProvider({
   children,
   thing: propThing,
   thingUrl,
-}: RequireThingOrThingUrl): ReactElement => {
+}: RequireThingOrThingUrl): ReactElement {
   const { solidDataset } = useContext(DatasetContext);
   let thing = propThing;
 
@@ -87,4 +83,4 @@ export const ThingProvider = ({
       {children}
     </ThingContext.Provider>
   );
-};
+}

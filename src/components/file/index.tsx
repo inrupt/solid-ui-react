@@ -19,13 +19,10 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import React, { ReactElement, useContext } from "react";
-import {
-  Url,
-  UrlString,
-  saveFileInContainer,
-  WithResourceInfo,
-} from "@inrupt/solid-client";
+import type { ReactElement } from "react";
+import React, { useContext } from "react";
+import type { Url, UrlString, WithResourceInfo } from "@inrupt/solid-client";
+import { saveFileInContainer } from "@inrupt/solid-client";
 import { SessionContext } from "../../context/sessionContext";
 
 export type Props = {
@@ -77,14 +74,12 @@ export function FileUpload({
   };
 
   return (
-    <>
-      <input
-        type="file"
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...inputProps}
-        onChange={(e) => handleChange(e)}
-        data-testid="form-input"
-      />
-    </>
+    <input
+      type="file"
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...inputProps}
+      onChange={(e) => handleChange(e)}
+      data-testid="form-input"
+    />
   );
 }

@@ -19,13 +19,10 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+import type { Thing, SolidDataset, UrlString, Url } from "@inrupt/solid-client";
 import {
   overwriteFile as solidOverwriteFile,
   getFile,
-  Thing,
-  SolidDataset,
-  UrlString,
-  Url,
   getBoolean,
   getDatetime,
   getDecimal,

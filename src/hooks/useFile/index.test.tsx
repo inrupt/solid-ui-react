@@ -22,7 +22,7 @@
 import * as React from "react";
 import { renderHook, waitFor } from "@testing-library/react";
 import SolidFns from "@inrupt/solid-client";
-import { Session } from "@inrupt/solid-client-authn-browser";
+import type { Session } from "@inrupt/solid-client-authn-browser";
 import { SessionContext } from "../../context/sessionContext";
 import useFile from ".";
 

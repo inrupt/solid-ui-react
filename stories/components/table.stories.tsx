@@ -19,7 +19,8 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import React, { ReactElement, useContext } from "react";
+import type { ReactElement } from "react";
+import React, { useContext } from "react";
 import SolidFns from "@inrupt/solid-client";
 import DatasetContext, {
   DatasetProvider,
@@ -196,9 +197,9 @@ export function CustomBodyComponent(): ReactElement {
   type bodyProps = {
     value?: string;
   };
-  const CustomBody = ({ value }: bodyProps) => {
+  function CustomBody({ value }: bodyProps) {
     return <span style={{ color: "#7C4DFF" }}>{`${value}`}</span>;
-  };
+  }
 
   return (
     <Table
@@ -236,7 +237,7 @@ export function NestedDataExample(): ReactElement {
   const workProperty = `http://www.w3.org/2006/vcard/ns#Work`;
   const valueProperty = `http://www.w3.org/2006/vcard/ns#value`;
 
-  const PhoneNumberDisplay = ({
+  function PhoneNumberDisplay({
     numberThingIris,
     numberType,
     dataset,
@@ -244,7 +245,7 @@ export function NestedDataExample(): ReactElement {
     numberThingIris: [string];
     numberType: string;
     dataset: SolidFns.SolidDataset;
-  }) => {
+  }) {
     let phoneNumber = "";
     numberThingIris.some((numberThingIri) => {
       const numberThing = SolidFns.getThing(dataset, numberThingIri);
@@ -258,9 +259,9 @@ export function NestedDataExample(): ReactElement {
       return false;
     });
     return <>{phoneNumber}</>;
-  };
+  }
 
-  const NestedDataExampleContent = () => {
+  function NestedDataExampleContent() {
     const datasetContext = useContext(DatasetContext);
     const { solidDataset } = datasetContext;
     if (!solidDataset) {
@@ -320,7 +321,7 @@ export function NestedDataExample(): ReactElement {
         />
       </Table>
     );
-  };
+  }
 
   return (
     <DatasetProvider datasetUrl={`${host}/example.ttl`}>

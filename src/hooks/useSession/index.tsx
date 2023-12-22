@@ -20,7 +20,7 @@
 //
 
 import { useContext } from "react";
-import {
+import type {
   ILoginInputOptions,
   Session,
 } from "@inrupt/solid-client-authn-browser";

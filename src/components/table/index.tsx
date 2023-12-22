@@ -21,19 +21,19 @@
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { ReactElement, useMemo, Children, ReactNode } from "react";
-import { SolidDataset, Thing, Url, UrlString } from "@inrupt/solid-client";
-import {
-  useTable,
+import type { ReactElement, ReactNode } from "react";
+import React, { useMemo, Children } from "react";
+import type { SolidDataset, Thing, Url, UrlString } from "@inrupt/solid-client";
+import type {
   Column,
   Row,
-  useSortBy,
-  useGlobalFilter,
   Renderer,
   CellProps,
   HeaderProps,
 } from "react-table";
-import { DataType, getValueByType, getValueByTypeAll } from "../../helpers";
+import { useTable, useSortBy, useGlobalFilter } from "react-table";
+import type { DataType } from "../../helpers";
+import { getValueByType, getValueByTypeAll } from "../../helpers";
 import CombinedDataProvider from "../../context/combinedDataContext";
 
 export type TableColumnProps = {

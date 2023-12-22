@@ -19,8 +19,9 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import React, { createContext, ReactElement, useState, useEffect } from "react";
-import {
+import type { ReactElement } from "react";
+import React, { createContext, useState, useEffect } from "react";
+import type {
   SolidDataset,
   WithResourceInfo,
   UrlString,
@@ -63,14 +64,14 @@ export type RequireDatasetOrDatasetUrl =
 /**
  * Used to provide a [Dataset](https://docs.inrupt.com/developer-tools/javascript/client-libraries/reference/glossary/#term-SolidDataset) to child components through context, as used by various provided components and the useDataset hook.
  */
-export const DatasetProvider = ({
+export function DatasetProvider({
   children,
   onError,
   solidDataset: propDataset,
   datasetUrl,
   loading,
   loadingComponent: LoadingComponent,
-}: RequireDatasetOrDatasetUrl): ReactElement => {
+}: RequireDatasetOrDatasetUrl): ReactElement {
   const { dataset, error } = useDataset(datasetUrl);
 
   if (error && onError) {
@@ -103,4 +104,4 @@ export const DatasetProvider = ({
       {stateDataset ? children : loader}
     </DatasetContext.Provider>
   );
-};
+}

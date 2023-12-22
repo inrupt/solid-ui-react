@@ -19,7 +19,8 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import React, { ReactElement, useContext, useState, useEffect } from "react";
+import type { ReactElement } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import SolidFns from "@inrupt/solid-client";
 import DatasetContext, {
   DatasetProvider,

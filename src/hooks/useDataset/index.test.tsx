@@ -23,7 +23,7 @@ import * as React from "react";
 import { renderHook, waitFor } from "@testing-library/react";
 import { SWRConfig } from "swr";
 import SolidFns from "@inrupt/solid-client";
-import { Session } from "@inrupt/solid-client-authn-browser";
+import type { Session } from "@inrupt/solid-client-authn-browser";
 import DatasetContext from "../../context/datasetContext";
 import { SessionContext } from "../../context/sessionContext";
 import useDataset from ".";

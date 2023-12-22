@@ -34,7 +34,7 @@ import {
   useDatetimeBrowserSupport,
   updateDataset,
 } from "../../../helpers";
-import { Props } from "..";
+import type { Props } from "..";
 
 type DatetimeProps = Omit<Props, "locale" | "dataType">;
 

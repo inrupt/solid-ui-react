@@ -19,8 +19,9 @@
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-import React, { ReactElement, useContext, useState } from "react";
-import { ComponentMeta } from "@storybook/react";
+import type { ReactElement } from "react";
+import React, { useContext, useState } from "react";
+import type { ComponentMeta } from "@storybook/react";
 
 import {
   SessionContext,
