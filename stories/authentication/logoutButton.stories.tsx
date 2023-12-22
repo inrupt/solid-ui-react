@@ -20,7 +20,7 @@
  */
 
 import React, { ReactElement } from "react";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import { SessionProvider } from "../../src/context/sessionContext";
 import { LogoutButton } from "../../src/components/logOut";
 
