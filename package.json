@@ -33,6 +33,7 @@
     "@babel/preset-env": "^7.23.6",
     "@babel/preset-react": "^7.23.3",
     "@babel/preset-typescript": "^7.23.3",
+    "@emotion/styled": "^11.11.0",
     "@inrupt/base-rollup-config": "^3.0.2",
     "@inrupt/eslint-config-base": "^3.0.2",
     "@inrupt/eslint-config-lib": "^3.0.2",
