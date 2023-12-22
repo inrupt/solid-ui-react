@@ -50,6 +50,9 @@ export const LoginButton: React.FC<Props> = ({
   const { login, setSessionRequestInProgress } = useContext(SessionContext);
 
   async function loginHandler() {
+    if (setSessionRequestInProgress === undefined) {
+      return;
+    }
     setSessionRequestInProgress(true);
 
     try {
