@@ -62,17 +62,17 @@ if (
   
   // FIXME This is a temporary workaround for https://github.com/jsdom/jsdom/issues/1724#issuecomment-720727999
   // The following fetch APIs are missing in JSDom
-  const undici = require("undici");
-  [{
-    condition: typeof globalThis.Response === "undefined", polyfill: () => { globalThis.Response = undici.Response }
-  }, {
-    condition: typeof globalThis.Request === "undefined", polyfill: () => { globalThis.Request = undici.Request } 
-  }, {
-    condition: typeof globalThis.Headers === "undefined", polyfill: () => { globalThis.Headers = undici.Headers } 
-  }, {
-    condition: typeof globalThis.fetch === "undefined", polyfill: () => { globalThis.fetch = undici.fetch }
-  }].forEach(({condition, polyfill}) => {
-    if (condition) {
-      polyfill()
-    }
-  });
+//   const undici = require("undici");
+//   [{
+//     condition: typeof globalThis.Response === "undefined", polyfill: () => { globalThis.Response = undici.Response }
+//   }, {
+//     condition: typeof globalThis.Request === "undefined", polyfill: () => { globalThis.Request = undici.Request } 
+//   }, {
+//     condition: typeof globalThis.Headers === "undefined", polyfill: () => { globalThis.Headers = undici.Headers } 
+//   }, {
+//     condition: typeof globalThis.fetch === "undefined", polyfill: () => { globalThis.fetch = undici.fetch }
+//   }].forEach(({condition, polyfill}) => {
+//     if (condition) {
+//       polyfill()
+//     }
+//   });
