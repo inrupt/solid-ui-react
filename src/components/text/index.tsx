@@ -97,7 +97,7 @@ export function Text({
   const [text, setText] = useState<string | null>(value as string);
   const [, setErrorState] = useState<string | null>();
   const [initialValue, setInitialValue] = useState<string | null>(
-    value as string
+    value as string,
   );
 
   /* Save text value in the pod */
@@ -110,7 +110,7 @@ export function Text({
           thing,
           property,
           newValue,
-          locale
+          locale,
         );
       } else {
         updatedResource = setStringNoLocale(thing, property, newValue);
@@ -122,20 +122,20 @@ export function Text({
           savedDataset = await saveSolidDatasetAt(
             saveDatasetTo,
             setThing(dataset, updatedResource),
-            { fetch }
+            { fetch },
           );
           await updateDataset(saveDatasetTo, setDataset);
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
             getSourceUrl(dataset),
             setThing(dataset, updatedResource),
-            { fetch }
+            { fetch },
           );
           await updateDataset(getSourceUrl(dataset), setDataset);
         } else {
           setErrorState(() => {
             throw new Error(
-              "Please provide saveDatasetTo location for new data"
+              "Please provide saveDatasetTo location for new data",
             );
           });
         }

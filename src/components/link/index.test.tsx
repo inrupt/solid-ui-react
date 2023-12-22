@@ -30,20 +30,20 @@ const mockPredicate = `http://xmlns.com/foaf/0.1/homepage`;
 const mockThing = SolidFns.addUrl(
   SolidFns.createThing(),
   mockPredicate,
-  mockUrl
+  mockUrl,
 );
 
 describe("Link component", () => {
   it("Link snapshot", () => {
     const { asFragment } = render(
-      <Link thing={mockThing} property={mockPredicate} />
+      <Link thing={mockThing} property={mockPredicate} />,
     );
     expect(asFragment()).toMatchSnapshot();
   });
 
   it("renders default error message if there is an error", () => {
     const documentBody = render(
-      <Link thing={mockThing} property="https://example.com/bad-url" />
+      <Link thing={mockThing} property="https://example.com/bad-url" />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -57,7 +57,7 @@ describe("Link component", () => {
         errorComponent={({ error }) => (
           <span id="custom-error-component">{error.toString()}</span>
         )}
-      />
+      />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -91,7 +91,7 @@ describe("Link component", () => {
         loadingComponent={() => (
           <span id="custom-loading-component">loading...</span>
         )}
-      />
+      />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -106,7 +106,7 @@ describe("Link component", () => {
       property: mockPredicate,
     });
     const documentBody = render(
-      <Link property={mockPredicate} loadingComponent={null} />
+      <Link property={mockPredicate} loadingComponent={null} />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -114,14 +114,14 @@ describe("Link component", () => {
   it("Should call getUrl and use result as href value", () => {
     jest.spyOn(SolidFns, "getUrl").mockImplementationOnce(() => mockUrl);
     const { getByText } = render(
-      <Link thing={mockThing} property={mockPredicate} />
+      <Link thing={mockThing} property={mockPredicate} />,
     );
     expect(SolidFns.getUrl).toHaveBeenCalled();
     expect(getByText(mockUrl).getAttribute("href")).toBe(mockUrl);
   });
   it("When passed no children, should render href as link text", () => {
     const { getByText } = render(
-      <Link thing={mockThing} property={mockPredicate} />
+      <Link thing={mockThing} property={mockPredicate} />,
     );
     expect(getByText(mockUrl)).toBeTruthy();
   });
@@ -129,7 +129,7 @@ describe("Link component", () => {
     const { getByText } = render(
       <Link thing={mockThing} property={mockPredicate}>
         <span>Test child</span>
-      </Link>
+      </Link>,
     );
     expect(getByText("Test child")).toBeTruthy();
   });
@@ -141,7 +141,7 @@ describe("Link component", () => {
         className="test-class"
         target="_self"
         rel="abcd"
-      />
+      />,
     );
     expect(getByText(mockUrl).getAttribute("target")).toBe("_self");
     expect(getByText(mockUrl).getAttribute("class")).toBe("test-class");
@@ -155,7 +155,7 @@ describe("Link component", () => {
         property={mockPredicate}
         className="test-class"
         target="_blank"
-      />
+      />,
     );
     expect(getByText(mockUrl).getAttribute("rel")).toBe("noopener noreferrer");
   });
@@ -168,7 +168,7 @@ describe("Link component", () => {
         className="test-class"
         target="_blank"
         rel="test"
-      />
+      />,
     );
     expect(getByText(mockUrl).getAttribute("rel")).toBe("test");
   });
@@ -176,7 +176,7 @@ describe("Link component", () => {
   it("renders in edit mode", () => {
     const mockDataset = SolidFns.setThing(
       SolidFns.createSolidDataset(),
-      mockThing
+      mockThing,
     );
 
     const { asFragment } = render(
@@ -184,7 +184,7 @@ describe("Link component", () => {
         thing={mockThing}
         property={mockPredicate}
         solidDataset={mockDataset}
-      />
+      />,
     );
     expect(asFragment()).toMatchSnapshot();
   });

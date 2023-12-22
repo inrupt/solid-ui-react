@@ -92,7 +92,7 @@ const StringValue: React.FC<StringProps> = (props: StringProps) => {
           thing,
           property,
           value as string,
-          locale
+          locale,
         );
       } else {
         updatedResource = setStringNoLocale(thing, property, value as string);
@@ -103,19 +103,19 @@ const StringValue: React.FC<StringProps> = (props: StringProps) => {
           savedDataset = await saveSolidDatasetAt(
             saveDatasetTo,
             setThing(dataset, updatedResource),
-            { fetch }
+            { fetch },
           );
           await updateDataset(saveDatasetTo, setDataset);
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
             getSourceUrl(dataset),
             setThing(dataset, updatedResource),
-            { fetch }
+            { fetch },
           );
           await updateDataset(getSourceUrl(dataset), setDataset);
         } else if (onError) {
           onError(
-            new Error("Please provide saveDatasetTo location for new data")
+            new Error("Please provide saveDatasetTo location for new data"),
           );
         }
 

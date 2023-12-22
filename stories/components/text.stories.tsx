@@ -109,12 +109,12 @@ export function BasicExample({
   const exampleThing = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     property,
-    exampleNick
+    exampleNick,
   );
 
   const exampleDataset = SolidFns.setThing(
     SolidFns.createSolidDataset(),
-    exampleThing
+    exampleThing,
   );
 
   return (
@@ -151,12 +151,12 @@ export function WithLocalData({
   const exampleThing = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     examplePredicate,
-    exampleNick
+    exampleNick,
   );
 
   const exampleDataset = SolidFns.setThing(
     SolidFns.createSolidDataset(),
-    exampleThing
+    exampleThing,
   );
 
   return (
@@ -223,7 +223,7 @@ export function ErrorComponent(): ReactElement {
   const exampleThing = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     exampleProperty,
-    exampleName
+    exampleName,
   );
 
   return (

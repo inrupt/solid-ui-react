@@ -61,9 +61,7 @@ describe("useThing() hook", () => {
       dataset: mockDataset,
       error: undefined,
     });
-    const { result } = renderHook(() =>
-      useThing(mockDatasetIri, mockThingIri)
-    );
+    const { result } = renderHook(() => useThing(mockDatasetIri, mockThingIri));
 
     expect(mockGetThing).toHaveBeenCalledTimes(1);
     expect(result.current.thing).toBe(mockThing);
@@ -74,9 +72,7 @@ describe("useThing() hook", () => {
       dataset: undefined,
       error: undefined,
     });
-    const { result } = renderHook(() =>
-      useThing(mockDatasetIri, mockThingIri)
-    );
+    const { result } = renderHook(() => useThing(mockDatasetIri, mockThingIri));
 
     expect(mockGetThing).toHaveBeenCalledTimes(0);
     expect(result.current.thing).toBeNull();
@@ -87,9 +83,7 @@ describe("useThing() hook", () => {
       dataset: mockDataset,
       error: new Error("useDataset error"),
     });
-    const { result } = renderHook(() =>
-      useThing(mockDatasetIri, mockThingIri)
-    );
+    const { result } = renderHook(() => useThing(mockDatasetIri, mockThingIri));
 
     expect(result.current.error.message).toBe("useDataset error");
   });
@@ -109,10 +103,9 @@ describe("useThing() hook", () => {
       dataset: mockDataset,
       error: undefined,
     });
-    const { result } = renderHook(
-      () => useThing(mockDatasetIri, undefined),
-      { wrapper }
-    );
+    const { result } = renderHook(() => useThing(mockDatasetIri, undefined), {
+      wrapper,
+    });
 
     expect(mockGetThing).not.toHaveBeenCalled();
     expect(result.current.thing).toBe(mockContextThing);

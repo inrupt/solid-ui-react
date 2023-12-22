@@ -35,37 +35,37 @@ const booleanPredicate = `http://schema.org/isAccessibleForFree`;
 const thing1A = SolidFns.addBoolean(
   SolidFns.createThing(),
   booleanPredicate,
-  true
+  true,
 );
 
 const thing1B = SolidFns.addStringNoLocale(
   thing1A,
   namePredicate,
-  `example name 1`
+  `example name 1`,
 );
 
 const thing1 = SolidFns.addStringNoLocale(
   thing1B,
   nickPredicate,
-  `example nick 1`
+  `example nick 1`,
 );
 
 const thing2A = SolidFns.addBoolean(
   SolidFns.createThing(),
   booleanPredicate,
-  false
+  false,
 );
 
 const thing2B = SolidFns.addStringNoLocale(
   thing2A,
   namePredicate,
-  `example name 2`
+  `example name 2`,
 );
 
 const thing2 = SolidFns.addStringNoLocale(
   thing2B,
   nickPredicate,
-  `example nick 2`
+  `example nick 2`,
 );
 
 const emptyDataset = SolidFns.createSolidDataset();
@@ -85,7 +85,7 @@ describe("<Table /> component snapshot tests", () => {
         <TableColumn property={nickPredicate} />
         <TableColumn property={booleanPredicate} dataType="boolean" />
         <TableColumn property="http://missing.property" />
-      </Table>
+      </Table>,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -104,11 +104,11 @@ describe("<Table /> component functional tests", () => {
         fallbackRender={({ error }) => <div>{error?.message}</div>}
       >
         <TableColumn property={namePredicate} />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
     await waitFor(() =>
-      expect(getByText("Can't use TableColumn outside a Table.")).toBeDefined()
+      expect(getByText("Can't use TableColumn outside a Table.")).toBeDefined(),
     );
   });
   it("uses property as header text unless header prop supplied", () => {
@@ -121,7 +121,7 @@ describe("<Table /> component functional tests", () => {
       >
         <TableColumn property={namePredicate} header="Name" />
         <TableColumn property={nickPredicate} />
-      </Table>
+      </Table>,
     );
 
     expect(getByText(nickPredicate)).not.toBeNull();
@@ -139,7 +139,7 @@ describe("<Table /> component functional tests", () => {
         ]}
       >
         <TableColumn property={namePredicate} />
-      </Table>
+      </Table>,
     );
 
     await user.click(getByText(namePredicate));
@@ -152,16 +152,16 @@ describe("<Table /> component functional tests", () => {
     const thingA = SolidFns.addStringNoLocale(
       SolidFns.createThing(),
       namePredicate,
-      "example"
+      "example",
     );
     const thingB = SolidFns.addStringNoLocale(
       SolidFns.createThing(),
       namePredicate,
-      "Foo"
+      "Foo",
     );
     const datasetWithThingA = SolidFns.setThing(
       SolidFns.createSolidDataset(),
-      thingA
+      thingA,
     );
     const datasetToSort = SolidFns.setThing(datasetWithThingA, thingB);
 
@@ -174,7 +174,7 @@ describe("<Table /> component functional tests", () => {
         ]}
       >
         <TableColumn property={namePredicate} sortable />
-      </Table>
+      </Table>,
     );
     expect(queryAllByRole("cell")[0].innerHTML).toBe("Foo");
     expect(queryAllByRole("cell")[1].innerHTML).toBe("example");
@@ -189,16 +189,16 @@ describe("<Table /> component functional tests", () => {
     const thingA = SolidFns.addStringNoLocale(
       SolidFns.createThing(),
       namePredicate,
-      "Name A"
+      "Name A",
     );
     const thingB = SolidFns.addStringNoLocale(
       SolidFns.createThing(),
       namePredicate,
-      "Another Name"
+      "Another Name",
     );
     const datasetWithThingA = SolidFns.setThing(
       SolidFns.createSolidDataset(),
-      thingA
+      thingA,
     );
     const datasetToCustomSort = SolidFns.setThing(datasetWithThingA, thingB);
 
@@ -221,7 +221,7 @@ describe("<Table /> component functional tests", () => {
           sortable
           sortFn={sortBySecondWord}
         />
-      </Table>
+      </Table>,
     );
     expect(queryAllByRole("cell")[0].innerHTML).toBe("Another Name");
     expect(queryAllByRole("cell")[1].innerHTML).toBe("Name A");
@@ -242,7 +242,7 @@ describe("<Table /> component functional tests", () => {
         ]}
       >
         <TableColumn property={namePredicate} header="Name" sortable />
-      </Table>
+      </Table>,
     );
 
     expect(queryByText("🔽")).toBeNull();
@@ -272,7 +272,7 @@ describe("<Table /> component functional tests", () => {
         ]}
       >
         <TableColumn property={namePredicate} body={CustomBodyComponent} />
-      </Table>
+      </Table>,
     );
 
     expect(getAllByText(/custom cell/)).toHaveLength(2);
@@ -289,7 +289,7 @@ describe("<Table /> component functional tests", () => {
         filter={filterTerm}
       >
         <TableColumn property={namePredicate} />
-      </Table>
+      </Table>,
     );
 
     expect(queryByText(filterTerm)).toBeNull();
@@ -307,7 +307,7 @@ describe("<Table /> component functional tests", () => {
         filter={filterTerm}
       >
         <TableColumn property={namePredicate} filterable />
-      </Table>
+      </Table>,
     );
 
     expect(getByText(filterTerm)).not.toBeNull();
@@ -318,22 +318,22 @@ describe("<Table /> component functional tests", () => {
     const thingMultipleA = SolidFns.addStringNoLocale(
       SolidFns.createThing(),
       namePredicate,
-      `multiple name 1`
+      `multiple name 1`,
     );
     const thingMultipleB = SolidFns.addStringNoLocale(
       thingMultipleA,
       nickPredicate,
-      `multiple nick 1`
+      `multiple nick 1`,
     );
     const thingMultipleC = SolidFns.addStringNoLocale(
       thingMultipleB,
       namePredicate,
-      `multiple name 2`
+      `multiple name 2`,
     );
     const thingMultiple = SolidFns.addStringNoLocale(
       thingMultipleC,
       nickPredicate,
-      `multiple nick 2`
+      `multiple nick 2`,
     );
 
     const datasetWithMultiple = SolidFns.setThing(dataset, thingMultiple);
@@ -348,7 +348,7 @@ describe("<Table /> component functional tests", () => {
       >
         <TableColumn property={namePredicate} filterable multiple />
         <TableColumn property={nickPredicate} filterable />
-      </Table>
+      </Table>,
     );
 
     expect(getByText(/multiple name 1/)).not.toBeNull();
@@ -365,7 +365,7 @@ describe("<Table /> component functional tests", () => {
           { dataset, thing: thing2 },
         ]}
         emptyStateComponent={() => <span>There is no Data</span>}
-      />
+      />,
     );
 
     expect(getByText(/There is no Data/)).not.toBeNull();

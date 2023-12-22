@@ -50,7 +50,7 @@ export function WithChildren({ property }: { property: string }): ReactElement {
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
     property,
-    exampleUrl
+    exampleUrl,
   );
   return (
     <Link thing={exampleThing} property={property}>
@@ -76,7 +76,7 @@ export function WithoutChildren({
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
     property,
-    exampleUrl
+    exampleUrl,
   );
   return <Link thing={exampleThing} property={property} />;
 }
@@ -94,12 +94,12 @@ export function Editable({ property }: { property: string }): ReactElement {
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
     property,
-    exampleUrl
+    exampleUrl,
   );
 
   const exampleDataset = SolidFns.setThing(
     SolidFns.createSolidDataset(),
-    exampleThing
+    exampleThing,
   );
 
   return (
@@ -126,7 +126,7 @@ export function ErrorComponent(): ReactElement {
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
     property,
-    exampleUrl
+    exampleUrl,
   );
   return (
     <Link

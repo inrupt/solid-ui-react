@@ -38,12 +38,12 @@ let mockThing = SolidFns.mockThingFrom(mockThingUrl);
 mockThing = SolidFns.addStringNoLocale(mockThing, mockPredicate, mockNick);
 mockDatasetWithResourceInfo = SolidFns.setThing(
   mockDatasetWithResourceInfo,
-  mockThing
+  mockThing,
 );
 
 function ExampleComponentWithThing(): React.ReactElement {
   const [property, setProperty] = React.useState<string>(
-    "fetching in progress"
+    "fetching in progress",
   );
   const thingContext = React.useContext(ThingContext);
   const { thing } = thingContext;
@@ -52,7 +52,7 @@ function ExampleComponentWithThing(): React.ReactElement {
     if (thing) {
       const fetchedProperty = SolidFns.getStringNoLocale(
         thing,
-        "http://xmlns.com/foaf/0.1/name"
+        "http://xmlns.com/foaf/0.1/name",
       );
       if (fetchedProperty) {
         setProperty(fetchedProperty);
@@ -70,7 +70,7 @@ function ExampleComponentWithThing(): React.ReactElement {
 function ExampleComponentWithThingUrl(): React.ReactElement {
   const examplePredicate = "http://xmlns.com/foaf/0.1/nick";
   const [property, setProperty] = React.useState<string>(
-    "fetching in progress"
+    "fetching in progress",
   );
 
   const thingContext = React.useContext(ThingContext);
@@ -80,7 +80,7 @@ function ExampleComponentWithThingUrl(): React.ReactElement {
     if (thing) {
       const fetchedProperty = SolidFns.getStringNoLocale(
         thing,
-        examplePredicate
+        examplePredicate,
       );
       if (fetchedProperty) {
         setProperty(fetchedProperty);
@@ -103,13 +103,13 @@ describe("Testing ThingContext matches snapshot", () => {
     const exampleThing = SolidFns.addStringNoLocale(
       SolidFns.createThing(),
       property,
-      name
+      name,
     );
 
     documentBody = render(
       <ThingProvider thing={exampleThing}>
         <ExampleComponentWithThing />
-      </ThingProvider>
+      </ThingProvider>,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -122,7 +122,7 @@ describe("Testing ThingContext matches snapshot", () => {
         <ThingProvider thingUrl="https://some-interesting-value.com">
           <ExampleComponentWithThingUrl />
         </ThingProvider>
-      </DatasetProvider>
+      </DatasetProvider>,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();

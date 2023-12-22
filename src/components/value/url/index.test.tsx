@@ -35,21 +35,21 @@ const testUrl = "https://test.com";
 const mockThing = SolidFns.addUrl(
   SolidFns.createThing(),
   mockPredicate,
-  mockUrl
+  mockUrl,
 );
 
 const mockDataset = SolidFns.setThing(
   SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
-  mockThing
+  mockThing,
 );
 const mockDatasetWithResourceInfo = SolidFns.setThing(
   SolidFns.mockContainerFrom("https://some-interesting-value.com/"),
-  mockThing
+  mockThing,
 );
 
 const savedDataset = SolidFns.setThing(
   SolidFns.mockSolidDatasetFrom("https://example.pod/resource"),
-  SolidFns.createThing()
+  SolidFns.createThing(),
 );
 const latestDataset = SolidFns.setThing(savedDataset, SolidFns.createThing());
 
@@ -67,7 +67,7 @@ describe("<UrlValue /> component functional testing", () => {
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
-      />
+      />,
     );
 
     expect(mockGetter).toHaveBeenCalled();
@@ -93,7 +93,7 @@ describe("<UrlValue /> component functional testing", () => {
         edit
         autosave
         inputProps={{ title: "test title" }}
-      />
+      />,
     );
 
     const input = getByTitle("test title");
@@ -115,7 +115,7 @@ describe("<UrlValue /> component functional testing", () => {
         property={mockPredicate}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue(mockUrl);
     input.focus();
@@ -132,7 +132,7 @@ describe("<UrlValue /> component functional testing", () => {
         property={mockPredicate}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue(mockUrl);
@@ -153,7 +153,7 @@ describe("<UrlValue /> component functional testing", () => {
         thing={mockThing}
         property={mockPredicate}
         edit
-      />
+      />,
     );
     getByDisplayValue(mockUrl).focus();
     getByDisplayValue(mockUrl).blur();
@@ -175,7 +175,7 @@ describe("<UrlValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue(mockUrl);
@@ -204,7 +204,7 @@ describe("<UrlValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue(mockUrl);
@@ -237,7 +237,7 @@ describe("<UrlValue /> component functional testing", () => {
         property={mockPredicate}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue(mockUrl);
@@ -272,7 +272,7 @@ describe("<UrlValue /> component functional testing", () => {
         property={mockPredicate}
         saveDatasetTo="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
         onError={onError}
-      />
+      />,
     );
     await waitFor(() => expect(onError).toHaveBeenCalled());
   });
@@ -291,7 +291,7 @@ describe("<UrlValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue(mockUrl);
@@ -318,7 +318,7 @@ describe("<UrlValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue(mockUrl);
@@ -334,7 +334,7 @@ describe("<UrlValue /> component functional testing", () => {
   it("Should call onError if trying to save a non-fetched dataset without saveDatasetTo", async () => {
     const mockUnfetchedDataset = SolidFns.setThing(
       SolidFns.createSolidDataset(),
-      mockThing
+      mockThing,
     );
 
     const onError = jest.fn();
@@ -348,7 +348,7 @@ describe("<UrlValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue(mockUrl);

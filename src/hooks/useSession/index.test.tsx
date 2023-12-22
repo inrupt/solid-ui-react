@@ -54,7 +54,7 @@ describe("useSession() hook functional testing", () => {
 
     const { result } = renderHook(() => useSession(), { wrapper });
     expect(result.current.session.info.webId).toEqual(
-      "https://solid.community/"
+      "https://solid.community/",
     );
     expect(result.current.sessionRequestInProgress).toEqual(true);
   });

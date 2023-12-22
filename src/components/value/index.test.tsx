@@ -37,22 +37,22 @@ const mockBday = new Date("2021-05-04T06:00:00.000Z");
 const mockThing = SolidFns.addStringNoLocale(
   SolidFns.createThing(),
   mockPredicate,
-  mockNick
+  mockNick,
 );
 
 const mockThingWithBday = SolidFns.addDatetime(
   mockThing,
   mockBdayPredicate,
-  mockBday
+  mockBday,
 );
 
 const mockDataset = SolidFns.setThing(
   SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
-  mockThing
+  mockThing,
 );
 const mockDatasetWithResourceInfo = SolidFns.setThing(
   SolidFns.createSolidDataset() as any,
-  mockThing
+  mockThing,
 );
 
 const inputOptions = {
@@ -62,12 +62,12 @@ const inputOptions = {
 
 const mockDatasetWithBdayResourceInfo = SolidFns.setThing(
   SolidFns.createSolidDataset(),
-  mockThingWithBday
+  mockThingWithBday,
 );
 
 const savedDataset = SolidFns.setThing(
   SolidFns.mockSolidDatasetFrom("https://example.pod/resource"),
-  SolidFns.createThing()
+  SolidFns.createThing(),
 );
 jest.spyOn(SolidFns, "saveSolidDatasetAt").mockResolvedValue(savedDataset);
 
@@ -79,7 +79,7 @@ describe("<Value /> component snapshot test", () => {
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
-      />
+      />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -95,7 +95,7 @@ describe("<Value /> component snapshot test", () => {
       property: mockPredicate,
     });
     const documentBody = render(
-      <Value dataType="string" property={mockPredicate} />
+      <Value dataType="string" property={mockPredicate} />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -117,7 +117,7 @@ describe("<Value /> component snapshot test", () => {
         loadingComponent={() => (
           <span id="custom-loading-component">loading...</span>
         )}
-      />
+      />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -137,7 +137,7 @@ describe("<Value /> component snapshot test", () => {
         dataType="string"
         property={mockPredicate}
         loadingComponent={null}
-      />
+      />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -150,7 +150,7 @@ describe("<Value /> component snapshot test", () => {
         thing={emptyThing}
         dataType="string"
         property="https://example.com/bad-url"
-      />
+      />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -166,7 +166,7 @@ describe("<Value /> component snapshot test", () => {
         errorComponent={({ error }) => (
           <span id="custom-error-component">{error.toString()}</span>
         )}
-      />
+      />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -183,7 +183,7 @@ describe("<Value /> component snapshot test", () => {
             property="http://xmlns.com/foaf/0.1/name"
           />
         </ThingProvider>
-      </DatasetProvider>
+      </DatasetProvider>,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -195,7 +195,7 @@ describe("<Value /> component snapshot test", () => {
         thing={undefined}
         dataType="boolean"
         property="http://xmlns.com/foaf/0.1/name"
-      />
+      />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -207,7 +207,7 @@ describe("<Value /> component snapshot test", () => {
         <ThingProvider thing={mockThing}>
           <Value dataType="string" property={mockPredicate} edit autosave />
         </ThingProvider>
-      </DatasetProvider>
+      </DatasetProvider>,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -222,7 +222,7 @@ describe("<Value /> component snapshot test", () => {
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
-      />
+      />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -236,7 +236,7 @@ describe("<Value /> component snapshot test", () => {
         solidDataset={mockDatasetWithBdayResourceInfo}
         thing={mockThingWithBday}
         property={mockBdayPredicate}
-      />
+      />,
     );
     expect(asFragment()).toMatchSnapshot();
   });
@@ -250,10 +250,10 @@ describe("<Value /> component snapshot test", () => {
           solidDataset={mockDataset}
           thing={mockThing}
           property={mockPredicate}
-        />
+        />,
       );
       expect(asFragment()).toMatchSnapshot();
-    }
+    },
   );
 
   it("matches snapshot with dataType datetime when browser does not support datetime-local", () => {
@@ -265,7 +265,7 @@ describe("<Value /> component snapshot test", () => {
         solidDataset={mockDatasetWithBdayResourceInfo}
         thing={mockThingWithBday}
         property={mockBdayPredicate}
-      />
+      />,
     );
     expect(asFragment()).toMatchSnapshot();
   });

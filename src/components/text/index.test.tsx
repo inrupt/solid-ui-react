@@ -40,7 +40,7 @@ const mockDatasetFromWithChangelog = (url: string) =>
 
 jest.mock("@inrupt/solid-client", () => {
   const solidClient = jest.requireActual(
-    "@inrupt/solid-client"
+    "@inrupt/solid-client",
   ) as typeof SolidClient;
   return {
     ...solidClient,
@@ -49,15 +49,15 @@ jest.mock("@inrupt/solid-client", () => {
       .fn<(typeof SolidClient)["saveSolidDatasetAt"]>()
       .mockResolvedValue(
         solidClient.mockSolidDatasetFrom(
-          "https://some-interesting-value.com"
-        ) as Awaited<ReturnType<typeof solidClient.saveSolidDatasetAt>>
+          "https://some-interesting-value.com",
+        ) as Awaited<ReturnType<typeof solidClient.saveSolidDatasetAt>>,
       ),
     getSolidDataset: jest
       .fn<(typeof SolidClient)["getSolidDataset"]>()
       .mockResolvedValue(
         solidClient.mockSolidDatasetFrom(
-          "https://some-interesting-value.com"
-        ) as Awaited<ReturnType<typeof solidClient.getSolidDataset>>
+          "https://some-interesting-value.com",
+        ) as Awaited<ReturnType<typeof solidClient.getSolidDataset>>,
       ),
   };
 });
@@ -71,13 +71,13 @@ const defaultMockedThing = () =>
 const defaultMockedDataset = () =>
   SolidFns.setThing(
     SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
-    defaultMockedThing()
+    defaultMockedThing(),
   );
 
 const defaultmockedDatasetWithResourceInfo = () =>
   SolidFns.setThing(
     SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
-    defaultMockedThing()
+    defaultMockedThing(),
   );
 
 const inputOptions = {
@@ -92,7 +92,7 @@ describe("<Text /> component snapshot test", () => {
         solidDataset={defaultmockedDatasetWithResourceInfo()}
         thing={defaultMockedThing()}
         property={mockPredicate}
-      />
+      />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -104,7 +104,7 @@ describe("<Text /> component snapshot test", () => {
         <ThingProvider thing={defaultMockedThing()}>
           <Text property={mockPredicate} edit autosave />
         </ThingProvider>
-      </DatasetProvider>
+      </DatasetProvider>,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -118,7 +118,7 @@ describe("<Text /> component snapshot test", () => {
         solidDataset={defaultmockedDatasetWithResourceInfo()}
         thing={defaultMockedThing()}
         property={mockPredicate}
-      />
+      />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -152,7 +152,7 @@ describe("<Text /> component snapshot test", () => {
         loadingComponent={() => (
           <span id="custom-loading-component">loading...</span>
         )}
-      />
+      />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -168,7 +168,7 @@ describe("<Text /> component snapshot test", () => {
       property: mockPredicate,
     });
     const documentBody = render(
-      <Text property={mockPredicate} loadingComponent={null} />
+      <Text property={mockPredicate} loadingComponent={null} />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -177,7 +177,7 @@ describe("<Text /> component snapshot test", () => {
   it("renders default error message if there is an error", () => {
     const emptyThing = SolidFns.createThing();
     const documentBody = render(
-      <Text thing={emptyThing} property="https://example.com/bad-url" />
+      <Text thing={emptyThing} property="https://example.com/bad-url" />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -192,7 +192,7 @@ describe("<Text /> component snapshot test", () => {
         errorComponent={({ error }) => (
           <span id="custom-error-component">{error.toString()}</span>
         )}
-      />
+      />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -204,12 +204,12 @@ describe("<Text /> component functional testing", () => {
     const mockThing = SolidFns.addStringNoLocale(
       SolidFns.createThing(),
       mockPredicate,
-      mockNick
+      mockNick,
     );
 
     const mockDataset = SolidFns.setThing(
       SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
-      mockThing
+      mockThing,
     );
 
     jest.spyOn(SolidFns, "getStringNoLocale");
@@ -219,7 +219,7 @@ describe("<Text /> component functional testing", () => {
         solidDataset={mockDataset}
         thing={mockThing}
         property={mockPredicate}
-      />
+      />,
     );
     expect(SolidFns.getStringNoLocale).toHaveBeenCalled();
     expect(getByText(mockNick)).toBeDefined();
@@ -230,12 +230,12 @@ describe("<Text /> component functional testing", () => {
       SolidFns.createThing(),
       mockPredicate,
       mockNick,
-      "en"
+      "en",
     );
 
     const mockDataset = SolidFns.setThing(
       SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
-      mockThing
+      mockThing,
     );
 
     jest.spyOn(SolidFns, "getStringWithLocale");
@@ -247,7 +247,7 @@ describe("<Text /> component functional testing", () => {
         property={mockPredicate}
         locale="en"
         autosave
-      />
+      />,
     );
     expect(SolidFns.getStringWithLocale).toHaveBeenCalled();
     expect(getByText(mockNick)).toBeDefined();
@@ -257,12 +257,12 @@ describe("<Text /> component functional testing", () => {
     const mockThing = SolidFns.addStringNoLocale(
       SolidFns.createThing(),
       mockPredicate,
-      mockNick
+      mockNick,
     );
 
     const mockDataset = SolidFns.setThing(
       SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
-      mockThing
+      mockThing,
     );
 
     jest.spyOn(SolidFns, "setStringNoLocale");
@@ -275,7 +275,7 @@ describe("<Text /> component functional testing", () => {
         property={mockPredicate}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
@@ -292,12 +292,12 @@ describe("<Text /> component functional testing", () => {
       SolidFns.createThing(),
       mockPredicate,
       mockNick,
-      "en"
+      "en",
     );
 
     const mockDataset = SolidFns.setThing(
       SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
-      mockThing
+      mockThing,
     );
 
     jest.spyOn(SolidFns, "setStringWithLocale");
@@ -311,7 +311,7 @@ describe("<Text /> component functional testing", () => {
         locale="en"
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
@@ -328,12 +328,12 @@ describe("<Text /> component functional testing", () => {
       SolidFns.createThing(),
       mockPredicate,
       mockNick,
-      "en"
+      "en",
     );
 
     const mockDataset = SolidFns.setThing(
       SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
-      mockThing
+      mockThing,
     );
 
     jest.spyOn(SolidFns, "setStringWithLocale");
@@ -347,7 +347,7 @@ describe("<Text /> component functional testing", () => {
         locale="en"
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
@@ -364,12 +364,12 @@ describe("<Text /> component functional testing", () => {
       SolidFns.createThing(),
       mockPredicate,
       mockNick,
-      "en"
+      "en",
     );
 
     const mockDataset = SolidFns.setThing(
       SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
-      mockThing
+      mockThing,
     );
 
     jest.spyOn(SolidFns, "saveSolidDatasetAt");
@@ -380,7 +380,7 @@ describe("<Text /> component functional testing", () => {
         property={mockPredicate}
         locale="en"
         edit
-      />
+      />,
     );
     getByDisplayValue(mockNick).focus();
     getByDisplayValue(mockNick).blur();
@@ -402,7 +402,7 @@ describe("<Text /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
@@ -429,7 +429,7 @@ describe("<Text /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
@@ -444,7 +444,7 @@ describe("<Text /> component functional testing", () => {
 
   it("Should call onError if saving fails", async () => {
     const { saveSolidDatasetAt: mockedSaveDataset } = jest.requireMock(
-      "@inrupt/solid-client"
+      "@inrupt/solid-client",
     ) as jest.Mocked<typeof SolidClient>;
     mockedSaveDataset.mockRejectedValueOnce(null);
     const onError = jest.fn();
@@ -459,7 +459,7 @@ describe("<Text /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
@@ -474,7 +474,7 @@ describe("<Text /> component functional testing", () => {
 
   it("Should call onError if saving fetched dataset to custom location fails", async () => {
     const { saveSolidDatasetAt: mockedSaveDataset } = jest.requireMock(
-      "@inrupt/solid-client"
+      "@inrupt/solid-client",
     ) as jest.Mocked<typeof SolidClient>;
     mockedSaveDataset.mockRejectedValueOnce(null);
     const onError = jest.fn();
@@ -489,7 +489,7 @@ describe("<Text /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue(mockNick);
     input.focus();
@@ -517,7 +517,7 @@ describe("<Text /> component functional testing", () => {
           edit
           autosave
         />
-      </ErrorBoundary>
+      </ErrorBoundary>,
     );
 
     const input = getByDisplayValue(mockNick);
@@ -534,10 +534,10 @@ describe("<Text /> component functional testing", () => {
   });
   it("Should update context with latest dataset after saving", async () => {
     const { getSolidDataset: mockedGet } = jest.requireMock(
-      "@inrupt/solid-client"
+      "@inrupt/solid-client",
     ) as jest.Mocked<typeof SolidClient>;
     const mockedLatestDataset = mockDatasetFromWithChangelog(
-      "https://some.irrelevant.url"
+      "https://some.irrelevant.url",
     );
     mockedGet.mockResolvedValueOnce(mockedLatestDataset);
     const setDataset = jest.fn();
@@ -561,7 +561,7 @@ describe("<Text /> component functional testing", () => {
         locale="en"
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue(mockNick);
     input.focus();

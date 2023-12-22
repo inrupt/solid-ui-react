@@ -49,7 +49,7 @@ describe("getValueByTypeAll", () => {
         dataType as DataType,
         mockThing,
         mockProperty,
-        locale
+        locale,
       );
       expect(value).toBe(mockValue);
 
@@ -59,7 +59,7 @@ describe("getValueByTypeAll", () => {
       }
       expect(mockGetter).toHaveBeenCalledWith(...args);
       expect(mockGetter).toHaveBeenCalledTimes(1);
-    }
+    },
   );
 });
 
@@ -77,11 +77,11 @@ describe("getPropertyForThing", () => {
     const thingWithString = SolidFns.setStringNoLocale(
       mockThing,
       properties[1],
-      "test"
+      "test",
     );
 
     expect(
-      getPropertyForThing(propertySelector, type, thingWithString, properties)
+      getPropertyForThing(propertySelector, type, thingWithString, properties),
     ).toEqual(properties[1]);
   });
 
@@ -96,7 +96,7 @@ describe("getPropertyForThing", () => {
     ];
 
     expect(
-      getPropertyForThing(propertySelector, type, mockThing, properties)
+      getPropertyForThing(propertySelector, type, mockThing, properties),
     ).toEqual(properties[0]);
   });
 
@@ -115,7 +115,7 @@ describe("getPropertyForThing", () => {
       mockThing,
       properties[1],
       "test",
-      locale
+      locale,
     );
 
     expect(
@@ -124,8 +124,8 @@ describe("getPropertyForThing", () => {
         type,
         thingWithString,
         properties,
-        locale
-      )
+        locale,
+      ),
     ).toEqual(properties[1]);
   });
 });

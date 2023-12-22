@@ -40,13 +40,13 @@ let mockThing = SolidFns.mockThingFrom(mockThingUrl);
 mockThing = SolidFns.addStringNoLocale(mockThing, mockPredicate, mockNick);
 mockDatasetWithResourceInfo = SolidFns.setThing(
   mockDatasetWithResourceInfo,
-  mockThing
+  mockThing,
 );
 
 function ExampleComponentWithDataset(): React.ReactElement {
   const [exampleThing, setExampleThing] = React.useState<SolidFns.Thing>();
   const [property, setProperty] = React.useState<string>(
-    "fetching in progress"
+    "fetching in progress",
   );
 
   const datasetContext = React.useContext(DatasetContext);
@@ -63,7 +63,7 @@ function ExampleComponentWithDataset(): React.ReactElement {
     if (exampleThing) {
       const fetchedProperty = SolidFns.getStringNoLocale(
         exampleThing,
-        mockPredicate
+        mockPredicate,
       );
       if (fetchedProperty) {
         setProperty(fetchedProperty);
@@ -98,7 +98,7 @@ function ExampleComponentWithDatasetUrl(): React.ReactElement {
     if (exampleThing) {
       const fetchedProperty = SolidFns.getStringNoLocale(
         exampleThing,
-        mockPredicate
+        mockPredicate,
       );
       if (fetchedProperty) {
         setProperty(fetchedProperty);
@@ -124,7 +124,7 @@ describe("Testing DatasetContext", () => {
     const { baseElement, getByText } = render(
       <DatasetProvider solidDataset={mockDatasetWithResourceInfo}>
         <ExampleComponentWithDataset />
-      </DatasetProvider>
+      </DatasetProvider>,
     );
 
     await waitFor(() => expect(getByText("test nick value")).toBeDefined());
@@ -141,7 +141,7 @@ describe("Testing DatasetContext", () => {
     documentBody = render(
       <DatasetProvider datasetUrl="https://some-broken-resource.com">
         <ExampleComponentWithDataset />
-      </DatasetProvider>
+      </DatasetProvider>,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -155,7 +155,7 @@ describe("Testing DatasetContext", () => {
     documentBody = render(
       <DatasetProvider datasetUrl="https://some-broken-resource.com">
         <ExampleComponentWithDataset />
-      </DatasetProvider>
+      </DatasetProvider>,
     );
 
     const { baseElement } = documentBody;
@@ -173,7 +173,7 @@ describe("Testing DatasetContext", () => {
         loadingComponent={() => <span>loading component</span>}
       >
         <ExampleComponentWithDataset />
-      </DatasetProvider>
+      </DatasetProvider>,
     );
 
     const { baseElement } = documentBody;
@@ -191,7 +191,7 @@ describe("Testing DatasetContext", () => {
         loading={<span>loading</span>}
       >
         <ExampleComponentWithDataset />
-      </DatasetProvider>
+      </DatasetProvider>,
     );
 
     const { baseElement } = documentBody;
@@ -208,7 +208,7 @@ describe("Testing DatasetContext", () => {
         loadingComponent={null}
       >
         <ExampleComponentWithDataset />
-      </DatasetProvider>
+      </DatasetProvider>,
     );
 
     const { baseElement } = documentBody;
@@ -226,7 +226,7 @@ describe("Functional testing", () => {
     render(
       <DatasetProvider datasetUrl={mockUrl}>
         <ExampleComponentWithDatasetUrl />
-      </DatasetProvider>
+      </DatasetProvider>,
     );
     expect(useDataset).toHaveBeenCalled();
   });
@@ -242,7 +242,7 @@ describe("Functional testing", () => {
         datasetUrl="https://some-broken-value.com"
       >
         <ExampleComponentWithDatasetUrl />
-      </DatasetProvider>
+      </DatasetProvider>,
     );
     await waitFor(() => expect(onError).toHaveBeenCalledWith("Error"));
   });

@@ -54,7 +54,7 @@ describe("<LogoutButton /> component snapshot test", () => {
     const documentBody = render(
       <SessionProvider sessionId="key">
         <LogoutButton onLogout={onLogout} onError={onError} />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     const { baseElement } = documentBody;
@@ -69,7 +69,7 @@ describe("<LogoutButton /> component visual testing", () => {
         <LogoutButton onLogout={onLogout} onError={onError}>
           <div>Custom child element</div>
         </LogoutButton>
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     expect(getByText("Custom child element")).toBeTruthy();
@@ -83,7 +83,7 @@ describe("<LogOutButton /> component functional testing", () => {
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <LogoutButton onLogout={onLogout} onError={onError} />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await user.click(getByText("Log Out"));
@@ -98,7 +98,7 @@ describe("<LogOutButton /> component functional testing", () => {
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <LogoutButton onLogout={onLogout} onError={onError} />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     // Focus the button
@@ -116,7 +116,7 @@ describe("<LogOutButton /> component functional testing", () => {
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <LogoutButton onLogout={onLogout} onError={onError} />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     // First focus the button, then press enter:
@@ -134,7 +134,7 @@ describe("<LogOutButton /> component functional testing", () => {
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <LogoutButton onError={onError} />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await user.click(getByText("Log Out"));
@@ -151,7 +151,7 @@ describe("<LogOutButton /> component functional testing", () => {
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <LogoutButton onLogout={onLogout} onError={onError} />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await user.click(getByText("Log Out"));
@@ -168,7 +168,7 @@ describe("<LogOutButton /> component functional testing", () => {
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <LogoutButton onLogout={onLogout} />
-      </SessionProvider>
+      </SessionProvider>,
     );
     await user.click(getByText("Log Out"));
 

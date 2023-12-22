@@ -82,7 +82,7 @@ export function EditFalse({
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
     exampleProperty,
-    exampleUrl
+    exampleUrl,
   );
   return (
     <Video
@@ -121,7 +121,7 @@ export function EditTrue({
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
     exampleProperty,
-    exampleUrl
+    exampleUrl,
   );
 
   return (
@@ -154,7 +154,7 @@ export function ErrorComponent(): ReactElement {
   const exampleThing = SolidFns.addUrl(
     SolidFns.createThing(),
     exampleProperty,
-    exampleUrl
+    exampleUrl,
   );
 
   return (

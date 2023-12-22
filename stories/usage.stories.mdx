@@ -58,7 +58,7 @@ import { useSession, CombinedDataProvider, Text } from "@inrupt/solid-ui-react";
 In your component tree, still within the context of the `SessionProvider`, first
 you can read the WebId of your session with the `useSession` hook.
 A WebId is a URL that links to the profile document stored in your pod -
-which was likely automatically generated for you.  A CombinedDataProvider can
+which was likely automatically generated for you. A CombinedDataProvider can
 then use that WebId to automatically fetch data, and the Text component can display
 that data.
 
@@ -85,7 +85,6 @@ code will display your full name (assuming a standard profile).
 To edit this data, set the `edit` and `autosave` properties to true, which will
 replace the text with an input box. With `autosave`, the data will be automatically
 saved back to the server when you click outside of the textbox:
-
 
 ```
 function Name() {

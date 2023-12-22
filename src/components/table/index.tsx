@@ -70,7 +70,7 @@ export interface TableProps
   getRowProps: (
     row: Row,
     rowThing: Thing,
-    rowDataset: SolidDataset
+    rowDataset: SolidDataset,
   ) => React.HTMLAttributes<HTMLTableRowElement>;
 }
 
@@ -150,7 +150,7 @@ export function Table({
       initialState: { globalFilter: filter || undefined },
     },
     useGlobalFilter,
-    useSortBy
+    useSortBy,
   );
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =

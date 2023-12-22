@@ -102,7 +102,7 @@ describe("Testing SessionContext", () => {
     const documentBody = render(
       <SessionProvider sessionId="key">
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -129,7 +129,7 @@ describe("Testing SessionContext", () => {
     const documentBody = render(
       <SessionProvider>
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -158,7 +158,7 @@ describe("Testing SessionContext", () => {
     render(
       <SessionProvider sessionId="key" onError={onError}>
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -184,7 +184,7 @@ describe("SessionContext functionality", () => {
     render(
       <SessionProvider sessionId="key">
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -221,11 +221,11 @@ describe("SessionContext functionality", () => {
     const screen = render(
       <SessionProvider sessionId="key">
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
     await waitFor(async () => {
       expect(screen.getByTestId("profile").textContent).toBe(
-        "1 alt profiles found"
+        "1 alt profiles found",
       );
     });
     await user.click(screen.getByTestId("logout"));
@@ -257,11 +257,11 @@ describe("SessionContext functionality", () => {
     const screen = render(
       <SessionProvider skipLoadingProfile>
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
     await waitFor(async () => {
       expect(screen.getByTestId("profile").textContent).toBe(
-        "No profile found"
+        "No profile found",
       );
     });
 
@@ -287,7 +287,7 @@ describe("SessionContext functionality", () => {
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -325,7 +325,7 @@ describe("SessionContext functionality", () => {
     const { getByText } = render(
       <SessionProvider sessionId="key" onError={onError}>
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -356,7 +356,7 @@ describe("SessionContext functionality", () => {
     const { getByText } = render(
       <SessionProvider sessionId="key" onError={onError}>
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -388,7 +388,7 @@ describe("SessionContext functionality", () => {
         onSessionRestore={sessionRestoreCallback}
       >
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -397,7 +397,7 @@ describe("SessionContext functionality", () => {
 
     expect(session.events.on).toHaveBeenCalledWith(
       EVENTS.SESSION_RESTORED,
-      sessionRestoreCallback
+      sessionRestoreCallback,
     );
   });
 
@@ -425,7 +425,7 @@ describe("SessionContext functionality", () => {
         onSessionRestore={sessionRestoreCallback}
       >
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -440,7 +440,7 @@ describe("SessionContext functionality", () => {
         onSessionRestore={sessionRestoreCallback}
       >
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -453,7 +453,7 @@ describe("SessionContext functionality", () => {
         onSessionRestore={differentSessionRestoreCallback}
       >
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -463,11 +463,11 @@ describe("SessionContext functionality", () => {
     expect(session.events.on).toHaveBeenCalledTimes(3);
     expect(session.events.on).toHaveBeenCalledWith(
       EVENTS.SESSION_RESTORED,
-      sessionRestoreCallback
+      sessionRestoreCallback,
     );
     expect(session.events.on).toHaveBeenCalledWith(
       EVENTS.SESSION_RESTORED,
-      differentSessionRestoreCallback
+      differentSessionRestoreCallback,
     );
   });
 });

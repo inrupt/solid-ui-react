@@ -344,7 +344,7 @@ UrlValue.args = {
 };
 
 export function WithUnsavedData(
-  props: IValue & { saveDatasetTo: string }
+  props: IValue & { saveDatasetTo: string },
 ): ReactElement {
   const {
     property,
@@ -360,12 +360,12 @@ export function WithUnsavedData(
   const exampleThing = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     property,
-    exampleNick
+    exampleNick,
   );
 
   const exampleDataset = SolidFns.setThing(
     SolidFns.createSolidDataset(),
-    exampleThing
+    exampleThing,
   );
 
   return (
@@ -390,7 +390,7 @@ WithUnsavedData.args = {
 };
 
 export function WithFetchedData(
-  props: IValue & { saveDatasetTo: string; dataType: any }
+  props: IValue & { saveDatasetTo: string; dataType: any },
 ): ReactElement {
   const {
     datasetUrl,
@@ -431,7 +431,7 @@ export function ErrorComponent(): ReactElement {
   const exampleThing = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     exampleProperty,
-    exampleName
+    exampleName,
   );
 
   return (

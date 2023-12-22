@@ -95,13 +95,13 @@ export function BasicExample({
   const thing1 = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 1`
+    `example name 1`,
   );
 
   const thing2 = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 2`
+    `example name 2`,
   );
 
   const emptyDataset = SolidFns.createSolidDataset();

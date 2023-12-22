@@ -34,18 +34,18 @@ const mockNick = "test nick value";
 const mockThing = SolidFns.addStringNoLocale(
   SolidFns.createThing(),
   mockPredicate,
-  mockNick
+  mockNick,
 );
 
 // const mockDataset = SolidFns.setThing(SolidFns.createSolidDataset(), mockThing);
 const mockDatasetWithResourceInfo = SolidFns.setThing(
   SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
-  mockThing
+  mockThing,
 );
 
 function ExampleComponentWithDataset(): React.ReactElement {
   const [property, setProperty] = React.useState<string>(
-    "fetching in progress"
+    "fetching in progress",
   );
 
   const thingContext = React.useContext(ThingContext);
@@ -75,7 +75,7 @@ describe("CombinedProvider", () => {
         thing={mockThing}
       >
         <ExampleComponentWithDataset />
-      </CombinedProvider>
+      </CombinedProvider>,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();

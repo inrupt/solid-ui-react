@@ -102,19 +102,19 @@ const BooleanValue: React.FC<BooleanProps> = (props: BooleanProps) => {
           savedDataset = await saveSolidDatasetAt(
             saveDatasetTo,
             setThing(dataset, updatedResource),
-            { fetch }
+            { fetch },
           );
           await updateDataset(saveDatasetTo, setDataset);
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
             getSourceUrl(dataset),
             setThing(dataset, updatedResource),
-            { fetch }
+            { fetch },
           );
           await updateDataset(getSourceUrl(dataset), setDataset);
         } else if (onError) {
           onError(
-            new Error("Please provide saveDatasetTo location for new data")
+            new Error("Please provide saveDatasetTo location for new data"),
           );
         }
 

@@ -126,11 +126,11 @@ export function WithLocalData(): ReactElement {
   const exampleThing = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     property,
-    name
+    name,
   );
   const dataset = SolidFns.setThing(
     SolidFns.createSolidDataset(),
-    exampleThing
+    exampleThing,
   );
 
   return (

@@ -60,11 +60,11 @@ export type RequireThingOrThingUrl =
 
 // TODO: naming of this provider TBC
 function CombinedDataProvider(
-  props: Dataset & RequireThingOrThingUrl
+  props: Dataset & RequireThingOrThingUrl,
 ): ReactElement;
 
 function CombinedDataProvider(
-  props: DatasetUrl & RequireThingOrThingUrl
+  props: DatasetUrl & RequireThingOrThingUrl,
 ): ReactElement;
 
 /**

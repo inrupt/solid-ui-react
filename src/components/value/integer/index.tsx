@@ -87,7 +87,7 @@ const IntegerValue: React.FC<IntegerProps> = (props: IntegerProps) => {
       const updatedResource = setInteger(
         thing,
         property,
-        parseInt(value as string, 10)
+        parseInt(value as string, 10),
       );
       try {
         let savedDataset;
@@ -95,19 +95,19 @@ const IntegerValue: React.FC<IntegerProps> = (props: IntegerProps) => {
           savedDataset = await saveSolidDatasetAt(
             saveDatasetTo,
             setThing(dataset, updatedResource),
-            { fetch }
+            { fetch },
           );
           await updateDataset(saveDatasetTo, setDataset);
         } else if (hasResourceInfo(dataset)) {
           savedDataset = await saveSolidDatasetAt(
             getSourceUrl(dataset),
             setThing(dataset, updatedResource),
-            { fetch }
+            { fetch },
           );
           await updateDataset(getSourceUrl(dataset), setDataset);
         } else if (onError) {
           onError(
-            new Error("Please provide saveDatasetTo location for new data")
+            new Error("Please provide saveDatasetTo location for new data"),
           );
         }
 

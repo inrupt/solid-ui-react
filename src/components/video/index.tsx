@@ -67,7 +67,7 @@ export function Video({
   const isFetchingThing = !thing && !thingError;
 
   const [error, setError] = useState<Error | undefined>(
-    thingError ?? valueError
+    thingError ?? valueError,
   );
 
   useEffect(() => {
@@ -110,7 +110,7 @@ export function Video({
         fetch,
         maxSize,
         onSave,
-        onError
+        onError,
       );
       if (newObjectUrl) {
         setVideoObjectUrl(newObjectUrl);

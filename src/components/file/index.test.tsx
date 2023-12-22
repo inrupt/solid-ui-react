@@ -46,7 +46,7 @@ describe("<File /> component snapshot test", () => {
 
   it("matches snapshot with input options", () => {
     const documentBody = render(
-      <FileUpload saveLocation="https://fake.url" inputProps={inputOptions} />
+      <FileUpload saveLocation="https://fake.url" inputProps={inputOptions} />,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -58,7 +58,7 @@ describe("<FileUpload /> component functional testing", () => {
     jest
       .spyOn(SolidFns, "saveFileInContainer")
       .mockResolvedValueOnce(
-        SolidFns.mockFileFrom("https://danbarclay.inrupt.net/public/foo.txt")
+        SolidFns.mockFileFrom("https://danbarclay.inrupt.net/public/foo.txt"),
       );
     const onSave = jest.fn();
     const onError = jest.fn();
@@ -75,7 +75,7 @@ describe("<FileUpload /> component functional testing", () => {
         onSave={onSave}
         onError={onError}
         autosave
-      />
+      />,
     );
     const input = getByTestId("form-input");
 
@@ -131,7 +131,7 @@ describe("<FileUpload /> component functional testing", () => {
         onError={onError}
         onSave={onSave}
         autosave
-      />
+      />,
     );
 
     const input = getByTestId("form-input");
@@ -156,7 +156,7 @@ describe("<FileUpload /> component functional testing", () => {
         saveLocation="https://this-will-fail.com"
         onError={onError}
         onSave={onSave}
-      />
+      />,
     );
 
     const input = getByTestId("form-input");

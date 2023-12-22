@@ -66,19 +66,19 @@ export function BasicExample(): ReactElement {
   const thing1A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 1`
+    `example name 1`,
   );
   const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
 
   const thing2A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 2`
+    `example name 2`,
   );
   const thing2 = SolidFns.addDatetime(
     thing2A,
     datePredicate,
-    new Date("1999-01-02")
+    new Date("1999-01-02"),
   );
 
   const emptyDataset = SolidFns.createSolidDataset();
@@ -110,33 +110,33 @@ export function MultipleValues(): ReactElement {
   const thing1A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 1`
+    `example name 1`,
   );
   const thing1B = SolidFns.addStringNoLocale(
     thing1A,
     nickPredicate,
-    `Nickname`
+    `Nickname`,
   );
   const thing1C = SolidFns.addStringNoLocale(
     thing1B,
     nickPredicate,
-    `Alt Nickname`
+    `Alt Nickname`,
   );
   const thing1 = SolidFns.addStringNoLocale(
     thing1C,
     nickPredicate,
-    `Final Nickname`
+    `Final Nickname`,
   );
 
   const thing2A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 2`
+    `example name 2`,
   );
   const thing2 = SolidFns.addStringNoLocale(
     thing2A,
     nickPredicate,
-    `example nickname 2`
+    `example nickname 2`,
   );
 
   const emptyDataset = SolidFns.createSolidDataset();
@@ -174,19 +174,19 @@ export function CustomBodyComponent(): ReactElement {
   const thing1A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 1`
+    `example name 1`,
   );
   const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
 
   const thing2A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 2`
+    `example name 2`,
   );
   const thing2 = SolidFns.addDatetime(
     thing2A,
     datePredicate,
-    new Date("1999-01-02")
+    new Date("1999-01-02"),
   );
 
   const emptyDataset = SolidFns.createSolidDataset();
@@ -268,11 +268,11 @@ export function NestedDataExample(): ReactElement {
     }
     const personThing = SolidFns.getThing(
       solidDataset,
-      `${host}/example.ttl#me`
+      `${host}/example.ttl#me`,
     );
     const alterEgoThing = SolidFns.getThing(
       solidDataset,
-      `${host}/example.ttl#alterEgo`
+      `${host}/example.ttl#alterEgo`,
     );
     if (!personThing || !alterEgoThing) {
       return <p>No matching thing</p>;
@@ -340,19 +340,19 @@ export function SortableColumns(): ReactElement {
   const thing1A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 1`
+    `example name 1`,
   );
   const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
 
   const thing2A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 2`
+    `example name 2`,
   );
   const thing2 = SolidFns.addDatetime(
     thing2A,
     datePredicate,
-    new Date("1999-01-02")
+    new Date("1999-01-02"),
   );
 
   const emptyDataset = SolidFns.createSolidDataset();
@@ -396,19 +396,19 @@ export function FilterOnFirstColumn({
   const thing1A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 1`
+    `example name 1`,
   );
   const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
 
   const thing2A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 2`
+    `example name 2`,
   );
   const thing2 = SolidFns.addDatetime(
     thing2A,
     datePredicate,
-    new Date("1999-01-02")
+    new Date("1999-01-02"),
   );
 
   const emptyDataset = SolidFns.createSolidDataset();
@@ -451,19 +451,19 @@ export function SortingFunctionOnFirstColumn(): ReactElement {
   const thing1A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    "Another Name"
+    "Another Name",
   );
   const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
 
   const thing2A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    "Name A"
+    "Name A",
   );
   const thing2 = SolidFns.addDatetime(
     thing2A,
     datePredicate,
-    new Date("1999-01-02")
+    new Date("1999-01-02"),
   );
 
   const emptyDataset = SolidFns.createSolidDataset();
@@ -506,19 +506,19 @@ export function NoDataComponent(): ReactElement {
   const thing1A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 1`
+    `example name 1`,
   );
   const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
 
   const thing2A = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     namePredicate,
-    `example name 2`
+    `example name 2`,
   );
   const thing2 = SolidFns.addDatetime(
     thing2A,
     datePredicate,
-    new Date("1999-01-02")
+    new Date("1999-01-02"),
   );
 
   const emptyDataset = SolidFns.createSolidDataset();

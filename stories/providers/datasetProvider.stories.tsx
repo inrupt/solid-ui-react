@@ -63,7 +63,7 @@ interface IExampleComponentWithDatasetUrl {
 }
 
 function ExampleComponentWithDatasetUrl(
-  props: IExampleComponentWithDatasetUrl
+  props: IExampleComponentWithDatasetUrl,
 ): ReactElement {
   const { thingUrl, property: propertyUrl } = props;
 
@@ -84,7 +84,7 @@ function ExampleComponentWithDatasetUrl(
     if (exampleThing) {
       const fetchedProperty = SolidFns.getStringNoLocale(
         exampleThing,
-        propertyUrl
+        propertyUrl,
       );
       if (fetchedProperty) {
         setProperty(fetchedProperty);
@@ -117,7 +117,7 @@ function ExampleComponentWithDataset(): ReactElement {
     if (exampleThing) {
       const fetchedProperty = SolidFns.getStringNoLocale(
         exampleThing,
-        "http://xmlns.com/foaf/0.1/name"
+        "http://xmlns.com/foaf/0.1/name",
       );
       if (fetchedProperty) {
         setProperty(fetchedProperty);
@@ -139,11 +139,11 @@ export function WithLocalDataset(): ReactElement {
   const exampleThing = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     property,
-    name
+    name,
   );
   const dataset = SolidFns.setThing(
     SolidFns.createSolidDataset(),
-    exampleThing
+    exampleThing,
   );
 
   return (

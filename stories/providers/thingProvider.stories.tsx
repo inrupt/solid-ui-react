@@ -54,7 +54,7 @@ interface IExampleComponentWithThingUrl {
 }
 
 function ExampleComponentWithThingUrl(
-  props: IExampleComponentWithThingUrl
+  props: IExampleComponentWithThingUrl,
 ): ReactElement {
   const { property: propertyUrl } = props;
 
@@ -67,7 +67,7 @@ function ExampleComponentWithThingUrl(
     if (thing) {
       const fetchedProperty = SolidFns.getStringNoLocale(
         thing,
-        propertyUrl as string
+        propertyUrl as string,
       );
 
       if (fetchedProperty) {
@@ -96,7 +96,7 @@ function ExampleComponentWithThing(): ReactElement {
     if (thing) {
       const fetchedProperty = SolidFns.getStringNoLocale(
         thing,
-        "http://xmlns.com/foaf/0.1/name"
+        "http://xmlns.com/foaf/0.1/name",
       );
       if (fetchedProperty) {
         setProperty(fetchedProperty);
@@ -118,7 +118,7 @@ export function WithLocalThing(): ReactElement {
   const exampleThing = SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     property,
-    name
+    name,
   );
 
   return (

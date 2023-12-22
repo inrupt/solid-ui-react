@@ -56,7 +56,7 @@ describe("<LoginButton /> component snapshot test", () => {
           redirectUrl="https://test.url/redirect"
           onError={onError}
         />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     const { baseElement } = documentBody;
@@ -76,7 +76,7 @@ describe("<LoginButton /> component visual testing", () => {
         >
           <div>Custom child element</div>
         </LoginButton>
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     expect(getByText("Custom child element")).toBeTruthy();
@@ -97,7 +97,7 @@ describe("<LoginButton /> component functional testing", () => {
           redirectUrl={redirectUrl}
           onError={onError}
         />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await user.click(getByText("Log In"));
@@ -121,7 +121,7 @@ describe("<LoginButton /> component functional testing", () => {
           redirectUrl={redirectUrl}
           onError={onError}
         />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     getByText("Log In").focus();
@@ -147,7 +147,7 @@ describe("<LoginButton /> component functional testing", () => {
           redirectUrl={redirectUrl}
           onError={onError}
         />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     getByText("Log In").focus();
@@ -169,7 +169,7 @@ describe("<LoginButton /> component functional testing", () => {
           redirectUrl="https://test.url/redirect"
           onError={onError}
         />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await user.click(getByText("Log In"));
@@ -188,7 +188,7 @@ describe("<LoginButton /> component functional testing", () => {
           oidcIssuer="https://test.url"
           redirectUrl="https://test.url/redirect"
         />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await user.click(getByText("Log In"));

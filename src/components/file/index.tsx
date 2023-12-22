@@ -64,7 +64,7 @@ export function FileUpload({
         {
           slug: target.files[0].name ? target.files[0].name : undefined,
           fetch,
-        }
+        },
       );
       if (onSave) {
         onSave(savedFile);

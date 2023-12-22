@@ -85,7 +85,7 @@ export function Image({
   const isFetchingThing = !thing && !thingError;
 
   const [error, setError] = useState<Error | undefined>(
-    thingError ?? valueError
+    thingError ?? valueError,
   );
 
   useEffect(() => {
@@ -152,7 +152,7 @@ export function Image({
           fetch,
           maxSize,
           onSave,
-          onError
+          onError,
         );
 
         if (newObjectUrl) {

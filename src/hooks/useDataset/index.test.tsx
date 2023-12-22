@@ -90,7 +90,7 @@ describe("useDataset() hook", () => {
       () => useDataset(mockDatasetIri, mockOptions),
       {
         wrapper,
-      }
+      },
     );
 
     expect(mockGetSolidDataset).toHaveBeenCalledTimes(1);
@@ -112,7 +112,9 @@ describe("useDataset() hook", () => {
     expect(mockGetSolidDataset).toHaveBeenCalledWith(mockDatasetIri, {
       fetch: mockFetch,
     });
-    await waitFor(() => expect(result.current.error.message).toBe("async error"));
+    await waitFor(() =>
+      expect(result.current.error.message).toBe("async error"),
+    );
   });
 
   it("should attempt to return dataset from context if uri is not defined", async () => {
@@ -121,7 +123,6 @@ describe("useDataset() hook", () => {
     });
 
     expect(mockGetSolidDataset).toHaveBeenCalledTimes(0);
-
 
     expect(result.current.dataset).toBe(mockContextDataset);
   });

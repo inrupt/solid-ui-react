@@ -35,21 +35,21 @@ const testCopyrightYear = 1980;
 const mockThing = SolidFns.addInteger(
   SolidFns.createThing(),
   mockPredicate,
-  mockCopyrightYear
+  mockCopyrightYear,
 );
 
 const mockDataset = SolidFns.setThing(
   SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
-  mockThing
+  mockThing,
 );
 const mockDatasetWithResourceInfo = SolidFns.setThing(
   SolidFns.mockContainerFrom("https://some-interesting-value.com/"),
-  mockThing
+  mockThing,
 );
 
 const savedDataset = SolidFns.setThing(
   SolidFns.mockSolidDatasetFrom("https://example.pod/resource"),
-  SolidFns.createThing()
+  SolidFns.createThing(),
 );
 const latestDataset = SolidFns.setThing(savedDataset, SolidFns.createThing());
 
@@ -67,7 +67,7 @@ describe("<IntegerValue /> component functional testing", () => {
         solidDataset={mockDatasetWithResourceInfo}
         thing={mockThing}
         property={mockPredicate}
-      />
+      />,
     );
 
     expect(mockGetter).toHaveBeenCalled();
@@ -95,7 +95,7 @@ describe("<IntegerValue /> component functional testing", () => {
         edit
         autosave
         inputProps={{ title: "test title" }}
-      />
+      />,
     );
 
     const input = getByTitle("test title");
@@ -117,7 +117,7 @@ describe("<IntegerValue /> component functional testing", () => {
         property={mockPredicate}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue(mockCopyrightYear);
     input.focus();
@@ -134,7 +134,7 @@ describe("<IntegerValue /> component functional testing", () => {
         property={mockPredicate}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue(mockCopyrightYear);
@@ -155,7 +155,7 @@ describe("<IntegerValue /> component functional testing", () => {
         thing={mockThing}
         property={mockPredicate}
         edit
-      />
+      />,
     );
     getByDisplayValue(mockCopyrightYear).focus();
     getByDisplayValue(mockCopyrightYear).blur();
@@ -177,7 +177,7 @@ describe("<IntegerValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue(mockCopyrightYear);
     input.focus();
@@ -205,7 +205,7 @@ describe("<IntegerValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue(mockCopyrightYear);
     input.focus();
@@ -238,7 +238,7 @@ describe("<IntegerValue /> component functional testing", () => {
         property={mockPredicate}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue(mockCopyrightYear);
@@ -273,7 +273,7 @@ describe("<IntegerValue /> component functional testing", () => {
         property={mockPredicate}
         saveDatasetTo="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
         onError={onError}
-      />
+      />,
     );
     await waitFor(() => expect(onError).toHaveBeenCalled());
   });
@@ -292,7 +292,7 @@ describe("<IntegerValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue(mockCopyrightYear);
@@ -319,7 +319,7 @@ describe("<IntegerValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue(mockCopyrightYear);
@@ -335,7 +335,7 @@ describe("<IntegerValue /> component functional testing", () => {
   it("Should call onError if trying to save a non-fetched dataset without saveDatasetTo", async () => {
     const mockUnfetchedDataset = SolidFns.setThing(
       SolidFns.createSolidDataset(),
-      mockThing
+      mockThing,
     );
 
     const onError = jest.fn();
@@ -349,7 +349,7 @@ describe("<IntegerValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue(mockCopyrightYear);
