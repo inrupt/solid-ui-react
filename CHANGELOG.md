@@ -4,6 +4,12 @@ This project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html
 
 ## Unreleased
 
+## [3.0.0](https://github.com/inrupt/solid-ui-react/releases/tag/v3.0.0) - 2023-12-22
+
+### Breaking changes
+
+- Node 16 is no longer supported, this requires Node 18 or higher to be built.
+
 ## 2.9.1 ( December 19, 2023)
 
 - Use non-deprecated events API from solid-client-authn-js

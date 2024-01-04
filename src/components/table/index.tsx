@@ -1,40 +1,42 @@
-/**
- * Copyright 2020 Inrupt Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { ReactElement, useMemo, Children, ReactNode } from "react";
-import { SolidDataset, Thing, Url, UrlString } from "@inrupt/solid-client";
-import {
-  useTable,
+import type { ReactElement, ReactNode } from "react";
+import React, { useMemo, Children } from "react";
+import type { SolidDataset, Thing, Url, UrlString } from "@inrupt/solid-client";
+import type {
   Column,
   Row,
-  useSortBy,
-  useGlobalFilter,
   Renderer,
   CellProps,
   HeaderProps,
 } from "react-table";
-import { DataType, getValueByType, getValueByTypeAll } from "../../helpers";
+import { useTable, useSortBy, useGlobalFilter } from "react-table";
+import type { DataType } from "../../helpers";
+import { getValueByType, getValueByTypeAll } from "../../helpers";
 import CombinedDataProvider from "../../context/combinedDataContext";
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export type TableColumnProps = {
   body?: Renderer<CellProps<any>>;
@@ -70,7 +72,7 @@ export interface TableProps
   getRowProps: (
     row: Row,
     rowThing: Thing,
-    rowDataset: SolidDataset
+    rowDataset: SolidDataset,
   ) => React.HTMLAttributes<HTMLTableRowElement>;
 }
 
@@ -150,7 +152,7 @@ export function Table({
       initialState: { globalFilter: filter || undefined },
     },
     useGlobalFilter,
-    useSortBy
+    useSortBy,
   );
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
