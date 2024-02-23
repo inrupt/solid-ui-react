@@ -9,16 +9,16 @@ concurrency:
   cancel-in-progress: true
 jobs:
   lint:
-    uses: inrupt/typescript-sdk-tools/.github/workflows/reusable-lint.yml@v2.5.0
+    uses: inrupt/typescript-sdk-tools/.github/workflows/reusable-lint.yml@v3.2.0
 
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ["20.x", "18.x", "16.x"]
+        node-version: ["20.x", "18.x"]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
@@ -27,7 +27,7 @@ jobs:
       - run: npm run test
       - name: Archive code coverage results
         if: ${{ github.actor != 'dependabot[bot]' }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: code-coverage-report
           path: coverage
@@ -42,11 +42,11 @@ jobs:
           # Sonar analysis needs the full history for features like automatic assignment of bugs. If the following step
           # is not included the project will show a warning about incomplete information.
           fetch-depth: 0
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: code-coverage-report
           path: coverage/
-      - uses: SonarSource/sonarcloud-github-action@v1.9
+      - uses: SonarSource/sonarcloud-github-action@v2.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

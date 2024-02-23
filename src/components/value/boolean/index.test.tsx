@@ -1,23 +1,23 @@
-/**
- * Copyright 2020 Inrupt Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 
 import { jest, it, describe, expect, beforeEach } from "@jest/globals";
 
@@ -33,7 +33,7 @@ import BooleanValue from ".";
 
 jest.mock("@inrupt/solid-client", () => {
   const solidClient = jest.requireActual(
-    "@inrupt/solid-client"
+    "@inrupt/solid-client",
   ) as typeof SolidClient;
   return {
     ...solidClient,
@@ -42,15 +42,15 @@ jest.mock("@inrupt/solid-client", () => {
       .fn<(typeof SolidClient)["saveSolidDatasetAt"]>()
       .mockResolvedValue(
         solidClient.mockSolidDatasetFrom(
-          "https://some-interesting-value.com"
-        ) as Awaited<ReturnType<typeof solidClient.saveSolidDatasetAt>>
+          "https://some-interesting-value.com",
+        ) as Awaited<ReturnType<typeof solidClient.saveSolidDatasetAt>>,
       ),
     getSolidDataset: jest
       .fn<(typeof SolidClient)["getSolidDataset"]>()
       .mockResolvedValue(
         solidClient.mockSolidDatasetFrom(
-          "https://some-interesting-value.com"
-        ) as Awaited<ReturnType<typeof solidClient.getSolidDataset>>
+          "https://some-interesting-value.com",
+        ) as Awaited<ReturnType<typeof solidClient.getSolidDataset>>,
       ),
   };
 });
@@ -68,23 +68,23 @@ const defaultMockedThing = () =>
   SolidFns.addStringNoLocale(
     SolidFns.createThing(),
     mockPredicate,
-    mockBoolean
+    mockBoolean,
   );
 
 const defaultMockDataset = () =>
   SolidFns.setThing(
     SolidFns.mockSolidDatasetFrom("https://some-interesting-value.com"),
-    defaultMockedThing()
+    defaultMockedThing(),
   );
 const defaultMockedDatasetWithResourceInfo = () =>
   SolidFns.setThing(
     SolidFns.mockContainerFrom("https://some-interesting-value.com/"),
-    defaultMockedThing()
+    defaultMockedThing(),
   );
 
 const savedDataset = SolidFns.setThing(
   SolidFns.mockSolidDatasetFrom("https://example.pod/resource"),
-  SolidFns.createThing()
+  SolidFns.createThing(),
 );
 
 const mockValue = true;
@@ -97,12 +97,12 @@ describe("<BooleanValue /> component functional testing", () => {
     const mockedThing = SolidClient.setBoolean(
       SolidClient.createThing(),
       mockPredicate,
-      true
+      true,
     );
 
     const mockedDataset = SolidClient.setThing(
       SolidClient.createSolidDataset(),
-      mockedThing
+      mockedThing,
     );
 
     jest.spyOn(SolidFns, "getBoolean");
@@ -112,7 +112,7 @@ describe("<BooleanValue /> component functional testing", () => {
         solidDataset={mockedDataset}
         thing={mockedThing}
         property={mockPredicate}
-      />
+      />,
     );
 
     expect(SolidFns.getBoolean).toHaveBeenCalled();
@@ -124,12 +124,12 @@ describe("<BooleanValue /> component functional testing", () => {
     const mockedThing = SolidClient.setBoolean(
       SolidClient.createThing(),
       mockPredicate,
-      true
+      true,
     );
 
     const mockedDataset = SolidClient.setThing(
       SolidClient.createSolidDataset(),
-      mockedThing
+      mockedThing,
     );
 
     // Be careful to call spyOn after the setup is done.
@@ -144,7 +144,7 @@ describe("<BooleanValue /> component functional testing", () => {
         edit
         autosave
         inputProps={{ title: "test title" }}
-      />
+      />,
     );
     const input = getByTitle("test title");
     input.focus();
@@ -159,12 +159,12 @@ describe("<BooleanValue /> component functional testing", () => {
     const mockedThing = SolidClient.setBoolean(
       SolidClient.createThing(),
       mockPredicate,
-      false
+      false,
     );
 
     const mockedDataset = SolidClient.setThing(
       SolidClient.createSolidDataset(),
-      mockedThing
+      mockedThing,
     );
 
     // Be careful to call spyOn after the setup is done.
@@ -180,7 +180,7 @@ describe("<BooleanValue /> component functional testing", () => {
         property={mockPredicate}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue("false");
     input.focus();
@@ -197,7 +197,7 @@ describe("<BooleanValue /> component functional testing", () => {
         property={mockPredicate}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue("false");
     input.focus();
@@ -216,7 +216,7 @@ describe("<BooleanValue /> component functional testing", () => {
         thing={defaultMockedThing()}
         property={mockPredicate}
         edit
-      />
+      />,
     );
     getByDisplayValue("false").focus();
     getByDisplayValue("false").blur();
@@ -236,7 +236,7 @@ describe("<BooleanValue /> component functional testing", () => {
         onError={jest.fn()}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue("false");
     input.focus();
@@ -262,7 +262,7 @@ describe("<BooleanValue /> component functional testing", () => {
         onError={jest.fn()}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue("false");
     input.focus();
@@ -285,10 +285,10 @@ describe("<BooleanValue /> component functional testing", () => {
       property: mockPredicate,
     });
     const { getSolidDataset: mockedGet } = jest.requireMock(
-      "@inrupt/solid-client"
+      "@inrupt/solid-client",
     ) as jest.Mocked<typeof SolidClient>;
     const mockedLatestDataset = mockDatasetFromWithChangelog(
-      "https://some.irrelevant.url"
+      "https://some.irrelevant.url",
     );
     mockedGet.mockResolvedValueOnce(mockedLatestDataset);
 
@@ -300,7 +300,7 @@ describe("<BooleanValue /> component functional testing", () => {
         property={mockPredicate}
         edit
         autosave
-      />
+      />,
     );
     const input = getByDisplayValue("false");
     input.focus();
@@ -314,7 +314,7 @@ describe("<BooleanValue /> component functional testing", () => {
   });
   it("Should call onError if saving fails", async () => {
     const { saveSolidDatasetAt: mockedSaveDataset } = jest.requireMock(
-      "@inrupt/solid-client"
+      "@inrupt/solid-client",
     ) as jest.Mocked<typeof SolidClient>;
     mockedSaveDataset.mockRejectedValueOnce(null);
     const onError = jest.fn();
@@ -329,7 +329,7 @@ describe("<BooleanValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue("false");
@@ -344,7 +344,7 @@ describe("<BooleanValue /> component functional testing", () => {
 
   it("Should call onError if Thing not found", async () => {
     const { saveSolidDatasetAt: mockedSaveDataset } = jest.requireMock(
-      "@inrupt/solid-client"
+      "@inrupt/solid-client",
     ) as jest.Mocked<typeof SolidClient>;
     mockedSaveDataset.mockRejectedValueOnce(null);
     jest.spyOn(helpers, "useProperty").mockReturnValueOnce({
@@ -365,7 +365,7 @@ describe("<BooleanValue /> component functional testing", () => {
         property={mockPredicate}
         saveDatasetTo="https://ldp.demo-ess.inrupt.com/norbertand/profile/card"
         onError={onError}
-      />
+      />,
     );
 
     await waitFor(() => expect(onError).toHaveBeenCalled());
@@ -373,7 +373,7 @@ describe("<BooleanValue /> component functional testing", () => {
 
   it("Should call onError if saving fetched dataset to custom location fails", async () => {
     const { saveSolidDatasetAt: mockedSaveDataset } = jest.requireMock(
-      "@inrupt/solid-client"
+      "@inrupt/solid-client",
     ) as jest.Mocked<typeof SolidClient>;
     mockedSaveDataset.mockRejectedValueOnce(null);
     const onError = jest.fn();
@@ -388,7 +388,7 @@ describe("<BooleanValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue("false");
@@ -404,7 +404,7 @@ describe("<BooleanValue /> component functional testing", () => {
   it("Should call onError if trying to save a non-fetched dataset without saveDatasetTo", async () => {
     const mockUnfetchedDataset = SolidFns.setThing(
       SolidFns.createSolidDataset(),
-      defaultMockedThing()
+      defaultMockedThing(),
     );
 
     const onError = jest.fn();
@@ -418,7 +418,7 @@ describe("<BooleanValue /> component functional testing", () => {
         onError={onError}
         edit
         autosave
-      />
+      />,
     );
 
     const input = getByDisplayValue("false");

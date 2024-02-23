@@ -22,6 +22,11 @@ module.exports = {
     "no-shadow": ["warn", { allow: ["fetch"] }],
     "react/require-default-props": "warn",
     "react/default-props-match-prop-types": "warn",
+    "react/function-component-definition": "off",
     noImplicitAny: "off",
+    // FIXME: re-enable the following
+    "react/no-unstable-nested-components": "off",
+    "react/jsx-no-bind": "off",
+    "react/jsx-no-constructed-context-values": "off"
   },
 };

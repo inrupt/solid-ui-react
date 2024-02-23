@@ -1,23 +1,23 @@
-/**
- * Copyright 2020 Inrupt Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 
 import * as React from "react";
 import { render, waitFor } from "@testing-library/react";
@@ -28,14 +28,25 @@ import {
   logout,
   handleIncomingRedirect,
   getDefaultSession,
-  onSessionRestore,
+  EVENTS,
 } from "@inrupt/solid-client-authn-browser";
 
 import { getProfileAll } from "@inrupt/solid-client";
 
 import { SessionContext, SessionProvider } from ".";
 
-jest.mock("@inrupt/solid-client-authn-browser");
+jest.mock("@inrupt/solid-client-authn-browser", () => {
+  const authnModule = jest.requireActual("@inrupt/solid-client-authn-browser");
+  return {
+    EVENTS: authnModule.EVENTS,
+    getDefaultSession: jest.fn().mockReturnValue({
+      events: { on: jest.fn() },
+    }),
+    handleIncomingRedirect: jest.fn(),
+    login: jest.fn(),
+    logout: jest.fn(),
+  };
+});
 jest.mock("@inrupt/solid-client");
 
 function ChildComponent(): React.ReactElement {
@@ -83,15 +94,15 @@ describe("Testing SessionContext", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
-    } as any;
+      events: { on: jest.fn() },
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
     const documentBody = render(
       <SessionProvider sessionId="key">
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -110,15 +121,15 @@ describe("Testing SessionContext", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
-    } as any;
+      events: { on: jest.fn() },
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
     const documentBody = render(
       <SessionProvider>
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -137,8 +148,8 @@ describe("Testing SessionContext", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
-    } as any;
+      events: { on: jest.fn() },
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -147,7 +158,7 @@ describe("Testing SessionContext", () => {
     render(
       <SessionProvider sessionId="key" onError={onError}>
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -165,15 +176,15 @@ describe("SessionContext functionality", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
-    } as any;
+      events: { on: jest.fn() },
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
     render(
       <SessionProvider sessionId="key">
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -201,8 +212,8 @@ describe("SessionContext functionality", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
-    } as any;
+      events: { on: jest.fn() },
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -210,11 +221,11 @@ describe("SessionContext functionality", () => {
     const screen = render(
       <SessionProvider sessionId="key">
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
     await waitFor(async () => {
       expect(screen.getByTestId("profile").textContent).toBe(
-        "1 alt profiles found"
+        "1 alt profiles found",
       );
     });
     await user.click(screen.getByTestId("logout"));
@@ -238,19 +249,19 @@ describe("SessionContext functionality", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
-    } as any;
+      events: { on: jest.fn() },
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
     const screen = render(
       <SessionProvider skipLoadingProfile>
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
     await waitFor(async () => {
       expect(screen.getByTestId("profile").textContent).toBe(
-        "No profile found"
+        "No profile found",
       );
     });
 
@@ -267,8 +278,8 @@ describe("SessionContext functionality", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
-    } as any;
+      events: { on: jest.fn() },
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -276,7 +287,7 @@ describe("SessionContext functionality", () => {
     const { getByText } = render(
       <SessionProvider sessionId="key">
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -305,8 +316,8 @@ describe("SessionContext functionality", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
-    } as any;
+      events: { on: jest.fn() },
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -314,7 +325,7 @@ describe("SessionContext functionality", () => {
     const { getByText } = render(
       <SessionProvider sessionId="key" onError={onError}>
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -336,8 +347,8 @@ describe("SessionContext functionality", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
-    } as any;
+      events: { on: jest.fn() },
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -345,7 +356,7 @@ describe("SessionContext functionality", () => {
     const { getByText } = render(
       <SessionProvider sessionId="key" onError={onError}>
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -365,8 +376,8 @@ describe("SessionContext functionality", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
-    } as any;
+      events: { on: jest.fn() },
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -377,14 +388,17 @@ describe("SessionContext functionality", () => {
         onSessionRestore={sessionRestoreCallback}
       >
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
       expect(handleIncomingRedirect).toHaveBeenCalled();
     });
 
-    expect(onSessionRestore).toHaveBeenCalledWith(sessionRestoreCallback);
+    expect(session.events.on).toHaveBeenCalledWith(
+      EVENTS.SESSION_RESTORED,
+      sessionRestoreCallback,
+    );
   });
 
   it("does not register a session restore callback on every render unless it changes", async () => {
@@ -395,8 +409,8 @@ describe("SessionContext functionality", () => {
         isLoggedIn: true,
         webId: "https://fakeurl.com/me",
       },
-      on: jest.fn(),
-    } as any;
+      events: { on: jest.fn() },
+    };
 
     (getDefaultSession as jest.Mock).mockReturnValue(session);
 
@@ -411,7 +425,7 @@ describe("SessionContext functionality", () => {
         onSessionRestore={sessionRestoreCallback}
       >
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -426,7 +440,7 @@ describe("SessionContext functionality", () => {
         onSessionRestore={sessionRestoreCallback}
       >
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
@@ -439,17 +453,21 @@ describe("SessionContext functionality", () => {
         onSessionRestore={differentSessionRestoreCallback}
       >
         <ChildComponent />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await waitFor(() => {
       expect(handleIncomingRedirect).toHaveBeenCalled();
     });
 
-    expect(onSessionRestore).toHaveBeenCalledTimes(2);
-    expect(onSessionRestore).toHaveBeenCalledWith(sessionRestoreCallback);
-    expect(onSessionRestore).toHaveBeenCalledWith(
-      differentSessionRestoreCallback
+    expect(session.events.on).toHaveBeenCalledTimes(3);
+    expect(session.events.on).toHaveBeenCalledWith(
+      EVENTS.SESSION_RESTORED,
+      sessionRestoreCallback,
+    );
+    expect(session.events.on).toHaveBeenCalledWith(
+      EVENTS.SESSION_RESTORED,
+      differentSessionRestoreCallback,
     );
   });
 });

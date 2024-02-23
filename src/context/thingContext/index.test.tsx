@@ -1,27 +1,28 @@
-/**
- * Copyright 2020 Inrupt Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
-import { RenderResult, render } from "@testing-library/react";
+import type { RenderResult } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import SolidFns from "@inrupt/solid-client";
 import ThingContext, { ThingProvider } from ".";
 import { DatasetProvider } from "../datasetContext";
@@ -38,12 +39,12 @@ let mockThing = SolidFns.mockThingFrom(mockThingUrl);
 mockThing = SolidFns.addStringNoLocale(mockThing, mockPredicate, mockNick);
 mockDatasetWithResourceInfo = SolidFns.setThing(
   mockDatasetWithResourceInfo,
-  mockThing
+  mockThing,
 );
 
 function ExampleComponentWithThing(): React.ReactElement {
   const [property, setProperty] = React.useState<string>(
-    "fetching in progress"
+    "fetching in progress",
   );
   const thingContext = React.useContext(ThingContext);
   const { thing } = thingContext;
@@ -52,7 +53,7 @@ function ExampleComponentWithThing(): React.ReactElement {
     if (thing) {
       const fetchedProperty = SolidFns.getStringNoLocale(
         thing,
-        "http://xmlns.com/foaf/0.1/name"
+        "http://xmlns.com/foaf/0.1/name",
       );
       if (fetchedProperty) {
         setProperty(fetchedProperty);
@@ -70,7 +71,7 @@ function ExampleComponentWithThing(): React.ReactElement {
 function ExampleComponentWithThingUrl(): React.ReactElement {
   const examplePredicate = "http://xmlns.com/foaf/0.1/nick";
   const [property, setProperty] = React.useState<string>(
-    "fetching in progress"
+    "fetching in progress",
   );
 
   const thingContext = React.useContext(ThingContext);
@@ -80,7 +81,7 @@ function ExampleComponentWithThingUrl(): React.ReactElement {
     if (thing) {
       const fetchedProperty = SolidFns.getStringNoLocale(
         thing,
-        examplePredicate
+        examplePredicate,
       );
       if (fetchedProperty) {
         setProperty(fetchedProperty);
@@ -103,13 +104,13 @@ describe("Testing ThingContext matches snapshot", () => {
     const exampleThing = SolidFns.addStringNoLocale(
       SolidFns.createThing(),
       property,
-      name
+      name,
     );
 
     documentBody = render(
       <ThingProvider thing={exampleThing}>
         <ExampleComponentWithThing />
-      </ThingProvider>
+      </ThingProvider>,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();
@@ -122,7 +123,7 @@ describe("Testing ThingContext matches snapshot", () => {
         <ThingProvider thingUrl="https://some-interesting-value.com">
           <ExampleComponentWithThingUrl />
         </ThingProvider>
-      </DatasetProvider>
+      </DatasetProvider>,
     );
     const { baseElement } = documentBody;
     expect(baseElement).toMatchSnapshot();

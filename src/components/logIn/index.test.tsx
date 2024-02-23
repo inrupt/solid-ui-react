@@ -1,23 +1,23 @@
-/**
- * Copyright 2020 Inrupt Inc.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to use,
- * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
- * Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
 
 import * as React from "react";
 import { render } from "@testing-library/react";
@@ -37,8 +37,8 @@ const onError = jest.fn().mockResolvedValue(null);
 
 const session = {
   info: { isLoggedIn: false },
-  on: jest.fn(),
-} as any;
+  events: { on: jest.fn() },
+};
 
 beforeEach(() => {
   jest.resetAllMocks();
@@ -56,7 +56,7 @@ describe("<LoginButton /> component snapshot test", () => {
           redirectUrl="https://test.url/redirect"
           onError={onError}
         />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     const { baseElement } = documentBody;
@@ -76,7 +76,7 @@ describe("<LoginButton /> component visual testing", () => {
         >
           <div>Custom child element</div>
         </LoginButton>
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     expect(getByText("Custom child element")).toBeTruthy();
@@ -97,7 +97,7 @@ describe("<LoginButton /> component functional testing", () => {
           redirectUrl={redirectUrl}
           onError={onError}
         />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await user.click(getByText("Log In"));
@@ -121,7 +121,7 @@ describe("<LoginButton /> component functional testing", () => {
           redirectUrl={redirectUrl}
           onError={onError}
         />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     getByText("Log In").focus();
@@ -147,7 +147,7 @@ describe("<LoginButton /> component functional testing", () => {
           redirectUrl={redirectUrl}
           onError={onError}
         />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     getByText("Log In").focus();
@@ -169,7 +169,7 @@ describe("<LoginButton /> component functional testing", () => {
           redirectUrl="https://test.url/redirect"
           onError={onError}
         />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await user.click(getByText("Log In"));
@@ -188,7 +188,7 @@ describe("<LoginButton /> component functional testing", () => {
           oidcIssuer="https://test.url"
           redirectUrl="https://test.url/redirect"
         />
-      </SessionProvider>
+      </SessionProvider>,
     );
 
     await user.click(getByText("Log In"));
