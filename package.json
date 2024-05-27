@@ -40,7 +40,7 @@
     "@inrupt/eslint-config-react": "^3.0.2",
     "@inrupt/jest-jsdom-polyfills": "^3.0.2",
     "@mui/material": "^5.15.1",
-    "@storybook/addon-actions": "^7.6.6",
+    "@storybook/addon-actions": "^8.1.3",
     "@storybook/addon-docs": "^7.6.6",
     "@storybook/addon-essentials": "^7.6.6",
     "@storybook/addon-knobs": "^7.0.2",
