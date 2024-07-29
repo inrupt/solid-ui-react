@@ -22,12 +22,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ReactElement } from "react";
 import React from "react";
-import SolidFns from "@inrupt/solid-client";
 import type { DataType } from "../../src/helpers";
 import { Value } from "../../src/components/value";
 import { DatasetProvider } from "../../src/context/datasetContext";
 import { ThingProvider } from "../../src/context/thingContext";
 import config from "../config";
+import { addStringNoLocale, createThing, setThing, createSolidDataset } from "@inrupt/solid-client";
 
 const { host } = config();
 
@@ -358,14 +358,14 @@ export function WithUnsavedData(
   } = props;
   const exampleNick = "example value";
 
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const exampleThing = addStringNoLocale(
+    createThing(),
     property,
     exampleNick,
   );
 
-  const exampleDataset = SolidFns.setThing(
-    SolidFns.createSolidDataset(),
+  const exampleDataset = setThing(
+    createSolidDataset(),
     exampleThing,
   );
 
@@ -429,8 +429,8 @@ WithFetchedData.args = {
 export function ErrorComponent(): ReactElement {
   const exampleName = "Example Name";
   const exampleProperty = "http://xmlns.com/foaf/0.1/name";
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const exampleThing = addStringNoLocale(
+    createThing(),
     exampleProperty,
     exampleName,
   );

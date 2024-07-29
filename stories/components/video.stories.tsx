@@ -21,8 +21,8 @@
 
 import type { ReactElement } from "react";
 import React from "react";
-import SolidFns from "@inrupt/solid-client";
 import { Video } from "../../src/components/video";
+import { addUrl, createThing } from "@inrupt/solid-client";
 
 export default {
   title: "Components/Video",
@@ -80,8 +80,8 @@ export function EditFalse({
   const exampleUrl =
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
   const exampleProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
-  const exampleThing = SolidFns.addUrl(
-    SolidFns.createThing(),
+  const exampleThing = addUrl(
+    createThing(),
     exampleProperty,
     exampleUrl,
   );
@@ -119,8 +119,8 @@ export function EditTrue({
   const exampleUrl =
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
   const exampleProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
-  const exampleThing = SolidFns.addUrl(
-    SolidFns.createThing(),
+  const exampleThing = addUrl(
+    createThing(),
     exampleProperty,
     exampleUrl,
   );
@@ -152,8 +152,8 @@ export function ErrorComponent(): ReactElement {
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4";
 
   const exampleProperty = `http://www.w3.org/2006/vcard/ns#hasPhoto`;
-  const exampleThing = SolidFns.addUrl(
-    SolidFns.createThing(),
+  const exampleThing = addUrl(
+    createThing(),
     exampleProperty,
     exampleUrl,
   );

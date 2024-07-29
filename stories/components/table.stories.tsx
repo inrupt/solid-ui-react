@@ -21,7 +21,7 @@
 
 import type { ReactElement } from "react";
 import React, { useContext } from "react";
-import SolidFns from "@inrupt/solid-client";
+import { addDatetime, addStringNoLocale, createSolidDataset, createThing, getThing, getUrl, setThing, SolidDataset } from "@inrupt/solid-client";
 import DatasetContext, {
   DatasetProvider,
 } from "../../src/context/datasetContext";
@@ -64,27 +64,27 @@ export function BasicExample(): ReactElement {
   const namePredicate = `http://xmlns.com/foaf/0.1/name`;
   const datePredicate = `http://schema.org/datePublished`;
 
-  const thing1A = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const thing1A = addStringNoLocale(
+    createThing(),
     namePredicate,
     `example name 1`,
   );
-  const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
+  const thing1 = addDatetime(thing1A, datePredicate, new Date());
 
-  const thing2A = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const thing2A = addStringNoLocale(
+    createThing(),
     namePredicate,
     `example name 2`,
   );
-  const thing2 = SolidFns.addDatetime(
+  const thing2 = addDatetime(
     thing2A,
     datePredicate,
     new Date("1999-01-02"),
   );
 
-  const emptyDataset = SolidFns.createSolidDataset();
-  const datasetWithThing1 = SolidFns.setThing(emptyDataset, thing1);
-  const dataset = SolidFns.setThing(datasetWithThing1, thing2);
+  const emptyDataset = createSolidDataset();
+  const datasetWithThing1 = setThing(emptyDataset, thing1);
+  const dataset = setThing(datasetWithThing1, thing2);
 
   return (
     <Table
@@ -108,41 +108,41 @@ export function MultipleValues(): ReactElement {
   const namePredicate = `http://xmlns.com/foaf/0.1/name`;
   const nickPredicate = `http://xmlns.com/foaf/0.1/nick`;
 
-  const thing1A = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const thing1A = addStringNoLocale(
+    createThing(),
     namePredicate,
     `example name 1`,
   );
-  const thing1B = SolidFns.addStringNoLocale(
+  const thing1B = addStringNoLocale(
     thing1A,
     nickPredicate,
     `Nickname`,
   );
-  const thing1C = SolidFns.addStringNoLocale(
+  const thing1C = addStringNoLocale(
     thing1B,
     nickPredicate,
     `Alt Nickname`,
   );
-  const thing1 = SolidFns.addStringNoLocale(
+  const thing1 = addStringNoLocale(
     thing1C,
     nickPredicate,
     `Final Nickname`,
   );
 
-  const thing2A = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const thing2A = addStringNoLocale(
+    createThing(),
     namePredicate,
     `example name 2`,
   );
-  const thing2 = SolidFns.addStringNoLocale(
+  const thing2 = addStringNoLocale(
     thing2A,
     nickPredicate,
     `example nickname 2`,
   );
 
-  const emptyDataset = SolidFns.createSolidDataset();
-  const datasetWithThing1 = SolidFns.setThing(emptyDataset, thing1);
-  const dataset = SolidFns.setThing(datasetWithThing1, thing2);
+  const emptyDataset = createSolidDataset();
+  const datasetWithThing1 = setThing(emptyDataset, thing1);
+  const dataset = setThing(datasetWithThing1, thing2);
 
   return (
     <Table
@@ -172,27 +172,27 @@ export function CustomBodyComponent(): ReactElement {
   const namePredicate = `http://xmlns.com/foaf/0.1/name`;
   const datePredicate = `http://schema.org/datePublished`;
 
-  const thing1A = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const thing1A = addStringNoLocale(
+    createThing(),
     namePredicate,
     `example name 1`,
   );
-  const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
+  const thing1 = addDatetime(thing1A, datePredicate, new Date());
 
-  const thing2A = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const thing2A = addStringNoLocale(
+    createThing(),
     namePredicate,
     `example name 2`,
   );
-  const thing2 = SolidFns.addDatetime(
+  const thing2 = addDatetime(
     thing2A,
     datePredicate,
     new Date("1999-01-02"),
   );
 
-  const emptyDataset = SolidFns.createSolidDataset();
-  const datasetWithThing1 = SolidFns.setThing(emptyDataset, thing1);
-  const dataset = SolidFns.setThing(datasetWithThing1, thing2);
+  const emptyDataset = createSolidDataset();
+  const datasetWithThing1 = setThing(emptyDataset, thing1);
+  const dataset = setThing(datasetWithThing1, thing2);
 
   type bodyProps = {
     value?: string;
@@ -244,16 +244,16 @@ export function NestedDataExample(): ReactElement {
   }: {
     numberThingIris: [string];
     numberType: string;
-    dataset: SolidFns.SolidDataset;
+    dataset: SolidDataset;
   }) {
     let phoneNumber = "";
     numberThingIris.some((numberThingIri) => {
-      const numberThing = SolidFns.getThing(dataset, numberThingIri);
+      const numberThing = getThing(dataset, numberThingIri);
       if (
         numberThing &&
-        SolidFns.getUrl(numberThing, typeProperty) === numberType
+        getUrl(numberThing, typeProperty) === numberType
       ) {
-        phoneNumber = SolidFns.getUrl(numberThing, valueProperty) ?? "";
+        phoneNumber = getUrl(numberThing, valueProperty) ?? "";
         return true;
       }
       return false;
@@ -267,11 +267,11 @@ export function NestedDataExample(): ReactElement {
     if (!solidDataset) {
       return null;
     }
-    const personThing = SolidFns.getThing(
+    const personThing = getThing(
       solidDataset,
       `${host}/example.ttl#me`,
     );
-    const alterEgoThing = SolidFns.getThing(
+    const alterEgoThing = getThing(
       solidDataset,
       `${host}/example.ttl#alterEgo`,
     );
@@ -338,27 +338,27 @@ export function SortableColumns(): ReactElement {
   const namePredicate = `http://xmlns.com/foaf/0.1/name`;
   const datePredicate = `http://schema.org/datePublished`;
 
-  const thing1A = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const thing1A = addStringNoLocale(
+    createThing(),
     namePredicate,
     `example name 1`,
   );
-  const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
+  const thing1 = addDatetime(thing1A, datePredicate, new Date());
 
-  const thing2A = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const thing2A = addStringNoLocale(
+    createThing(),
     namePredicate,
     `example name 2`,
   );
-  const thing2 = SolidFns.addDatetime(
+  const thing2 = addDatetime(
     thing2A,
     datePredicate,
     new Date("1999-01-02"),
   );
 
-  const emptyDataset = SolidFns.createSolidDataset();
-  const datasetWithThing1 = SolidFns.setThing(emptyDataset, thing1);
-  const dataset = SolidFns.setThing(datasetWithThing1, thing2);
+  const emptyDataset = createSolidDataset();
+  const datasetWithThing1 = setThing(emptyDataset, thing1);
+  const dataset = setThing(datasetWithThing1, thing2);
 
   return (
     <Table
@@ -394,27 +394,27 @@ export function FilterOnFirstColumn({
   const namePredicate = `http://xmlns.com/foaf/0.1/name`;
   const datePredicate = `http://schema.org/datePublished`;
 
-  const thing1A = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const thing1A = addStringNoLocale(
+    createThing(),
     namePredicate,
     `example name 1`,
   );
-  const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
+  const thing1 = addDatetime(thing1A, datePredicate, new Date());
 
-  const thing2A = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const thing2A = addStringNoLocale(
+    createThing(),
     namePredicate,
     `example name 2`,
   );
-  const thing2 = SolidFns.addDatetime(
+  const thing2 = addDatetime(
     thing2A,
     datePredicate,
     new Date("1999-01-02"),
   );
 
-  const emptyDataset = SolidFns.createSolidDataset();
-  const datasetWithThing1 = SolidFns.setThing(emptyDataset, thing1);
-  const dataset = SolidFns.setThing(datasetWithThing1, thing2);
+  const emptyDataset = createSolidDataset();
+  const datasetWithThing1 = setThing(emptyDataset, thing1);
+  const dataset = setThing(datasetWithThing1, thing2);
 
   return (
     <Table
@@ -449,27 +449,27 @@ export function SortingFunctionOnFirstColumn(): ReactElement {
   const namePredicate = `http://xmlns.com/foaf/0.1/name`;
   const datePredicate = `http://schema.org/datePublished`;
 
-  const thing1A = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const thing1A = addStringNoLocale(
+    createThing(),
     namePredicate,
     "Another Name",
   );
-  const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
+  const thing1 = addDatetime(thing1A, datePredicate, new Date());
 
-  const thing2A = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const thing2A = addStringNoLocale(
+    createThing(),
     namePredicate,
     "Name A",
   );
-  const thing2 = SolidFns.addDatetime(
+  const thing2 = addDatetime(
     thing2A,
     datePredicate,
     new Date("1999-01-02"),
   );
 
-  const emptyDataset = SolidFns.createSolidDataset();
-  const datasetWithThing1 = SolidFns.setThing(emptyDataset, thing1);
-  const dataset = SolidFns.setThing(datasetWithThing1, thing2);
+  const emptyDataset = createSolidDataset();
+  const datasetWithThing1 = setThing(emptyDataset, thing1);
+  const dataset = setThing(datasetWithThing1, thing2);
 
   const sortFunction = (a: string, b: string) => {
     const valueA = a.split(/\s+/)[1];
@@ -504,27 +504,27 @@ export function NoDataComponent(): ReactElement {
   const namePredicate = `http://xmlns.com/foaf/0.1/name`;
   const datePredicate = `http://schema.org/datePublished`;
 
-  const thing1A = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const thing1A = addStringNoLocale(
+    createThing(),
     namePredicate,
     `example name 1`,
   );
-  const thing1 = SolidFns.addDatetime(thing1A, datePredicate, new Date());
+  const thing1 = addDatetime(thing1A, datePredicate, new Date());
 
-  const thing2A = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const thing2A = addStringNoLocale(
+    createThing(),
     namePredicate,
     `example name 2`,
   );
-  const thing2 = SolidFns.addDatetime(
+  const thing2 = addDatetime(
     thing2A,
     datePredicate,
     new Date("1999-01-02"),
   );
 
-  const emptyDataset = SolidFns.createSolidDataset();
-  const datasetWithThing1 = SolidFns.setThing(emptyDataset, thing1);
-  const dataset = SolidFns.setThing(datasetWithThing1, thing2);
+  const emptyDataset = createSolidDataset();
+  const datasetWithThing1 = setThing(emptyDataset, thing1);
+  const dataset = setThing(datasetWithThing1, thing2);
 
   return (
     <Table

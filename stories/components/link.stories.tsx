@@ -21,7 +21,7 @@
 
 import type { ReactElement } from "react";
 import React from "react";
-import SolidFns from "@inrupt/solid-client";
+import { addUrl, createThing, setThing, createSolidDataset } from "@inrupt/solid-client";
 import { Link } from "../../src/components/link";
 
 export default {
@@ -48,8 +48,8 @@ export default {
 
 export function WithChildren({ property }: { property: string }): ReactElement {
   const exampleUrl = "http://test.url";
-  const exampleThing = SolidFns.addUrl(
-    SolidFns.createThing(),
+  const exampleThing = addUrl(
+    createThing(),
     property,
     exampleUrl,
   );
@@ -74,8 +74,8 @@ export function WithoutChildren({
   property: string;
 }): ReactElement {
   const exampleUrl = "http://test.url";
-  const exampleThing = SolidFns.addUrl(
-    SolidFns.createThing(),
+  const exampleThing = addUrl(
+    createThing(),
     property,
     exampleUrl,
   );
@@ -92,14 +92,14 @@ WithoutChildren.args = {
 
 export function Editable({ property }: { property: string }): ReactElement {
   const exampleUrl = "http://test.url";
-  const exampleThing = SolidFns.addUrl(
-    SolidFns.createThing(),
+  const exampleThing = addUrl(
+    createThing(),
     property,
     exampleUrl,
   );
 
-  const exampleDataset = SolidFns.setThing(
-    SolidFns.createSolidDataset(),
+  const exampleDataset = setThing(
+    createSolidDataset(),
     exampleThing,
   );
 
@@ -124,8 +124,8 @@ Editable.args = {
 export function ErrorComponent(): ReactElement {
   const exampleUrl = "http://test.url";
   const property = "http://xmlns.com/foaf/0.1/homepage";
-  const exampleThing = SolidFns.addUrl(
-    SolidFns.createThing(),
+  const exampleThing = addUrl(
+    createThing(),
     property,
     exampleUrl,
   );
