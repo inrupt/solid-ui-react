@@ -21,9 +21,9 @@
 
 import type { ReactElement } from "react";
 import React from "react";
-import SolidFns from "@inrupt/solid-client";
 import { Table, TableColumn } from "../../src/components/table";
 import type { DataType } from "../../src/helpers";
+import { addStringNoLocale, createThing, createSolidDataset, setThing } from "@inrupt/solid-client";
 
 export default {
   title: "Components/TableColumn",
@@ -93,21 +93,21 @@ export function BasicExample({
 }: ITableColumn): ReactElement {
   const namePredicate = `http://xmlns.com/foaf/0.1/name`;
 
-  const thing1 = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const thing1 = addStringNoLocale(
+    createThing(),
     namePredicate,
     `example name 1`,
   );
 
-  const thing2 = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const thing2 = addStringNoLocale(
+    createThing(),
     namePredicate,
     `example name 2`,
   );
 
-  const emptyDataset = SolidFns.createSolidDataset();
-  const datasetWithThing1 = SolidFns.setThing(emptyDataset, thing1);
-  const dataset = SolidFns.setThing(datasetWithThing1, thing2);
+  const emptyDataset = createSolidDataset();
+  const datasetWithThing1 = setThing(emptyDataset, thing1);
+  const dataset = setThing(datasetWithThing1, thing2);
 
   return (
     <Table

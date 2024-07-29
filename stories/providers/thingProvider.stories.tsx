@@ -21,10 +21,10 @@
 
 import type { ReactElement } from "react";
 import React, { useContext, useState, useEffect } from "react";
-import SolidFns from "@inrupt/solid-client";
 import { DatasetProvider } from "../../src/context/datasetContext";
 import ThingContext, { ThingProvider } from "../../src/context/thingContext";
 import config from "../config";
+import { getStringNoLocale, addStringNoLocale, createThing, getSolidDataset, SolidDataset, WithResourceInfo } from "@inrupt/solid-client";
 
 const { host } = config();
 
@@ -66,7 +66,7 @@ function ExampleComponentWithThingUrl(
 
   useEffect(() => {
     if (thing) {
-      const fetchedProperty = SolidFns.getStringNoLocale(
+      const fetchedProperty = getStringNoLocale(
         thing,
         propertyUrl as string,
       );
@@ -95,7 +95,7 @@ function ExampleComponentWithThing(): ReactElement {
 
   useEffect(() => {
     if (thing) {
-      const fetchedProperty = SolidFns.getStringNoLocale(
+      const fetchedProperty = getStringNoLocale(
         thing,
         "http://xmlns.com/foaf/0.1/name",
       );
@@ -116,8 +116,8 @@ export function WithLocalThing(): ReactElement {
   const property = "http://xmlns.com/foaf/0.1/name";
   const name = "example value";
 
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const exampleThing = addStringNoLocale(
+    createThing(),
     property,
     name,
   );
@@ -138,11 +138,11 @@ interface IWithThingUrl {
 export function WithThingUrl(props: IWithThingUrl): ReactElement {
   const { datasetUrl, thingUrl, property } = props;
   const [litDataset, setSolidDataset] = useState<
-    SolidFns.SolidDataset & SolidFns.WithResourceInfo
+    SolidDataset & WithResourceInfo
   >();
 
   const setDataset = async (url: string) => {
-    await SolidFns.getSolidDataset(url).then((result) => {
+    await getSolidDataset(url).then((result) => {
       setSolidDataset(result);
     });
   };
