@@ -21,9 +21,14 @@
 
 import type { ReactElement } from "react";
 import React from "react";
+import {
+  addStringNoLocale,
+  createThing,
+  createSolidDataset,
+  setThing,
+} from "@inrupt/solid-client";
 import { Table, TableColumn } from "../../src/components/table";
 import type { DataType } from "../../src/helpers";
-import { addStringNoLocale, createThing, createSolidDataset, setThing } from "@inrupt/solid-client";
 
 export default {
   title: "Components/TableColumn",

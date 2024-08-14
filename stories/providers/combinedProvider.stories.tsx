@@ -21,10 +21,16 @@
 
 import type { ReactElement } from "react";
 import React, { useContext, useState, useEffect } from "react";
+import {
+  getStringNoLocale,
+  addStringNoLocale,
+  createThing,
+  setThing,
+  createSolidDataset,
+} from "@inrupt/solid-client";
 import ThingContext from "../../src/context/thingContext";
 import CombinedDataProvider from "../../src/context/combinedDataContext";
 import config from "../config";
-import { getStringNoLocale, addStringNoLocale, createThing, setThing, createSolidDataset } from "@inrupt/solid-client";
 
 const { host } = config();
 
@@ -124,15 +130,8 @@ export function WithLocalData(): ReactElement {
   const property = "http://xmlns.com/foaf/0.1/name";
   const name = "example value";
 
-  const exampleThing = addStringNoLocale(
-    createThing(),
-    property,
-    name,
-  );
-  const dataset = setThing(
-    createSolidDataset(),
-    exampleThing,
-  );
+  const exampleThing = addStringNoLocale(createThing(), property, name);
+  const dataset = setThing(createSolidDataset(), exampleThing);
 
   return (
     <CombinedDataProvider solidDataset={dataset} thing={exampleThing}>

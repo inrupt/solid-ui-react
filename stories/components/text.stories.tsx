@@ -22,11 +22,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ReactElement } from "react";
 import React from "react";
+import {
+  addStringNoLocale,
+  createThing,
+  setThing,
+  createSolidDataset,
+} from "@inrupt/solid-client";
 import { Text } from "../../src/components/text";
 import { DatasetProvider } from "../../src/context/datasetContext";
 import { ThingProvider } from "../../src/context/thingContext";
 import config from "../config";
-import { addStringNoLocale, createThing, setThing, createSolidDataset } from "@inrupt/solid-client";
 
 const { host } = config();
 
@@ -107,16 +112,9 @@ export function BasicExample({
 }: IText): ReactElement {
   const exampleNick = "example value";
 
-  const exampleThing = addStringNoLocale(
-    createThing(),
-    property,
-    exampleNick,
-  );
+  const exampleThing = addStringNoLocale(createThing(), property, exampleNick);
 
-  const exampleDataset = setThing(
-    createSolidDataset(),
-    exampleThing,
-  );
+  const exampleDataset = setThing(createSolidDataset(), exampleThing);
 
   return (
     <Text
@@ -155,10 +153,7 @@ export function WithLocalData({
     exampleNick,
   );
 
-  const exampleDataset = setThing(
-    createSolidDataset(),
-    exampleThing,
-  );
+  const exampleDataset = setThing(createSolidDataset(), exampleThing);
 
   return (
     <Text

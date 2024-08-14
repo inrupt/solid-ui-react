@@ -21,11 +21,20 @@
 
 import type { ReactElement } from "react";
 import React, { useContext, useState, useEffect } from "react";
+import type { Thing } from "@inrupt/solid-client";
+import {
+  getThing,
+  getStringNoLocale,
+  getThingAll,
+  addStringNoLocale,
+  createThing,
+  setThing,
+  createSolidDataset,
+} from "@inrupt/solid-client";
 import DatasetContext, {
   DatasetProvider,
 } from "../../src/context/datasetContext";
 import config from "../config";
-import { Thing, getThing, getStringNoLocale, getThingAll, addStringNoLocale, createThing, setThing, createSolidDataset } from "@inrupt/solid-client";
 
 const { host } = config();
 
@@ -83,10 +92,7 @@ function ExampleComponentWithDatasetUrl(
 
   useEffect(() => {
     if (exampleThing) {
-      const fetchedProperty = getStringNoLocale(
-        exampleThing,
-        propertyUrl,
-      );
+      const fetchedProperty = getStringNoLocale(exampleThing, propertyUrl);
       if (fetchedProperty) {
         setProperty(fetchedProperty);
       }
@@ -137,15 +143,8 @@ export function WithLocalDataset(): ReactElement {
   const property = "http://xmlns.com/foaf/0.1/name";
   const name = "example value";
 
-  const exampleThing = addStringNoLocale(
-    createThing(),
-    property,
-    name,
-  );
-  const dataset = setThing(
-    createSolidDataset(),
-    exampleThing,
-  );
+  const exampleThing = addStringNoLocale(createThing(), property, name);
+  const dataset = setThing(createSolidDataset(), exampleThing);
 
   return (
     <DatasetProvider solidDataset={dataset}>

@@ -21,7 +21,16 @@
 
 import type { ReactElement } from "react";
 import React, { useContext } from "react";
-import { addDatetime, addStringNoLocale, createSolidDataset, createThing, getThing, getUrl, setThing, SolidDataset } from "@inrupt/solid-client";
+import type { SolidDataset } from "@inrupt/solid-client";
+import {
+  addDatetime,
+  addStringNoLocale,
+  createSolidDataset,
+  createThing,
+  getThing,
+  getUrl,
+  setThing,
+} from "@inrupt/solid-client";
 import DatasetContext, {
   DatasetProvider,
 } from "../../src/context/datasetContext";
@@ -76,11 +85,7 @@ export function BasicExample(): ReactElement {
     namePredicate,
     `example name 2`,
   );
-  const thing2 = addDatetime(
-    thing2A,
-    datePredicate,
-    new Date("1999-01-02"),
-  );
+  const thing2 = addDatetime(thing2A, datePredicate, new Date("1999-01-02"));
 
   const emptyDataset = createSolidDataset();
   const datasetWithThing1 = setThing(emptyDataset, thing1);
@@ -113,21 +118,9 @@ export function MultipleValues(): ReactElement {
     namePredicate,
     `example name 1`,
   );
-  const thing1B = addStringNoLocale(
-    thing1A,
-    nickPredicate,
-    `Nickname`,
-  );
-  const thing1C = addStringNoLocale(
-    thing1B,
-    nickPredicate,
-    `Alt Nickname`,
-  );
-  const thing1 = addStringNoLocale(
-    thing1C,
-    nickPredicate,
-    `Final Nickname`,
-  );
+  const thing1B = addStringNoLocale(thing1A, nickPredicate, `Nickname`);
+  const thing1C = addStringNoLocale(thing1B, nickPredicate, `Alt Nickname`);
+  const thing1 = addStringNoLocale(thing1C, nickPredicate, `Final Nickname`);
 
   const thing2A = addStringNoLocale(
     createThing(),
@@ -184,11 +177,7 @@ export function CustomBodyComponent(): ReactElement {
     namePredicate,
     `example name 2`,
   );
-  const thing2 = addDatetime(
-    thing2A,
-    datePredicate,
-    new Date("1999-01-02"),
-  );
+  const thing2 = addDatetime(thing2A, datePredicate, new Date("1999-01-02"));
 
   const emptyDataset = createSolidDataset();
   const datasetWithThing1 = setThing(emptyDataset, thing1);
@@ -249,10 +238,7 @@ export function NestedDataExample(): ReactElement {
     let phoneNumber = "";
     numberThingIris.some((numberThingIri) => {
       const numberThing = getThing(dataset, numberThingIri);
-      if (
-        numberThing &&
-        getUrl(numberThing, typeProperty) === numberType
-      ) {
+      if (numberThing && getUrl(numberThing, typeProperty) === numberType) {
         phoneNumber = getUrl(numberThing, valueProperty) ?? "";
         return true;
       }
@@ -267,10 +253,7 @@ export function NestedDataExample(): ReactElement {
     if (!solidDataset) {
       return null;
     }
-    const personThing = getThing(
-      solidDataset,
-      `${host}/example.ttl#me`,
-    );
+    const personThing = getThing(solidDataset, `${host}/example.ttl#me`);
     const alterEgoThing = getThing(
       solidDataset,
       `${host}/example.ttl#alterEgo`,
@@ -350,11 +333,7 @@ export function SortableColumns(): ReactElement {
     namePredicate,
     `example name 2`,
   );
-  const thing2 = addDatetime(
-    thing2A,
-    datePredicate,
-    new Date("1999-01-02"),
-  );
+  const thing2 = addDatetime(thing2A, datePredicate, new Date("1999-01-02"));
 
   const emptyDataset = createSolidDataset();
   const datasetWithThing1 = setThing(emptyDataset, thing1);
@@ -406,11 +385,7 @@ export function FilterOnFirstColumn({
     namePredicate,
     `example name 2`,
   );
-  const thing2 = addDatetime(
-    thing2A,
-    datePredicate,
-    new Date("1999-01-02"),
-  );
+  const thing2 = addDatetime(thing2A, datePredicate, new Date("1999-01-02"));
 
   const emptyDataset = createSolidDataset();
   const datasetWithThing1 = setThing(emptyDataset, thing1);
@@ -456,16 +431,8 @@ export function SortingFunctionOnFirstColumn(): ReactElement {
   );
   const thing1 = addDatetime(thing1A, datePredicate, new Date());
 
-  const thing2A = addStringNoLocale(
-    createThing(),
-    namePredicate,
-    "Name A",
-  );
-  const thing2 = addDatetime(
-    thing2A,
-    datePredicate,
-    new Date("1999-01-02"),
-  );
+  const thing2A = addStringNoLocale(createThing(), namePredicate, "Name A");
+  const thing2 = addDatetime(thing2A, datePredicate, new Date("1999-01-02"));
 
   const emptyDataset = createSolidDataset();
   const datasetWithThing1 = setThing(emptyDataset, thing1);
@@ -516,11 +483,7 @@ export function NoDataComponent(): ReactElement {
     namePredicate,
     `example name 2`,
   );
-  const thing2 = addDatetime(
-    thing2A,
-    datePredicate,
-    new Date("1999-01-02"),
-  );
+  const thing2 = addDatetime(thing2A, datePredicate, new Date("1999-01-02"));
 
   const emptyDataset = createSolidDataset();
   const datasetWithThing1 = setThing(emptyDataset, thing1);

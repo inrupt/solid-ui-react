@@ -21,10 +21,16 @@
 
 import type { ReactElement } from "react";
 import React, { useContext, useState, useEffect } from "react";
+import type { SolidDataset, WithResourceInfo } from "@inrupt/solid-client";
+import {
+  getStringNoLocale,
+  addStringNoLocale,
+  createThing,
+  getSolidDataset,
+} from "@inrupt/solid-client";
 import { DatasetProvider } from "../../src/context/datasetContext";
 import ThingContext, { ThingProvider } from "../../src/context/thingContext";
 import config from "../config";
-import { getStringNoLocale, addStringNoLocale, createThing, getSolidDataset, SolidDataset, WithResourceInfo } from "@inrupt/solid-client";
 
 const { host } = config();
 
@@ -66,10 +72,7 @@ function ExampleComponentWithThingUrl(
 
   useEffect(() => {
     if (thing) {
-      const fetchedProperty = getStringNoLocale(
-        thing,
-        propertyUrl as string,
-      );
+      const fetchedProperty = getStringNoLocale(thing, propertyUrl as string);
 
       if (fetchedProperty) {
         setProperty(fetchedProperty);
@@ -116,11 +119,7 @@ export function WithLocalThing(): ReactElement {
   const property = "http://xmlns.com/foaf/0.1/name";
   const name = "example value";
 
-  const exampleThing = addStringNoLocale(
-    createThing(),
-    property,
-    name,
-  );
+  const exampleThing = addStringNoLocale(createThing(), property, name);
 
   return (
     <ThingProvider thing={exampleThing}>

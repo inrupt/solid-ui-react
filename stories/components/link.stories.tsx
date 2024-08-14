@@ -21,7 +21,12 @@
 
 import type { ReactElement } from "react";
 import React from "react";
-import { addUrl, createThing, setThing, createSolidDataset } from "@inrupt/solid-client";
+import {
+  addUrl,
+  createThing,
+  setThing,
+  createSolidDataset,
+} from "@inrupt/solid-client";
 import { Link } from "../../src/components/link";
 
 export default {
@@ -48,11 +53,7 @@ export default {
 
 export function WithChildren({ property }: { property: string }): ReactElement {
   const exampleUrl = "http://test.url";
-  const exampleThing = addUrl(
-    createThing(),
-    property,
-    exampleUrl,
-  );
+  const exampleThing = addUrl(createThing(), property, exampleUrl);
   return (
     <Link thing={exampleThing} property={property}>
       <span>Example child</span>
@@ -74,11 +75,7 @@ export function WithoutChildren({
   property: string;
 }): ReactElement {
   const exampleUrl = "http://test.url";
-  const exampleThing = addUrl(
-    createThing(),
-    property,
-    exampleUrl,
-  );
+  const exampleThing = addUrl(createThing(), property, exampleUrl);
   return <Link thing={exampleThing} property={property} />;
 }
 
@@ -92,16 +89,9 @@ WithoutChildren.args = {
 
 export function Editable({ property }: { property: string }): ReactElement {
   const exampleUrl = "http://test.url";
-  const exampleThing = addUrl(
-    createThing(),
-    property,
-    exampleUrl,
-  );
+  const exampleThing = addUrl(createThing(), property, exampleUrl);
 
-  const exampleDataset = setThing(
-    createSolidDataset(),
-    exampleThing,
-  );
+  const exampleDataset = setThing(createSolidDataset(), exampleThing);
 
   return (
     <Link
@@ -124,11 +114,7 @@ Editable.args = {
 export function ErrorComponent(): ReactElement {
   const exampleUrl = "http://test.url";
   const property = "http://xmlns.com/foaf/0.1/homepage";
-  const exampleThing = addUrl(
-    createThing(),
-    property,
-    exampleUrl,
-  );
+  const exampleThing = addUrl(createThing(), property, exampleUrl);
   return (
     <Link
       thing={exampleThing}
