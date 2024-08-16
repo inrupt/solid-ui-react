@@ -21,7 +21,16 @@
 
 import type { ReactElement } from "react";
 import React, { useContext, useState, useEffect } from "react";
-import SolidFns from "@inrupt/solid-client";
+import type { Thing } from "@inrupt/solid-client";
+import {
+  getThing,
+  getStringNoLocale,
+  getThingAll,
+  addStringNoLocale,
+  createThing,
+  setThing,
+  createSolidDataset,
+} from "@inrupt/solid-client";
 import DatasetContext, {
   DatasetProvider,
 } from "../../src/context/datasetContext";
@@ -68,7 +77,7 @@ function ExampleComponentWithDatasetUrl(
 ): ReactElement {
   const { thingUrl, property: propertyUrl } = props;
 
-  const [exampleThing, setExampleThing] = useState<SolidFns.Thing>();
+  const [exampleThing, setExampleThing] = useState<Thing>();
   const [property, setProperty] = useState<string>("fetching in progress");
 
   const datasetContext = useContext(DatasetContext);
@@ -76,17 +85,14 @@ function ExampleComponentWithDatasetUrl(
 
   useEffect(() => {
     if (solidDataset) {
-      const thing = SolidFns.getThing(solidDataset, thingUrl);
+      const thing = getThing(solidDataset, thingUrl);
       setExampleThing(thing || undefined);
     }
   }, [solidDataset, thingUrl]);
 
   useEffect(() => {
     if (exampleThing) {
-      const fetchedProperty = SolidFns.getStringNoLocale(
-        exampleThing,
-        propertyUrl,
-      );
+      const fetchedProperty = getStringNoLocale(exampleThing, propertyUrl);
       if (fetchedProperty) {
         setProperty(fetchedProperty);
       }
@@ -101,7 +107,7 @@ function ExampleComponentWithDatasetUrl(
 }
 
 function ExampleComponentWithDataset(): ReactElement {
-  const [exampleThing, setExampleThing] = useState<SolidFns.Thing>();
+  const [exampleThing, setExampleThing] = useState<Thing>();
   const [property, setProperty] = useState<string>("fetching in progress");
 
   const datasetContext = useContext(DatasetContext);
@@ -109,14 +115,14 @@ function ExampleComponentWithDataset(): ReactElement {
 
   useEffect(() => {
     if (solidDataset) {
-      const things = SolidFns.getThingAll(solidDataset);
+      const things = getThingAll(solidDataset);
       setExampleThing(things[0]);
     }
   }, [solidDataset]);
 
   useEffect(() => {
     if (exampleThing) {
-      const fetchedProperty = SolidFns.getStringNoLocale(
+      const fetchedProperty = getStringNoLocale(
         exampleThing,
         "http://xmlns.com/foaf/0.1/name",
       );
@@ -137,15 +143,8 @@ export function WithLocalDataset(): ReactElement {
   const property = "http://xmlns.com/foaf/0.1/name";
   const name = "example value";
 
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
-    property,
-    name,
-  );
-  const dataset = SolidFns.setThing(
-    SolidFns.createSolidDataset(),
-    exampleThing,
-  );
+  const exampleThing = addStringNoLocale(createThing(), property, name);
+  const dataset = setThing(createSolidDataset(), exampleThing);
 
   return (
     <DatasetProvider solidDataset={dataset}>

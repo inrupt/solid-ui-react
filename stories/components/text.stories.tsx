@@ -22,7 +22,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ReactElement } from "react";
 import React from "react";
-import SolidFns from "@inrupt/solid-client";
+import {
+  addStringNoLocale,
+  createThing,
+  setThing,
+  createSolidDataset,
+} from "@inrupt/solid-client";
 import { Text } from "../../src/components/text";
 import { DatasetProvider } from "../../src/context/datasetContext";
 import { ThingProvider } from "../../src/context/thingContext";
@@ -107,16 +112,9 @@ export function BasicExample({
 }: IText): ReactElement {
   const exampleNick = "example value";
 
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
-    property,
-    exampleNick,
-  );
+  const exampleThing = addStringNoLocale(createThing(), property, exampleNick);
 
-  const exampleDataset = SolidFns.setThing(
-    SolidFns.createSolidDataset(),
-    exampleThing,
-  );
+  const exampleDataset = setThing(createSolidDataset(), exampleThing);
 
   return (
     <Text
@@ -149,16 +147,13 @@ export function WithLocalData({
   const examplePredicate = `http://xmlns.com/foaf/0.1/nick`;
   const exampleNick = "example value";
 
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const exampleThing = addStringNoLocale(
+    createThing(),
     examplePredicate,
     exampleNick,
   );
 
-  const exampleDataset = SolidFns.setThing(
-    SolidFns.createSolidDataset(),
-    exampleThing,
-  );
+  const exampleDataset = setThing(createSolidDataset(), exampleThing);
 
   return (
     <Text
@@ -221,8 +216,8 @@ WithFetchedData.args = {
 export function ErrorComponent(): ReactElement {
   const exampleName = "Example Name";
   const exampleProperty = "http://xmlns.com/foaf/0.1/name";
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
+  const exampleThing = addStringNoLocale(
+    createThing(),
     exampleProperty,
     exampleName,
   );

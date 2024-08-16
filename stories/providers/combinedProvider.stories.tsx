@@ -21,7 +21,13 @@
 
 import type { ReactElement } from "react";
 import React, { useContext, useState, useEffect } from "react";
-import SolidFns from "@inrupt/solid-client";
+import {
+  getStringNoLocale,
+  addStringNoLocale,
+  createThing,
+  setThing,
+  createSolidDataset,
+} from "@inrupt/solid-client";
 import ThingContext from "../../src/context/thingContext";
 import CombinedDataProvider from "../../src/context/combinedDataContext";
 import config from "../config";
@@ -79,7 +85,7 @@ function ExampleComponent({
 
   useEffect(() => {
     if (thing) {
-      const fetchedProperty = SolidFns.getStringNoLocale(thing, propertyUrl);
+      const fetchedProperty = getStringNoLocale(thing, propertyUrl);
 
       if (fetchedProperty) {
         setProperty(fetchedProperty);
@@ -106,7 +112,7 @@ function ExampleComponentFetchedData({
 
   useEffect(() => {
     if (thing) {
-      const fetchedProperty = SolidFns.getStringNoLocale(thing, propertyUrl);
+      const fetchedProperty = getStringNoLocale(thing, propertyUrl);
       if (fetchedProperty) {
         setProperty(fetchedProperty);
       }
@@ -124,15 +130,8 @@ export function WithLocalData(): ReactElement {
   const property = "http://xmlns.com/foaf/0.1/name";
   const name = "example value";
 
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
-    property,
-    name,
-  );
-  const dataset = SolidFns.setThing(
-    SolidFns.createSolidDataset(),
-    exampleThing,
-  );
+  const exampleThing = addStringNoLocale(createThing(), property, name);
+  const dataset = setThing(createSolidDataset(), exampleThing);
 
   return (
     <CombinedDataProvider solidDataset={dataset} thing={exampleThing}>

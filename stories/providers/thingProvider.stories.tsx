@@ -21,7 +21,13 @@
 
 import type { ReactElement } from "react";
 import React, { useContext, useState, useEffect } from "react";
-import SolidFns from "@inrupt/solid-client";
+import type { SolidDataset, WithResourceInfo } from "@inrupt/solid-client";
+import {
+  getStringNoLocale,
+  addStringNoLocale,
+  createThing,
+  getSolidDataset,
+} from "@inrupt/solid-client";
 import { DatasetProvider } from "../../src/context/datasetContext";
 import ThingContext, { ThingProvider } from "../../src/context/thingContext";
 import config from "../config";
@@ -66,10 +72,7 @@ function ExampleComponentWithThingUrl(
 
   useEffect(() => {
     if (thing) {
-      const fetchedProperty = SolidFns.getStringNoLocale(
-        thing,
-        propertyUrl as string,
-      );
+      const fetchedProperty = getStringNoLocale(thing, propertyUrl as string);
 
       if (fetchedProperty) {
         setProperty(fetchedProperty);
@@ -95,7 +98,7 @@ function ExampleComponentWithThing(): ReactElement {
 
   useEffect(() => {
     if (thing) {
-      const fetchedProperty = SolidFns.getStringNoLocale(
+      const fetchedProperty = getStringNoLocale(
         thing,
         "http://xmlns.com/foaf/0.1/name",
       );
@@ -116,11 +119,7 @@ export function WithLocalThing(): ReactElement {
   const property = "http://xmlns.com/foaf/0.1/name";
   const name = "example value";
 
-  const exampleThing = SolidFns.addStringNoLocale(
-    SolidFns.createThing(),
-    property,
-    name,
-  );
+  const exampleThing = addStringNoLocale(createThing(), property, name);
 
   return (
     <ThingProvider thing={exampleThing}>
@@ -138,11 +137,11 @@ interface IWithThingUrl {
 export function WithThingUrl(props: IWithThingUrl): ReactElement {
   const { datasetUrl, thingUrl, property } = props;
   const [litDataset, setSolidDataset] = useState<
-    SolidFns.SolidDataset & SolidFns.WithResourceInfo
+    SolidDataset & WithResourceInfo
   >();
 
   const setDataset = async (url: string) => {
-    await SolidFns.getSolidDataset(url).then((result) => {
+    await getSolidDataset(url).then((result) => {
       setSolidDataset(result);
     });
   };
