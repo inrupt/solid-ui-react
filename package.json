@@ -71,7 +71,7 @@
     "license-checker": "^25.0.1",
     "postcss": "^8.4.12",
     "prettier": "^3.1.1",
-    "react": "^18.2.0",
+    "react": "^18.3.1",
     "react-docgen-typescript-loader": "^3.7.2",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^4.0.12",
