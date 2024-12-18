@@ -1,3 +1,7 @@
+# Deprecation warning
+
+**This project is deprecated. It will no longer receive any updates, including security patches, so we recommend to stop using it as a dependency (or to use it at your own risk). The repository will be archived.**
+
 # Solid React SDK v2 - solid-ui-react
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](CODE-OF-CONDUCT.md)
